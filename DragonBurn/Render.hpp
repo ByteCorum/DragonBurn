@@ -39,6 +39,15 @@ namespace Render
 		
 	}
 
+	void DrawHealth(int Health, ImVec2 Pos)
+	{
+		if (!ESPConfig::ShowHealthNum)
+			return;
+
+		std::string health_str = Format("%i", Health);
+		Gui.StrokeText(health_str, Pos, ImColor(0, 220, 0, 255), 12, false);
+	}
+
 	void DrawDistance(const CEntity& LocalEntity, CEntity& Entity, ImVec4 Rect)
 	{
 		if (!ESPConfig::ShowDistance)
@@ -466,6 +475,9 @@ namespace Render
 		static std::map<DWORD, HealthBar> HealthBarMap;
 		if (!HealthBarMap.count(Sign))
 			HealthBarMap.insert({ Sign,HealthBar() });
+
+		if (HealthBarMap.count(Sign))
+			HealthBarMap[Sign].HealthBarV(MaxHealth, CurrentHealth, Pos, Size, ESPConfig::ShowHealthNum);
 	}
 
 	void DrawAmmoBar(DWORD Sign, float MaxAmmo, float CurrentAmmo, ImVec2 Pos, ImVec2 Size)
@@ -483,6 +495,9 @@ namespace Render
 		static std::map<DWORD, HealthBar> HealthBarMap;
 		if (!HealthBarMap.count(Sign))
 			HealthBarMap.insert({ Sign,HealthBar() });
+
+		if (HealthBarMap.count(Sign))
+			HealthBarMap[Sign].ArmorBarV(HasHelmet, MaxArmor, CurrentArmor, Pos, Size, ESPConfig::ShowArmorNum);
 	}
 
 	// Update crosshair preset

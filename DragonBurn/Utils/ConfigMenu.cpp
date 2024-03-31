@@ -134,9 +134,11 @@ namespace ConfigMenu {
 		AimControl::AimLock = false;
 		ESPConfig::RenderDistance = 80;
 		ESPConfig::ArmorBar = false;
+		ESPConfig::ShowArmorNum = false;
 		ESPConfig::ShowIsScoped = false;
 		ESPConfig::AmmoBar = false;
 		ESPConfig::OutLine = true;
+		ESPConfig::ShowHealthNum = false;
 		ESPConfig::FilledColor = ImColor(255, 255, 255, 255);
 		ESPConfig::FilledColor2 = ImColor(255, 255, 255, 255);
 		ESPConfig::MultiColor = false;

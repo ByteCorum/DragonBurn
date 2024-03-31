@@ -42,6 +42,7 @@ namespace MenuConfig
 	inline bool VisibleCheck = true;
 
 	inline bool RCS = false;
+	inline bool Bhop = false;
 
 	// 0: normal 1: dynamic 2: Flat
 	inline int BoxType = 0;
@@ -83,7 +84,9 @@ namespace ESPConfig
 	inline bool ShowPlayerName = true;
 	inline bool DrawFov = false;
 	inline bool ShowDistance = false;
+	inline bool ShowHealthNum = false;
 	inline bool ArmorBar = false;
+	inline bool ShowArmorNum = false;
 	inline bool ShowHeadBox = false;
 	inline bool ShowPreview = true;
 	inline bool VisibleCheck = false;

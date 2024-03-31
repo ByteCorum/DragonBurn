@@ -38,6 +38,7 @@ namespace MyConfigSaver {
         emitter << YAML::Key << "EyeRay" << YAML::Value << ESPConfig::ShowEyeRay;
         emitter << YAML::Key << "PlayerName" << YAML::Value << ESPConfig::ShowPlayerName;
         emitter << YAML::Key << "DistanceESP" << YAML::Value << ESPConfig::ShowDistance;
+        emitter << YAML::Key << "HealthNum" << YAML::Value << ESPConfig::ShowHealthNum;
         emitter << YAML::Key << "HeadBox" << YAML::Value << ESPConfig::ShowHeadBox;
         emitter << YAML::Key << "Preview" << YAML::Value << ESPConfig::ShowPreview;
         emitter << YAML::Key << "VisCheck" << YAML::Value << ESPConfig::VisibleCheck;
@@ -49,6 +50,7 @@ namespace MyConfigSaver {
         emitter << YAML::Key << "BoxRounding" << YAML::Value << ESPConfig::BoxRounding;
         emitter << YAML::Key << "ShowScoped" << YAML::Value << ESPConfig::ShowIsScoped;
         emitter << YAML::Key << "ArmorBar" << YAML::Value << ESPConfig::ArmorBar;
+        emitter << YAML::Key << "ArmorNum" << YAML::Value << ESPConfig::ShowArmorNum;
         emitter << YAML::Key << "MaxRenderDistance" << YAML::Value << ESPConfig::RenderDistance;
         emitter << YAML::Key << "BoneColor";
         emitter << YAML::Value;
@@ -290,6 +292,7 @@ namespace MyConfigSaver {
             ESPConfig::ShowEyeRay = ReadData(config["ESP"]["EyeRay"], false);
             ESPConfig::ShowPlayerName = ReadData(config["ESP"]["PlayerName"], false);
             ESPConfig::ShowDistance = ReadData(config["ESP"]["DistanceESP"], false);
+            ESPConfig::ShowHealthNum = ReadData(config["ESP"]["HealthNum"], false);
             ESPConfig::ShowHeadBox = ReadData(config["ESP"]["HeadBox"], false);
             ESPConfig::ShowPreview = ReadData(config["ESP"]["Preview"], false);
             ESPConfig::VisibleCheck = ReadData(config["ESP"]["VisCheck"], false);
@@ -300,6 +303,7 @@ namespace MyConfigSaver {
             ESPConfig::BoxRounding = ReadData(config["ESP"]["BoxRounding"], 0.f);
             ESPConfig::ShowIsScoped = ReadData(config["ESP"]["ShowScoped"], false);
             ESPConfig::ArmorBar = ReadData(config["ESP"]["ArmorBar"], false);
+            ESPConfig::ShowArmorNum = ReadData(config["ESP"]["ArmorNum"], false);
             ESPConfig::RenderDistance = ReadData(config["ESP"]["MaxRenderDistance"], 80);
             ESPConfig::BoneColor.Value.x = ReadData(config["ESP"]["BoneColor"]["r"], 0.f);
             ESPConfig::BoneColor.Value.y = ReadData(config["ESP"]["BoneColor"]["g"], 0.f);
