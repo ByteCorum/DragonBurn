@@ -45,7 +45,6 @@ namespace Lang
 		inline static const char* Ammo;
 		inline static const char* ScopedESP;
 		inline static const char* ShowArmorBar;
-		inline static const char* ArmorNum;
 		inline static const char* RenderDistance;
 
 		inline static const char* BoxType_Normal;
@@ -153,7 +152,6 @@ namespace Lang
 		inline static const char* HitSound;
 		inline static const char* bmbTimer;
 		//inline static const char* SpecList;
-		inline static const char* Bhop;
 		inline static const char* Watermark;
 		inline static const char* TeamCheck;
 		inline static const char* AntiRecord;
@@ -221,7 +219,6 @@ namespace Lang
 		ESPtext.Ammo = u8"Ammo";
 		ESPtext.ScopedESP = u8"Show Scoped";
 		ESPtext.ShowArmorBar = u8"Armor Bar";
-		ESPtext.ArmorNum = u8"Armor Number";
 		ESPtext.RenderDistance = u8"Maximum Render Distance: ";
 
 		ESPtext.BoxType_Normal = u8"Normal";
@@ -242,7 +239,7 @@ namespace Lang
 		AimbotText.FovSlider = u8"FOV: ";
 		AimbotText.FovMinSlider = u8"MinFOV: ";
 		AimbotText.SmoothSlider = u8"Smooth: ";
-		AimbotText.BoneList = u8"Hitbox";
+		AimbotText.BoneList = u8"Hitboxes";
 		AimbotText.Tip = u8"Aimbot will not work while the menu is opened";
 		AimbotText.ScopeOnly = u8"Scope Only";
 		AimbotText.AimLock = u8"Aim Lock";
@@ -304,7 +301,6 @@ namespace Lang
 		MiscText.HitSound = u8"Hit Sound  ";
 		MiscText.bmbTimer = u8"Bomb Timer";
 		//MiscText.SpecList = u8"Spec List";
-		MiscText.Bhop = u8"Auto Jump";
 		MiscText.Watermark = u8"Watermark";
 		MiscText.TeamCheck = u8"Team Check";
 		MiscText.AntiRecord = u8"Anti Record";
