@@ -42,7 +42,6 @@ namespace MenuConfig
 	inline bool VisibleCheck = true;
 
 	inline bool RCS = false;
-	inline bool Bhop = false;
 
 	// 0: normal 1: dynamic 2: Flat
 	inline int BoxType = 0;
