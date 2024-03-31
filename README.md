@@ -21,30 +21,80 @@
 ---
 
 
-<!--### 📋 Features
+### 📋 Features
 
 <details>
 <summary>Visual</summary>
   
-- ESP
-- Glow
-- Radar
-- Crosshairs
-- No Flash
+- Box ESP
+- Filled Box ESP
+- Skeleton
+- Snap Line
+- Eye Ray
+- Health Bar
+- Armor Bar
+- Weapon
+- Ammo
+- Distance
+- Name
+- Scoped
+- AWP Crosshair
+- Visual Preview
+</details>
+
+<details>
+<summary>Radar Hack</summary>
+  
+- Point Size
+- Proportion
+- Range
+- Alpha
+</details>
+
+<details>
+<summary>Aimbot</summary>
+  
+- Start Bullet
+- Aim Lock
+- Draw Fov
+- Visible Only
+- Ignore Flash
+- Scope Only
+- Auto Shoot
+- FOV
+- Smooth
+- Multi Hitboxes Selection
+</details>
+
+<details>
+<summary>RCS</summary>
+  
+- Yaw
+- Pitch
+- Preview
+</details>
+
+<details>
+<summary>Trigger Bot</summary>
+  
+- Scope Only
+- Ignore Flash
+- Shot Delay
+- Shot Duration
+- 
 </details>
 
 <details>
 <summary>Misc</summary>
-
-- Bhop
-- Aimbot
-- Triggerbot
-- Languages Settings
-- Hit Sound
+  
 - Bomb Timer
+- Fast Stop
+- Head Line
+- Hit Sound
+- Watermark
+- Anti Record
 </details>
 
------>
 
 ### 🖼️Prewiev
 
@@ -55,3 +105,5 @@
 <p align="center">
 <img src="imgs/img1.png">
 </p>
+
+---
