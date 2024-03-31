@@ -9,7 +9,6 @@
 
 #include "..\Resources\Language.h"
 #include "..\Resources\Images.h"
-#include "../Font/IconsFontAwesome5.h"
 
 ID3D11ShaderResourceView* Logo = NULL;
 ID3D11ShaderResourceView* MenuButton1 = NULL;
@@ -246,7 +245,7 @@ namespace GUI
 				{
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::SeparatorText(ICON_FA_EYE" ESP");
+					ImGui::SeparatorText("ESP");
 					float MinRounding = 0.f, MaxRouding = 5.f;
 					int MinCombo = 0, MaxCombo = 2;
 					int MinDis = 0, MaxDis = 128;
@@ -260,7 +259,7 @@ namespace GUI
 							PutSwitch(Lang::ESPtext.Outline, 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::OutLine);
 							ImGui::TextDisabled(Lang::ESPtext.BoxType);
 							ImGui::SameLine();
-							//ImGui::SetNextItemWidth(140.f);
+							//ImGui::SetNextItemWidth(165.f);
 							ImGui::Combo("###BoxType", &MenuConfig::BoxType, "Normal\0Dynamic\0Corner\0");
 							PutSliderFloat(Lang::ESPtext.BoxRounding, 10.f, &ESPConfig::BoxRounding, &MinRounding, &MaxRouding, "%.1f");
 						}
@@ -290,12 +289,12 @@ namespace GUI
 					
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::SeparatorText(ICON_FA_GRIN_ALT" ESP Preview");
+					ImGui::SeparatorText("ESP Preview");
 					// ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() }, { ImGui::GetCursorPosX() - ImGui::GetColumnWidth() * 0.65f, ImGui::GetCursorPosY() - ImGui::GetFrameHeight() });
 					ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() });
 					ImGui::Dummy({ 0.f, ImGui::GetFrameHeight() * 9 });
 
-					ImGui::SeparatorText(ICON_FA_COMPASS" External Radar");
+					ImGui::SeparatorText("External Radar");
 					float RadarPointSizeProportionMin = 0.8f, RadarPointSizeProportionMax = 2.f;
 					float ProportionMin = 500.f, ProportionMax = 3300.f;
 					float RadarRangeMin = 100.f, RadarRangeMax = 300.f;
@@ -316,7 +315,7 @@ namespace GUI
 					}
 					
 					ImGui::NewLine();
-					ImGui::SeparatorText(ICON_FA_DOT_CIRCLE" Crosshairs");
+					ImGui::SeparatorText("Crosshairs");
 					float DotMin = 1.f, DotMax = 50.f;
 					int LengthMin = 1, LengthMax = 100;
 					int GapMin = 1, GapMax = 50;
@@ -352,7 +351,7 @@ namespace GUI
 				{
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::SeparatorText(ICON_FA_USER" Aimbot");
+					ImGui::SeparatorText("Aimbot");
 
 					float FovMin = 0.f, FovMax = 25.f, MinFovMax = 1.f;
 					int BulletMin = 0, BulletMax = 5;
@@ -444,7 +443,7 @@ namespace GUI
 					}
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::SeparatorText(ICON_FA_ARROW_ALT_CIRCLE_DOWN " RCS");
+					ImGui::SeparatorText("RCS");
 					float recoilMin = 0.f, recoilMax = 2.f;
 					PutSwitch(Lang::RCStext.Toggle, 5.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::RCS);
 					if (MenuConfig::RCS) {
@@ -493,7 +492,7 @@ namespace GUI
 					}
 
 					ImGui::NewLine();
-					ImGui::SeparatorText(ICON_FA_HAND_POINTER" Triggerbot");
+					ImGui::SeparatorText("Triggerbot");
 					int DelayMin = 0, DelayMax = 300;
 					int DurationMin = 0, DurationMax = 1000;
 					PutSwitch(Lang::TriggerText.Enable, 5.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::TriggerBot);
@@ -526,7 +525,7 @@ namespace GUI
 					float FlashMin = 0.f, FlashMax = 255.f;
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::SeparatorText(ICON_FA_SUN" Misc");
+					ImGui::SeparatorText("Misc");
 					PutSwitch(Lang::MiscText.bmbTimer, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::bmbTimer, true, "###bmbTimerCol", reinterpret_cast<float*>(&MiscCFG::BombTimerCol));
 					PutSwitch(Lang::MiscText.FastStop, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
 					PutSwitch(Lang::MiscText.HeadshotLine, 10.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::ShowHeadShootLine);
@@ -542,7 +541,7 @@ namespace GUI
 
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::SeparatorText(ICON_FA_HEART" Menu Settings");
+					ImGui::SeparatorText("Menu Settings");
 					PutSwitch(Lang::MiscText.AntiRecord, 5.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::BypassOBS);
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5.f);
 

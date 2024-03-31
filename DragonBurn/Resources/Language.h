@@ -220,7 +220,7 @@ namespace Lang
 		ESPtext.ScopedESP = u8"Show Scoped";
 		ESPtext.ShowArmorBar = u8"Armor Bar";
 		ESPtext.ArmorNum = u8"Armor Number";
-		ESPtext.RenderDistance = u8"Maximum Render Distance: ";
+		ESPtext.RenderDistance = u8"Max Render Distance: ";
 
 		ESPtext.LinePos_1 = u8"Top";
 		ESPtext.LinePos_2 = u8"Center";
@@ -311,7 +311,7 @@ namespace Lang
 		ConfigText.MyConfigs = u8"Config List";
 		ConfigText.Load = u8"Load Selected";
 		ConfigText.Save = u8"Save Selected";
-		ConfigText.Delete = u8"Delete Selected";
+		ConfigText.Delete = u8"Del Selected";
 		ConfigText.Reset = u8"Reset Config";
 		ConfigText.Create = u8"Create";
 		ConfigText.OpenFolder = u8"Open Folder";

@@ -1,6 +1,4 @@
 ﻿#include "OS-ImGui_Base.h"
-#include "..\Font\fontArray.h"
-#include "..\Font\IconsFontAwesome5.h"
 #include "..\Resources\WeaponIcon.h"
 #include "..\Resources\Language.h"
 
@@ -16,18 +14,16 @@ namespace OSImGui
         ImFontAtlas* fontAtlas = new ImFontAtlas();
         ImFontConfig arialConfig;
         arialConfig.FontDataOwnedByAtlas = false;
-        ImFont* arialFont = fontAtlas->AddFontFromFileTTF("c:\\Windows\\Fonts\\msyhbd.ttc", 20.0f, &arialConfig, io.Fonts->GetGlyphRangesAll());
+        ImFont* arialFont = fontAtlas->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF", 19.0f, &arialConfig, io.Fonts->GetGlyphRangesAll());
         
         ImFontConfig iconConfig;
-        static const ImWchar iconRanges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
         iconConfig.MergeMode = true;
         iconConfig.PixelSnapH = true;
         iconConfig.OversampleH = 3;
         iconConfig.OversampleV = 3;
-        iconConfig.GlyphRanges = iconRanges;
         iconConfig.FontDataOwnedByAtlas = false;
-        ImFont* iconFont = fontAtlas->AddFontFromMemoryTTF((void*)faData, sizeof(faData), 16.f, &iconConfig, iconRanges);
 
+        //ImFont* font = io.Fonts->AddFontFromFileTTF("../Resources/font.ttf", 23.0f, NULL, io.Fonts->GetGlyphRangesDefault());
         ImFont* WeaponIconFont = fontAtlas->AddFontFromMemoryTTF((void*)cs_icon, sizeof(cs_icon), 25.0f);
 
         io.Fonts = fontAtlas;

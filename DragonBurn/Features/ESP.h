@@ -3,7 +3,6 @@
 #include "..\MenuConfig.hpp"
 #include "..\Cheats.h"
 #include "GetWeaponIcon.h"
-#define ICON_FA_EYE "\xef\x81\xae"
 
 int winnie_h = 0, winnie_w = 0;
 

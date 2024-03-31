@@ -158,8 +158,6 @@
     <ClInclude Include="Features\Mouse.h" />
     <ClInclude Include="Features\RCS.h" />
     <ClInclude Include="Features\SpectatorList.h" />
-    <ClInclude Include="Font\fontArray.h" />
-    <ClInclude Include="Font\IconsFontAwesome5.h" />
     <ClInclude Include="Font\IconsFontAwesome6.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="MenuConfig.hpp" />
@@ -267,10 +265,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="DragonBurn.aps" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="Font\fa-regular.ttf" />
-    <Font Include="Font\stratum2.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Utils\yaml-cpp\lib\yaml-cpp.lib" />
