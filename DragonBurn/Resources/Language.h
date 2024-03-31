@@ -214,7 +214,7 @@ namespace Lang
 		ESPtext.MultiColor = u8"Multi-Color";
 		ESPtext.MultiColTip = u8"Only work when the box has non-rounded corners.";
 		ESPtext.Outline = u8"Outline";
-		ESPtext.BoxType = u8"Box Type:";
+		ESPtext.BoxType = u8"  Box Type";
 		ESPtext.HealthNum = u8"Health Number";
 		ESPtext.Ammo = u8"Ammo";
 		ESPtext.ScopedESP = u8"Show Scoped";
@@ -222,9 +222,6 @@ namespace Lang
 		ESPtext.ArmorNum = u8"Armor Number";
 		ESPtext.RenderDistance = u8"Maximum Render Distance: ";
 
-		ESPtext.BoxType_Normal = u8"Normal";
-		ESPtext.BoxType_Edge = u8"Dynamic";
-		ESPtext.BoxType_Corner = u8"Corner";
 		ESPtext.LinePos_1 = u8"Top";
 		ESPtext.LinePos_2 = u8"Center";
 		ESPtext.LinePos_3 = u8"Bottom";
