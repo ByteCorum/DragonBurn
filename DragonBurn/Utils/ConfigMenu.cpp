@@ -5,7 +5,6 @@
 #include "../Features/Legitbot.hpp"
 #include <filesystem>
 #include <string>
-#include "../Font/IconsFontAwesome5.h"
 #include "../Resources/Language.h"
 #include "../Features/RCS.h"
 

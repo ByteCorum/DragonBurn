@@ -1,6 +1,5 @@
 ﻿#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #pragma once
-#include "..\Font\IconsFontAwesome5.h"
 #include <iostream>
 #include <string>
 #include <windows.h>

@@ -5,6 +5,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb\stb_image.h"
+#define RGBA_TO_FLOAT(r,g,b,a) (float)r/255.0f, (float)g/255.0f, (float)b/255.0f, (float)a/255.0f
 
 
 // OS-ImGui Draw
@@ -112,11 +113,11 @@ namespace OSImGui
     {
         ImVec2 p = ImGui::GetCursorScreenPos();
         ImDrawList* DrawList = ImGui::GetWindowDrawList();
-        float Height = ImGui::GetFrameHeight();
-        float Width = Height * 1.7f;
-        float Radius = Height / 2 - 2;
+        float Height = ImGui::GetFrameHeight()*1.5;
+        float Width = Height;
+        float Radius = Height / 4 -2;
 
-        ImGui::InvisibleButton(str_id, ImVec2(Width, Height));
+        ImGui::InvisibleButton(str_id, ImVec2(Width, Height-10));
         if (ImGui::IsItemClicked())
             *v = !(*v);
         // Animation
@@ -130,13 +131,13 @@ namespace OSImGui
         }
         // Hovered Color
         ImU32 Color;
-        Color = ImGui::GetColorU32(ImLerp(ImVec4(1.00f, 0.30f, 0.0f, 1.0f), ImVec4(0.0f, 1.0f, 0.63f, 1.000f), t));
+        Color = ImGui::GetColorU32(ImLerp(ImVec4(RGBA_TO_FLOAT(31, 36, 70, 200)), ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200)),t));
         // Rendering
-        DrawList->AddRectFilled(ImVec2(p.x, p.y + Height * 0.30f), ImVec2(p.x + Width, p.y + Height * 0.70f), IM_COL32(87, 87, 87, 255), Height);
-        DrawList->AddCircleFilled(ImVec2(p.x + Radius + t * (Width - Radius * 2), p.y + Radius + 2), Radius, Color, 360);
+        DrawList->AddRectFilled(ImVec2(p.x, p.y + Height * 0.30f), ImVec2(p.x + Width, p.y + Height * 0.70f), IM_COL32(35, 35, 35, 255), Height);
+        DrawList->AddCircleFilled(ImVec2(p.x + Radius + t * (Width - Radius * 2), p.y + Radius + 10), Radius, Color, 360);
 
-        ImGui::SameLine();
-        ImGui::Text(str_id);
+        //ImGui::SameLine();
+        //ImGui::Text(str_id);
     }
 
     void OSImGui::MyProgressBar(float fraction, const ImVec2& Size, const char* overlay, ImVec4 Color)

@@ -9,6 +9,7 @@
 
 #include "..\Resources\Language.h"
 #include "..\Resources\Images.h"
+#include "../Font/IconsFontAwesome5.h"
 
 ID3D11ShaderResourceView* Logo = NULL;
 ID3D11ShaderResourceView* MenuButton1 = NULL;
@@ -111,11 +112,13 @@ namespace GUI
 	{
 		ImGui::PushID(string);
 		float CurrentCursorX = ImGui::GetCursorPosX();
+		float CurrentCursorY = ImGui::GetCursorPosY();
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(string);
 		if (Tip && ImGui::IsItemHovered())
 			ImGui::SetTooltip(Tip);
 		ImGui::SameLine();
+		ImGui::SetCursorPosY(CurrentCursorY - 2);
 		if (ColorEditor) {
 			AlignRight(ContentWidth + ImGui::GetFrameHeight() + 8);
 			ImGui::ColorEdit4(lable, col, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview);
