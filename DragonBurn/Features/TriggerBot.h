@@ -22,7 +22,6 @@ namespace TriggerBot
 	}
 
 	// Triggerbot
-	void ReleaseMouseButton();
 	void Run(const CEntity& LocalEntity);
 	void TargetCheck(const CEntity& LocalEntity) noexcept;
 }

@@ -6,12 +6,6 @@ DWORD64 PawnAddress = 0;
 CEntity Entity;
 bool AllowShoot = false;
 
-void TriggerBot::ReleaseMouseButton()
-{
-	//std::this_thread::sleep_for(std::chrono::milliseconds(FakeShotDelay));
-	mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-}
-
 void TriggerBot::Run(const CEntity& LocalEntity)
 {
     DWORD uHandle;
