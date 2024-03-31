@@ -1,0 +1,5 @@
+◎ add aim hitboxes to config
+○ Fix bug with aim hotkey
+◎ Fix bug with trigger delay
+○ Make gui look cooler
+◎ Delete junk
