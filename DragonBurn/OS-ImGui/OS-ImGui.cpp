@@ -131,9 +131,9 @@ namespace OSImGui
         }
         // Hovered Color
         ImU32 Color;
-        Color = ImGui::GetColorU32(ImLerp(ImVec4(RGBA_TO_FLOAT(31, 36, 70, 200)), ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200)),t));
+        Color = ImGui::GetColorU32(ImLerp(ImVec4(RGBA_TO_FLOAT(31, 36, 70, 255)), ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255)),t));
         // Rendering
-        DrawList->AddRectFilled(ImVec2(p.x, p.y + Height * 0.30f), ImVec2(p.x + Width, p.y + Height * 0.70f), IM_COL32(35, 35, 35, 255), Height);
+        DrawList->AddRectFilled(ImVec2(p.x, p.y + Height * 0.30f), ImVec2(p.x + Width, p.y + Height * 0.70f), IM_COL32(35, 35, 35, 255), Height);//
         DrawList->AddCircleFilled(ImVec2(p.x + Radius + t * (Width - Radius * 2), p.y + Radius + 10), Radius, Color, 360);
 
         //ImGui::SameLine();
@@ -596,7 +596,8 @@ namespace OSImGui
         float frame_height_origin = frame_sc.GetHeight();
         frame_sc.Min.y += frame_height_origin / 3;
         frame_sc.Max.y -= frame_height_origin / 3;
-        const ImU32 frame_col = ImGui::ColorConvertFloat4ToU32(g.ActiveId == id ? ImColor(60, 60, 60, 255) : hovered ? ImColor(130, 130, 130, 255) : ImColor(87, 87, 87, 255));
+        //                                                                           grab color                            hover color                color
+        const ImU32 frame_col = ImGui::ColorConvertFloat4ToU32(g.ActiveId == id ? ImColor(31, 36, 70, 255) : hovered ? ImColor(31, 36, 70, 255) : ImColor(35, 35, 35, 255));
         ImGui::RenderNavHighlight(frame_bb, id);
         window->DrawList->AddRectFilled(frame_sc.Min, frame_sc.Max, frame_col, grab_radius);
 
@@ -605,26 +606,26 @@ namespace OSImGui
         const bool value_changed = ImGui::SliderBehavior(frame_bb, id, data_type, p_data, p_min, p_max, format, flags, &grab_bb);
         if (value_changed)
             ImGui::MarkItemEdited(id);
-
+        //ImLerp(ImVec4(RGBA_TO_FLOAT(31, 36, 70, 200)), ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200)), t));
         // Render grab
         if (grab_bb.Max.x > grab_bb.Min.x)
         {
             window->DrawList->AddRectFilled(
-                { grab_bb.GetCenter().x - grab_radius * 1.5f, grab_bb.GetCenter().y - grab_radius },
-                { grab_bb.GetCenter().x + grab_radius * 1.5f, grab_bb.GetCenter().y + grab_radius },
-                ImColor(220, 220, 220, 255), 3);
-            window->DrawList->AddLine(
-                { grab_bb.GetCenter().x - grab_radius * 0.5f - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
-                { grab_bb.GetCenter().x - grab_radius * 0.5f - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
-                ImColor(150, 150, 150, 255), 1.3f);
-            window->DrawList->AddLine(
-                { grab_bb.GetCenter().x - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
-                { grab_bb.GetCenter().x - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
-                ImColor(150, 150, 150, 255), 1.3f);
-            window->DrawList->AddLine(
-                { grab_bb.GetCenter().x + grab_radius * 0.5f - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
-                { grab_bb.GetCenter().x + grab_radius * 0.5f - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
-                ImColor(150, 150, 150, 255), 1.3f);
+                { grab_bb.GetCenter().x - grab_radius, grab_bb.GetCenter().y - grab_radius },
+                { grab_bb.GetCenter().x + grab_radius, grab_bb.GetCenter().y + grab_radius },
+                ImColor(55, 63, 124, 255), 20);
+            //window->DrawList->AddLine(
+            //    { grab_bb.GetCenter().x - grab_radius * 0.5f - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
+            //    { grab_bb.GetCenter().x - grab_radius * 0.5f - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
+            //    ImColor(150, 150, 150, 255), 1.3f);
+            //window->DrawList->AddLine(
+            //    { grab_bb.GetCenter().x - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
+            //    { grab_bb.GetCenter().x - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
+            //    ImColor(150, 150, 150, 255), 1.3f);
+            //window->DrawList->AddLine(
+            //    { grab_bb.GetCenter().x + grab_radius * 0.5f - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
+            //    { grab_bb.GetCenter().x + grab_radius * 0.5f - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
+            //    ImColor(150, 150, 150, 255), 1.3f);
         }
 
         // Display value using user-provided display format so user can add prefix/suffix/decorations to the value.
