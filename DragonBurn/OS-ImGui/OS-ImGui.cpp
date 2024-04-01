@@ -400,7 +400,6 @@ namespace OSImGui
 
         if (ImGui::IsItemClicked())
             *v = !(*v);
-        // ×é¼þ¶¯»­
         float t = *v ? 1.0f : 0.f;
         ImGuiContext& g = *GImGui;
         float AnimationSpeed = 0.12f;
