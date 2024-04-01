@@ -888,31 +888,31 @@ ImRect ImGui::GetWindowScrollbarRect(ImGuiWindow* window, ImGuiAxis axis)
 
 void ImGui::Scrollbar(ImGuiAxis axis)
 {
-    ImGuiContext& g = *GImGui;
-    ImGuiWindow* window = g.CurrentWindow;
-    const ImGuiID id = GetWindowScrollbarID(window, axis);
+    //ImGuiContext& g = *GImGui;
+    //ImGuiWindow* window = g.CurrentWindow;
+    //const ImGuiID id = GetWindowScrollbarID(window, axis);
 
-    // Calculate scrollbar bounding box
-    ImRect bb = GetWindowScrollbarRect(window, axis);
-    ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersNone;
-    if (axis == ImGuiAxis_X)
-    {
-        rounding_corners |= ImDrawFlags_RoundCornersBottomLeft;
-        if (!window->ScrollbarY)
-            rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
-    }
-    else
-    {
-        if ((window->Flags & ImGuiWindowFlags_NoTitleBar) && !(window->Flags & ImGuiWindowFlags_MenuBar))
-            rounding_corners |= ImDrawFlags_RoundCornersTopRight;
-        if (!window->ScrollbarX)
-            rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
-    }
-    float size_avail = window->InnerRect.Max[axis] - window->InnerRect.Min[axis];
-    float size_contents = window->ContentSize[axis] + window->WindowPadding[axis] * 2.0f;
-    ImS64 scroll = (ImS64)window->Scroll[axis];
-    ScrollbarEx(bb, id, axis, &scroll, (ImS64)size_avail, (ImS64)size_contents, rounding_corners);
-    window->Scroll[axis] = (float)scroll;
+    //// Calculate scrollbar bounding box
+    //ImRect bb = GetWindowScrollbarRect(window, axis);
+    //ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersNone;
+    //if (axis == ImGuiAxis_X)
+    //{
+    //    rounding_corners |= ImDrawFlags_RoundCornersBottomLeft;
+    //    if (!window->ScrollbarY)
+    //        rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
+    //}
+    //else
+    //{
+    //    if ((window->Flags & ImGuiWindowFlags_NoTitleBar) && !(window->Flags & ImGuiWindowFlags_MenuBar))
+    //        rounding_corners |= ImDrawFlags_RoundCornersTopRight;
+    //    if (!window->ScrollbarX)
+    //        rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
+    //}
+    //float size_avail = window->InnerRect.Max[axis] - window->InnerRect.Min[axis];
+    //float size_contents = window->ContentSize[axis] + window->WindowPadding[axis] * 2.0f;
+    //ImS64 scroll = (ImS64)window->Scroll[axis];
+    //ScrollbarEx(bb, id, axis, &scroll, (ImS64)size_avail, (ImS64)size_contents, rounding_corners);
+    //window->Scroll[axis] = (float)scroll;
 }
 
 // Vertical/Horizontal scrollbar
@@ -1476,7 +1476,7 @@ void ImGui::Separator()
     // FIXME: We cannot g.Style.SeparatorTextBorderSize for thickness as it relates to SeparatorText() which is a decorated separator, not defaulting to 1.0f.
     ImGuiSeparatorFlags flags = (window->DC.LayoutType == ImGuiLayoutType_Horizontal) ? ImGuiSeparatorFlags_Vertical : ImGuiSeparatorFlags_Horizontal;
     flags |= ImGuiSeparatorFlags_SpanAllColumns; // NB: this only applies to legacy Columns() api as they relied on Separator() a lot.
-    SeparatorEx(flags, 1.0f);
+    SeparatorEx(flags, 3.0f);
 }
 
 void ImGui::SeparatorTextEx(ImGuiID id, const char* label, const char* label_end, float extra_w)

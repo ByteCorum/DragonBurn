@@ -17,7 +17,7 @@ namespace Misc
 
 		//	globalvars GV;
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
-		ImGui::SetNextWindowBgAlpha(0.3f);
+		ImGui::SetNextWindowBgAlpha(0.6f);
 		ImGui::Begin("Watermark", nullptr, windowFlags);
 
 		// Cheat FPS

@@ -11,44 +11,6 @@
 // OS-ImGui Draw
 namespace OSImGui
 {
-    bool OSImGui::LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
-    { //shit coded by sysR@M
-        int image_width = 0;
-        int image_height = 0;
-        unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
-        if (image_data == NULL)
-            return false;
-        D3D11_TEXTURE2D_DESC desc;
-        ZeroMemory(&desc, sizeof(desc));
-        desc.Width = image_width;
-        desc.Height = image_height;
-        desc.MipLevels = 1;
-        desc.ArraySize = 1;
-        desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        desc.SampleDesc.Count = 1;
-        desc.Usage = D3D11_USAGE_DEFAULT;
-        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-        desc.CPUAccessFlags = 0;
-        ID3D11Texture2D* pTexture = NULL;
-        D3D11_SUBRESOURCE_DATA subResource;
-        subResource.pSysMem = image_data;
-        subResource.SysMemPitch = desc.Width * 4;
-        subResource.SysMemSlicePitch = 0;
-        g_Device.g_pd3dDevice->CreateTexture2D(&desc, &subResource, &pTexture);
-        // Create texture view
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-        ZeroMemory(&srvDesc, sizeof(srvDesc));
-        srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MipLevels = desc.MipLevels;
-        srvDesc.Texture2D.MostDetailedMip = 0;
-        g_Device.g_pd3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
-        pTexture->Release();
-        *out_width = image_width;
-        *out_height = image_height;
-        stbi_image_free(image_data);
-        return true;
-    }
 
     bool OSImGui::LoadTextureFromMemory(unsigned char* Memory, UINT size, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
     {
@@ -150,12 +112,6 @@ namespace OSImGui
     void OSImGui::OpenWebpage(const char* url)
     {
         ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
-    }
-
-    void OSImGui::OpenWebpageButton(const char* label, const char* url)
-    {
-        if (ImGui::Button(label))
-            OpenWebpage(url);
     }
 
     void OSImGui::MyText(std::string Text, bool isCenter) {
@@ -283,7 +239,6 @@ namespace OSImGui
         ImGui::InvisibleButton(str_id, ImVec2(Width, Height));
         if (ImGui::IsItemClicked())
             *v = !(*v);
-        // 组件移动动画
         float t = *v ? 1.0f : 0.f;
         ImGuiContext& g = *GImGui;
         float AnimationSpeed = 0.08f;
@@ -292,13 +247,11 @@ namespace OSImGui
             float T_Animation = ImSaturate(g.LastActiveIdTimer / AnimationSpeed);
             t = *v ? (T_Animation) : (1.0f - T_Animation);
         }
-        // 鼠标悬停颜色
         ImU32 Color;
         if (ImGui::IsItemHovered())
             Color = ImGui::GetColorU32(ImLerp(ImVec4(0.85f, 0.24f, 0.15f, 1.0f), ImVec4(0.55f, 0.85f, 0.13f, 1.000f), t));
         else
             Color = ImGui::GetColorU32(ImLerp(ImVec4(0.90f, 0.29f, 0.20f, 1.0f), ImVec4(0.60f, 0.90f, 0.18f, 1.000f), t));
-        // 组件绘制
         DrawList->AddRectFilled(ImVec2(p.x, p.y), ImVec2(p.x + Width, p.y + Height), Color, Height);
         DrawList->AddCircleFilled(ImVec2(p.x + Radius + t * (Width - Radius * 2) + (t == 0 ? 2 : -2), p.y + Radius + 2), Radius, IM_COL32(255, 255, 255, 255), 360);
         DrawList->AddCircle(ImVec2(p.x + Radius + t * (Width - Radius * 2) + (t == 0 ? 2 : -2), p.y + Radius + 2), Radius, IM_COL32(20, 20, 20, 80), 360, 1);

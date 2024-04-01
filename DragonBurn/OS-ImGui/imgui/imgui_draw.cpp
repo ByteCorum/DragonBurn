@@ -377,27 +377,27 @@ void ImGui::DragonBurnDefaultStyle(ImGuiStyle* dst)
     ImGuiStyle& style = ImGui::GetStyle();
 
     style.Alpha = 1.0f;
-    style.DisabledAlpha = 0.6f;
-    style.WindowPadding = ImVec2(6.0f, 3.0f);
-    style.WindowRounding = 10.0f;
+    style.DisabledAlpha = 0.8f;
+    style.WindowPadding = ImVec2(0.f, 0.f);
+    style.WindowRounding = 2.0f;
     style.WindowBorderSize = 1.0f;
     style.WindowMinSize = ImVec2(32.0f, 32.0f);
     style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
     style.WindowMenuButtonPosition = ImGuiDir_Left;
-    style.ChildRounding = 10.0f;
+    style.ChildRounding = 2.0f;
     style.ChildBorderSize = 1.0f;
-    style.PopupRounding = 5.0f;
+    style.PopupRounding = 4.0f;
     style.PopupBorderSize = 1.0f;
     style.FramePadding = ImVec2(5.0f, 1.0f);
     style.FrameRounding = 5.0f;
     style.FrameBorderSize = 1.0f;
-    style.ItemSpacing = ImVec2(8.0f, 4.0f);
+    style.ItemSpacing = ImVec2(6.0f, 4.0f);
     style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
     style.CellPadding = ImVec2(4.0f, 2.0f);
     style.IndentSpacing = 21.0f;
     style.ColumnsMinSpacing = 6.0f;
-    style.ScrollbarSize = 13.0f;
-    style.ScrollbarRounding = 16.0f;
+    style.ScrollbarSize = 0.f;
+    style.ScrollbarRounding = 0.f;
     style.GrabMinSize = 20.0f;
     style.GrabRounding = 5.0f;
     style.TabRounding = 4.0f;
@@ -407,48 +407,48 @@ void ImGui::DragonBurnDefaultStyle(ImGuiStyle* dst)
     style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
     style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
 
-    style.Colors[ImGuiCol_Text] = ImVec4(RGBA_TO_FLOAT(102, 110, 180, 250));
-    style.Colors[ImGuiCol_TextDisabled] = ImVec4(RGBA_TO_FLOAT(61, 71, 149, 250));
+    style.Colors[ImGuiCol_Text] = ImVec4(RGBA_TO_FLOAT(102, 110, 180, 255));
+    style.Colors[ImGuiCol_TextDisabled] = ImVec4(RGBA_TO_FLOAT(61, 71, 149, 255));
     style.Colors[ImGuiCol_WindowBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_ChildBg] = ImVec4(RGBA_TO_FLOAT(0,0,0,150));
-    style.Colors[ImGuiCol_PopupBg] = ImVec4(RGBA_TO_FLOAT(0, 0, 0, 150));
-    style.Colors[ImGuiCol_Border] = ImVec4(RGBA_TO_FLOAT(102, 110, 180, 250));
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(RGBA_TO_FLOAT(15, 17, 33, 255));
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(RGBA_TO_FLOAT(0, 0, 0, 200));
+    style.Colors[ImGuiCol_Border] = ImVec4(RGBA_TO_FLOAT(102, 110, 180, 200));
     style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-    style.Colors[ImGuiCol_FrameBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_TitleBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_MenuBarBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_TitleBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_TitleBgActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_MenuBarBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
     style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(RGBA_TO_FLOAT(0, 0, 0, 40));
-    style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_CheckMark] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_SliderGrab] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_Button] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_ButtonActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_Header] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_HeaderActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_Separator] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_SeparatorActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_ResizeGrip] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_Tab] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_TabHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_TabActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_TabUnfocused] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(RGBA_TO_FLOAT(45, 51, 101, 200));
-    style.Colors[ImGuiCol_PlotLines] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
-    style.Colors[ImGuiCol_PlotHistogram] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
-    style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
+    style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_CheckMark] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_SliderGrab] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_Button] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_ButtonHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_ButtonActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_Header] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_HeaderActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_Separator] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_SeparatorActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_ResizeGrip] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_Tab] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_TabHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_TabActive] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_TabUnfocused] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(RGBA_TO_FLOAT(45, 51, 101, 255));
+    style.Colors[ImGuiCol_PlotLines] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
+    style.Colors[ImGuiCol_PlotHistogram] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 255));
+    style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255));
     //style.Colors[ImGuiCol_TableHeaderBg] = ImVec4(RGBA_TO_FLOAT(27, 31, 61, 200));
     //style.Colors[ImGuiCol_TableBorderStrong] = ImVec4(RGBA_TO_FLOAT(55, 63, 124, 200));
     //style.Colors[ImGuiCol_TableBorderLight] = ImVec4(RGBA_TO_FLOAT(45, 51, 101, 200));
@@ -1522,10 +1522,10 @@ void ImDrawList::AddRect(const ImVec2& p_min, const ImVec2& p_max, ImU32 col, fl
 {
     if ((col & IM_COL32_A_MASK) == 0)
         return;
-    if (Flags & ImDrawListFlags_AntiAliasedLines)
-        PathRect(p_min + ImVec2(0.50f, 0.50f), p_max - ImVec2(0.50f, 0.50f), rounding, flags);
-    else
-        PathRect(p_min + ImVec2(0.50f, 0.50f), p_max - ImVec2(0.49f, 0.49f), rounding, flags); // Better looking lower-right corner and rounded non-AA shapes.
+    //if (Flags & ImDrawListFlags_AntiAliasedLines)
+    //    PathRect(p_min + ImVec2(0.50f, 0.50f), p_max - ImVec2(0.50f, 0.50f), rounding, flags);
+    //else
+    PathRect(p_min + ImVec2(0.50f, 0.50f), p_max - ImVec2(-0.50f, 0.49f), rounding, flags); // Better looking lower-right corner and rounded non-AA shapes.
     PathStroke(col, ImDrawFlags_Closed, thickness);
 }
 
@@ -4029,7 +4029,7 @@ static void UnpackAccumulativeOffsetsIntoRanges(int base_codepoint, const short*
 
 const ImWchar*  ImFontAtlas::GetGlyphRangesChineseSimplifiedCommon()
 {
-    // Store 2500 regularly used characters for Simplified Chinese.
+    // Store 2550 regularly used characters for Simplified Chinese.
     // Sourced from https://zh.wiktionary.org/wiki/%E9%99%84%E5%BD%95:%E7%8E%B0%E4%BB%A3%E6%B1%89%E8%AF%AD%E5%B8%B8%E7%94%A8%E5%AD%97%E8%A1%A8
     // This table covers 97.97% of all characters used during the month in July, 1987.
     // You can use ImFontGlyphRangesBuilder to create your own ranges derived from this, by merging existing ranges or adding new characters.

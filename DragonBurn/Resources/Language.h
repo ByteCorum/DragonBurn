@@ -309,10 +309,10 @@ namespace Lang
 		// Config Menu
 		ConfigText.FeatureName = u8"Config Loader";
 		ConfigText.MyConfigs = u8"Config List";
-		ConfigText.Load = u8"Load Selected";
-		ConfigText.Save = u8"Save Selected";
-		ConfigText.Delete = u8"Del Selected";
-		ConfigText.Reset = u8"Reset Config";
+		ConfigText.Load = u8"Load";
+		ConfigText.Save = u8"Save";
+		ConfigText.Delete = u8"Delete";
+		ConfigText.Reset = u8"Reset";
 		ConfigText.Create = u8"Create";
 		ConfigText.OpenFolder = u8"Open Folder";
 		ConfigText.SeparateLine = u8"Create Config";
@@ -321,11 +321,11 @@ namespace Lang
 
 		ConfigText.fpsCap = u8"Frame Limit: ";
 
-		// Readme Menu
-		ReadMeText.FeatureName = u8" README";
-		ReadMeText.LastUpdate = u8"Last update: ";
-		ReadMeText.SourceButton = u8"Source Code";
-		ReadMeText.DiscordButton = u8"Join Discord";
-		ReadMeText.OffsetsTitle = u8"Offsets:";
+		//// Readme Menu
+		//ReadMeText.FeatureName = u8" README";
+		//ReadMeText.LastUpdate = u8"Last update: ";
+		//ReadMeText.SourceButton = u8"Source Code";
+		//ReadMeText.DiscordButton = u8"Join Discord";
+		//ReadMeText.OffsetsTitle = u8"Offsets:";
 	}
 }

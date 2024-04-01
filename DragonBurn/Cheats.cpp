@@ -90,7 +90,7 @@ void Cheats::Run()
 
 	if (MenuConfig::ShowMenu)
 	{
-		GUI::NewGui();
+		GUI::DrawGui();
 	}
 
 	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu)

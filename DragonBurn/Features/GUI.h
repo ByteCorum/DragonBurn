@@ -15,10 +15,18 @@ ID3D11ShaderResourceView* MenuButton1 = NULL;
 ID3D11ShaderResourceView* MenuButton2 = NULL;
 ID3D11ShaderResourceView* MenuButton3 = NULL;
 ID3D11ShaderResourceView* MenuButton4 = NULL;
+ID3D11ShaderResourceView* MenuButton1Pressed = NULL;
+ID3D11ShaderResourceView* MenuButton2Pressed = NULL;
+ID3D11ShaderResourceView* MenuButton3Pressed = NULL;
+ID3D11ShaderResourceView* MenuButton4Pressed = NULL;
 ID3D11ShaderResourceView* HitboxImage = NULL;
 
+bool Button1Pressed = true;
+bool Button2Pressed = false;
+bool Button3Pressed = false;
+bool Button4Pressed = false;
+
 int LogoW = 0, LogoH = 0;
-int LogoW2 = 0, LogoH2 = 0;
 int buttonW = 0;
 int buttonH = 0;
 int hitboxW = 0, hitboxH = 0;
@@ -96,6 +104,10 @@ namespace GUI
 			Gui.LoadTextureFromMemory(Images::MiscButton, sizeof Images::MiscButton, &MenuButton3, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::ConfigButton, sizeof Images::ConfigButton, &MenuButton4, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::PreviewImg, sizeof Images::PreviewImg, &HitboxImage, &hitboxW, &hitboxH);
+			Gui.LoadTextureFromMemory(Images::VisualButtonPressed, sizeof Images::VisualButtonPressed, &MenuButton1Pressed, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::AimbotButtonPressed, sizeof Images::AimbotButtonPressed, &MenuButton2Pressed, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::MiscButtonPressed, sizeof Images::MiscButtonPressed, &MenuButton3Pressed, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::ConfigButtonPressed, sizeof Images::ConfigButtonPressed, &MenuButton4Pressed, &buttonW, &buttonH);
 		}
 	}
 
@@ -119,7 +131,7 @@ namespace GUI
 		ImGui::SameLine();
 		ImGui::SetCursorPosY(CurrentCursorY - 2);
 		if (ColorEditor) {
-			AlignRight(ContentWidth + ImGui::GetFrameHeight() + 8);
+			AlignRight(ContentWidth + ImGui::GetFrameHeight() +7);
 			ImGui::ColorEdit4(lable, col, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview);
 			ImGui::SameLine();
 		}
@@ -148,7 +160,7 @@ namespace GUI
 		// if there is no fucking ID, all the sliders would be fucking forced to sync when you click on one of them ;3
 		ImGui::PushID(string);
 		float CurrentCursorX = ImGui::GetCursorPosX();
-		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX;
+		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX - 15;
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(string);
 		ImGui::SameLine();
@@ -162,7 +174,7 @@ namespace GUI
 	{
 		ImGui::PushID(string);
 		float CurrentCursorX = ImGui::GetCursorPosX();
-		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX;
+		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX-15;
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(string);
 		ImGui::SameLine();
@@ -174,7 +186,7 @@ namespace GUI
 	}
 	// ########################################
 
-	void NewGui()
+	void DrawGui()
 	{
 		LoadImages();
 		ImTextureID ImageID;
@@ -184,56 +196,95 @@ namespace GUI
 		LogoSize = ImVec2(LogoW, LogoH);
 		LogoPos = MenuConfig::WCS.LogoPos;
 
-		ImColor BorderColor = ImColor(102, 110, 180, 250);
+		ImColor BorderColor = ImColor(102, 110, 180, 255);
 
 		char TempText[256];
-		ImGuiWindowFlags Flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
-		ImGui::SetNextWindowPos({ (ImGui::GetIO().DisplaySize.x - 851.0f) / 2.0f, (ImGui::GetIO().DisplaySize.y - 514.0f) / 2.0f }, ImGuiCond_Once);
-		ImGui::SetNextWindowSize({ 851,514 });
+		ImGuiWindowFlags Flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar;
+		ImGui::SetNextWindowPos({ (ImGui::GetIO().DisplaySize.x - MenuConfig::WCS.MainWinSize.x) / 2.0f, (ImGui::GetIO().DisplaySize.y - MenuConfig::WCS.MainWinSize.y) / 2.0f }, ImGuiCond_Once);
+		ImGui::SetNextWindowSize(MenuConfig::WCS.MainWinSize);
 		ImGui::Begin("DragonBurn", nullptr, Flags);
 		{
 			ImGui::SetCursorPos(LogoPos);
 			ImGui::Image(ImageID, LogoSize);
-
-			ImGui::SetCursorPos(MenuConfig::WCS.Button1Pos);
-			ImGui::Image((void*)MenuButton1, ImVec2(buttonW, buttonH));
 			if (ImGui::IsItemClicked()) {
-				MenuConfig::WCS.MenuPage = 0;
+				Gui.OpenWebpage("https://github.com/ByteCorum/DragonBurn");
 			}
 			ImGui::GetWindowDrawList()->AddRect(
-				ImVec2(MenuConfig::WCS.Button1Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button1Pos.y + ImGui::GetWindowPos().y), 
-				ImVec2(MenuConfig::WCS.Button1Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button1Pos.y + buttonH + ImGui::GetWindowPos().y), 
-				BorderColor, 9.f, ImDrawFlags_RoundCornersAll, 2.f);
-			
+				ImVec2(MenuConfig::WCS.LogoPos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.LogoPos.y + ImGui::GetWindowPos().y),
+				ImVec2(MenuConfig::WCS.LogoPos.x + LogoW + ImGui::GetWindowPos().x, MenuConfig::WCS.LogoPos.y + LogoH + ImGui::GetWindowPos().y),
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+
+			ImGui::SetCursorPos(MenuConfig::WCS.Button1Pos);
+			if (!Button1Pressed)
+				ImGui::Image((void*)MenuButton1, ImVec2(buttonW, buttonH));
+			if (Button1Pressed)
+				ImGui::Image((void*)MenuButton1Pressed, ImVec2(buttonW, buttonH));
+			if (ImGui::IsItemClicked()) 
+			{
+				MenuConfig::WCS.MenuPage = 0;
+				Button1Pressed = true;
+				Button2Pressed = false;
+				Button3Pressed = false;
+				Button4Pressed = false;
+			}
+			ImGui::GetWindowDrawList()->AddRect(
+				ImVec2(MenuConfig::WCS.Button1Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button1Pos.y + ImGui::GetWindowPos().y),
+				ImVec2(MenuConfig::WCS.Button1Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button1Pos.y + buttonH + ImGui::GetWindowPos().y),
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+
 			ImGui::SetCursorPos(MenuConfig::WCS.Button2Pos);
-			ImGui::Image((void*)MenuButton2, ImVec2(buttonW, buttonH));
-			if (ImGui::IsItemClicked()) {
+			if (!Button2Pressed)
+				ImGui::Image((void*)MenuButton2, ImVec2(buttonW, buttonH));
+			if (Button2Pressed)
+				ImGui::Image((void*)MenuButton2Pressed, ImVec2(buttonW, buttonH));
+			if (ImGui::IsItemClicked())
+			{
 				MenuConfig::WCS.MenuPage = 1;
+				Button1Pressed = false;
+				Button2Pressed = true;
+				Button3Pressed = false;
+				Button4Pressed = false;
 			}
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button2Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button2Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button2Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button2Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 9.f, ImDrawFlags_RoundCornersAll, 2.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.Button3Pos);
-			ImGui::Image((void*)MenuButton3, ImVec2(buttonW, buttonH));
-			if (ImGui::IsItemClicked()) {
+			if (!Button3Pressed)
+				ImGui::Image((void*)MenuButton3, ImVec2(buttonW, buttonH));
+			if (Button3Pressed)
+				ImGui::Image((void*)MenuButton3Pressed, ImVec2(buttonW, buttonH));
+			if (ImGui::IsItemClicked())
+			{
 				MenuConfig::WCS.MenuPage = 2;
+				Button1Pressed = false;
+				Button2Pressed = false;
+				Button3Pressed = true;
+				Button4Pressed = false;
 			}
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button3Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button3Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button3Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button3Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 9.f, ImDrawFlags_RoundCornersAll, 2.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.Button4Pos);
-			ImGui::Image((void*)MenuButton4, ImVec2(buttonW, buttonH));
-			if (ImGui::IsItemClicked()) {
+			if (!Button4Pressed)
+				ImGui::Image((void*)MenuButton4, ImVec2(buttonW, buttonH));
+			if (Button4Pressed)
+				ImGui::Image((void*)MenuButton4Pressed, ImVec2(buttonW, buttonH));
+			if (ImGui::IsItemClicked())
+			{
 				MenuConfig::WCS.MenuPage = 3;
+				Button1Pressed = false;
+				Button2Pressed = false;
+				Button3Pressed = false;
+				Button4Pressed = true;
 			}
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button4Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button4Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button4Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button4Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 9.f, ImDrawFlags_RoundCornersAll, 2.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
 
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5);
 
@@ -241,6 +292,8 @@ namespace GUI
 			
 			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize);
 			{
+				ImGui::Text("   DragonBurn");
+				ImGui::Separator();
 				if (MenuConfig::WCS.MenuPage == 0)
 				{
 					ImGui::Columns(2, nullptr, false);
@@ -259,7 +312,7 @@ namespace GUI
 							PutSwitch(Lang::ESPtext.Outline, 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::OutLine);
 							ImGui::TextDisabled(Lang::ESPtext.BoxType);
 							ImGui::SameLine();
-							//ImGui::SetNextItemWidth(165.f);
+							ImGui::SetNextItemWidth(165.f);
 							ImGui::Combo("###BoxType", &MenuConfig::BoxType, "Normal\0Dynamic\0Corner\0");
 							PutSliderFloat(Lang::ESPtext.BoxRounding, 10.f, &ESPConfig::BoxRounding, &MinRounding, &MaxRouding, "%.1f");
 						}
@@ -363,6 +416,7 @@ namespace GUI
 						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
 						ImGui::TextDisabled(Lang::AimbotText.HotKeyList);
 						ImGui::SameLine();
+						ImGui::SetNextItemWidth(165.f);
 						if (ImGui::Combo("###AimKey", &MenuConfig::AimBotHotKey, "LALT\0LBUTTON\0RBUTTON\0XBUTTON1\0XBUTTON2\0CAPITAL\0SHIFT\0CONTROL\0"))
 						{
 							AimControl::SetHotKey(MenuConfig::AimBotHotKey);
@@ -503,6 +557,7 @@ namespace GUI
 							ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5.f);
 							ImGui::TextDisabled(Lang::TriggerText.HotKeyList);
 							ImGui::SameLine();
+							ImGui::SetNextItemWidth(170.f);
 							if (ImGui::Combo("###TriggerbotKey", &MenuConfig::TriggerHotKey, "LALT\0RBUTTON\0XBUTTON1\0XBUTTON2\0CAPITAL\0SHIFT\0CONTROL\0"))
 							{
 								TriggerBot::SetHotKey(MenuConfig::TriggerHotKey);
@@ -532,7 +587,7 @@ namespace GUI
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
 					ImGui::TextDisabled(Lang::MiscText.HitSound);
 					ImGui::SameLine();
-					ImGui::SetNextItemWidth(170.f);
+					ImGui::SetNextItemWidth(155.f);
 					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
 					PutSwitch(Lang::MiscText.SpecCheck, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::WorkInSpec);
 					// PutSwitch(Lang::MiscText.SpecList, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SpecList);
@@ -546,6 +601,11 @@ namespace GUI
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5.f);
 
 					ImGui::NewLine();
+					if (ImGui::Button("Source Code", { 125.f, 25.f }))
+						Gui.OpenWebpage("https://github.com/ByteCorum/DragonBurn");
+					ImGui::SameLine();
+					if (ImGui::Button("Contact Author", { 125.f, 25.f }))
+						Gui.OpenWebpage("https://discordapp.com/users/798503509522645012/");
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() / 4);
 					if (ImGui::Button("Safe Exit", { 125.f, 25.f }))
 						Init::Client::Exit();
@@ -567,6 +627,7 @@ namespace GUI
 
 					ImGui::Columns(1);
 				}
+				ImGui::NewLine();
 			} ImGui::EndChild();
 		} ImGui::End();
 

@@ -52,8 +52,6 @@ namespace bmb
 		ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
 		ImGui::SetNextWindowPos({ (ImGui::GetIO().DisplaySize.x - 200.0f) / 2.0f, 80.0f }, ImGuiCond_Once);
 		ImGui::SetNextWindowSize({ windowWidth, 0 }, ImGuiCond_Once);
-		if (!MenuConfig::ShowMenu)
-			ImGui::SetNextWindowBgAlpha(0.3f);
 		ImGui::Begin("Bomb Timer", nullptr, flags);
 
 		ProcessMgr.ReadMemory(plantedAddress, isBombPlanted);
@@ -99,6 +97,8 @@ namespace bmb
 			Gui.MyText("C4 not planted", true);
 			barLength = 0.0f;
 		}
+		ImGui::TextUnformatted(" ");
+		ImGui::SameLine();
 		Gui.MyProgressBar(barLength, { 180, 15 }, "", MiscCFG::BombTimerCol);
 
 		if (isPlanted && !isBombPlanted)

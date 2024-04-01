@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include "Utils/ProcessManager.hpp"
-#include "Utils/Helpers.h"
 
 namespace Offset
 {
