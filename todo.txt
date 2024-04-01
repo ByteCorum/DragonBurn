@@ -1,6 +1,7 @@
-◎ Change button textures to more cool
-◎ add aim hitboxes to config
+○ Refactor the code
 ○ Fix bug with aim hotkey
+◎ Change button textures to more cool
+◎ Add aim hitboxes to config
 ◎ Fix bug with trigger delay
 ◎ Make gui look cooler
 ◎ Delete junk
