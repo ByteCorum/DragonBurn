@@ -14,7 +14,7 @@ namespace OSImGui
         ImFontAtlas* fontAtlas = new ImFontAtlas();
         ImFontConfig arialConfig;
         arialConfig.FontDataOwnedByAtlas = false;
-        ImFont* arialFont = fontAtlas->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF", 19.0f, &arialConfig, io.Fonts->GetGlyphRangesAll());
+        ImFont* arialFont = fontAtlas->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF", 19.0f, &arialConfig, io.Fonts->GetGlyphRangesDefault());
         
         ImFontConfig iconConfig;
         iconConfig.MergeMode = true;

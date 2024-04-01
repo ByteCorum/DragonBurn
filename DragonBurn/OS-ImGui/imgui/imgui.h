@@ -2607,7 +2607,7 @@ struct ImDrawList
     //   In future versions we will use textures to provide cheaper and higher-quality circles.
     //   Use AddNgon() and AddNgonFilled() functions if you need to guarantee a specific number of sides.
     IMGUI_API void  AddLine(const ImVec2& p1, const ImVec2& p2, ImU32 col, float thickness = 1.0f);
-    IMGUI_API void  AddRect(const ImVec2& p_min, const ImVec2& p_max, ImU32 col, float rounding = 0.0f, ImDrawFlags flags = 0, float thickness = 1.0f);   // a: upper-left, b: lower-right (== upper-left + size)
+    IMGUI_API void  AddRect(const ImVec2& p_min, const ImVec2& p_max, ImU32 col, float rounding = 0.0f, ImDrawFlags flags = 0, float thickness = 1.0f, bool menu = false);   // a: upper-left, b: lower-right (== upper-left + size)
     IMGUI_API void  AddRectFilled(const ImVec2& p_min, const ImVec2& p_max, ImU32 col, float rounding = 0.0f, ImDrawFlags flags = 0);                     // a: upper-left, b: lower-right (== upper-left + size)
     IMGUI_API void  AddRectFilledMultiColor(const ImVec2& p_min, const ImVec2& p_max, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left);
     IMGUI_API void  AddQuad(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, ImU32 col, float thickness = 1.0f);
@@ -2880,15 +2880,6 @@ struct ImFontAtlas
     // Read https://github.com/ocornut/imgui/blob/master/docs/FONTS.md/#about-utf-8-encoding for details.
     // NB: Consider using ImFontGlyphRangesBuilder to build glyph ranges from textual data.
     IMGUI_API const ImWchar*    GetGlyphRangesDefault();                // Basic Latin, Extended Latin
-    IMGUI_API const ImWchar*    GetGlyphRangesGreek();                  // Default + Greek and Coptic
-    IMGUI_API const ImWchar*    GetGlyphRangesKorean();                 // Default + Korean characters
-    IMGUI_API const ImWchar*    GetGlyphRangesJapanese();               // Default + Hiragana, Katakana, Half-Width, Selection of 2999 Ideographs
-    IMGUI_API const ImWchar*    GetGlyphRangesChineseFull();            // Default + Half-Width + Japanese Hiragana/Katakana + full set of about 21000 CJK Unified Ideographs
-    IMGUI_API const ImWchar*    GetGlyphRangesChineseSimplifiedCommon();// Default + Half-Width + Japanese Hiragana/Katakana + set of 2500 CJK Unified Ideographs for common simplified Chinese
-    IMGUI_API const ImWchar*    GetGlyphRangesCyrillic();               // Default + about 400 Cyrillic characters
-    IMGUI_API const ImWchar*    GetGlyphRangesThai();                   // Default + Thai characters
-    IMGUI_API const ImWchar*    GetGlyphRangesVietnamese();             // Default + Vietnamese characters
-    IMGUI_API const ImWchar*    GetGlyphRangesAll();
 
     //-------------------------------------------
     // [BETA] Custom Rectangles/Glyphs API

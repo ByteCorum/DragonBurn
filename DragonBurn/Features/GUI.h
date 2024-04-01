@@ -212,7 +212,7 @@ namespace GUI
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.LogoPos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.LogoPos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.LogoPos.x + LogoW + ImGui::GetWindowPos().x, MenuConfig::WCS.LogoPos.y + LogoH + ImGui::GetWindowPos().y),
-				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f, true);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.Button1Pos);
 			if (!Button1Pressed)
@@ -230,7 +230,7 @@ namespace GUI
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button1Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button1Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button1Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button1Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f, true);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.Button2Pos);
 			if (!Button2Pressed)
@@ -248,7 +248,7 @@ namespace GUI
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button2Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button2Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button2Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button2Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f, true);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.Button3Pos);
 			if (!Button3Pressed)
@@ -266,7 +266,7 @@ namespace GUI
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button3Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button3Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button3Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button3Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f, true);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.Button4Pos);
 			if (!Button4Pressed)
@@ -284,7 +284,7 @@ namespace GUI
 			ImGui::GetWindowDrawList()->AddRect(
 				ImVec2(MenuConfig::WCS.Button4Pos.x + ImGui::GetWindowPos().x, MenuConfig::WCS.Button4Pos.y + ImGui::GetWindowPos().y),
 				ImVec2(MenuConfig::WCS.Button4Pos.x + buttonW + ImGui::GetWindowPos().x, MenuConfig::WCS.Button4Pos.y + buttonH + ImGui::GetWindowPos().y),
-				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f);
+				BorderColor, 0.f, ImDrawFlags_RoundCornersNone | ImDrawCornerFlags_Top | ImDrawCornerFlags_Bot, 1.f, true);
 
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5);
 
@@ -565,8 +565,8 @@ namespace GUI
 						}
 						PutSwitch(Lang::TriggerText.Toggle, 5.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::TriggerAlways);
 						PutSwitch(Lang::TriggerText.ScopeOnly, 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::ScopeOnly);
-						PutSwitch(Lang::AimbotText.IgnoreFlash, 10.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::IgnoreFlash);
-						PutSliderInt(Lang::TriggerText.DelaySlider, 1.f, &TriggerBot::TriggerDelay, &DelayMin, &DelayMax, "%d ms");
+						PutSwitch(Lang::AimbotText.IgnoreFlash, 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::IgnoreFlash);
+						PutSliderInt(Lang::TriggerText.DelaySlider, 5.f, &TriggerBot::TriggerDelay, &DelayMin, &DelayMax, "%d ms");
 						PutSliderInt(Lang::TriggerText.FakeShotSlider, 5.f, &TriggerBot::FakeShotDelay, &DurationMin, &DurationMax, "%d ms");
 					}
 

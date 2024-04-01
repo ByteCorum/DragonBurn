@@ -888,31 +888,31 @@ ImRect ImGui::GetWindowScrollbarRect(ImGuiWindow* window, ImGuiAxis axis)
 
 void ImGui::Scrollbar(ImGuiAxis axis)
 {
-    //ImGuiContext& g = *GImGui;
-    //ImGuiWindow* window = g.CurrentWindow;
-    //const ImGuiID id = GetWindowScrollbarID(window, axis);
+    ImGuiContext& g = *GImGui;
+    ImGuiWindow* window = g.CurrentWindow;
+    const ImGuiID id = GetWindowScrollbarID(window, axis);
 
-    //// Calculate scrollbar bounding box
-    //ImRect bb = GetWindowScrollbarRect(window, axis);
-    //ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersNone;
-    //if (axis == ImGuiAxis_X)
-    //{
-    //    rounding_corners |= ImDrawFlags_RoundCornersBottomLeft;
-    //    if (!window->ScrollbarY)
-    //        rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
-    //}
-    //else
-    //{
-    //    if ((window->Flags & ImGuiWindowFlags_NoTitleBar) && !(window->Flags & ImGuiWindowFlags_MenuBar))
-    //        rounding_corners |= ImDrawFlags_RoundCornersTopRight;
-    //    if (!window->ScrollbarX)
-    //        rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
-    //}
-    //float size_avail = window->InnerRect.Max[axis] - window->InnerRect.Min[axis];
-    //float size_contents = window->ContentSize[axis] + window->WindowPadding[axis] * 2.0f;
-    //ImS64 scroll = (ImS64)window->Scroll[axis];
-    //ScrollbarEx(bb, id, axis, &scroll, (ImS64)size_avail, (ImS64)size_contents, rounding_corners);
-    //window->Scroll[axis] = (float)scroll;
+    // Calculate scrollbar bounding box
+    ImRect bb = GetWindowScrollbarRect(window, axis);
+    ImDrawFlags rounding_corners = ImDrawFlags_RoundCornersNone;
+    if (axis == ImGuiAxis_X)
+    {
+        rounding_corners |= ImDrawFlags_RoundCornersBottomLeft;
+        if (!window->ScrollbarY)
+            rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
+    }
+    else
+    {
+        if ((window->Flags & ImGuiWindowFlags_NoTitleBar) && !(window->Flags & ImGuiWindowFlags_MenuBar))
+            rounding_corners |= ImDrawFlags_RoundCornersTopRight;
+        if (!window->ScrollbarX)
+            rounding_corners |= ImDrawFlags_RoundCornersBottomRight;
+    }
+    float size_avail = window->InnerRect.Max[axis] - window->InnerRect.Min[axis];
+    float size_contents = window->ContentSize[axis] + window->WindowPadding[axis] * 2.0f;
+    ImS64 scroll = (ImS64)window->Scroll[axis];
+    ScrollbarEx(bb, id, axis, &scroll, (ImS64)size_avail, (ImS64)size_contents, rounding_corners);
+    window->Scroll[axis] = (float)scroll;
 }
 
 // Vertical/Horizontal scrollbar
