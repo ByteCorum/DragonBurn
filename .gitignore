@@ -401,7 +401,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-DragonBurn/Utils/curl/lib/libcurl.dll
-DragonBurn/Utils/curl/lib/libcurl_imp.lib
-DragonBurn/Utils/yaml-cpp/lib/yaml-cpp.lib
 DragonBurn/imgui.ini
