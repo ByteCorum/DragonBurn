@@ -1,5 +1,6 @@
 ○ Refactor the code
-○ Fix bug with aim hotkey(rcs)
+◎ visible check load color bug 
+◎ Fix bug with aim hotkey
 ◎ Change button textures to more cool
 ◎ Add aim hitboxes to config
 ◎ Fix bug with trigger delay
