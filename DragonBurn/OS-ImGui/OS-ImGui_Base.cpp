@@ -1,5 +1,6 @@
 ﻿#include "OS-ImGui_Base.h"
 #include "..\Resources\WeaponIcon.h"
+#include "..\Resources\Font.h"
 #include "..\Resources\Language.h"
 
 namespace OSImGui
@@ -14,7 +15,7 @@ namespace OSImGui
         ImFontAtlas* fontAtlas = new ImFontAtlas();
         ImFontConfig arialConfig;
         arialConfig.FontDataOwnedByAtlas = false;
-        ImFont* arialFont = fontAtlas->AddFontFromFileTTF("c:\\Windows\\Fonts\\ARLRDBD.TTF", 19.0f, &arialConfig, io.Fonts->GetGlyphRangesDefault());
+        ImFont* arialFont = fontAtlas->AddFontFromMemoryTTF((void*)MainFont, sizeof(MainFont), 19.0f, &arialConfig, io.Fonts->GetGlyphRangesDefault());
         
         ImFontConfig iconConfig;
         iconConfig.MergeMode = true;
