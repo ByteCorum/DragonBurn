@@ -23,7 +23,6 @@ namespace AimControl
     inline int AimBullet = 1;
     inline bool ScopeOnly = false;
     inline bool AutoShot = false;
-    inline bool AimLock = false;
     inline bool IgnoreFlash = false;
     inline float AimFov = 5;
     inline float AimFovMin = 0.f;
@@ -48,7 +47,7 @@ namespace AimControl
         if (MenuConfig::ShowMenu)
             return;
 
-        if (Local.Pawn.ShotsFired <= AimBullet-1 && !AimLock && AimBullet != 0)
+        if (Local.Pawn.ShotsFired <= AimBullet-1 && AimBullet != 0)
         {
             HasTarget = false;
             return;

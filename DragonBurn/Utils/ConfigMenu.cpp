@@ -134,7 +134,6 @@ namespace ConfigMenu {
 		TriggerBot::IgnoreFlash = false;
 		TriggerBot::ScopeOnly = false;
 		AimControl::IgnoreFlash = false;
-		AimControl::AimLock = false;
 		ESPConfig::RenderDistance = 80;
 		ESPConfig::ArmorBar = false;
 		ESPConfig::ShowArmorNum = false;

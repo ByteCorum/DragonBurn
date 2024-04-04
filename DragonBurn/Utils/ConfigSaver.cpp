@@ -218,7 +218,6 @@ namespace MyConfigSaver {
         emitter << YAML::Value;
         emitter << YAML::BeginMap;
         emitter << YAML::Key << "Enable" << YAML::Value << MenuConfig::AimBot;
-        emitter << YAML::Key << "AimLock" << YAML::Value << AimControl::AimLock;
         emitter << YAML::Key << "ToggleMode" << YAML::Value << MenuConfig::AimToggleMode;
         emitter << YAML::Key << "Hotkey" << YAML::Value << MenuConfig::AimBotHotKey; 
         emitter << YAML::Key << "AimBullet" << YAML::Value << AimControl::AimBullet;
@@ -409,7 +408,6 @@ namespace MyConfigSaver {
         if (config["Aimbot"])
         {
             MenuConfig::AimBot = ReadData(config["Aimbot"]["Enable"], false);
-            AimControl::AimLock = ReadData(config["Aimbot"]["AimLock"], false);
             MenuConfig::AimToggleMode = ReadData(config["Aimbot"]["ToggleMode"], false);
             MenuConfig::AimBotHotKey = ReadData(config["Aimbot"]["Hotkey"], 0);
             AimControl::AimBullet = ReadData(config["Aimbot"]["AimBullet"], 0);
