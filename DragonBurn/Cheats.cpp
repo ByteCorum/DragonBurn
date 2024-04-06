@@ -18,84 +18,38 @@
 int PreviousTotalHits = 0;
 
 // Does not work and not use it for now
-void Cheats::KeyCheckThread()
-{
-	try
-	{
-		if ((GetAsyncKeyState(VK_END) & 0x8000))
-		{
-			MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(150));
-	}
-	catch (const std::exception& e) {
-		std::cout << e.what() << std::endl;
-	}
-}
+//void Cheats::KeyCheckThread()
+//{
+//	try
+//	{
+//		if ((GetAsyncKeyState(VK_END) & 0x8000))
+//		{
+//			MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
+//		}
+//		std::this_thread::sleep_for(std::chrono::milliseconds(150));
+//	}
+//	catch (const std::exception& e) {
+//		std::cout << e.what() << std::endl;
+//	}
+//}
 
-void Cheats::RadarSetting(Base_Radar& Radar)
-{
-	// Radar window
-	ImGui::SetNextWindowBgAlpha(RadarCFG::RadarBgAlpha);
-	ImGui::Begin("Radar", 0, ImGuiWindowFlags_NoResize);
-	ImGui::SetWindowSize({ RadarCFG::RadarRange * 2,RadarCFG::RadarRange * 2 });
-	
-	if (!RadarCFG::customRadar)
-	{
-		ImGui::SetWindowPos(ImVec2(0, 0));
-		RadarCFG::ShowRadarCrossLine = false;
-		RadarCFG::Proportion = 3300.f;
-		RadarCFG::RadarPointSizeProportion = 1.f;
-		RadarCFG::RadarRange = 150.f;
-		RadarCFG::RadarBgAlpha = 0.1f;
-	}
-		
+void RenderCrossHair(ImDrawList*);
 
-	// Radar.SetPos({ Gui.Window.Size.x / 2,Gui.Window.Size.y / 2 });
-	Radar.SetDrawList(ImGui::GetWindowDrawList());
-	Radar.SetPos({ ImGui::GetWindowPos().x + RadarCFG::RadarRange, ImGui::GetWindowPos().y + RadarCFG::RadarRange });
-	Radar.SetProportion(RadarCFG::Proportion);
-	Radar.SetRange(RadarCFG::RadarRange);
-	Radar.SetSize(RadarCFG::RadarRange * 2);
-	Radar.SetCrossColor(RadarCFG::RadarCrossLineColor);
+void RadarSetting(Base_Radar&);
 
-	Radar.ArcArrowSize *= RadarCFG::RadarPointSizeProportion;
-	Radar.ArrowSize *= RadarCFG::RadarPointSizeProportion;
-	Radar.CircleSize *= RadarCFG::RadarPointSizeProportion;
-
-	Radar.ShowCrossLine = RadarCFG::ShowRadarCrossLine;
-	Radar.Opened = true;
-}
-
-void Cheats::RenderCrossHair(ImDrawList* drawList) noexcept
-{
-	if (!CrosshairsCFG::ShowCrossHair)
-		return;
-
-	if(CrosshairsCFG::isAim && MenuConfig::TargetingCrosshairs)
-		Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::TargetedColor));
-	else
-		Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::CrossHairColor));
-}
+void Menu();
+void Visual(CEntity);
+void Radar(Base_Radar);
+void Trigger(CEntity);
+void AIM(CEntity, std::vector<Vec3>);
+void MiscFuncs(CEntity);
 
 void Cheats::Run()
 {	
-	// Show menu
-	static DWORD lastTick = 0; 
-	DWORD currentTick = GetTickCount(); 
-	if ((GetAsyncKeyState(VK_END) & 0x8000) && currentTick - lastTick >= 150) {
-		MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
-		lastTick = currentTick;
-	}
-
-	if (MenuConfig::ShowMenu)
-	{
-		GUI::DrawGui();
-	}
+	Menu();
 
 	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu)
 		return;
-
 
 	// Update matrix
 	if(!ProcessMgr.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix,64))
@@ -132,9 +86,9 @@ void Cheats::Run()
 	std::vector<Vec3> AimPosList;
 
 	// Radar Data
-	Base_Radar Radar;
+	Base_Radar GameRadar;
 	if (RadarCFG::ShowRadar)
-		RadarSetting(Radar);
+		RadarSetting(GameRadar);
 
 	for (int i = 0; i < 64; i++)
 	{
@@ -152,45 +106,16 @@ void Cheats::Run()
 		if (!Entity.UpdatePawn(Entity.Pawn.Address))
 			continue;
 
-		//std::vector<std::string> spectators;
-		//if (MiscCFG::SpecList && !MenuConfig::ShowMenu)
-		//{
-		//	int spectatorCount = 0;
-		//	uint32_t m_hPawn;
-		//	uintptr_t pCSPlayerPawn, m_pObserverServices;
-		//	ProcessMgr.ReadMemory<uint32_t>(Entity.Controller.Address + 0x5BC, m_hPawn);
-		//	ProcessMgr.ReadMemory<uintptr_t>(gGame.GetEntityListEntry() + 120 * (m_hPawn & 0x1FF), pCSPlayerPawn);
-		//	ProcessMgr.ReadMemory<uintptr_t>(pCSPlayerPawn + Offset::PlayerController.m_pObserverServices, m_pObserverServices);
-
-		//	if (m_pObserverServices)
-		//	{
-		//		uint32_t m_hObserverTarget;
-		//		uintptr_t list_entry, pController;
-		//		ProcessMgr.ReadMemory<uint32_t>(m_pObserverServices + Offset::PlayerController.m_hObserverTarget, m_hObserverTarget);
-		//		ProcessMgr.ReadMemory<uintptr_t>(EntityAddress + 0x8 * ((m_hObserverTarget & 0x7FFF) >> 9) + 0x10, list_entry);
-		//		ProcessMgr.ReadMemory<uintptr_t>(gGame.GetEntityListEntry() + 120 * (m_hObserverTarget & 0x1FF), pController);
-
-		//		if (pController == LocalEntity.Pawn.Address)
-		//		{
-		//			spectators.push_back(Entity.Controller.PlayerName);
-		//		}
-		//	}
-		//}
-		//// It not work rn.
-		//// SpecList::SpectatorWindowList(spectators);
 		if (MenuConfig::TeamCheck && Entity.Controller.TeamID == LocalEntity.Controller.TeamID)
 			continue;
 
 		if (!Entity.IsAlive())
 			continue;
-//		if (MenuConfig::VisibleCheck && (!Entity.Pawn.bSpottedByMask > 0))
-//			continue;
-
 
 		// Add entity to radar
 		if (RadarCFG::ShowRadar)
-			Radar.AddPoint(LocalEntity.Pawn.Pos, LocalEntity.Pawn.ViewAngle.y, Entity.Pawn.Pos, ImColor(237, 85, 106, 200), RadarCFG::RadarType, Entity.Pawn.ViewAngle.y);
-
+			GameRadar.AddPoint(LocalEntity.Pawn.Pos, LocalEntity.Pawn.ViewAngle.y, Entity.Pawn.Pos, ImColor(237, 85, 106, 200), RadarCFG::RadarType, Entity.Pawn.ViewAngle.y);
+		
 		if (!Entity.IsInScreen())
 			continue;
 
@@ -264,23 +189,47 @@ void Cheats::Run()
 			}
 		}
 	}
-	
-	// Radar render
-	if(RadarCFG::ShowRadar)
+
+	Visual(LocalEntity);
+	Radar(GameRadar);
+	Trigger(LocalEntity);
+	AIM(LocalEntity, AimPosList);
+	MiscFuncs(LocalEntity);
+
+
+	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
+	if (currentFPS > MenuConfig::MaxRenderFPS)
 	{
-		Radar.Render();
-		ImGui::End();
+		int FrameWait = round(1000.0 / MenuConfig::MaxRenderFPS);
+		std::this_thread::sleep_for(std::chrono::milliseconds(FrameWait));
+	}
+}
+
+void Menu() 
+{
+	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+	std::chrono::duration<double, std::milli> difference = now - timepoint;
+	SHORT keyState = GetAsyncKeyState(VK_END);
+	if (keyState & 0x8000) {
+		keyWasPressed = true;
+	}
+	if (keyWasPressed && !(keyState & 0x8000) && difference.count() >= 1000)
+	{
+		MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
+		std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
+		keyWasPressed = false;
 	}
 
-	// TriggerBot
-	if (MenuConfig::TriggerBot && (GetAsyncKeyState(TriggerBot::HotKey) || MenuConfig::TriggerAlways)) 
-		TriggerBot::Run(LocalEntity);
-	
-	
-			
+	if (MenuConfig::ShowMenu)
+	{
+		GUI::DrawGui();
+	}
 
-	Misc::HitSound(LocalEntity, PreviousTotalHits);
-	Misc::FastStop();
+	GUI::InitHitboxList();
+}
+
+void Visual(CEntity LocalEntity)
+{
 	Misc::Watermark(LocalEntity);
 
 
@@ -289,15 +238,37 @@ void Cheats::Run()
 
 	// HeadShoot Line
 	Render::HeadShootLine(LocalEntity, MenuConfig::HeadShootLineColor);
-	
+
 	// CrossHair
 	TriggerBot::TargetCheck(LocalEntity);
 	Misc::AirCheck(LocalEntity);
 	RenderCrossHair(ImGui::GetBackgroundDrawList());
 
 	bmb::RenderWindow();
-	
+}
+
+void Radar(Base_Radar Radar)
+{
+	// Radar render
+	if (RadarCFG::ShowRadar)
+	{
+		Radar.Render();
+		ImGui::End();
+	}
+}
+
+void Trigger(CEntity LocalEntity)
+{
+	// TriggerBot
+	if (MenuConfig::TriggerBot && (GetAsyncKeyState(TriggerBot::HotKey) || MenuConfig::TriggerAlways))
+		TriggerBot::Run(LocalEntity);
+}
+
+void AIM(CEntity LocalEntity, std::vector<Vec3> AimPosList)
+{
 	// Aimbot
+	DWORD lastTick = 0;
+	DWORD currentTick = GetTickCount64();
 	if (MenuConfig::AimBot) {
 		Render::DrawFovCircle(LocalEntity);
 
@@ -315,13 +286,55 @@ void Cheats::Run()
 
 	if (!AimControl::AimBot || !AimControl::HasTarget)
 		RCS::RecoilControl(LocalEntity);
+}
 
-	GUI::InitHitboxList();
+void MiscFuncs(CEntity LocalEntity)
+{
+	Misc::HitSound(LocalEntity, PreviousTotalHits);
+	Misc::FastStop();
+}
 
-	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
-	if (currentFPS > MenuConfig::MaxRenderFPS)
+void RadarSetting(Base_Radar& Radar)
+{
+	// Radar window
+	ImGui::SetNextWindowBgAlpha(RadarCFG::RadarBgAlpha);
+	ImGui::Begin("Radar", 0, ImGuiWindowFlags_NoResize);
+	ImGui::SetWindowSize({ RadarCFG::RadarRange * 2,RadarCFG::RadarRange * 2 });
+
+	if (!RadarCFG::customRadar)
 	{
-		int FrameWait = round(1000.0 / MenuConfig::MaxRenderFPS);
-		std::this_thread::sleep_for(std::chrono::milliseconds(FrameWait));
+		ImGui::SetWindowPos(ImVec2(0, 0));
+		RadarCFG::ShowRadarCrossLine = false;
+		RadarCFG::Proportion = 3300.f;
+		RadarCFG::RadarPointSizeProportion = 1.f;
+		RadarCFG::RadarRange = 150.f;
+		RadarCFG::RadarBgAlpha = 0.1f;
 	}
+
+
+	// Radar.SetPos({ Gui.Window.Size.x / 2,Gui.Window.Size.y / 2 });
+	Radar.SetDrawList(ImGui::GetWindowDrawList());
+	Radar.SetPos({ ImGui::GetWindowPos().x + RadarCFG::RadarRange, ImGui::GetWindowPos().y + RadarCFG::RadarRange });
+	Radar.SetProportion(RadarCFG::Proportion);
+	Radar.SetRange(RadarCFG::RadarRange);
+	Radar.SetSize(RadarCFG::RadarRange * 2);
+	Radar.SetCrossColor(RadarCFG::RadarCrossLineColor);
+
+	Radar.ArcArrowSize *= RadarCFG::RadarPointSizeProportion;
+	Radar.ArrowSize *= RadarCFG::RadarPointSizeProportion;
+	Radar.CircleSize *= RadarCFG::RadarPointSizeProportion;
+
+	Radar.ShowCrossLine = RadarCFG::ShowRadarCrossLine;
+	Radar.Opened = true;
+}
+
+void RenderCrossHair(ImDrawList* drawList)
+{
+	if (!CrosshairsCFG::ShowCrossHair)
+		return;
+
+	if (CrosshairsCFG::isAim && MenuConfig::TargetingCrosshairs)
+		Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::TargetedColor));
+	else
+		Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::CrossHairColor));
 }

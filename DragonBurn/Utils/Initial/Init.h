@@ -6,6 +6,9 @@
 #include <chrono>
 #include <thread>
 
+inline std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
+inline bool keyWasPressed = false;
+
 namespace Init
 {
     using namespace std;

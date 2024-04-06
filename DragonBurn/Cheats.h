@@ -8,11 +8,6 @@
 
 namespace Cheats
 {
-	void KeyCheckThread();
-
-	void RenderCrossHair(ImDrawList* drawList) noexcept;
-
-	void RadarSetting(Base_Radar& Radar);
 
 	void Run();
 }
