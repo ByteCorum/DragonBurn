@@ -312,9 +312,10 @@ void Cheats::Run()
 			lastTick = currentTick;
 		}
 	}
-	else {
+
+	if (!AimControl::AimBot || !AimControl::HasTarget)
 		RCS::RecoilControl(LocalEntity);
-	}
+
 	GUI::InitHitboxList();
 
 	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
