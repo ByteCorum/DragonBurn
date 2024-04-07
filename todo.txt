@@ -1,6 +1,6 @@
 ○ Refactor the code
 ○ Make cheat multi-tread
-◎ visible check load color bug 
+◎ Visible check load color bug 
 ◎ Fix bug with aim hotkey
 ◎ Change button textures to more cool
 ◎ Add aim hitboxes to config
