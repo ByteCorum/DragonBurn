@@ -1,0 +1,28 @@
+name: buildcheck x64 release
+
+on:
+  push:
+    branches: [ stable, WIP ]
+  pull_request:
+    branches: [ stable, WIP ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Configure project
+      run: |
+        msbuild DragonBurn.sln -t:Rebuild -p:Configuration=Release -p:Platform=x64
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Compiled-Binaries
+        path: |
+          \built\DragonBurn.exe
