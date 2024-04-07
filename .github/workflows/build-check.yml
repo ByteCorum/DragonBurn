@@ -1,4 +1,4 @@
-name: buildcheck x64 release
+name: build-check x64 release
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
     - name: Setup MSVC
       uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Configure project
+    - name: Building project
       run: |
         msbuild DragonBurn.sln -t:Rebuild -p:Configuration=Release -p:Platform=x64
 
