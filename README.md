@@ -81,7 +81,6 @@
 - Ignore Flash
 - Shot Delay
 - Shot Duration
-- 
 </details>
 
 <details>
