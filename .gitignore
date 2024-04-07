@@ -8,6 +8,7 @@
 *.suo
 *psd
 old/
+built/
 *.user
 *.userosscache
 *.sln.docstates
