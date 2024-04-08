@@ -65,3 +65,4 @@ CMakeLists.txt linguist-documentation=false
 #Ignore dirs/files
 
 DragonBurn/Resources/*		    linguist-vendored
+DragonBurn/Utils/yaml-cpp/*		linguist-vendored
