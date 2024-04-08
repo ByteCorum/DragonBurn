@@ -30,35 +30,35 @@ CMakeLists.txt  text diff=CMake
 
 *.md linguist-language=Markdown
 *.md linguist-detectable=true
-*.md linguist-detectable=true
+*.md linguist-documentation=false
 
 *.cs linguist-language=CSharp
 *.cs linguist-detectable=true
-*.cs linguist-detectable=true
+*.cs linguist-documentation=false
 
 *.cpp linguist-language=C++
 *.cpp linguist-detectable=true
-*.cpp linguist-detectable=true
+*.cpp linguist-documentation=false
 
 *.hpp linguist-language=C++
 *.hpp linguist-detectable=true
-*.hpp linguist-detectable=true
+*.hpp linguist-documentation=false
 
 *.h linguist-language=C
 *.h linguist-detectable=true
-*.h linguist-detectable=true
+*.h linguist-documentation=false
 
 *.c linguist-language=C
 *.c linguist-detectable=true
-*.c linguist-detectable=true
+*.c linguist-documentation=false
 
 *.rc linguist-language=Assembly
 *.rc linguist-detectable=true
-*.rc linguist-detectable=true
+*.rc linguist-documentation=false
 
 CMakeLists.txt linguist-language=CMake
 CMakeLists.txt linguist-detectable=true
-CMakeLists.txt linguist-detectable=true
+CMakeLists.txt linguist-documentation=false
 
 
 #Ignore dirs/files
