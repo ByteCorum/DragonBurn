@@ -30,26 +30,34 @@ CMakeLists.txt  text diff=CMake
 
 *.md linguist-language=Markdown
 *.md linguist-detectable=true
+*.md linguist-detectable=true
 
 *.cs linguist-language=CSharp
+*.cs linguist-detectable=true
 *.cs linguist-detectable=true
 
 *.cpp linguist-language=C++
 *.cpp linguist-detectable=true
+*.cpp linguist-detectable=true
 
 *.hpp linguist-language=C++
+*.hpp linguist-detectable=true
 *.hpp linguist-detectable=true
 
 *.h linguist-language=C
 *.h linguist-detectable=true
+*.h linguist-detectable=true
 
 *.c linguist-language=C
+*.c linguist-detectable=true
 *.c linguist-detectable=true
 
 *.rc linguist-language=Assembly
 *.rc linguist-detectable=true
+*.rc linguist-detectable=true
 
 CMakeLists.txt linguist-language=CMake
+CMakeLists.txt linguist-detectable=true
 CMakeLists.txt linguist-detectable=true
 
 
