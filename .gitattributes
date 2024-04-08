@@ -1,11 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-*.cs linguist-language=csharp
-*.cpp linguist-language=C++
-*.hpp linguist-language=C++
-*.h linguist-language=C
 *.rc linguist-language=Assembly
-CMakeLists.txt linguist-language=CMake
 
 #ignore dirs/files
 DragonBurn/Resources/*		    linguist-vendored
