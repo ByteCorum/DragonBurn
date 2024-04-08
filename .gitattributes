@@ -4,5 +4,3 @@
 
 #ignore dirs/files
 DragonBurn/Resources/*		    linguist-vendored
-DragonBurn/OS-ImGui/*		      linguist-vendored
-DragonBurn/Utils/yaml-cpp/*		linguist-vendored
