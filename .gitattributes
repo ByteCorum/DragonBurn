@@ -1,6 +1,58 @@
-# Auto detect text files and perform LF normalization
+# Handle line endings automatically for files detected as text
+# and leave all files detected as binary untouched.
 * text=auto
-*.rc linguist-language=Assembly
+# The above will handle all files NOT found below
 
-#ignore dirs/files
+
+
+# These files are text and should be normalized (Convert crlf => lf)
+.gitattributes text
+.gitignore      text
+*.md            text diff=Markdown
+*.cs            text diff=CSharp
+*.cpp           text diff=C++
+*.hpp           text diff=C++
+*.h             text diff=C
+*.c             text diff=C
+*.rc            text diff=Assembly
+CMakeLists.txt  text diff=CMake
+
+
+
+# Exclude files from exporting
+
+.gitattributes  export-ignore
+.gitignore      export-ignore
+
+
+
+# Enable syntax highlighting for files with extensions.
+
+*.md linguist-language=Markdown
+*.md linguist-detectable=true
+
+*.cs linguist-language=CSharp
+*.cs linguist-detectable=true
+
+*.cpp linguist-language=C++
+*.cpp linguist-detectable=true
+
+*.hpp linguist-language=C++
+*.hpp linguist-detectable=true
+
+*.h linguist-language=C
+*.h linguist-detectable=true
+
+*.c linguist-language=C
+*.c linguist-detectable=true
+
+*.rc linguist-language=Assembly
+*.rc linguist-detectable=true
+
+CMakeLists.txt linguist-language=CMake
+CMakeLists.txt linguist-detectable=true
+
+
+#Ignore dirs/files
+
 DragonBurn/Resources/*		    linguist-vendored
