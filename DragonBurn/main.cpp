@@ -14,7 +14,6 @@
 using namespace std;
 
 namespace fs = filesystem;
-bool otp = false;
 string fileName;
 
 void Exit()

@@ -31,26 +31,17 @@ public:
 	CView View;
 
 public:	
-
 	bool InitAddress();
 
 	DWORD64 GetClientDLLAddress();
 	DWORD64 GetServerDLLAddress();
-
 	DWORD64 GetEntityListAddress();
-
 	DWORD64 GetMatrixAddress();
-
 	DWORD64 GetViewAngleAddress();
-
 	DWORD64 GetEntityListEntry();
-
 	DWORD64 GetLocalControllerAddress();
-
 	DWORD64 GetLocalPawnAddress();
-
 	DWORD64 GetServerPawnAddress();
-
 	DWORD64 GetGlobalVarsAddress();
 
 	bool UpdateEntityListEntry();
