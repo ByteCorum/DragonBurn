@@ -1,5 +1,7 @@
 ○ Refactor the code
 ○ Make cheat multi-tread
+○ Add hit markers
+○ Add spec list
 ◎ Visible check load color bug 
 ◎ Fix bug with aim hotkey
 ◎ Change button textures to more cool
