@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/DragonBurn-v1.0.0-blue?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/CS2-000000?style=for-the-badge&logo=counter-strike&logoColor=white">
-  <img src="https://img.shields.io/badge/undetected-03C75A?style=for-the-badge&logo=ticktick&logoColor=FFFFFF">
+  <img src="https://img.shields.io/badge/undetected(not sure)-03C75A?style=for-the-badge&logo=ticktick&logoColor=FFFFFF">
 </p>
 
 ---
