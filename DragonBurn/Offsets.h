@@ -24,8 +24,8 @@ namespace Offset
 
 	struct
 	{
-		DWORD Health = 0x334;
-		DWORD TeamID = 0x3CB;
+		//DWORD Health = 0x334; Offset::Pawn.CurrentHealth
+		//DWORD TeamID = 0x3CB; Offset::Pawn.iTeamNum
 		DWORD IsAlive = 0x7EC;
 		DWORD PlayerPawn = 0x7E4;
 		DWORD iszPlayerName = 0x638;
@@ -110,7 +110,7 @@ namespace Offset
 
 	struct
 	{
-		DWORD ClippingWeapon = 0x12F8;			// WeaponBase
+		//DWORD ClippingWeapon = 0x12F8;[Offset::Pawn.pClippingWeapon]			// WeaponBase
 		DWORD WeaponDataPTR = 0x368;
 		DWORD szName = 0xC20;
 		DWORD Clip1 = 0x15C8;					// C_BasePlayerWeapon::m_iClip1

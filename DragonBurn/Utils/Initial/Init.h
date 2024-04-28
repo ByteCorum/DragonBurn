@@ -33,6 +33,20 @@ namespace Init
             }
             return false;
 		}
+
+        static void RandTitle()
+        {
+            constexpr int length = 25;
+            const auto characters = TEXT("0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM");
+            TCHAR title[length + 1]{};
+
+            for (int j = 0; j != length; j++)
+            {
+                title[j] += characters[rand() % 63];
+            }
+
+            SetConsoleTitle(title);
+        }
 	};
 
     class Client
