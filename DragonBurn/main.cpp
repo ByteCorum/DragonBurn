@@ -26,6 +26,7 @@ void Exit()
 void Cheat()
 {
 	ShowWindow(GetConsoleWindow(), SW_SHOWNORMAL);
+	Init::Verify::RandTitle();
 	if (Init::Verify::CheckWindowVersion())
 	{
 		MenuConfig::MaxFrameRate = Init::Client::getMaxFrameRate();
