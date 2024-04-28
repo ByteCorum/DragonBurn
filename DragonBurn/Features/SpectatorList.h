@@ -15,7 +15,7 @@ namespace SpecList
         ProcessMgr.ReadMemory<uintptr_t>(pCSPlayerPawn + 0x10C0, m_pObserverServices);
         ProcessMgr.ReadMemory<uintptr_t>(m_pObserverServices + 0x44, m_hObserverTarget);
         if (!m_hObserverTarget == 0) {
-            std::cout << m_hObserverTarget << std::endl;
+            //std::cout << m_hObserverTarget << std::endl;
             return true;
         }
 

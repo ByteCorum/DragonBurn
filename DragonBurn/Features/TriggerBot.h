@@ -8,7 +8,7 @@
 namespace TriggerBot
 {
 	inline int TriggerDelay = 90; // ms
-	inline int FakeShotDelay = 200; // ms
+	inline int ShotDuration = 200; // ms
 	inline bool ScopeOnly = false;
 	inline bool IgnoreFlash = false;
 	inline int HotKey = VK_LMENU;

@@ -37,35 +37,36 @@ namespace Offset
 	{
 		//DWORD MovementServices = 0x1140;		// CPlayer_MovementServices*
 		//DWORD WeaponServices = 0x1100;			// CPlayer_WeaponServices*
-		DWORD BulletServices = 0x1718;			// CCSPlayer_BulletServices*
+		DWORD BulletServices = 0x1470;			// CCSPlayer_BulletServices*
 		DWORD CameraServices = 0x1138;			// CPlayer_CameraServices*
-		//DWORD ViewModelServices = 0x12C8;		// CPlayer_ViewModelServices*
-		DWORD pClippingWeapon = 0x1308;			// C_CSWeaponBase*
+		//DWORD ViewModelServices = 0x12C0;		// CPlayer_ViewModelServices*
+		DWORD pClippingWeapon = 0x12F8;			// C_CSWeaponBase*
 
 		//DWORD ViewModel = 0x40;				// CCSPlayer_ViewModelServices::m_hViewModel
 		//DWORD StartAccount = 0x1490;
-		DWORD isScoped = 0x1400;
+		DWORD isScoped = 0x2290;
+		DWORD isDefusing = 0x2292;
 		DWORD TotalHit = 0x40;
 		DWORD Pos = 0x127C;						// C_BasePlayerPawn::m_vOldOrigin
+		DWORD CurrentArmor = 0x22C0;			// C_BasePlayerPawn::m_ArmorValue
 		DWORD MaxHealth = 0x330;				// C_BaseEntity::m_iMaxHealth
 		DWORD CurrentHealth = 0x334;			// C_BaseEntity::m_iHealth
 		DWORD GameSceneNode = 0x318;			// C_BaseEntity::m_pGameSceneNode
-		DWORD BoneArray = 0x1E0;				// CSkeletonInstance_::m_modelState + CGameSceneNode_::m_vecOrigin
-		DWORD angEyeAngles = 0x1578;
-		DWORD vecLastClipCameraPos = 0x12EC;
-		DWORD iShotsFired = 0x147C;
-		//DWORD flFlashMaxAlpha = 0x14C8;
-		DWORD flFlashDuration = 0x14CC;
-		DWORD aimPunchAngle = 0x177C;			// C_CSPlayerPawn::m_aimPunchAngle
-		DWORD aimPunchCache = 0x17A0;
-		DWORD iIDEntIndex = 0x15A4;
+		DWORD BoneArray = 0x160 + 0x80;				// CSkeletonInstance_::m_modelState + CGameSceneNode_::m_vecOrigin
+		DWORD angEyeAngles = 0x1390;
+		DWORD vecLastClipCameraPos = 0x12DC;
+		DWORD iShotsFired = 0x22A4;
+		//DWORD flFlashMaxAlpha = 0x1360;
+		DWORD flFlashDuration = 0x1364;
+		DWORD aimPunchAngle = 0x14D4;			// C_CSPlayerPawn::m_aimPunchAngle
+		DWORD aimPunchCache = 0x14F8;
+		DWORD iIDEntIndex = 0x13B0;
 		DWORD iTeamNum = 0x3CB;
 		//DWORD DesiredFov = 0x6CC;
 		DWORD iFovStart = 0x214;
 		DWORD fFlags = 0x3D4;
-		DWORD bSpottedByMask = 0x1698 + 0xC;	// C_CSPlayerPawnBase::entitySpottedState + EntitySpottedState_t::bSpottedByMask
+		DWORD bSpottedByMask = 0x2278 + 0xC;	// C_CSPlayerPawnBase::entitySpottedState + EntitySpottedState_t::bSpottedByMask
 		DWORD AbsVelocity = 0x3D8;
-		//DWORD isDefusing = 0x1408;
 	} Pawn;
 
 	struct
@@ -109,7 +110,7 @@ namespace Offset
 
 	struct
 	{
-		DWORD ClippingWeapon = 0x1308;			// WeaponBase
+		DWORD ClippingWeapon = 0x12F8;			// WeaponBase
 		DWORD WeaponDataPTR = 0x368;
 		DWORD szName = 0xC20;
 		DWORD Clip1 = 0x15C8;					// C_BasePlayerWeapon::m_iClip1
@@ -124,7 +125,7 @@ namespace Offset
 		//DWORD ActiveWeapon = 0x58;
 		DWORD Item = 0x50;						// C_AttributeContainer::m_Item
 		DWORD ItemDefinitionIndex = 0x1BA;
-		//DWORD m_MeshGroupMask = 0x180;			// CModelState::m_MeshGroupMask
+		//DWORD m_MeshGroupMask = 0x180;		// CModelState::m_MeshGroupMask
 	} WeaponBaseData;
 
 	struct
