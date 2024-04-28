@@ -251,13 +251,13 @@ bool PlayerPawn::GetHealth()
 
 bool PlayerPawn::GetArmor()
 {
-	return GetDataAddressWithOffset<int>(Address, 0x1570, this->Armor);
+	return GetDataAddressWithOffset<int>(Address, Offset::Pawn.CurrentArmor, this->Armor);
 }
 
 bool PlayerPawn::GetAmmo()
 {
 	DWORD64 ClippingWeapon = 0;
-	if (!ProcessMgr.ReadMemory<DWORD64>(Address + Offset::WeaponBaseData.ClippingWeapon, ClippingWeapon))
+	if (!ProcessMgr.ReadMemory<DWORD64>(Address + Offset::Pawn.pClippingWeapon, ClippingWeapon))
 		return false;
 
 	return GetDataAddressWithOffset<int>(ClippingWeapon, Offset::WeaponBaseData.Clip1, this->Ammo);

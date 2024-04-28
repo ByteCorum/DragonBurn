@@ -48,13 +48,13 @@ void TriggerBot::Run(const CEntity& LocalEntity)
 
     std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
     std::chrono::duration<double, std::milli> difference = now - timepoint;
-    if (!recorded && difference.count() >= FakeShotDelay)
+    if (!recorded && difference.count() >= ShotDuration)
     {
         startTime = std::chrono::system_clock::now();
         recorded = true;
     }
     std::chrono::duration<double, std::milli> difference1 = now - startTime;
-    if (difference.count() >= FakeShotDelay && difference1.count() >= TriggerDelay)
+    if (difference.count() >= ShotDuration && difference1.count() >= TriggerDelay)
     {
         const bool isAlreadyShooting = GetAsyncKeyState(VK_LBUTTON) < 0;
         if (!isAlreadyShooting)
