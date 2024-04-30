@@ -26,6 +26,7 @@ void Exit()
 void Cheat()
 {
 	ShowWindow(GetConsoleWindow(), SW_SHOWNORMAL);
+	srand(time(0));
 	Init::Verify::RandTitle();
 	if (Init::Verify::CheckWindowVersion())
 	{
