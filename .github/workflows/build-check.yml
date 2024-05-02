@@ -11,17 +11,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: ilammy/msvc-dev-cmd@v2
 
     - name: Building project
       run: |
         msbuild DragonBurn.sln -t:Rebuild -p:Configuration=Release -p:Platform=x64
 
     - name: Archive artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: Compiled-Binaries
         path: |
