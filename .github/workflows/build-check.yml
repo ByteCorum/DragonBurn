@@ -25,4 +25,4 @@ jobs:
       with:
         name: Compiled-Binaries
         path: |
-          \DragonBurn\built\DragonBurn.exe
+          \DragonBurn\DragonBurn\built\DragonBurn.exe
