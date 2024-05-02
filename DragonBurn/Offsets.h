@@ -4,11 +4,11 @@
 
 namespace Offset
 {
-	inline DWORD ForceJump = 0x1736920;
-	inline DWORD ForceCrouch = 0x17369B0;
-	inline DWORD ForceForward = 0x1736650;
-	inline DWORD ForceLeft = 0x1736770;
-	inline DWORD ForceRight = 0x1736800;
+	//inline DWORD ForceJump = 0x1736920;
+	//inline DWORD ForceCrouch = 0x17369B0;
+	//inline DWORD ForceForward = 0x1736650;
+	//inline DWORD ForceLeft = 0x1736770;
+	//inline DWORD ForceRight = 0x1736800;
 
 	inline DWORD EntityList;
 	inline DWORD Matrix;
