@@ -138,7 +138,7 @@ void Cheat()
 
 	cout << endl;
 	SetConsoleTextAttribute(hConsole, 14);
-	cout << "=======[ Offset List ]=======" << endl;
+	cout << "======={ Offset List }=======" << endl;
 	cout << setw(23) << left << "EntityList:" << setiosflags(ios::uppercase) << hex << Offset::EntityList << endl;
 	cout << setw(23) << left << "Matrix:" << setiosflags(ios::uppercase) << hex << Offset::Matrix << endl;
 	cout << setw(23) << left << "LocalPlayerController:" << setiosflags(ios::uppercase) << hex << Offset::LocalPlayerController << endl;
