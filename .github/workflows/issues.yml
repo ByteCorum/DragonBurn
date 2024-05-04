@@ -14,9 +14,17 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const issueComment = `Thanks for using our software! We will look into and fix your issue asap also, if CS2 was recently updated wait for an up-to-date fix, cuz often game updates break cheats.`;
+
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
             body: issueComment
           });
+
+          github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['new']
+            });
