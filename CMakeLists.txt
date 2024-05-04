@@ -30,4 +30,3 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Install rules (optional)
 install(TARGETS DragonBurn DESTINATION bin)
-
