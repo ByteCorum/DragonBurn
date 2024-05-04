@@ -19,3 +19,4 @@ jobs:
               repo: context.repo.repo,
               body: 'Thanks for using our software! We will look into and fix your issue asap also, if CS2 was recently updated wait for an up-to-date fix, cuz often game updates break cheats.'
             })
+            
