@@ -17,10 +17,17 @@ jobs:
               🖐️ Hello @${{ github.actor }}!
               Thank you for your contribution. We will review your pull request soon. Please make sure you have followed our contributing guidelines.
             `;
+            
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: prComment
-              labels: ['new', 'enhancement']
+            });
+
+            github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['enhancement', 'new']
             });
