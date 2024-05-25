@@ -4,7 +4,7 @@
 
 namespace Offset
 {
-
+	inline long long CS2ver = 8926190;
 	inline DWORD EntityList = 26882856;
 	inline DWORD Matrix = 27284176;
 	inline DWORD ViewAngle = 27337880;
@@ -98,6 +98,4 @@ namespace Offset
 		DWORD m_flDefuseCountDown = 0xF28;
 		DWORD m_nBombSite = 0xEDC;
 	} C4;
-
-	bool UpdateOffsets();
 }

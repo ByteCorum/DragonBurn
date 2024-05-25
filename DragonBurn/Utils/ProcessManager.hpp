@@ -222,9 +222,6 @@ public:
 		return false;
 	}
 
-
-	std::vector<DWORD64> SearchMemory(const std::string& Signature, DWORD64 StartAddress, DWORD64 EndAddress, int SearchNum = 1);
-
 	DWORD64 TraceAddress(DWORD64 BaseAddress, std::vector<DWORD> Offsets)
 	{
 		_is_invalid(hProcess,0);
