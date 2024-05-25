@@ -11,7 +11,7 @@
 inline std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
 inline bool keyWasPressed = false;
 
-std::string WStringToString(const std::wstring& wstr) {
+inline std::string WStringToString(const std::wstring& wstr) {
     int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
     std::vector<char> buffer(bufferSize);
     WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, buffer.data(), bufferSize, NULL, NULL);
