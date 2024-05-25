@@ -218,12 +218,6 @@
     <ClCompile Include="Bone.cpp">
       <Filter>Cheats\Data</Filter>
     </ClCompile>
-    <ClCompile Include="Offsets.cpp">
-      <Filter>Cheats\Offsets</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\MemorySearch.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Features\Radar.cpp">
       <Filter>Cheats\Radar</Filter>
     </ClCompile>

@@ -242,7 +242,6 @@
     <ClCompile Include="Features\Mouse.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Offsets.cpp" />
     <ClCompile Include="OS-ImGui\imgui\imgui.cpp" />
     <ClCompile Include="OS-ImGui\imgui\imgui_demo.cpp" />
     <ClCompile Include="OS-ImGui\imgui\imgui_draw.cpp" />
@@ -258,7 +257,6 @@
     <ClCompile Include="Utils\ConfigMenu.cpp" />
     <ClCompile Include="Utils\ConfigSaver.cpp" />
     <ClCompile Include="Utils\GlobalVars.cpp" />
-    <ClCompile Include="Utils\MemorySearch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DragonBurn.rc" />

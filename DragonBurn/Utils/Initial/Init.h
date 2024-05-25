@@ -5,9 +5,18 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
+#include <psapi.h>
+#include "../../Offsets.h"
 
 inline std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
 inline bool keyWasPressed = false;
+
+inline std::string WStringToString(const std::wstring& wstr) {
+    int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
+    std::vector<char> buffer(bufferSize);
+    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, buffer.data(), bufferSize, NULL, NULL);
+    return std::string(buffer.data());
+}
 
 namespace Init
 {
@@ -58,6 +67,51 @@ namespace Init
             int rate = GetDeviceCaps(hdc, VREFRESH);
             ReleaseDC(NULL, hdc);
             return rate;
+        }
+
+        // Checks cs2 version
+        static int CheckCS2Version()
+        {
+            DWORD pid = ProcessMgr.GetProcessID("cs2.exe");
+            long long curVer = -1;
+            std::string processPath;
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+            if (hProcess) 
+            {
+                wchar_t buffer[MAX_PATH];
+                if (GetModuleFileNameEx(hProcess, NULL, buffer, MAX_PATH))
+                    processPath = WStringToString(buffer);
+                else 
+                    return 0;
+                CloseHandle(hProcess);
+            }
+            else 
+                return 0;
+
+            int pos = processPath.rfind("bin");
+            if (pos != std::string::npos) 
+                processPath = processPath.substr(0, pos + 3);
+            else
+                return 0;
+            processPath += "\\built_from_cl.txt";
+
+            std::ifstream file(processPath);
+            if (file.is_open()) 
+            {
+                std::string line;
+                if (std::getline(file, line))
+                    curVer = stoi(line);
+                else
+                    return 0;
+                file.close();
+            }
+            else
+                return 0;
+
+            if (Offset::CS2ver == curVer)
+                return 2;
+            else
+                return 1;
         }
 
         // Check if the game window is activated
