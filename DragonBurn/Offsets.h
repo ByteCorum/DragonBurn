@@ -5,16 +5,15 @@
 namespace Offset
 {
 
-	inline DWORD EntityList;
-	inline DWORD Matrix;
-	inline DWORD ViewAngle;
-	inline DWORD LocalPlayerController;
-	inline DWORD LocalPlayerPawn;
-	inline DWORD GlobalVars;
-	inline DWORD PlantedC4;
-	inline DWORD InputSystem;
-	inline DWORD Sensitivity;
-	inline DWORD Pointer;
+	inline DWORD EntityList = 26882856;
+	inline DWORD Matrix = 27284176;
+	inline DWORD ViewAngle = 27337880;
+	inline DWORD LocalPlayerController = 27210392;
+	inline DWORD LocalPlayerPawn = 25221912;
+	inline DWORD GlobalVars = 25172976;
+	inline DWORD PlantedC4 = 27304952;
+	inline DWORD InputSystem = 231376;
+	inline DWORD Sensitivity = 27269560;
 
 	struct
 	{
