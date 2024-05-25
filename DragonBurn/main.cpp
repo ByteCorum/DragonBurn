@@ -85,11 +85,28 @@ void Cheat()
 	}
 	
 
-	if (!Offset::UpdateOffsets())
+	switch (Init::Client::CheckCS2Version()) 
 	{
+	case 0:
 		SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
-		cout << "[ERROR] Failed to update offsets." << endl;
-		Exit();
+		cout << "[ERROR] Failed to get the current game version." << endl;
+		system("pause");
+		break;
+
+	case 1:
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << "[Info] This version of the cheat was made for a later version of the game and may work unstable on the current version." << endl;
+		system("pause");
+		break;
+
+	case 2:
+		break;
+
+	default:
+		SetConsoleTextAttribute(hConsole, FOREGROUND_RED);
+		cout << "[ERROR] Failed to get the current game version." << endl;
+		system("pause");
+		break;
 	}
 
 	if (!gGame.InitAddress())
