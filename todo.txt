@@ -1,7 +1,9 @@
-○ Refactor the code
-○ Make cheat multi-tread
-○ Add hit markers
+○ Refactor the code(I have no time for it)
+○ Make cheat multi-tread(I have no time for it)
+○ Add hit markers(mb I should del hit sound)
 ○ Add spec list
+○ Use JSON instead YAML
+○ Make menu looks nice(low priority)
 ◎ Visible check load color bug 
 ◎ Fix bug with aim hotkey
 ◎ Change button textures to more cool
