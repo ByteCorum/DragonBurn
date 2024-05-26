@@ -65,3 +65,4 @@ CMakeLists.txt linguist-documentation=false
 
 DragonBurn/Resources/*		    linguist-vendored
 DragonBurn/Utils/yaml-cpp/*		linguist-vendored
+DragonBurn/OffsetsList/*        linguist-vendored
