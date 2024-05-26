@@ -1,25 +1,29 @@
 #pragma once
 #include <Windows.h>
 #include "Utils/ProcessManager.hpp"
+#include "OffsetsList/Client.hpp"
 #include "OffsetsList/Offsets.hpp"
 
 namespace dll = cs2_dumper::schemas::client_dll;
+namespace offsets = cs2_dumper::offsets::client_dll;
+namespace offsetsInput = cs2_dumper::offsets::inputsystem_dll;
 
 namespace Offset
 {
 	inline long long CS2ver = 8926190;
 
-	//https://github.com/a2x/cs2-dumper/blob/main/output/offsets.json
-	inline DWORD EntityList = 26882856;				//dwEntityList
-	inline DWORD Matrix = 27284176;					//dwViewMatrix
-	inline DWORD ViewAngle = 27337880;				//dwViewAngles
-	inline DWORD LocalPlayerController = 27210392;	//dwLocalPlayerController
-	inline DWORD LocalPlayerPawn = 25221912;		//dwLocalPlayerPawn
-	inline DWORD GlobalVars = 25172976;				//dwGlobalVars
-	inline DWORD PlantedC4 = 27304952;				//dwPlantedC4
-	inline DWORD InputSystem = 231376;				//dwInputSystem
-	inline DWORD Sensitivity = 27269560;			//dwSensitivity
+	//https://github.com/a2x/cs2-dumper/blob/main/output/offsets.hpp
+	inline DWORD EntityList =				offsets::dwEntityList;
+	inline DWORD Matrix =					offsets::dwViewMatrix;
+	inline DWORD ViewAngle =				offsets::dwViewAngles;
+	inline DWORD LocalPlayerController =	offsets::dwLocalPlayerController;
+	inline DWORD LocalPlayerPawn =			offsets::dwLocalPlayerPawn;
+	inline DWORD GlobalVars =				offsets::dwGlobalVars;
+	inline DWORD PlantedC4 =				offsets::dwPlantedC4;
+	inline DWORD InputSystem =				offsetsInput::dwInputSystem;
+	inline DWORD Sensitivity =				offsets::dwSensitivity;
 
+	//https://github.com/a2x/cs2-dumper/blob/main/output/client.dll.hpp
 	struct
 	{
 		DWORD IsAlive =				dll::CCSPlayerController::m_bPawnIsAlive;
