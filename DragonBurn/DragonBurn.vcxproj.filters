@@ -171,6 +171,7 @@
     <ClInclude Include="Resources\Sounds.h" />
     <ClInclude Include="Features\Legitbot.hpp" />
     <ClInclude Include="Resources\font.h" />
+    <ClInclude Include="OffsetsList\Offsets.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OS-ImGui\imgui\imgui.cpp">
