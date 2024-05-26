@@ -40,9 +40,9 @@ class CBone
 {
 private:
 	DWORD64 EntityPawnAddress = 0;
+
 public:
 	std::vector<BoneJointPos> BonePosList;
-
 	bool UpdateAllBoneData(const DWORD64& EntityPawnAddress);
 };
 

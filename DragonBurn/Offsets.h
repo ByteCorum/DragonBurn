@@ -36,7 +36,7 @@ namespace Offset
 		DWORD MaxHealth = 0x330;
 		DWORD CurrentHealth = 0x334;
 		DWORD GameSceneNode = 0x318;
-		DWORD BoneArray = 0x160 + 0x80;
+		DWORD BoneArray = 0x1F0;
 		DWORD angEyeAngles = 0x1390;
 		DWORD vecLastClipCameraPos = 0x12DC;
 		DWORD iShotsFired = 0x22A4;
@@ -84,7 +84,7 @@ namespace Offset
 
 	struct
 	{
-		DWORD WeaponDataPTR = 0x368;
+		DWORD WeaponDataPTR = 0x360;
 		DWORD szName = 0xC20;
 		DWORD Clip1 = 0x15C8;	
 		DWORD MaxClip = 0x1FC;	
