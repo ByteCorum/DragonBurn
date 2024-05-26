@@ -164,6 +164,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="MenuConfig.hpp" />
     <ClInclude Include="Offsets.h" />
+    <ClInclude Include="OffsetsList\Offsets.hpp" />
     <ClInclude Include="OS-ImGui\imgui\imconfig.h" />
     <ClInclude Include="OS-ImGui\imgui\imgui.h" />
     <ClInclude Include="OS-ImGui\imgui\imgui_impl_dx11.h" />
