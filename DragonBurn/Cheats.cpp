@@ -290,7 +290,7 @@ void AIM(CEntity LocalEntity, std::vector<Vec3> AimPosList)
 
 void MiscFuncs(CEntity LocalEntity)
 {
-	Misc::HitSound(LocalEntity, PreviousTotalHits);
+	Misc::HitManager(LocalEntity, PreviousTotalHits);
 	Misc::FastStop();
 }
 

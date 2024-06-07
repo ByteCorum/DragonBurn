@@ -185,41 +185,12 @@ namespace MyConfigSaver {
         emitter << YAML::EndMap;
         emitter << YAML::EndMap;
 
-        emitter << YAML::Key << "Misc";
-        emitter << YAML::Value;
-        emitter << YAML::BeginMap;
-        emitter << YAML::Key << "HeadShootLine" << YAML::Value << MenuConfig::ShowHeadShootLine;
-        emitter << YAML::Key << "HeadShootLineColor";
-        emitter << YAML::Value;
-        emitter << YAML::BeginMap;
-        emitter << YAML::Key << "r" << YAML::Value << MenuConfig::HeadShootLineColor.Value.x;
-        emitter << YAML::Key << "g" << YAML::Value << MenuConfig::HeadShootLineColor.Value.y;
-        emitter << YAML::Key << "b" << YAML::Value << MenuConfig::HeadShootLineColor.Value.z;
-        emitter << YAML::Key << "a" << YAML::Value << MenuConfig::HeadShootLineColor.Value.w;
-        emitter << YAML::EndMap;
-        emitter << YAML::Key << "WorkInSpec" << YAML::Value << MiscCFG::WorkInSpec;
-        emitter << YAML::Key << "Watermark" << YAML::Value << MiscCFG::WaterMark;
-        emitter << YAML::Key << "HitSounds" << YAML::Value << MiscCFG::HitSound;
-        emitter << YAML::Key << "BombTimer" << YAML::Value << MiscCFG::bmbTimer;
-        emitter << YAML::Key << "TimerColor";
-        emitter << YAML::Value;
-        emitter << YAML::BeginMap;
-        emitter << YAML::Key << "r" << YAML::Value << MiscCFG::BombTimerCol.Value.x;
-        emitter << YAML::Key << "g" << YAML::Value << MiscCFG::BombTimerCol.Value.y;
-        emitter << YAML::Key << "b" << YAML::Value << MiscCFG::BombTimerCol.Value.z;
-        emitter << YAML::Key << "a" << YAML::Value << MiscCFG::BombTimerCol.Value.w;
-        emitter << YAML::EndMap;
-        emitter << YAML::Key << "FastStop" << YAML::Value << MiscCFG::FastStop;
-        emitter << YAML::Key << "TeamCheck" << YAML::Value << MenuConfig::TeamCheck;
-        emitter << YAML::Key << "AntiRecord" << YAML::Value << MenuConfig::BypassOBS;
-        emitter << YAML::EndMap;
-
         emitter << YAML::Key << "Aimbot";
         emitter << YAML::Value;
         emitter << YAML::BeginMap;
         emitter << YAML::Key << "Enable" << YAML::Value << MenuConfig::AimBot;
         emitter << YAML::Key << "ToggleMode" << YAML::Value << MenuConfig::AimToggleMode;
-        emitter << YAML::Key << "Hotkey" << YAML::Value << MenuConfig::AimBotHotKey; 
+        emitter << YAML::Key << "Hotkey" << YAML::Value << MenuConfig::AimBotHotKey;
         emitter << YAML::Key << "AimBullet" << YAML::Value << AimControl::AimBullet;
         emitter << YAML::Key << "Fov" << YAML::Value << AimControl::AimFov;
         emitter << YAML::Key << "FovMin" << YAML::Value << AimControl::AimFovMin;
@@ -260,6 +231,36 @@ namespace MyConfigSaver {
         emitter << YAML::Key << "AutoMode" << YAML::Value << MenuConfig::TriggerAlways;
         emitter << YAML::EndMap;
 
+        emitter << YAML::Key << "Misc";
+        emitter << YAML::Value;
+        emitter << YAML::BeginMap;
+        emitter << YAML::Key << "HeadShootLine" << YAML::Value << MenuConfig::ShowHeadShootLine;
+        emitter << YAML::Key << "HeadShootLineColor";
+        emitter << YAML::Value;
+        emitter << YAML::BeginMap;
+        emitter << YAML::Key << "r" << YAML::Value << MenuConfig::HeadShootLineColor.Value.x;
+        emitter << YAML::Key << "g" << YAML::Value << MenuConfig::HeadShootLineColor.Value.y;
+        emitter << YAML::Key << "b" << YAML::Value << MenuConfig::HeadShootLineColor.Value.z;
+        emitter << YAML::Key << "a" << YAML::Value << MenuConfig::HeadShootLineColor.Value.w;
+        emitter << YAML::EndMap;
+        emitter << YAML::Key << "WorkInSpec" << YAML::Value << MiscCFG::WorkInSpec;
+        emitter << YAML::Key << "Watermark" << YAML::Value << MiscCFG::WaterMark;
+        emitter << YAML::Key << "HitSounds" << YAML::Value << MiscCFG::HitSound;
+        emitter << YAML::Key << "HitMarker" << YAML::Value << MiscCFG::HitMarker;
+        emitter << YAML::Key << "BombTimer" << YAML::Value << MiscCFG::bmbTimer;
+        emitter << YAML::Key << "TimerColor";
+        emitter << YAML::Value;
+        emitter << YAML::BeginMap;
+        emitter << YAML::Key << "r" << YAML::Value << MiscCFG::BombTimerCol.Value.x;
+        emitter << YAML::Key << "g" << YAML::Value << MiscCFG::BombTimerCol.Value.y;
+        emitter << YAML::Key << "b" << YAML::Value << MiscCFG::BombTimerCol.Value.z;
+        emitter << YAML::Key << "a" << YAML::Value << MiscCFG::BombTimerCol.Value.w;
+        emitter << YAML::EndMap;
+        emitter << YAML::Key << "FastStop" << YAML::Value << MiscCFG::FastStop;
+        emitter << YAML::Key << "TeamCheck" << YAML::Value << MenuConfig::TeamCheck;
+        emitter << YAML::Key << "AntiRecord" << YAML::Value << MenuConfig::BypassOBS;
+        emitter << YAML::EndMap;
+
         emitter << YAML::Key << "Menu";
         emitter << YAML::Value;
         emitter << YAML::BeginMap;
@@ -270,12 +271,13 @@ namespace MyConfigSaver {
 
         configFile << emitter.c_str();
         configFile.close();
-        std::cout << "[Info] Configuration saved to " << MenuConfig::path + '\\' + filename << std::endl;
+        //std::cout << "[Info] Configuration saved to " << MenuConfig::path + '\\' + filename << std::endl;
     }
 
     // Function to load the configuration from a file
     void LoadConfig(const std::string& filename) {
         YAML::Node config = YAML::LoadFile(MenuConfig::path + '\\' + filename);
+
         if (config["ESP"]) {
             // If you want to make the new version compatible with the old configuration, you can use "<Config>.IsDefine() ? <Config>.as() : <Default Value>"
             ESPConfig::ESPenabled = ReadData(config["ESP"]["Enable"], false);
@@ -341,6 +343,7 @@ namespace MyConfigSaver {
             ESPConfig::EyeRayColor.Value.z = ReadData(config["ESP"]["EyeRayColor"]["b"], 0.f);
 
         }
+
         if (config["Crosshairs"]) {
             CrosshairsCFG::ShowCrossHair = ReadData(config["Crosshairs"]["Enable"], false);
             CrosshairsCFG::CrossHairSize = ReadData(config["Crosshairs"]["Size"], 0.f);
@@ -369,6 +372,7 @@ namespace MyConfigSaver {
             CrosshairsCFG::TargetedColor.Value.w = ReadData(config["Crosshairs"]["TargetedColor"]["a"], 0.f);
 
         }
+
         if (config["Radar"])
         {
             RadarCFG::ShowRadar = ReadData(config["Radar"]["Enable"], false);
@@ -385,26 +389,7 @@ namespace MyConfigSaver {
             RadarCFG::RadarCrossLineColor.Value.w = ReadData(config["Radar"]["CrosslineColor"]["a"], 0.f);
 
         }
-        if (config["Misc"])
-        {
-            MenuConfig::ShowHeadShootLine = ReadData(config["Misc"]["HeadShootLine"], false);
-            MenuConfig::HeadShootLineColor.Value.x = ReadData(config["Misc"]["HeadShootLineColor"]["r"], 0.f);
-            MenuConfig::HeadShootLineColor.Value.y = ReadData(config["Misc"]["HeadShootLineColor"]["g"], 0.f);
-            MenuConfig::HeadShootLineColor.Value.z = ReadData(config["Misc"]["HeadShootLineColor"]["b"], 0.f);
-            MenuConfig::HeadShootLineColor.Value.w = ReadData(config["Misc"]["HeadShootLineColor"]["a"], 0.f);
-            MiscCFG::WorkInSpec = ReadData(config["Misc"]["WorkInSpec"], false);
-            MiscCFG::WaterMark = ReadData(config["Misc"]["Watermark"], false);
-            MiscCFG::HitSound = ReadData(config["Misc"]["HitSounds"], 0);
-            MiscCFG::bmbTimer = ReadData(config["Misc"]["BombTimer"], false);
-            MiscCFG::BombTimerCol.Value.x = ReadData(config["Misc"]["TimerColor"]["r"], 0.f);
-            MiscCFG::BombTimerCol.Value.y = ReadData(config["Misc"]["TimerColor"]["g"], 0.f);
-            MiscCFG::BombTimerCol.Value.z = ReadData(config["Misc"]["TimerColor"]["b"], 0.f);
-            MiscCFG::BombTimerCol.Value.w = ReadData(config["Misc"]["TimerColor"]["a"], 0.f);
-            MiscCFG::FastStop = ReadData(config["Misc"]["FastStop"], false);
-            //MiscCFG::SpecList = ReadData(config["Misc"]["SpecList"], false);
-            MenuConfig::TeamCheck = ReadData(config["Misc"]["TeamCheck"], true);
-            MenuConfig::BypassOBS = ReadData(config["Misc"]["AntiRecord"], false);
-        }
+
         if (config["Aimbot"])
         {
             MenuConfig::AimBot = ReadData(config["Aimbot"]["Enable"], false);
@@ -425,12 +410,14 @@ namespace MyConfigSaver {
             AimControl::ScopeOnly = ReadData(config["Aimbot"]["ScopeOnly"], false);
             AimControl::AutoShot = ReadData(config["Aimbot"]["AutoShot"], false);
         }
+
         if (config["Recoil Control System"])
         {
             MenuConfig::RCS = ReadData(config["Recoil Control System"]["Enable"], false);
             RCS::RCSScale.x = ReadData(config["Recoil Control System"]["Yaw"], 1.f);
             RCS::RCSScale.y = ReadData(config["Recoil Control System"]["Pitch"], 1.f);
         }
+
         if (config["Triggerbot"])
         {
             MenuConfig::TriggerBot = ReadData(config["Triggerbot"]["Enable"], false);
@@ -441,6 +428,29 @@ namespace MyConfigSaver {
             TriggerBot::IgnoreFlash = ReadData(config["Triggerbot"]["IgnoreFlash"], false);
             MenuConfig::TriggerAlways = ReadData(config["Triggerbot"]["AutoMode"], false);
         }
+
+        if (config["Misc"])
+        {
+            MenuConfig::ShowHeadShootLine = ReadData(config["Misc"]["HeadShootLine"], false);
+            MenuConfig::HeadShootLineColor.Value.x = ReadData(config["Misc"]["HeadShootLineColor"]["r"], 0.f);
+            MenuConfig::HeadShootLineColor.Value.y = ReadData(config["Misc"]["HeadShootLineColor"]["g"], 0.f);
+            MenuConfig::HeadShootLineColor.Value.z = ReadData(config["Misc"]["HeadShootLineColor"]["b"], 0.f);
+            MenuConfig::HeadShootLineColor.Value.w = ReadData(config["Misc"]["HeadShootLineColor"]["a"], 0.f);
+            MiscCFG::WorkInSpec = ReadData(config["Misc"]["WorkInSpec"], false);
+            MiscCFG::WaterMark = ReadData(config["Misc"]["Watermark"], false);
+            MiscCFG::HitSound = ReadData(config["Misc"]["HitSounds"], 0);
+            MiscCFG::HitMarker = ReadData(config["Misc"]["HitMarker"], false);
+            MiscCFG::bmbTimer = ReadData(config["Misc"]["BombTimer"], false);
+            MiscCFG::BombTimerCol.Value.x = ReadData(config["Misc"]["TimerColor"]["r"], 0.f);
+            MiscCFG::BombTimerCol.Value.y = ReadData(config["Misc"]["TimerColor"]["g"], 0.f);
+            MiscCFG::BombTimerCol.Value.z = ReadData(config["Misc"]["TimerColor"]["b"], 0.f);
+            MiscCFG::BombTimerCol.Value.w = ReadData(config["Misc"]["TimerColor"]["a"], 0.f);
+            MiscCFG::FastStop = ReadData(config["Misc"]["FastStop"], false);
+            //MiscCFG::SpecList = ReadData(config["Misc"]["SpecList"], false);
+            MenuConfig::TeamCheck = ReadData(config["Misc"]["TeamCheck"], true);
+            MenuConfig::BypassOBS = ReadData(config["Misc"]["AntiRecord"], false);
+        }
+
         if (config["Menu"])
         {
             MenuConfig::MaxRenderFPS = ReadData(config["Menu"]["RenderFrameLimit"], MenuConfig::MaxFrameRate);
@@ -450,6 +460,6 @@ namespace MyConfigSaver {
         TriggerBot::SetHotKey(MenuConfig::TriggerHotKey);
         MenuConfig::HitboxUpdated = false;
 
-        std::cout << "[Info] Configuration loaded from " << MenuConfig::path + '\\' + filename << std::endl;
+        //std::cout << "[Info] Configuration loaded from " << MenuConfig::path + '\\' + filename << std::endl;
     }
 } // namespace ConfigSaver

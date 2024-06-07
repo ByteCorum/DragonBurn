@@ -588,6 +588,7 @@ namespace GUI
 					ImGui::SameLine();
 					ImGui::SetNextItemWidth(155.f);
 					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
+					PutSwitch(Lang::MiscText.HitMerker, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Lang::MiscText.SpecCheck, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::WorkInSpec);
 					// PutSwitch(Lang::MiscText.SpecList, 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SpecList);
 					PutSwitch(Lang::MiscText.TeamCheck, 10.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::TeamCheck);
@@ -606,7 +607,7 @@ namespace GUI
 					if (ImGui::Button("Contact Author", { 125.f, 25.f }))
 						Gui.OpenWebpage("https://discordapp.com/users/798503509522645012/");
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetColumnWidth() / 4);
-					if (ImGui::Button("Safe Exit", { 125.f, 25.f }))
+					if (ImGui::Button("Unhook", { 125.f, 25.f }))
 						Init::Client::Exit();
 
 
