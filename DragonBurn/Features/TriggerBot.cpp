@@ -12,7 +12,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     DWORD64 ListEntry;
     DWORD64 PawnAddress;
 
-    if (!ProcessMgr.ReadMemory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle) || uHandle == -1)// can have bug
+    if (!ProcessMgr.ReadMemory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle) || uHandle == -1)// https://github.com/ByteCorum/DragonBurn/issues/60
         return;
 
     ListEntry = ProcessMgr.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
