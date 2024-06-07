@@ -10,7 +10,7 @@ namespace offsetsInput = cs2_dumper::offsets::inputsystem_dll;
 
 namespace Offset
 {
-	inline long long CS2ver = 8934826;
+	inline long long CS2ver = 8947443;
 
 	//https://github.com/a2x/cs2-dumper/blob/main/output/offsets.hpp
 	inline DWORD EntityList =				offsets::dwEntityList;
@@ -93,7 +93,7 @@ namespace Offset
 
 	struct
 	{
-		DWORD WeaponDataPTR =		0x360;
+		DWORD WeaponDataPTR =		dll::C_BaseEntity::m_nSubclassID + 0x08;
 		DWORD szName =				dll::CCSWeaponBaseVData::m_szName;
 		DWORD Clip1 =				dll::C_BasePlayerWeapon::m_iClip1;
 		DWORD MaxClip =				dll::CBasePlayerWeaponVData::m_iMaxClip1;
