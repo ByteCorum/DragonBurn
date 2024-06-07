@@ -152,7 +152,6 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Features\Legitbot.hpp" />
     <ClInclude Include="Features\BombTimer.h" />
-    <ClInclude Include="Features\Debugger.h" />
     <ClInclude Include="Features\ESP.h" />
     <ClInclude Include="Features\GetWeaponIcon.h" />
     <ClInclude Include="Features\GUI.h" />
