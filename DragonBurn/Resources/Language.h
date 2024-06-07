@@ -149,6 +149,7 @@ namespace Lang
 		inline static const char* NoFlash;
 		inline static const char* FastStop;
 		inline static const char* HitSound;
+		inline static const char* HitMerker;
 		inline static const char* bmbTimer;
 		//inline static const char* SpecList;
 		inline static const char* Watermark;
@@ -295,6 +296,7 @@ namespace Lang
 		MiscText.NoFlash = u8"No Flash";
 		MiscText.FastStop = u8"Fast Stop";
 		MiscText.HitSound = u8"Hit Sound  ";
+		MiscText.HitMerker = u8"Hit Markers";
 		MiscText.bmbTimer = u8"Bomb Timer";
 		//MiscText.SpecList = u8"Spec List";
 		MiscText.Watermark = u8"Watermark";
@@ -318,12 +320,5 @@ namespace Lang
 		ConfigText.ConfigName = u8"Config Name";
 
 		ConfigText.fpsCap = u8"Frame Limit: ";
-
-		//// Readme Menu
-		//ReadMeText.FeatureName = u8" README";
-		//ReadMeText.LastUpdate = u8"Last update: ";
-		//ReadMeText.SourceButton = u8"Source Code";
-		//ReadMeText.DiscordButton = u8"Join Discord";
-		//ReadMeText.OffsetsTitle = u8"Offsets:";
 	}
 }

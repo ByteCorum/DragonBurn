@@ -110,11 +110,6 @@ namespace ESPConfig
 	inline ImColor FilledColor2 = ImColor(0, 255, 102, 255);
 }
 
-namespace DebuggerConfig
-{
-	inline bool Debug = false;
-}
-
 namespace CrosshairsCFG
 {
 	inline float CrossHairSize = 75;
@@ -162,6 +157,7 @@ namespace MiscCFG
 	inline bool WorkInSpec = true;
 	inline bool WaterMark = false;
 	inline int	HitSound = 0;
+	inline bool HitMarker = false;
 	inline bool bmbTimer = false;
 	inline bool FastStop = false;
 	//inline bool SpecList = false;

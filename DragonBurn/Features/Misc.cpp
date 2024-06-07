@@ -9,6 +9,9 @@ namespace Misc
 	bool dKeyPressed = false;
 	bool wKeyPressed = false;
 	bool sKeyPressed = false;
+	HitMarker hitMarker(0, std::chrono::steady_clock::now());
+	const float HitMarker::SIZE = 30.f;
+	const float HitMarker::GAP = 10.f;
 
 	void Watermark(const CEntity& LocalPlayer) noexcept
 	{
@@ -50,10 +53,27 @@ namespace Misc
 		ImGui::End();
 	}
 
-	void HitSound(const CEntity& aLocalPlayer, int& PreviousTotalHits) noexcept
+	void HitSound() noexcept
 	{
-		if (!MiscCFG::HitSound)
+		switch (MiscCFG::HitSound)
+		{
+		case 1:
+			PlaySoundA(reinterpret_cast<char*>(neverlose_sound), NULL, SND_ASYNC | SND_MEMORY);
+			break;
+		case 2:
+			PlaySoundA(reinterpret_cast<char*>(skeet_sound), NULL, SND_ASYNC | SND_MEMORY);
+			break;
+		default:
+			break;
+		}
+	}
+
+	void HitManager(const CEntity& aLocalPlayer, int& PreviousTotalHits) noexcept
+	{
+		if (!MiscCFG::HitSound && !MiscCFG::HitMarker)
+		{
 			return;
+		}
 
 		uintptr_t pBulletServices;
 		int totalHits;
@@ -63,29 +83,27 @@ namespace Misc
 		if (totalHits != PreviousTotalHits) {
 			if (totalHits == 0 && PreviousTotalHits != 0)
 			{
-				// `totalHits` changed from non-zero to zero, do not play hitsound
+				// `totalHits` changed from non-zero to zero, do nothing
 			}
 			else
 			{
-				// Play the HitSound
-				switch (MiscCFG::HitSound)
+				if (MiscCFG::HitSound)
 				{
-				case 1:
-					PlaySoundA(reinterpret_cast<char*>(neverlose_sound), NULL, SND_ASYNC | SND_MEMORY);
-					break;
-				case 2:
-					PlaySoundA(reinterpret_cast<char*>(skeet_sound), NULL, SND_ASYNC | SND_MEMORY);
-					break;
-				default:
-					break;
+					HitSound();
 				}
-				
+				if (MiscCFG::HitMarker)
+				{
+					hitMarker = HitMarker(255.f, std::chrono::steady_clock::now());
+					hitMarker.Draw();
+				}
 			}
 		}
+
+		hitMarker.Update();
 		PreviousTotalHits = totalHits;
 	}
 
-	void FastStop() noexcept
+	void FastStop() noexcept// junk
 	{
 		if (!MiscCFG::FastStop)
 			return;
