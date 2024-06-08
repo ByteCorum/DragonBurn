@@ -147,7 +147,7 @@ namespace Lang
 		inline static const char* HeadshotLine;
 		inline static const char* SpecCheck;
 		inline static const char* NoFlash;
-		inline static const char* FastStop;
+		//inline static const char* FastStop;
 		inline static const char* HitSound;
 		inline static const char* HitMerker;
 		inline static const char* bmbTimer;
@@ -294,7 +294,7 @@ namespace Lang
 		MiscText.HeadshotLine = u8"Headshot Line";
 		MiscText.SpecCheck = u8"Cheat in Spec";
 		MiscText.NoFlash = u8"No Flash";
-		MiscText.FastStop = u8"Fast Stop";
+		//MiscText.FastStop = u8"Fast Stop";
 		MiscText.HitSound = u8"Hit Sound  ";
 		MiscText.HitMerker = u8"Hit Markers";
 		MiscText.bmbTimer = u8"Bomb Timer";
@@ -302,7 +302,6 @@ namespace Lang
 		MiscText.Watermark = u8"Watermark";
 		MiscText.TeamCheck = u8"Team Check";
 		MiscText.AntiRecord = u8"Anti Record";
-		MiscText.FastStop = u8"Fast Stop";
 		MiscText.VisCheckDisable = u8"Visible Check DISABLED";
 
 

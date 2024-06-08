@@ -256,7 +256,7 @@ namespace MyConfigSaver {
         emitter << YAML::Key << "b" << YAML::Value << MiscCFG::BombTimerCol.Value.z;
         emitter << YAML::Key << "a" << YAML::Value << MiscCFG::BombTimerCol.Value.w;
         emitter << YAML::EndMap;
-        emitter << YAML::Key << "FastStop" << YAML::Value << MiscCFG::FastStop;
+        //emitter << YAML::Key << "FastStop" << YAML::Value << MiscCFG::FastStop;
         emitter << YAML::Key << "TeamCheck" << YAML::Value << MenuConfig::TeamCheck;
         emitter << YAML::Key << "AntiRecord" << YAML::Value << MenuConfig::BypassOBS;
         emitter << YAML::EndMap;
@@ -445,7 +445,7 @@ namespace MyConfigSaver {
             MiscCFG::BombTimerCol.Value.y = ReadData(config["Misc"]["TimerColor"]["g"], 0.f);
             MiscCFG::BombTimerCol.Value.z = ReadData(config["Misc"]["TimerColor"]["b"], 0.f);
             MiscCFG::BombTimerCol.Value.w = ReadData(config["Misc"]["TimerColor"]["a"], 0.f);
-            MiscCFG::FastStop = ReadData(config["Misc"]["FastStop"], false);
+            //MiscCFG::FastStop = ReadData(config["Misc"]["FastStop"], false);
             //MiscCFG::SpecList = ReadData(config["Misc"]["SpecList"], false);
             MenuConfig::TeamCheck = ReadData(config["Misc"]["TeamCheck"], true);
             MenuConfig::BypassOBS = ReadData(config["Misc"]["AntiRecord"], false);

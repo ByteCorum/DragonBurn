@@ -291,7 +291,7 @@ void AIM(CEntity LocalEntity, std::vector<Vec3> AimPosList)
 void MiscFuncs(CEntity LocalEntity)
 {
 	Misc::HitManager(LocalEntity, PreviousTotalHits);
-	Misc::FastStop();
+	//Misc::FastStop();
 }
 
 void RadarSetting(Base_Radar& Radar)
