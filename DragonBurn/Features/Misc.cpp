@@ -103,20 +103,20 @@ namespace Misc
 		PreviousTotalHits = totalHits;
 	}
 
-	void FastStop() noexcept// junk
-	{
-		if (!MiscCFG::FastStop)
-			return;
-		// Disable when bhopping
-		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-			return;
-		// Disable when slow walking
-		if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
-			return;
+	//void FastStop() noexcept// junk
+	//{
+	//	if (!MiscCFG::FastStop)
+	//		return;
+	//	// Disable when bhopping
+	//	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	//		return;
+	//	// Disable when slow walking
+	//	if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+	//		return;
 
-		Misc::StopKeyEvent('A', &aKeyPressed, 'D', 50.f);
-		Misc::StopKeyEvent('D', &dKeyPressed, 'A', 50.f);
-		Misc::StopKeyEvent('W', &wKeyPressed, 'S', 50.f);
-		Misc::StopKeyEvent('S', &sKeyPressed, 'W', 50.f);
-	}
+	//	Misc::StopKeyEvent('A', &aKeyPressed, 'D', 50.f);
+	//	Misc::StopKeyEvent('D', &dKeyPressed, 'A', 50.f);
+	//	Misc::StopKeyEvent('W', &wKeyPressed, 'S', 50.f);
+	//	Misc::StopKeyEvent('S', &sKeyPressed, 'W', 50.f);
+	//}
 }

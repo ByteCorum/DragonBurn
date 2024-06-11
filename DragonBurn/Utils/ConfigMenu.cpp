@@ -227,7 +227,7 @@ namespace ConfigMenu {
 		MiscCFG::WaterMark = false;
 		MiscCFG::HitSound = 0;
 		MiscCFG::HitMarker = false;
-		MiscCFG::FastStop = false;
+		//MiscCFG::FastStop = false;
 
 		ESPConfig::ESPenabled = false;
 
