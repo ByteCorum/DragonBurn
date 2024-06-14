@@ -5,17 +5,23 @@ DWORD64 ListEntry = 0;
 DWORD64 PawnAddress = 0;
 CEntity Entity;
 bool AllowShoot = false;
+bool WaitForNoAttack = false;
 
 void TriggerBot::Run(const CEntity& LocalEntity)
 {
-    DWORD uHandle;
-    DWORD64 ListEntry;
-    DWORD64 PawnAddress;
-
-    if (!ProcessMgr.ReadMemory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle) || uHandle == -1)// https://github.com/ByteCorum/DragonBurn/issues/60
+    if (LocalEntity.Controller.AliveStatus == 0)
         return;
 
-    ListEntry = ProcessMgr.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
+    if (!ProcessMgr.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset::Pawn.m_bWaitForNoAttack, WaitForNoAttack))
+        return;
+
+    if (!ProcessMgr.ReadMemory<DWORD>(LocalEntity.Pawn.Address + Offset::Pawn.iIDEntIndex, uHandle))
+        return;
+
+    if (uHandle == -1)
+        return;
+
+    ListEntry = ProcessMgr.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10,0x0 });
     if (ListEntry == 0)
         return;
 
@@ -33,14 +39,16 @@ void TriggerBot::Run(const CEntity& LocalEntity)
         bool isScoped;
         ProcessMgr.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset::Pawn.isScoped, isScoped);
         if (!isScoped)
+            {
             return;
+        }
     }
 
-    bool AllowShoot;
     if (MenuConfig::TeamCheck)
         AllowShoot = LocalEntity.Pawn.TeamID != Entity.Pawn.TeamID && Entity.Pawn.Health > 0;
     else
         AllowShoot = Entity.Pawn.Health > 0;
+
 
     if (!AllowShoot)
         return;
