@@ -10,7 +10,7 @@ namespace offsetsInput = cs2_dumper::offsets::inputsystem_dll;
 
 namespace Offset
 {
-	inline long long CS2ver = 8964291; //nano "D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\built_from_cl.txt"
+	inline long long CS2ver = 8972920; //nano "D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\built_from_cl.txt"
 
 	//https://github.com/a2x/cs2-dumper/blob/main/output/offsets.hpp
 	inline DWORD EntityList =				offsets::dwEntityList;
@@ -58,6 +58,8 @@ namespace Offset
 		DWORD fFlags =				dll::C_BaseEntity::m_fFlags;
 		DWORD bSpottedByMask =		dll::C_CSPlayerPawn::m_entitySpottedState + dll::EntitySpottedState_t::m_bSpottedByMask;
 		DWORD AbsVelocity =			dll::C_BaseEntity::m_vecAbsVelocity;
+		DWORD m_bWaitForNoAttack =	dll::C_CSPlayerPawn::m_bWaitForNoAttack;
+
 	} Pawn;
 
 	struct
