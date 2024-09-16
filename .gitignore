@@ -407,3 +407,6 @@ DragonBurn/settings.yml
 DragonBurn/prefs.ini
 DragonBurn/Libs/zlib/*
 DragonBurn/Libs/curl/*
+built/
+built_dbg/
+DragonBurn/Core/ProcessManager.txt
