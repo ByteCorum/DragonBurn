@@ -410,3 +410,4 @@ DragonBurn/Libs/curl/*
 built/
 built_dbg/
 DragonBurn/Core/ProcessManager.txt
+DragonBurn-kernel/*
