@@ -185,6 +185,10 @@
     </ClInclude>
     <ClInclude Include="Helpers\KeyManager.h" />
     <ClInclude Include="Resources\Resource.h" />
+    <ClInclude Include="Helpers\uiaccess.h" />
+    <ClInclude Include="Core\vector.h" />
+    <ClInclude Include="Core\ray_trace.h" />
+    <ClInclude Include="Core\Threading.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\icon.ico">
@@ -256,7 +260,7 @@
     <ClCompile Include="Config\ConfigMenu.cpp">
       <Filter>Config</Filter>
     </ClCompile>
-    <ClCompile Include="Features\Aimbot.cpp">
+    <ClCompile Include="Features\AimBot.cpp">
       <Filter>Features\Legit</Filter>
     </ClCompile>
     <ClCompile Include="Offsets\Offsets.cpp">
@@ -268,6 +272,11 @@
     <ClCompile Include="Core\MemoryMgr.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Helpers\uiaccess.cpp" />
+    <ClCompile Include="Core\Threading.cpp" />
+    <ClCompile Include="Core\Render.cpp" />
+    <ClCompile Include="Features\ESP.cpp" />
+    <ClCompile Include="Core\ray_trace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />

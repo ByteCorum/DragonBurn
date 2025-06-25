@@ -11,6 +11,7 @@
 #include "..\Game\View.h"
 #include "..\Features/RCS.h"
 #include "TriggerBot.h"
+#include <random>
 
 extern "C" {
 #include "..\Helpers\Mouse.h"
@@ -24,6 +25,8 @@ namespace AimControl
     inline int AimBullet = 1;
     inline bool ScopeOnly = true;
     inline bool IgnoreFlash = false;
+    inline bool HumanizeVar = false;
+    inline float HumanizationStrength = 0.5f;
     inline float AimFov = 10;
     inline float AimFovMin = 0.4f;
     inline float Smooth = 5.0f;
@@ -31,8 +34,16 @@ namespace AimControl
     inline bool HasTarget = false;
     inline bool onlyAuto = false;
 
+    static float PrevTargetX = 0.0f;
+    static float PrevTargetY = 0.0f;
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+   
 
-    void AimBot(const CEntity& Local, Vec3 LocalPos, std::vector<Vec3>& AimPosList);
+    std::pair<float, float> Humanize(float TargetX, float TargetY);
+
+    void AimBot(const CEntity& Local, Vec3 LocalPos,std::vector<Vec3>& AimPosList);
     void switchToggle();
+    std::pair<float, float> CalculateTargetOffset(const Vec2& ScreenPos, int ScreenCenterX, int ScreenCenterY);
     bool CheckAutoMode(const std::string& WeaponName);
 }

@@ -33,7 +33,7 @@ namespace MenuConfig
 	inline int WindowStyle = 0;
 	inline bool ShowMenu = true;
 	inline bool TeamCheck = true;
-	inline bool BypassOBS = false;
+	inline bool BypassOBS = true;
 	inline bool WorkInSpec = true;
 
 	inline ImVec2 MarkWinPos;

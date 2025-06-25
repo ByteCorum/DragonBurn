@@ -405,3 +405,5 @@ FodyWeavers.xsd
 built/
 built_dbg/
 DragonBurn/RCa21268
+DragonBurn/offsets_cache.json
+/built_legacy

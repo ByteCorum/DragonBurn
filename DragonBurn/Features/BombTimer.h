@@ -73,7 +73,7 @@ namespace bmb
 		ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
 		ImGui::SetNextWindowPos(MenuConfig::BombWinPos, ImGuiCond_Once);
 		ImGui::SetNextWindowSize({ windowWidth, 0 }, ImGuiCond_Once);
-		ImGui::GetStyle().WindowRounding = 8.0f;
+		//ImGui::GetStyle().WindowRounding = 8.0f;
 		ImGui::Begin("Bomb Timer", nullptr, flags);
 
 		if (MenuConfig::BombWinChengePos)

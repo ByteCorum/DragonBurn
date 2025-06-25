@@ -120,6 +120,9 @@ public:
 
 private:
 	void SetOffsets(const std::string&, const std::string&, const std::string&);
+	bool LoadOffsetsFromFile(const std::string& filename);
+	bool SaveOffsetsToFile(const std::string& filename, const std::string& offsetsData, const std::string& buttonsData, const std::string& client_dllData);
+	bool CompareOffsets(const std::string& filename, const std::string& offsetsData, const std::string& buttonsData, const std::string& client_dllData);
 };
 
 inline Offsets Offset;

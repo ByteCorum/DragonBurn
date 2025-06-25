@@ -103,38 +103,3 @@ bool CGame::UpdateEntityListEntry()
 
 	return this->Address.EntityListEntry != 0;
 }
-
-//bool CGame::GetForceJump(int& value)
-//{
-//	if (!memoryManager.ReadMemory<int>(this->Address.ForceJump, value))
-//		return false;
-//
-//	return true;
-//}
-//bool CGame::GetForceCrouch(int& value)
-//{
-//	if (!memoryManager.ReadMemory<int>(this->Address.ForceCrouch, value))
-//		return false;
-//
-//	return true;
-//}
-//
-//bool CGame::GetForceMove(int MovingType, int& Value)
-//{
-//	switch (MovingType)
-//	{
-//	case 0:
-//		if (!memoryManager.ReadMemory<int>(this->Address.ForceForward, Value)) return false;
-//		break;
-//	case 1:
-//		if (!memoryManager.ReadMemory<int>(this->Address.ForceLeft, Value)) return false;
-//		break;
-//	case 2:
-//		if (!memoryManager.ReadMemory<int>(this->Address.ForceRight, Value)) return false;
-//		break;
-//	default:
-//		return false;
-//		break;
-//	}
-//	return true;
-//}

@@ -68,17 +68,22 @@ namespace Log
 		std::cout << ctx << '\n';
 	}
 
-	inline void Debug(std::string ctx, bool write = false)
+	inline void Debug(std::string ctx, bool write = false, int delay = 0)
 	{
 #ifdef DBDEBUG
-		std::string line = "[Debug]" + ctx + '\n';
+		static auto lastPrintTime = std::chrono::high_resolution_clock::now();
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		auto timeSinceLastPrint = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastPrintTime);
 
-		SetConsoleTextAttribute(hConsole, 9);
-		std::cout << line;
-
-		if (write)
-		{
-			WriteLog(line);
+		// Only print if X-ms have passed since last print
+		if (timeSinceLastPrint.count() >= delay) {
+			std::string line = "[Debug]" + ctx + '\n';
+			SetConsoleTextAttribute(hConsole, 9);
+			std::cout << line;
+			if (write) {
+				WriteLog(line);
+			}
+			lastPrintTime = currentTime;
 		}
 #endif
 	}

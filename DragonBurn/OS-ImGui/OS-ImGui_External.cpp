@@ -183,21 +183,51 @@ namespace OSImGui
 
     bool OSImGui_External::CreateMyWindow()
     {
-        WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc_External, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, Window.wClassName.c_str(), NULL };
-        RegisterClassExW(&wc);
-        if (Type == ATTACH)
-        {
-            Window.hWnd = CreateWindowExW(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW, Window.wClassName.c_str(), Window.wName.c_str(), WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT, 100, 100, NULL, NULL, GetModuleHandle(NULL), NULL);
-            SetLayeredWindowAttributes(Window.hWnd, 0, 255, LWA_ALPHA);
+        WNDCLASSEXW wc = {
+            sizeof(wc), CS_CLASSDC, WndProc_External,
+            0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL,
+            Window.wClassName.c_str(), NULL
+        };
+
+        // Load CreateWindowInBand dynamically
+        typedef HWND(WINAPI* pCreateWindowInBand_t)(
+            DWORD, ATOM, LPCWSTR, DWORD, int, int, int, int,
+            HWND, HMENU, HINSTANCE, LPVOID, DWORD);
+
+        pCreateWindowInBand_t pCreateWindowInBand = (pCreateWindowInBand_t)
+            GetProcAddress(GetModuleHandleW(L"user32.dll"), "CreateWindowInBand");
+
+        if (!pCreateWindowInBand) {
+            MessageBoxW(NULL, L"CreateWindowInBand is not supported on this OS.", L"Error", MB_OK | MB_ICONERROR);
+            return false;
         }
-        else
-        {
-            Window.hWnd = CreateWindowW(Window.wClassName.c_str(), Window.wName.c_str(), WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU, (int)Window.Pos.x, (int)Window.Pos.y, (int)Window.Size.x, (int)Window.Size.y, NULL, NULL, wc.hInstance, NULL);
-        }
+
+        // Register the window class
+        ATOM classAtom = RegisterClassExW(&wc);
+
+        // Create the window in UIACCESS band with the requested extended styles
+        Window.hWnd = pCreateWindowInBand(
+            WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_TRANSPARENT,
+            classAtom,
+            Window.wName.c_str(),
+            WS_POPUP,
+            (int)Window.Pos.x, (int)Window.Pos.y,
+            (int)Window.Size.x, (int)Window.Size.y,
+            NULL, NULL,
+            wc.hInstance,
+            NULL,
+            2
+        );
+
         Window.hInstance = wc.hInstance;
 
-        if (!g_Device.CreateDeviceD3D(Window.hWnd))
-        {
+        if (!Window.hWnd) {
+            MessageBoxW(NULL, L"CreateWindowInBand failed.", L"Error", MB_OK | MB_ICONERROR);
+            return false;
+        }
+
+        // Setup ImGui render device
+        if (!g_Device.CreateDeviceD3D(Window.hWnd)) {
             g_Device.CleanupDeviceD3D();
             UnregisterClassW(wc.lpszClassName, wc.hInstance);
             return false;
@@ -206,7 +236,7 @@ namespace OSImGui
         ShowWindow(Window.hWnd, SW_SHOWDEFAULT);
         UpdateWindow(Window.hWnd);
 
-        return Window.hWnd != NULL;
+        return true;
     }
 
     bool OSImGui_External::UpdateWindowData()

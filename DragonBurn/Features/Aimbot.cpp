@@ -1,285 +1,12 @@
 #include "Aimbot.h"
 
+#undef max()
+#undef min()
+
 void AimControl::switchToggle()
 {
     LegitBotConfig::AimAlways = !LegitBotConfig::AimAlways;
 }
-
-void AimControl::AimBot(const CEntity& Local, Vec3 LocalPos, std::vector<Vec3>& AimPosList)
-{
-    if (MenuConfig::ShowMenu)
-        return;
-
-    std::string curWeapon = TriggerBot::GetWeapon(Local);
-    if (!TriggerBot::CheckWeapon(curWeapon))
-        return;
-
-    if (onlyAuto && !CheckAutoMode(curWeapon))
-        return;
-
-    if (Local.Pawn.ShotsFired <= AimBullet - 1 && AimBullet != 0)
-    {
-        HasTarget = false;
-        return;
-    }
-
-
-    if (AimControl::ScopeOnly)
-    {
-        bool isScoped;
-        memoryManager.ReadMemory<bool>(Local.Pawn.Address + Offset.Pawn.isScoped, isScoped);
-        if (!isScoped and TriggerBot::CheckScopeWeapon(curWeapon))
-        {
-            HasTarget = false;
-            return;
-        }
-    }
-
-    if (!IgnoreFlash && Local.Pawn.FlashDuration > 0.f)
-        return;
-
-    int ListSize = AimPosList.size();
-    float BestNorm = MAXV;
-
-    float Yaw, Pitch;
-    float Distance, Norm, Length;
-    Vec2 Angles{ 0,0 };
-    int ScreenCenterX = Gui.Window.Size.x / 2;
-    int ScreenCenterY = Gui.Window.Size.y / 2;
-    float TargetX = 0.f;
-    float TargetY = 0.f;
-
-    Vec2 ScreenPos;
-
-    for (int i = 0; i < ListSize; i++)
-    {
-        Vec3 OppPos;
-
-        OppPos = AimPosList[i] - LocalPos;
-
-        Distance = sqrt(pow(OppPos.x, 2) + pow(OppPos.y, 2));
-
-        Length = sqrt(Distance * Distance + OppPos.z * OppPos.z);
-
-        if (LegitBotConfig::RCS)
-        {
-            RCS::UpdateAngles(Local, Angles);
-            float rad = Angles.x * RCS::RCSScale.x / 360.f * M_PI;
-            float si = sinf(rad);
-            float co = cosf(rad);
-
-            float z = OppPos.z * co + Distance * si;
-            float d = (Distance * co - OppPos.z * si) / Distance;
-
-            rad = -Angles.y * RCS::RCSScale.y / 360.f * M_PI;
-            si = sinf(rad);
-            co = cosf(rad);
-
-            float x = (OppPos.x * co - OppPos.y * si) * d;
-            float y = (OppPos.x * si + OppPos.y * co) * d;
-
-            OppPos = Vec3{ x, y, z };
-
-            AimPosList[i] = LocalPos + OppPos;
-        }
-
-        Yaw = atan2f(OppPos.y, OppPos.x) * 57.295779513 - Local.Pawn.ViewAngle.y;
-        Pitch = -atan(OppPos.z / Distance) * 57.295779513 - Local.Pawn.ViewAngle.x;
-        Norm = sqrt(pow(Yaw, 2) + pow(Pitch, 2));
-
-        if (Norm < BestNorm)
-            BestNorm = Norm;
-
-        gGame.View.WorldToScreen(Vec3(AimPosList[i]), ScreenPos);
-    }
-
-    if (Norm < AimFov && Norm > AimFovMin)
-    {
-        HasTarget = true;
-        if (ScreenPos.x != ScreenCenterX)
-        {
-            TargetX = (ScreenPos.x > ScreenCenterX) ? -(ScreenCenterX - ScreenPos.x) : ScreenPos.x - ScreenCenterX;
-            TargetX /= Smooth != 0.0f ? Smooth : 1.5f;
-            TargetX = (TargetX + ScreenCenterX > ScreenCenterX * 2 || TargetX + ScreenCenterX < 0) ? 0 : TargetX;
-        }
-
-        if (ScreenPos.y != 0)
-        {
-            if (ScreenPos.y != ScreenCenterY)
-            {
-                TargetY = (ScreenPos.y > ScreenCenterY) ? -(ScreenCenterY - ScreenPos.y) : ScreenPos.y - ScreenCenterY;
-                TargetY /= Smooth != 0.0f ? Smooth : 1.5f;
-                TargetY = (TargetY + ScreenCenterY > ScreenCenterY * 2 || TargetY + ScreenCenterY < 0) ? 0 : TargetY;
-            }
-        }
-
-        if (!Smooth)
-        {
-            mouse_event(MOUSEEVENTF_MOVE, (DWORD)(TargetX), (DWORD)(TargetY), NULL, NULL);
-            return;
-        }
-
-        // Dynamic AimSmooth based on distance
-        float DistanceRatio = Norm / AimFov; // Calculate the distance ratio
-        float SpeedFactor = 1.0f + (1.0f - DistanceRatio); // Determine the speed factor based on the distance ratio
-        TargetX /= (Smooth * SpeedFactor);
-        TargetY /= (Smooth * SpeedFactor);
-
-        if (ScreenPos.x != ScreenCenterX)
-        {
-            TargetX = (ScreenPos.x > ScreenCenterX) ? -(ScreenCenterX - ScreenPos.x) : ScreenPos.x - ScreenCenterX;
-            TargetX /= Smooth != 0.0f ? Smooth : 1.5f;
-            TargetX = (TargetX + ScreenCenterX > ScreenCenterX * 2 || TargetX + ScreenCenterX < 0) ? 0 : TargetX;
-        }
-
-        if (ScreenPos.y != 0)
-        {
-            if (ScreenPos.y != ScreenCenterY)
-            {
-                TargetY = (ScreenPos.y > ScreenCenterY) ? -(ScreenCenterY - ScreenPos.y) : ScreenPos.y - ScreenCenterY;
-                TargetY /= Smooth != 0.0f ? Smooth : 1.5f;
-                TargetY = (TargetY + ScreenCenterY > ScreenCenterY * 2 || TargetY + ScreenCenterY < 0) ? 0 : TargetY;
-            }
-        }
-
-        mouse_event(MOUSEEVENTF_MOVE, TargetX, TargetY, NULL, NULL);
-
-        int FrameWait = round(1000000.0f / MenuConfig::RenderFPS);
-        std::this_thread::sleep_for(std::chrono::microseconds(FrameWait));
-    }
-    else
-        HasTarget = false;
-}
-
-//void AimControl::AimBot(const CEntity& Local, Vec3 LocalPos, std::vector<Vec3>& AimPosList)
-//{
-//    // Early exit conditions
-//    if (MenuConfig::ShowMenu)
-//        return;
-//
-//    std::string curWeapon = TriggerBot::GetWeapon(Local);
-//    if (!TriggerBot::CheckWeapon(curWeapon))
-//        return;
-//    if (onlyAuto && !CheckAutoMode(curWeapon))
-//        return;
-//    if (AimBullet != 0 && Local.Pawn.ShotsFired < AimBullet)
-//    {
-//        HasTarget = false;
-//        return;
-//    }
-//    if (AimControl::ScopeOnly)
-//    {
-//        bool isScoped;
-//        memoryManager.ReadMemory<bool>(Local.Pawn.Address + Offset.Pawn.isScoped, isScoped);
-//        if (!isScoped && TriggerBot::CheckScopeWeapon(curWeapon))
-//        {
-//            HasTarget = false;
-//            return;
-//        }
-//    }
-//    if (!IgnoreFlash && Local.Pawn.FlashDuration > 0.f)
-//        return;
-//
-//    // Determine screen center once
-//    const int ScreenCenterX = Gui.Window.Size.x / 2;
-//    const int ScreenCenterY = Gui.Window.Size.y / 2;
-//
-//    // We'll choose the best target based on the smallest aim angle (norm)
-//    float bestNorm = MAXV;
-//    Vec2 bestScreenPos{ 0, 0 };
-//
-//    // Iterate through all candidate aim positions
-//    for (const auto& aimPos : AimPosList)
-//    {
-//        // Calculate the opponent’s relative position from our local position
-//        Vec3 diff = aimPos - LocalPos;
-//        // Horizontal distance: sqrt(diff.x^2 + diff.y^2)
-//        float horizDist = sqrtf(diff.x * diff.x + diff.y * diff.y);
-//
-//        // Apply RCS adjustments if enabled
-//        Vec3 adjusted = diff;
-//        if (LegitBotConfig::RCS)
-//        {
-//            Vec2 rcsAngles{ 0, 0 };
-//            RCS::UpdateAngles(Local, rcsAngles);
-//            float rad = rcsAngles.x * RCS::RCSScale.x / 360.f * M_PI;
-//            float si = sinf(rad), co = cosf(rad);
-//            float z = adjusted.z * co + horizDist * si;
-//            // Avoid division by zero (assuming horizDist > 0)
-//            float d = (horizDist * co - adjusted.z * si) / (horizDist ? horizDist : 1.0f);
-//            rad = -rcsAngles.y * RCS::RCSScale.y / 360.f * M_PI;
-//            si = sinf(rad); co = cosf(rad);
-//            float x = (adjusted.x * co - adjusted.y * si) * d;
-//            float y = (adjusted.x * si + adjusted.y * co) * d;
-//            adjusted = Vec3{ x, y, z };
-//            // Update aim position if desired (mirroring original behavior)
-//            // Note: This alters AimPosList; if that is not desired, use a temporary variable.
-//            // For targeting purposes we use the adjusted value.
-//        }
-//        Vec3 finalAimPos = (LegitBotConfig::RCS) ? LocalPos + adjusted : aimPos;
-//
-//        // Calculate the aim angle offsets (in degrees)
-//        float targetYaw = atan2f(adjusted.y, adjusted.x) * 57.29578f - Local.Pawn.ViewAngle.y;
-//        float targetPitch = -atan2f(adjusted.z, horizDist) * 57.29578f - Local.Pawn.ViewAngle.x;
-//        float norm = sqrtf(targetYaw * targetYaw + targetPitch * targetPitch);
-//
-//        // Convert the final aim position to screen coordinates
-//        Vec2 screenPos;
-//        gGame.View.WorldToScreen(Vec3(finalAimPos), screenPos);
-//
-//        // Select the best (lowest norm) target
-//        if (norm < bestNorm)
-//        {
-//            bestNorm = norm;
-//            bestScreenPos = screenPos;
-//        }
-//    }
-//
-//    // Only aim if the best target is within the FOV limits
-//    if (bestNorm < AimFov && bestNorm > AimFovMin)
-//    {
-//        HasTarget = true;
-//        // Calculate the initial offset from screen center
-//        float offsetX = bestScreenPos.x - ScreenCenterX;
-//        float offsetY = bestScreenPos.y - ScreenCenterY;
-//
-//        // Clamp offsets if the target is off-screen
-//        if (bestScreenPos.x < 0 || bestScreenPos.x > 2 * ScreenCenterX)
-//            offsetX = 0;
-//        if (bestScreenPos.y < 0 || bestScreenPos.y > 2 * ScreenCenterY)
-//            offsetY = 0;
-//
-//        // If no smoothing is applied, move immediately
-//        if (Smooth == 0.0f)
-//        {
-//            mouse_event(MOUSEEVENTF_MOVE, (DWORD)offsetX, (DWORD)offsetY, 0, 0);
-//            return;
-//        }
-//
-//        // Dynamic smoothing: adjust speed based on target closeness
-//        float distanceRatio = bestNorm / AimFov;
-//        float speedFactor = 1.0f + (1.0f - distanceRatio);
-//        float effectiveSmooth = (Smooth != 0.0f) ? Smooth : 1.5f;
-//        offsetX /= (effectiveSmooth * speedFactor);
-//        offsetY /= (effectiveSmooth * speedFactor);
-//
-//        // Re-clamp after smoothing if needed
-//        if ((offsetX + ScreenCenterX) > (2 * ScreenCenterX) || (offsetX + ScreenCenterX) < 0)
-//            offsetX = 0;
-//        if ((offsetY + ScreenCenterY) > (2 * ScreenCenterY) || (offsetY + ScreenCenterY) < 0)
-//            offsetY = 0;
-//
-//        mouse_event(MOUSEEVENTF_MOVE, (DWORD)offsetX, (DWORD)offsetY, 0, 0);
-//
-//        // Throttle the aimbot updates based on the render FPS
-//        int frameWait = (int)round(1000000.0f / MenuConfig::RenderFPS);
-//        std::this_thread::sleep_for(std::chrono::microseconds(frameWait));
-//    }
-//    else
-//    {
-//        HasTarget = false;
-//    }
-//}
 
 bool AimControl::CheckAutoMode(const std::string& WeaponName)
 {
@@ -287,4 +14,218 @@ bool AimControl::CheckAutoMode(const std::string& WeaponName)
         return false;
     else
         return true;
+}
+
+std::pair<float, float> AimControl::CalculateTargetOffset(const Vec2& ScreenPos, int ScreenCenterX, int ScreenCenterY)
+{
+    float TargetX = 0.0f;
+    float TargetY = 0.0f;
+
+    // Calculate X offset
+    if (ScreenPos.x != ScreenCenterX) {
+        TargetX = (ScreenPos.x > ScreenCenterX) ?
+            -(ScreenCenterX - ScreenPos.x) :
+            ScreenPos.x - ScreenCenterX;
+
+        // Clamp to screen boundaries
+        if (TargetX + ScreenCenterX > ScreenCenterX * 2 || TargetX + ScreenCenterX < 0) {
+            TargetX = 0.0f;
+        }
+    }
+
+    // Calculate Y offset
+    if (ScreenPos.y != 0 && ScreenPos.y != ScreenCenterY) {
+        TargetY = (ScreenPos.y > ScreenCenterY) ?
+            -(ScreenCenterY - ScreenPos.y) :
+            ScreenPos.y - ScreenCenterY;
+
+        // Clamp to screen boundaries
+        if (TargetY + ScreenCenterY > ScreenCenterY * 2 || TargetY + ScreenCenterY < 0) {
+            TargetY = 0.0f;
+        }
+    }
+
+    return { TargetX, TargetY };
+}
+
+// Humanize function to add natural movement patterns
+std::pair<float, float> AimControl::Humanize(float TargetX, float TargetY) {
+
+    // Clamp strength to valid range
+    HumanizationStrength = std::clamp(HumanizationStrength, 0.0f, 1.0f);
+    
+    // If no humanization requested, return original targets
+    if (HumanizationStrength <= 0.0f) {
+        PrevTargetX = TargetX;
+        PrevTargetY = TargetY;
+        return { TargetX, TargetY };
+    }
+    
+    // Random distributions for different types of jitter (increased ranges)
+    std::uniform_real_distribution<float> jitterDist(-2.5f, 2.5f);
+    std::uniform_real_distribution<float> microDist(-1.2f, 1.2f);
+    std::uniform_real_distribution<float> smoothnessDist(0.4f, 0.85f);
+    
+    // Calculate movement distance for dynamic adjustments
+    float MovementDistance = std::sqrt(TargetX * TargetX + TargetY * TargetY);
+    
+    // Add micro-movements (scaled by strength) - increased base multiplier
+    float MicroJitterX = microDist(gen) * std::min(MovementDistance * 0.25f, 8.0f) * HumanizationStrength;
+    float MicroJitterY = microDist(gen) * std::min(MovementDistance * 0.25f, 8.0f) * HumanizationStrength;
+    
+    // Add larger jitter for longer movements (scaled by strength) - increased multiplier
+    float JitterScale = std::min(MovementDistance * 0.15f, 12.0f) * HumanizationStrength;
+    float JitterX = jitterDist(gen) * JitterScale;
+    float JitterY = jitterDist(gen) * JitterScale;
+    
+    // Create slightly curved path (scaled by strength) - increased curve factor
+    float PerpX = -TargetY * 0.35f * jitterDist(gen) * HumanizationStrength;
+    float PerpY = TargetX * 0.35f * jitterDist(gen) * HumanizationStrength;
+    
+    // Apply smoothing with strength-controlled factor (more aggressive smoothing variation)
+    // At strength=0, no smoothing (immediate response)
+    // At strength=1, full smoothing range with more noticeable lag
+    float baseSmoothFactor = smoothnessDist(gen);
+    float SmoothFactor = 1.0f - ((1.0f - baseSmoothFactor) * HumanizationStrength);
+    float SmoothedX = TargetX * SmoothFactor + PrevTargetX * (1.0f - SmoothFactor);
+    float SmoothedY = TargetY * SmoothFactor + PrevTargetY * (1.0f - SmoothFactor);
+    
+    // Add reaction time simulation - occasional delayed response
+    std::uniform_real_distribution<float> reactionDist(0.0f, 1.0f);
+    if (reactionDist(gen) < 0.15f * HumanizationStrength) { // 15% chance at full strength
+        SmoothedX = PrevTargetX; // Use previous target (simulates delayed reaction)
+        SmoothedY = PrevTargetY;
+    }
+    
+    // Combine all humanization elements
+    float HumanizedX = SmoothedX + MicroJitterX + JitterX + PerpX;
+    float HumanizedY = SmoothedY + MicroJitterY + JitterY + PerpY;
+    
+    // Store current targets for next frame smoothing
+    PrevTargetX = TargetX;
+    PrevTargetY = TargetY;
+    
+    return { HumanizedX, HumanizedY };
+}
+
+void AimControl::AimBot(const CEntity& Local, Vec3 LocalPos,std::vector<Vec3>& AimPosList)
+{
+    // Early returns for invalid states
+    if (MenuConfig::ShowMenu) return;
+
+    std::string curWeapon = TriggerBot::GetWeapon(Local);
+    if (!TriggerBot::CheckWeapon(curWeapon)) return;
+
+    if (onlyAuto && !CheckAutoMode(curWeapon)) return;
+
+    if (Local.Pawn.ShotsFired <= AimBullet - 1 && AimBullet != 0) {
+        HasTarget = false;
+        return;
+    }
+
+    // Scope check
+    if (AimControl::ScopeOnly) {
+        bool isScoped;
+        memoryManager.ReadMemory<bool>(Local.Pawn.Address + Offset.Pawn.isScoped, isScoped);
+        if (!isScoped && TriggerBot::CheckScopeWeapon(curWeapon)) {
+            HasTarget = false;
+            return;
+        }
+    }
+
+    if (!IgnoreFlash && Local.Pawn.FlashDuration > 0.f) return;
+
+    // Initialize variables
+    const int ListSize = AimPosList.size();
+    if (ListSize == 0) {
+        HasTarget = false;
+        return;
+    }
+
+    float BestNorm = MAXV;
+    int BestTargetIndex = -1;
+    Vec2 Angles{ 0, 0 };
+
+    const int ScreenCenterX = Gui.Window.Size.x / 2;
+    const int ScreenCenterY = Gui.Window.Size.y / 2;
+
+    // Find best target
+    for (int i = 0; i < ListSize; i++) {
+        Vec3 OppPos = AimPosList[i] - LocalPos;
+        const float Distance = sqrt(OppPos.x * OppPos.x + OppPos.y * OppPos.y);
+
+        // Apply RCS if enabled
+        if (LegitBotConfig::RCS) {
+            RCS::UpdateAngles(Local, Angles);
+
+            // X-axis rotation
+            const float radX = Angles.x * RCS::RCSScale.x / 360.f * M_PI;
+            const float sinX = sinf(radX);
+            const float cosX = cosf(radX);
+
+            const float z = OppPos.z * cosX + Distance * sinX;
+            const float d = (Distance * cosX - OppPos.z * sinX) / Distance;
+
+            // Y-axis rotation
+            const float radY = -Angles.y * RCS::RCSScale.y / 360.f * M_PI;
+            const float sinY = sinf(radY);
+            const float cosY = cosf(radY);
+
+            const float x = (OppPos.x * cosY - OppPos.y * sinY) * d;
+            const float y = (OppPos.x * sinY + OppPos.y * cosY) * d;
+
+            OppPos = Vec3{ x, y, z };
+            AimPosList[i] = LocalPos + OppPos;
+        }
+
+        // Calculate angles
+        const float Yaw = atan2f(OppPos.y, OppPos.x) * 57.295779513f - Local.Pawn.ViewAngle.y;
+        const float Pitch = -atan(OppPos.z / Distance) * 57.295779513f - Local.Pawn.ViewAngle.x;
+        const float Norm = sqrt(Yaw * Yaw + Pitch * Pitch);
+
+        // Track best target
+        if (Norm < BestNorm) {
+            BestNorm = Norm;
+            BestTargetIndex = i;
+        }
+    }
+
+    // Check if best target is within FOV
+    if (BestNorm >= AimFov || BestNorm <= AimFovMin || BestTargetIndex == -1) {
+        HasTarget = false;
+        return;
+    }
+
+    // Get screen position of best target
+    Vec2 ScreenPos;
+    if (!gGame.View.WorldToScreen(AimPosList[BestTargetIndex], ScreenPos)) {
+        HasTarget = false;
+        return;
+    }
+
+    HasTarget = true;
+
+    // Calculate target offsets
+    auto [TargetX, TargetY] = CalculateTargetOffset(ScreenPos, ScreenCenterX, ScreenCenterY);
+
+    // Apply smoothing if enabled
+    if (Smooth > 0.0f) {
+        // Dynamic smoothing based on distance
+        const float DistanceRatio = BestNorm / AimFov;
+        const float SpeedFactor = 1.0f + (1.0f - DistanceRatio);
+        TargetX /= (Smooth * SpeedFactor);
+        TargetY /= (Smooth * SpeedFactor);
+    }
+
+    if (HumanizeVar)
+    {
+        // Humanize the movement
+        auto [HumanizedX, HumanizedY] = Humanize(TargetX, TargetY);
+        TargetX = HumanizedX;
+        TargetY = HumanizedY;
+    }
+    
+
+    // Apply mouse movement
+    mouse_event(MOUSEEVENTF_MOVE, static_cast<DWORD>(TargetX), static_cast<DWORD>(TargetY), NULL, NULL);
 }

@@ -40,7 +40,7 @@ namespace ConfigMenu {
 		float ComponentWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX * 2;
 
 		ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-		ImGui::SeparatorText(Text::Config::FeatureName.c_str());
+		ImGui::GradientText(Text::Config::FeatureName.c_str());
 
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(Text::Config::MyConfigs.c_str());
@@ -107,7 +107,7 @@ namespace ConfigMenu {
 		ImGui::NextColumn();
 		CurrentCursorX = ImGui::GetCursorPosX();
 		ImGui::SetCursorPos(ImVec2(CurrentCursorX + CursorX, 24.f));
-		ImGui::SeparatorText(Text::Config::SeparateLine.c_str());
+		ImGui::GradientText(Text::Config::SeparateLine.c_str());
 		ImGui::TextDisabled(Text::Config::ConfigName.c_str());
 		ImGui::SetNextItemWidth(ComponentWidth + 8);
 		ImGui::InputText("###ConfigNameInput", configNameBuffer, sizeof(configNameBuffer));
@@ -130,8 +130,11 @@ namespace ConfigMenu {
 
 	void ResetToDefault() {
 		TriggerBot::IgnoreFlash = false;
+		TriggerBot::VisibleCheck = false;
 		TriggerBot::ScopeOnly = true;
+		TriggerBot::WorkWithAimbot = false;
 		AimControl::IgnoreFlash = false;
+		AimControl::HumanizeVar = false;
 
 		ESPConfig::ArmorBar = false;
 		ESPConfig::ShowArmorNum = false;

@@ -12,6 +12,8 @@
 #include "..\Resources\Images.hpp"
 #include "../Helpers/KeyManager.h"
 
+#include "../Features/ESP.h"
+
 ID3D11ShaderResourceView* Logo = NULL;
 ID3D11ShaderResourceView* MenuButton1 = NULL;
 ID3D11ShaderResourceView* MenuButton2 = NULL;
@@ -100,13 +102,13 @@ namespace GUI
 		{
 			// Updater::CheckForUpdates();
 			Gui.LoadTextureFromMemory(Images::Logo, sizeof Images::Logo, &Logo, &LogoW, &LogoH);
-			Gui.LoadTextureFromMemory(Images::VisualButton, sizeof Images::VisualButton, &MenuButton1, &buttonW, &buttonH);
-			Gui.LoadTextureFromMemory(Images::AimbotButton, sizeof Images::AimbotButton, &MenuButton2, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::AimbotButton, sizeof Images::AimbotButton, &MenuButton1, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::VisualButton, sizeof Images::VisualButton, &MenuButton2, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::MiscButton, sizeof Images::MiscButton, &MenuButton3, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::ConfigButton, sizeof Images::ConfigButton, &MenuButton4, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::PreviewImg, sizeof Images::PreviewImg, &HitboxImage, &hitboxW, &hitboxH);
-			Gui.LoadTextureFromMemory(Images::VisualButtonPressed, sizeof Images::VisualButtonPressed, &MenuButton1Pressed, &buttonW, &buttonH);
-			Gui.LoadTextureFromMemory(Images::AimbotButtonPressed, sizeof Images::AimbotButtonPressed, &MenuButton2Pressed, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::AimbotButtonPressed, sizeof Images::AimbotButtonPressed, &MenuButton1Pressed, &buttonW, &buttonH);
+			Gui.LoadTextureFromMemory(Images::VisualButtonPressed, sizeof Images::VisualButtonPressed, &MenuButton2Pressed, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::MiscButtonPressed, sizeof Images::MiscButtonPressed, &MenuButton3Pressed, &buttonW, &buttonH);
 			Gui.LoadTextureFromMemory(Images::ConfigButtonPressed, sizeof Images::ConfigButtonPressed, &MenuButton4Pressed, &buttonW, &buttonH);
 
@@ -202,13 +204,12 @@ namespace GUI
 		LogoSize = ImVec2(LogoW, LogoH);
 		LogoPos = MenuConfig::WCS.LogoPos;
 
-		ImColor BorderColor = ImColor(102, 110, 180, 255);
+		ImColor BorderColor = ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border));
 
 		char TempText[256];
 		ImGuiWindowFlags Flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar;
 		ImGui::SetNextWindowPos({ (ImGui::GetIO().DisplaySize.x - MenuConfig::WCS.MainWinSize.x) / 2.0f, (ImGui::GetIO().DisplaySize.y - MenuConfig::WCS.MainWinSize.y) / 2.0f }, ImGuiCond_Once);
 		ImGui::SetNextWindowSize(MenuConfig::WCS.MainWinSize);
-		ImGui::GetStyle().WindowRounding = 2.0f;
 		ImGui::Begin("DragonBurn", nullptr, Flags);
 		{
 			ImGui::SetCursorPos(LogoPos);
@@ -297,15 +298,15 @@ namespace GUI
 
 			ImGui::SetCursorPos(MenuConfig::WCS.ChildPos);
 			
-			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize);
+			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize, false, ImGuiWindowFlags_NoScrollbar);
 			{
 				ImGui::Text("   DragonBurn");
 				ImGui::Separator();
-				if (MenuConfig::WCS.MenuPage == 0)
+				if (MenuConfig::WCS.MenuPage == 1)
 				{
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::SeparatorText("ESP");
+					ImGui::GradientText("ESP");
 					float MinRounding = 0.f, MaxRouding = 5.f;
 					PutSwitch(Text::ESP::Toggle.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
 					if (ESPConfig::ESPenabled)
@@ -353,12 +354,12 @@ namespace GUI
 					
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::SeparatorText("ESP Preview");
+					ImGui::GradientText("ESP Preview");
 					// ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() }, { ImGui::GetCursorPosX() - ImGui::GetColumnWidth() * 0.65f, ImGui::GetCursorPosY() - ImGui::GetFrameHeight() });
 					ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() });
 					ImGui::Dummy({ 0.f, ImGui::GetFrameHeight() * 9 });
 
-					ImGui::SeparatorText("External Radar");
+					ImGui::GradientText("External Radar");
 					float RadarPointSizeProportionMin = 0.2f, RadarPointSizeProportionMax = 2.f;
 					float ProportionMin = 500.f, ProportionMax = 15000.f;
 					float RadarRangeMin = 100.f, RadarRangeMax = 300.f;
@@ -379,7 +380,7 @@ namespace GUI
 					}
 					
 					//ImGui::NewLine();
-					//ImGui::SeparatorText("Crosshairs");
+					//ImGui::GradientText("Crosshairs");
 					//float DotMin = 1.f, DotMax = 50.f;
 					//int LengthMin = 1, LengthMax = 100;
 					//int GapMin = 1, GapMax = 50;
@@ -411,15 +412,15 @@ namespace GUI
 					//ImGui::Columns(1);
 				}
 				
-				if (MenuConfig::WCS.MenuPage == 1)
+				if (MenuConfig::WCS.MenuPage == 0)
 				{
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::SeparatorText("Aimbot");
+					ImGui::GradientText("Aimbot");
 
 					float FovMin = 0.f, FovMax = 30.f, MinFovMax = 1.f;
 					int BulletMin = 0, BulletMax = 5;
-					float SmoothMin = 1.f, SmoothMax = 15.f;
+					float SmoothMin = 0.f, SmoothMax = 15.f;
 					PutSwitch(Text::Aimbot::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::AimBot);
 					if (LegitBotConfig::AimBot)
 					{
@@ -440,7 +441,13 @@ namespace GUI
 						PutSwitch(Text::Aimbot::VisCheck.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::VisibleCheck);
 						PutSwitch(Text::Aimbot::OnlyAuto.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::onlyAuto, false, NULL, NULL, Text::Aimbot::OnlyAutoTip.c_str());
 						PutSwitch(Text::Aimbot::IgnoreFlash.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::IgnoreFlash);
+						PutSwitch(Text::Aimbot::HumanizeVar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::HumanizeVar);
 						PutSwitch(Text::Aimbot::ScopeOnly.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::ScopeOnly);
+
+						static const float MinHumanize = 0.0f;
+						static const float MaxHumanize = 1.0f;
+						PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
+
 						PutSliderFloat(Text::Aimbot::FovSlider.c_str(), 10.f, &AimControl::AimFov, &AimControl::AimFovMin, &FovMax, "%.1f");
 						PutSliderFloat(Text::Aimbot::FovMinSlider.c_str(), 10.f, &AimControl::AimFovMin, &FovMin, &MinFovMax, "%.2f");
 						PutSliderFloat(Text::Aimbot::SmoothSlider.c_str(), 10.f, &AimControl::Smooth, &SmoothMin, &SmoothMax, "%.1f");
@@ -509,7 +516,7 @@ namespace GUI
 					}
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::SeparatorText("RCS");
+					ImGui::GradientText("RCS");
 					float recoilMin = 0.f, recoilMax = 2.f;
 					int RCSBulletMin = 0, RCSBulletMax = 5;
 					PutSwitch(Text::RCS::Toggle.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::RCS);
@@ -561,7 +568,7 @@ namespace GUI
 					}
 
 					ImGui::NewLine();
-					ImGui::SeparatorText("Triggerbot");
+					ImGui::GradientText("Triggerbot");
 					int DelayMin = 0, DelayMax = 300;
 					int DurationMin = 0, DurationMax = 1000;
 
@@ -583,7 +590,9 @@ namespace GUI
 						}
 						PutSwitch(Text::Trigger::Toggle.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::TriggerAlways);
 						PutSwitch(Text::Trigger::ScopeOnly.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::ScopeOnly);
+						PutSwitch(Text::Trigger::WorkWithAimbot.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::WorkWithAimbot);
 						PutSwitch(Text::Trigger::IgnoreFlash.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::IgnoreFlash);
+						PutSwitch(Text::Trigger::VisCheck.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::VisibleCheck);
 						PutSliderInt(Text::Trigger::DelaySlider.c_str(), 5.f, &TriggerBot::TriggerDelay, &DelayMin, &DelayMax, "%d ms");
 						PutSliderInt(Text::Trigger::FakeShotSlider.c_str(), 5.f, &TriggerBot::ShotDuration, &DurationMin, &DurationMax, "%d ms");
 					}
@@ -598,7 +607,7 @@ namespace GUI
 					float FlashMin = 0.f, FlashMax = 255.f;
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::SeparatorText("Misc");
+					ImGui::GradientText("Misc");
 					PutSwitch(Text::Misc::bmbTimer.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::bmbTimer, true, "###bmbTimerCol", reinterpret_cast<float*>(&MiscCFG::BombTimerCol));
 					PutSwitch(Text::Misc::SpecList.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SpecList);
 					PutSwitch(Text::Misc::Watermark.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::WaterMark);
@@ -616,7 +625,7 @@ namespace GUI
 
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::SeparatorText("Global Settings");
+					ImGui::GradientText("Global Settings");
 					ImGui::TextDisabled(Text::Misc::MenuKey.c_str());
 					ImGui::SameLine();
 					AlignRight(70.f);

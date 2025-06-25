@@ -152,6 +152,7 @@ namespace MyConfigSaver
         ConfigData["Aimbot"]["Hotkey"]=           AimControl::HotKey;
         ConfigData["Aimbot"]["AimBullet"]=        AimControl::AimBullet;
         ConfigData["Aimbot"]["Fov"]=              AimControl::AimFov;
+        ConfigData["Aimbot"]["HumanizationStrength"]=              AimControl::HumanizationStrength;
         ConfigData["Aimbot"]["FovMin"]=           AimControl::AimFovMin;
         ConfigData["Aimbot"]["FovCircle"]=        ESPConfig::DrawFov;
 
@@ -159,6 +160,7 @@ namespace MyConfigSaver
         ConfigData["Aimbot"]["Hitboxes"]=         AimControl::HitboxList;
         ConfigData["Aimbot"]["VisibleCheck"]=     LegitBotConfig::VisibleCheck;
         ConfigData["Aimbot"]["IgnoreFlash"]=      AimControl::IgnoreFlash;
+        ConfigData["Aimbot"]["HumanizeVar"]=      AimControl::HumanizeVar;
         ConfigData["Aimbot"]["ScopeOnly"]=        AimControl::ScopeOnly;
         ConfigData["Aimbot"]["OnlyAuto"] =        AimControl::onlyAuto;
 
@@ -181,7 +183,9 @@ namespace MyConfigSaver
         ConfigData["Triggerbot"]["Delay"]=        TriggerBot::TriggerDelay;
         ConfigData["Triggerbot"]["FakeShot"]=     TriggerBot::ShotDuration;
         ConfigData["Triggerbot"]["ScopeOnly"]=    TriggerBot::ScopeOnly;
+        ConfigData["Triggerbot"]["WorkWithAimbot"]=    TriggerBot::WorkWithAimbot;
         ConfigData["Triggerbot"]["IgnoreFlash"]=  TriggerBot::IgnoreFlash;
+        ConfigData["Triggerbot"]["VisCheck"] = TriggerBot::VisibleCheck;
         ConfigData["Triggerbot"]["AutoMode"]=     LegitBotConfig::TriggerAlways;
 
 
@@ -376,7 +380,8 @@ namespace MyConfigSaver
             LegitBotConfig::AimToggleMode = ReadData(ConfigData["Aimbot"],{"ToggleMode"}, false);
             AimControl::HotKey = ReadData(ConfigData["Aimbot"],{"Hotkey"}, 0);
             AimControl::AimBullet = ReadData(ConfigData["Aimbot"],{"AimBullet"}, 0);
-            AimControl::AimFov = ReadData(ConfigData["Aimbot"],{"Fov"}, 5.f);
+            AimControl::AimFov = ReadData(ConfigData["Aimbot"],{"FOV"}, 5.f);
+            AimControl::HumanizationStrength = ReadData(ConfigData["Aimbot"],{"HumanizationStrength"}, 0.5f);
             AimControl::AimFovMin = ReadData(ConfigData["Aimbot"],{"FovMin"}, .5f);
             ESPConfig::DrawFov = ReadData(ConfigData["Aimbot"],{"FovCircle"}, false);
             LegitBotConfig::FovCircleColor.Value.x = ReadData(ConfigData["Aimbot"],{"CircleColor","r"}, 0.f);
@@ -387,6 +392,7 @@ namespace MyConfigSaver
             AimControl::HitboxList = LoadVector(ConfigData["Aimbot"], "Hitboxes", { BONEINDEX::head });
             LegitBotConfig::VisibleCheck = ReadData(ConfigData["Aimbot"],{"VisibleCheck"}, true);
             AimControl::IgnoreFlash = ReadData(ConfigData["Aimbot"],{"IgnoreFlash"}, false);
+            AimControl::HumanizeVar = ReadData(ConfigData["Aimbot"],{"HumanizeVar"}, false);
             AimControl::ScopeOnly = ReadData(ConfigData["Aimbot"],{"ScopeOnly"}, false);
             AimControl::onlyAuto = ReadData(ConfigData["Aimbot"], { "OnlyAuto" }, false);
             Text::Aimbot::HotKey = KeyMgr::GetKeyName(AimControl::HotKey);
@@ -408,7 +414,9 @@ namespace MyConfigSaver
             TriggerBot::TriggerDelay = ReadData(ConfigData["Triggerbot"],{"Delay"}, 20);
             TriggerBot::ShotDuration = ReadData(ConfigData["Triggerbot"],{"FakeShot"}, 200);
             TriggerBot::ScopeOnly = ReadData(ConfigData["Triggerbot"],{"ScopeOnly"}, false);
+            TriggerBot::WorkWithAimbot = ReadData(ConfigData["Triggerbot"],{"WorkWithAimbot"}, false);
             TriggerBot::IgnoreFlash = ReadData(ConfigData["Triggerbot"],{"IgnoreFlash"}, false);
+            TriggerBot::VisibleCheck = ReadData(ConfigData["Triggerbot"], { "VisCheck" }, false);
             LegitBotConfig::TriggerAlways = ReadData(ConfigData["Triggerbot"],{"AutoMode"}, false);
             Text::Trigger::HotKey = KeyMgr::GetKeyName(TriggerBot::HotKey);
         }

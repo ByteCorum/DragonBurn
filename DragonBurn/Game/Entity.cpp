@@ -1,7 +1,8 @@
 #include "Entity.h"
 
 
-std::map<int, std::string> CEntity::weaponNames = {
+// Optimized weapon names lookup using unordered_map for O(1) average case
+std::unordered_map<int, std::string> CEntity::weaponNames = {
 	{1, "deagle"},
 	{2, "elite"},
 	{3, "fiveseven"},
@@ -13,6 +14,7 @@ std::map<int, std::string> CEntity::weaponNames = {
 	{11, "g3Sg1"},
 	{13, "galilar"},
 	{14, "m249"},
+	{16, "m4a1"},
 	{17, "mac10"},
 	{19, "p90"},
 	{23, "mp5sd"},
@@ -40,21 +42,12 @@ std::map<int, std::string> CEntity::weaponNames = {
 	{47, "decoy"},
 	{48, "incgrenade"},
 	{49, "c4"},
-	{16, "m4a1"},
-	{61, "usp"},
+	{59, "t_knife"},
 	{60, "m4a1_silencer"},
+	{61, "usp"},
 	{63, "cz75a"},
-	{64, "revolver"},
-	{59, "t_knife"}
+	{64, "revolver"}
 };
-
-inline std::string CEntity::GetWeaponName(int weaponID) {
-	auto it = weaponNames.find(weaponID);
-	if (it != weaponNames.end()) {
-		return it->second;
-	}
-	return "Weapon_None";
-}
 
 bool CEntity::UpdateController(const DWORD64& PlayerControllerAddress)
 {
@@ -188,24 +181,27 @@ bool PlayerPawn::GetSpotted()
 }
 
 
+
 bool PlayerPawn::GetWeaponName()
 {
-	DWORD64 WeaponNameAddress = 0;
-	char Buffer[256]{};
-	
-	WeaponNameAddress = memoryManager.TraceAddress(this->Address + Offset.Pawn.pClippingWeapon, { 0x10,0x20 ,0x0 });
-	if (WeaponNameAddress == 0)
-		return false;
-
+	// Single memory read to get the weapon pointer
 	DWORD64 CurrentWeapon;
-	short weaponIndex;
-	memoryManager.ReadMemory(this->Address + Offset.Pawn.pClippingWeapon, CurrentWeapon);
-	memoryManager.ReadMemory(CurrentWeapon + Offset.EconEntity.AttributeManager + Offset.WeaponBaseData.Item + Offset.WeaponBaseData.ItemDefinitionIndex, weaponIndex);
-
-	if (weaponIndex == -1)
+	if (!memoryManager.ReadMemory(this->Address + Offset.Pawn.pClippingWeapon, CurrentWeapon) || CurrentWeapon == 0)
 		return false;
 
-	WeaponName = CEntity::GetWeaponName(weaponIndex);
+	// Calculate the final address for weapon index directly
+	DWORD64 weaponIndexAddress = CurrentWeapon + Offset.EconEntity.AttributeManager +
+		Offset.WeaponBaseData.Item + Offset.WeaponBaseData.ItemDefinitionIndex;
+
+	// Single memory read to get weapon index
+	short weaponIndex;
+	if (!memoryManager.ReadMemory(weaponIndexAddress, weaponIndex) || weaponIndex == -1)
+		return false;
+
+	// Inline weapon name lookup
+	static const std::string defaultWeapon = "Weapon_None";
+	auto it = CEntity::weaponNames.find(weaponIndex);
+	WeaponName = (it != CEntity::weaponNames.end()) ? it->second : defaultWeapon;
 
 	return true;
 }
@@ -318,7 +314,7 @@ bool PlayerPawn::GetVelocity()
 	return true;
 }
 
-bool CEntity::IsAlive()
+bool CEntity::IsAlive() const
 {
 	return this->Controller.AliveStatus == 1 && this->Pawn.Health > 0;
 }
@@ -347,4 +343,194 @@ bool Client::GetSensitivity()
 	}
 	else
 		return false;
+}
+
+
+bool CEntity::UpdateControllerBatch(const DWORD64& PlayerControllerAddress) {
+	if (PlayerControllerAddress == 0) return false;
+
+	this->Controller.Address = PlayerControllerAddress;
+
+	// Prepare batch read requests in specific order
+	std::vector<std::pair<DWORD64, SIZE_T>> requests = {
+		{PlayerControllerAddress + Offset.Pawn.CurrentHealth, sizeof(int)},           // 0
+		{PlayerControllerAddress + Offset.Entity.IsAlive, sizeof(int)},              // 1
+		{PlayerControllerAddress + Offset.Pawn.iTeamNum, sizeof(int)},               // 2
+		{PlayerControllerAddress + Offset.Entity.iszPlayerName, MAX_PATH},           // 3
+		{PlayerControllerAddress + Offset.PlayerController.m_steamID, sizeof(INT64)}, // 4
+		{PlayerControllerAddress + Offset.Entity.PlayerPawn, sizeof(DWORD)}          // 5
+	};
+
+	// Calculate total size needed
+	SIZE_T total_size = 0;
+	for (const auto& req : requests) {
+		total_size += req.second;
+	}
+
+	// Allocate buffer for all data
+	std::vector<BYTE> batch_buffer(total_size);
+
+	if (!memoryManager.BatchReadMemory(requests, batch_buffer.data())) {
+		return false;
+	}
+
+	// Extract data in the same order as requests
+	SIZE_T offset = 0;
+
+	// Health (index 0)
+	memcpy(&this->Controller.Health, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	// Alive status (index 1)
+	memcpy(&this->Controller.AliveStatus, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	// Team ID (index 2)
+	memcpy(&this->Controller.TeamID, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	// Player name (index 3)
+	char temp_name[MAX_PATH] = { 0 };
+	memcpy(temp_name, batch_buffer.data() + offset, MAX_PATH);
+	this->Controller.PlayerName = temp_name;
+	if (this->Controller.PlayerName.empty()) {
+		this->Controller.PlayerName = "Name_None";
+	}
+	offset += MAX_PATH;
+
+	// Steam ID (index 4)
+	memcpy(&this->Controller.SteamID, batch_buffer.data() + offset, sizeof(INT64));
+	offset += sizeof(INT64);
+
+	// Pawn address (index 5)
+	memcpy(&this->Controller.Pawn, batch_buffer.data() + offset, sizeof(DWORD));
+
+	// Get pawn address
+	this->Pawn.Address = this->Controller.GetPlayerPawnAddress();
+
+	return true;
+}
+
+
+bool CEntity::UpdatePawnBatch(const DWORD64& PlayerPawnAddress) {
+	if (PlayerPawnAddress == 0) return false;
+
+	this->Pawn.Address = PlayerPawnAddress;
+
+	// Get dependent addresses first (these need individual reads)
+	DWORD64 weaponAddress = 0;
+	DWORD64 cameraServices = 0;
+
+	// Read these separately as they're needed to determine other reads
+	memoryManager.ReadMemory<DWORD64>(PlayerPawnAddress + Offset.Pawn.pClippingWeapon, weaponAddress);
+	memoryManager.ReadMemory<DWORD64>(PlayerPawnAddress + Offset.Pawn.CameraServices, cameraServices);
+
+	// Build batch requests in specific order
+	std::vector<std::pair<DWORD64, SIZE_T>> requests = {
+		// Index 0-12: Core pawn data
+		{PlayerPawnAddress + Offset.Pawn.angEyeAngles, sizeof(Vec2)},          // 0
+		{PlayerPawnAddress + Offset.Pawn.vecLastClipCameraPos, sizeof(Vec3)},  // 1
+		{PlayerPawnAddress + Offset.Pawn.Pos, sizeof(Vec3)},                   // 2
+		{PlayerPawnAddress + Offset.Pawn.bSpottedByMask, sizeof(DWORD64)},     // 3
+		{PlayerPawnAddress + Offset.Pawn.iShotsFired, sizeof(DWORD)},          // 4
+		{PlayerPawnAddress + Offset.Pawn.aimPunchAngle, sizeof(Vec2)},         // 5
+		{PlayerPawnAddress + Offset.Pawn.iTeamNum, sizeof(int)},               // 6
+		{PlayerPawnAddress + Offset.Pawn.CurrentHealth, sizeof(int)},          // 7
+		{PlayerPawnAddress + Offset.Pawn.CurrentArmor, sizeof(int)},           // 8
+		{PlayerPawnAddress + Offset.Pawn.flFlashDuration, sizeof(float)},      // 9
+		{PlayerPawnAddress + Offset.Pawn.AbsVelocity, sizeof(Vec3)},           // 10
+		{PlayerPawnAddress + Offset.Pawn.fFlags, sizeof(int)},                 // 11
+		{PlayerPawnAddress + Offset.C4.m_bBeingDefused, sizeof(bool)}          // 12
+	};
+
+	// Add conditional reads
+	bool has_weapon = (weaponAddress != 0);
+	bool has_camera = (cameraServices != 0);
+
+	if (has_weapon) {
+		requests.push_back({ weaponAddress + Offset.WeaponBaseData.Clip1, sizeof(int) }); // 13
+	}
+
+	if (has_camera) {
+		requests.push_back({ cameraServices + Offset.Pawn.iFovStart, sizeof(int) }); // 14 (or 13 if no weapon)
+	}
+
+	// Calculate buffer size and perform batch read
+	SIZE_T total_size = 0;
+	for (const auto& req : requests) {
+		total_size += req.second;
+	}
+
+	std::vector<BYTE> batch_buffer(total_size);
+
+	if (!memoryManager.BatchReadMemory(requests, batch_buffer.data())) {
+		return false;
+	}
+
+	// Extract data in request order
+	SIZE_T offset = 0;
+
+	// Core data (indices 0-12)
+	memcpy(&this->Pawn.ViewAngle, batch_buffer.data() + offset, sizeof(Vec2));
+	offset += sizeof(Vec2);
+
+	memcpy(&this->Pawn.CameraPos, batch_buffer.data() + offset, sizeof(Vec3));
+	offset += sizeof(Vec3);
+
+	memcpy(&this->Pawn.Pos, batch_buffer.data() + offset, sizeof(Vec3));
+	offset += sizeof(Vec3);
+
+	memcpy(&this->Pawn.bSpottedByMask, batch_buffer.data() + offset, sizeof(DWORD64));
+	offset += sizeof(DWORD64);
+
+	memcpy(&this->Pawn.ShotsFired, batch_buffer.data() + offset, sizeof(DWORD));
+	offset += sizeof(DWORD);
+
+	memcpy(&this->Pawn.AimPunchAngle, batch_buffer.data() + offset, sizeof(Vec2));
+	offset += sizeof(Vec2);
+
+	memcpy(&this->Pawn.TeamID, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	memcpy(&this->Pawn.Health, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	memcpy(&this->Pawn.Armor, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	memcpy(&this->Pawn.FlashDuration, batch_buffer.data() + offset, sizeof(float));
+	offset += sizeof(float);
+
+	Vec3 velocity;
+	memcpy(&velocity, batch_buffer.data() + offset, sizeof(Vec3));
+	this->Pawn.Speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+	offset += sizeof(Vec3);
+
+	memcpy(&this->Pawn.fFlags, batch_buffer.data() + offset, sizeof(int));
+	offset += sizeof(int);
+
+	memcpy(&this->Pawn.isDefusing, batch_buffer.data() + offset, sizeof(bool));
+	offset += sizeof(bool);
+
+	// Handle conditional data
+	if (has_weapon) {
+		memcpy(&this->Pawn.Ammo, batch_buffer.data() + offset, sizeof(int));
+		offset += sizeof(int);
+	}
+	else {
+		this->Pawn.Ammo = 0; // Default value
+	}
+
+	if (has_camera) {
+		memcpy(&this->Pawn.Fov, batch_buffer.data() + offset, sizeof(int));
+	}
+	else {
+		this->Pawn.Fov = 90; // Default FOV
+	}
+
+	// These still need individual processing
+	this->Pawn.GetWeaponName();
+	this->Pawn.BoneData.UpdateAllBoneDataBatch(PlayerPawnAddress);
+
+	return true;
 }

@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #define DRAGON_DEVICE 0x8000
 #define IOCTL_GET_PID CTL_CODE(DRAGON_DEVICE, 0x4452, METHOD_NEITHER, FILE_ANY_ACCESS)
@@ -10,6 +11,7 @@
 #define IOCTL_READ_PROCESS_MEMORY CTL_CODE(DRAGON_DEVICE, 0x4472, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_WRITE_PROCESS_MEMORY CTL_CODE(DRAGON_DEVICE, 0x4482, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_WRITE_PROCESS_MEMORY_PROTECTED CTL_CODE(DRAGON_DEVICE, 0x4492, METHOD_NEITHER, FILE_ANY_ACCESS)
+#define IOCTL_BATCH_READ CTL_CODE(FILE_DEVICE_UNKNOWN, 0x804, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
 
 class MemoryMgr
@@ -24,7 +26,8 @@ public:
 
     DWORD64 GetModuleBase(const wchar_t*);
     DWORD GetProcessID(const wchar_t*);
-
+    bool BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& requests, void* output_buffer);
+       
     template <typename ReadType>
     bool ReadMemory(DWORD64 address, ReadType& value, SIZE_T size = sizeof(ReadType))
     {
@@ -100,6 +103,21 @@ public:
     //    return false;
     //}
 
+    template<typename T>
+    bool BatchReadStructured(const std::vector<DWORD64>& addresses, std::vector<T>& results) {
+        if (addresses.empty()) return false;
+
+        std::vector<std::pair<DWORD64, SIZE_T>> requests;
+        requests.reserve(addresses.size());
+
+        for (DWORD64 addr : addresses) {
+            requests.emplace_back(addr, sizeof(T));
+        }
+
+        results.resize(addresses.size());
+        return BatchReadMemory(requests, results.data());
+    }
+
 	DWORD64 TraceAddress(DWORD64, std::vector<DWORD>);
 
 private:
@@ -137,6 +155,20 @@ private:
         SIZE_T size;
         PVOID buff;
     } READ_PACK, * P_READ_PACK;
+
+    // Batch read structures
+    struct BatchReadRequest {
+        DWORD64 address;
+        SIZE_T size;
+        SIZE_T offset_in_buffer; // Offset where this read's data starts in the output buffer
+    };
+
+    struct BatchReadHeader {
+        HANDLE process_id;
+        UINT32 num_requests;
+        SIZE_T total_buffer_size;
+        // Followed by BatchReadRequest array, then output buffer
+    };
 
 };
 

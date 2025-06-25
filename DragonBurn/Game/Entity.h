@@ -11,6 +11,31 @@ struct C_UTL_VECTOR
 	DWORD64 Data = 0;
 };
 
+struct EntityBatchData {
+	// Controller data
+	int teamID;
+	int health;
+	int aliveStatus;
+	char playerName[MAX_PATH];
+	INT64 steamID;
+	DWORD pawn;
+
+	// Pawn data
+	Vec2 viewAngle;
+	Vec3 cameraPos;
+	Vec3 pos;
+	DWORD64 spottedMask;
+	DWORD shotsFired;
+	Vec2 aimPunchAngle;
+	int pawnTeamID;
+	int pawnHealth;
+	int armor;
+	float flashDuration;
+	Vec3 velocity;
+	int fov;
+	int fFlags;
+};
+
 class PlayerController
 {
 public:
@@ -107,14 +132,20 @@ public:
 	PlayerPawn Pawn;
 	Client Client;
 public:
+
 	bool UpdateController(const DWORD64& PlayerControllerAddress);
 	bool UpdatePawn(const DWORD64& PlayerPawnAddress);
 	bool UpdateClientData();
-	bool IsAlive();
+	bool IsAlive() const;
 	bool IsInScreen();
 	CBone GetBone() const;
 
+	bool UpdateControllerBatch(const DWORD64& PlayerControllerAddress);
+	bool UpdatePawnBatch(const DWORD64& PlayerPawnAddress);
+	static std::vector<CEntity> BatchUpdateEntities(const std::vector<DWORD64>& controllerAddresses);
+
 public:
-	static std::map<int, std::string> weaponNames;
-	static std::string GetWeaponName(int weaponID);
+	static std::unordered_map<int, std::string> weaponNames;
+	const std::string& GetWeaponName(int weaponID);
+	//static std::string GetWeaponName(int weaponID);
 };
