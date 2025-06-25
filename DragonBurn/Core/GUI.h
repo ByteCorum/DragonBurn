@@ -354,8 +354,12 @@ namespace GUI
 					
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
+<<<<<<< Updated upstream
 					ImGui::GradientText("ESP Preview");
 					// ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() }, { ImGui::GetCursorPosX() - ImGui::GetColumnWidth() * 0.65f, ImGui::GetCursorPosY() - ImGui::GetFrameHeight() });
+=======
+					ImGui::SeparatorText("ESP Preview");
+>>>>>>> Stashed changes
 					ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() });
 					ImGui::Dummy({ 0.f, ImGui::GetFrameHeight() * 9 });
 
@@ -378,6 +382,7 @@ namespace GUI
 							PutSliderFloat(Text::Radar::AlphaSlider.c_str(), 5.f, &RadarCFG::RadarBgAlpha, &AlphaMin, &AlphaMax, "%.1f");
 						}
 					}
+<<<<<<< Updated upstream
 					
 					//ImGui::NewLine();
 					//ImGui::GradientText("Crosshairs");
@@ -410,6 +415,8 @@ namespace GUI
 					//}
 					
 					//ImGui::Columns(1);
+=======
+>>>>>>> Stashed changes
 				}
 				
 				if (MenuConfig::WCS.MenuPage == 0)
@@ -446,7 +453,11 @@ namespace GUI
 
 						static const float MinHumanize = 0.0f;
 						static const float MaxHumanize = 1.0f;
+<<<<<<< Updated upstream
 						PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
+=======
+						PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 0.5f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
+>>>>>>> Stashed changes
 
 						PutSliderFloat(Text::Aimbot::FovSlider.c_str(), 10.f, &AimControl::AimFov, &AimControl::AimFovMin, &FovMax, "%.1f");
 						PutSliderFloat(Text::Aimbot::FovMinSlider.c_str(), 10.f, &AimControl::AimFovMin, &FovMin, &MinFovMax, "%.2f");
