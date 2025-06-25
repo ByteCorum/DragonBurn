@@ -44,6 +44,7 @@ void Cheat()
 {
 	ShowWindow(GetConsoleWindow(), SW_SHOWNORMAL);
 	SetConsoleTitle(L"DragonBurn");
+	//Init::Verify::RandTitle();
 
 	Log::Custom(R"LOGO(______                            ______                  
 |  _  \                           | ___ \                 
@@ -64,7 +65,7 @@ https://github.com/ByteCorum/DragonBurn
 	}
 
 #ifndef DBDEBUG
-	Log::Info("Checking cheat version");
+	/*Log::Info("Checking cheat version");
 	switch (Init::Verify::CheckCheatVersion())
 	{
 	case 0:
@@ -93,7 +94,7 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error("Unknown connection error");
 		break;
 
-	}
+	}*/
 #endif
 
 	Log::Info("Updating offsets");

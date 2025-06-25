@@ -23,7 +23,7 @@ namespace Misc
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 		ImGui::SetNextWindowPos(MenuConfig::MarkWinPos, ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(0.8f);
-		//ImGui::GetStyle().WindowRounding = 8.0f;
+		ImGui::GetStyle().WindowRounding = 8.0f;
 		ImGui::Begin("Watermark", nullptr, windowFlags);
 
 		if (MenuConfig::MarkWinChengePos)
