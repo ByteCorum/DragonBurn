@@ -221,13 +221,8 @@
     <ClInclude Include="Resources\Language.hpp" />
     <ClInclude Include="Resources\Sounds.hpp" />
     <ClInclude Include="Resources\WeaponIcon.hpp" />
-<<<<<<< Updated upstream
-    <ClInclude Include="Core\ray_trace.h" />
-    <ClInclude Include="Core\vector.h" />
-=======
     <ClInclude Include="TriVisCheck\ray_trace.h" />
     <ClInclude Include="TriVisCheck\vector.h" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\icon.ico" />
@@ -263,11 +258,7 @@
     <ClCompile Include="OS-ImGui\OS-ImGui_Base.cpp" />
     <ClCompile Include="OS-ImGui\OS-ImGui_External.cpp" />
     <ClCompile Include="Core\MemoryMgr.cpp" />
-<<<<<<< Updated upstream
-    <ClCompile Include="Core\ray_trace.cpp" />
-=======
     <ClCompile Include="TriVisCheck\ray_trace.cpp" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />

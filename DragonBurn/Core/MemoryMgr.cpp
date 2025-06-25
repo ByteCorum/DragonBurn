@@ -128,77 +128,6 @@ DWORD64 MemoryMgr::TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets)
     if (offsets.empty())
         return baseAddress;
 
-<<<<<<< Updated upstream
-		for (int i = 0; i < offsets.size() - 1; i++)
-		{
-			if (!ReadMemory<DWORD64>(address + offsets[i], address))
-				return 0;
-		}
-		return address == 0 ? 0 : address + offsets[offsets.size() - 1];
-	}
-	else
-		return 0;
-}
-
-bool MemoryMgr::BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& requests, void* output_buffer)
-{
-	if (kernelDriver == nullptr || ProcessID == 0 || requests.empty()) {
-		return false;
-	}
-
-	// Calculate buffer size for output data only
-	SIZE_T output_data_size = 0;
-	for (const auto& req : requests) {
-		output_data_size += req.second;
-	}
-
-	// Calculate total request structure size
-	SIZE_T request_struct_size = sizeof(BatchReadHeader) +
-		(requests.size() * sizeof(BatchReadRequest));
-
-	// Total size includes both request structure and output buffer space
-	SIZE_T total_buffer_size = request_struct_size + output_data_size;
-
-	// Allocate buffer for the entire operation
-	std::vector<BYTE> operation_buffer(total_buffer_size);
-
-	BatchReadHeader* header = reinterpret_cast<BatchReadHeader*>(operation_buffer.data());
-	BatchReadRequest* batch_requests = reinterpret_cast<BatchReadRequest*>(header + 1);
-
-	// Fill header
-	header->process_id = ULongToHandle(ProcessID);
-	header->num_requests = static_cast<UINT32>(requests.size());
-	header->total_buffer_size = output_data_size; // Size of output data only
-
-	// Fill requests with correct offsets
-	SIZE_T buffer_offset = 0;
-	for (size_t i = 0; i < requests.size(); ++i) {
-		batch_requests[i].address = requests[i].first;
-		batch_requests[i].size = requests[i].second;
-		batch_requests[i].offset_in_buffer = buffer_offset;
-		buffer_offset += requests[i].second;
-	}
-
-	BOOL result = DeviceIoControl(
-		kernelDriver,
-		IOCTL_BATCH_READ,
-		operation_buffer.data(),
-		static_cast<DWORD>(total_buffer_size),
-		operation_buffer.data(),
-		static_cast<DWORD>(total_buffer_size),
-		nullptr,
-		nullptr
-	);
-
-	if (result) {
-		// Copy output data (starts after the request structures)
-		BYTE* output_start = operation_buffer.data() + request_struct_size;
-		memcpy(output_buffer, output_start, output_data_size);
-	}
-
-	return result == TRUE;
-}
-=======
     uint64_t buffer = 0;
     if (!ReadMemory(address, buffer))
         return 0;
@@ -281,4 +210,3 @@ bool MemoryMgr::BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& r
 
     return result == TRUE;
 }
->>>>>>> Stashed changes

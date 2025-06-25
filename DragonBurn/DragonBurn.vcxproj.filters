@@ -186,13 +186,8 @@
     <ClInclude Include="Helpers\KeyManager.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="Helpers\uiaccess.h" />
-<<<<<<< Updated upstream
-    <ClInclude Include="Core\vector.h" />
-    <ClInclude Include="Core\ray_trace.h" />
-=======
     <ClInclude Include="TriVisCheck\vector.h" />
     <ClInclude Include="TriVisCheck\ray_trace.h" />
->>>>>>> Stashed changes
     <ClInclude Include="Core\Threading.h" />
   </ItemGroup>
   <ItemGroup>
@@ -279,15 +274,9 @@
     </ClCompile>
     <ClCompile Include="Helpers\uiaccess.cpp" />
     <ClCompile Include="Core\Threading.cpp" />
-<<<<<<< Updated upstream
-    <ClCompile Include="Core\Render.cpp" />
-    <ClCompile Include="Features\ESP.cpp" />
-    <ClCompile Include="Core\ray_trace.cpp" />
-=======
     <ClCompile Include="TriVisCheck\ray_trace.cpp" />
     <ClCompile Include="Features\ESP.cpp" />
     <ClCompile Include="Core\Render.cpp" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />

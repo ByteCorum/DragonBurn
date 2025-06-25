@@ -44,6 +44,7 @@ void Cheat()
 {
 	ShowWindow(GetConsoleWindow(), SW_SHOWNORMAL);
 	SetConsoleTitle(L"DragonBurn");
+	//Init::Verify::RandTitle();
 
 	Log::Custom(R"LOGO(______                            ______                  
 |  _  \                           | ___ \                 

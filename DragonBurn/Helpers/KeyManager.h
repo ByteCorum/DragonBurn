@@ -64,34 +64,38 @@ namespace KeyMgr
         }
     }
 
-	inline void GetPressedKey(int& vk_code, std::string& keyName)
-	{
-        int hotkey;
+    inline void GetPressedKey(int& vk_code, std::string& keyName)
+    {
+        int hotkey = 0; // Initialize to 0
         std::string buff = keyName;
         keyName = "...";
+
         while (true)
         {
+            hotkey = 0;
 
-			for (int key = 0; key < 256; key++)
-			{
-				if (GetAsyncKeyState(key) & 0x8000)
-				{
-					hotkey = key;
-				}
-			}
+            for (int key = 0; key < 256; key++)
+            {
+                if (GetAsyncKeyState(key) & 0x8000)
+                {
+                    hotkey = key;
+                    break;
+                }
+            }
+
+           
             if (hotkey == MenuConfig::HotKey)
             {
                 keyName = buff;
                 break;
             }
-                
 
-			if (hotkey > 0 && hotkey < 256 )
-			{
-				vk_code = hotkey;
-				keyName = GetKeyName(hotkey);
+            if (hotkey > 0 && hotkey < 256)
+            {
+                vk_code = hotkey;
+                keyName = GetKeyName(hotkey);
                 break;
-			}
-		}
-	}
+            }
+        }
+    }
 }

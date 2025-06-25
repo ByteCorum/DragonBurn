@@ -9,11 +9,7 @@
 #include "../Features/Radar.h"
 #include "../Features/TriggerBot.h"
 #include "../Features/Misc.h"
-<<<<<<< Updated upstream
-#include "ray_trace.h"
-=======
 #include "../TriVisCheck/ray_trace.h"
->>>>>>> Stashed changes
 
 
 // //Forward declarations
