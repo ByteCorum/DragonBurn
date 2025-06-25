@@ -1544,52 +1544,6 @@ void ImGui::SeparatorText(const char* label)
     SeparatorTextEx(0, label, FindRenderedTextEnd(label), 0.0f);
 }
 
-void ImGui::GradientText(const char* text)
-{
-    // Increase font scale
-    ImFont* font = ImGui::GetFont();
-    float oldScale = font->Scale;
-    font->Scale = 1.25f; // Increase by 15%
-    ImGui::PushFont(font);  // Ensure scaled font is applied
-
-    ImVec2 textSize = ImGui::CalcTextSize(text);
-    float width = 180.0f;
-    float height = textSize.y + 2;
-
-    ImVec2 cursorPos = ImGui::GetCursorScreenPos();
-
-    // Get the color of TextDisabled and create transparent version
-    ImVec4 color = ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled);
-    ImU32 colorOpaque = ImGui::ColorConvertFloat4ToU32(color);
-    ImVec4 colorTransparent = color;
-    colorTransparent.w = 0.0f;
-    ImU32 colorTrans = ImGui::ColorConvertFloat4ToU32(colorTransparent);
-
-    ImDrawList* drawList = ImGui::GetWindowDrawList();
-    ImVec2 p1 = ImVec2(cursorPos.x - 15, cursorPos.y + 3.5f);
-    ImVec2 p3 = ImVec2(cursorPos.x, cursorPos.y + 3.5f);
-    ImVec2 p2 = ImVec2(p1.x + width, p1.y + height);
-
-    // Draw background gradient
-    drawList->AddRectFilledMultiColor(
-        p1, p2,
-        colorOpaque, // top-left
-        colorTrans,  // top-right
-        colorTrans,  // bottom-right
-        colorOpaque  // bottom-left
-    );
-
-    // Set text color and render
-    ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_ChildBg));
-    ImGui::SetCursorScreenPos(p3);
-    ImGui::TextUnformatted(text);
-    ImGui::PopStyleColor();
-
-    // Restore original font scale
-    font->Scale = oldScale;
-    ImGui::PopFont();
-}
-
 // Using 'hover_visibility_delay' allows us to hide the highlight and mouse cursor for a short time, which can be convenient to reduce visual noise.
 bool ImGui::SplitterBehavior(const ImRect& bb, ImGuiID id, ImGuiAxis axis, float* size1, float* size2, float min_size1, float min_size2, float hover_extend, float hover_visibility_delay, ImU32 bg_col)
 {
@@ -2002,7 +1956,6 @@ bool ImGui::Combo(const char* label, int* current_item, const char* const items[
 // Combo box helper allowing to pass all items in a single string literal holding multiple zero-terminated items "item1\0item2\0"
 bool ImGui::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items)
 {
-    //ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
     int items_count = 0;
     const char* p = items_separated_by_zeros;       // FIXME-OPT: Avoid computing this, or at least only when combo is open
     while (*p)
@@ -2011,7 +1964,6 @@ bool ImGui::Combo(const char* label, int* current_item, const char* items_separa
         items_count++;
     }
     bool value_changed = Combo(label, current_item, Items_SingleStringGetter, (void*)items_separated_by_zeros, items_count, height_in_items);
-    //ImGui::PopStyleColor();
     return value_changed;
 }
 
