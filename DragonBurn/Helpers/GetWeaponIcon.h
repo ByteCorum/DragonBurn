@@ -2,69 +2,59 @@
 #include <string>
 #include <map>
 
+static const std::map<std::string, const char*> gunIcons = 
+{
+    {"ct_knife", "]"},
+    {"t_knife", "["},
+    {"deagle", "A"},
+    {"elite", "B"},
+    {"fiveseven", "C"},
+    {"glock", "D"},
+    {"revolver", "J"},
+    {"p2000", "E"},
+    {"p250", "F"},
+    {"usp_silencer", "G"},
+    {"tec9", "H"},
+    {"cz75a", "I"},
+    {"mac10", "K"},
+    {"ump45", "L"},
+    {"bizon", "M"},
+    {"mp7", "N"},
+    {"mp9", "P"},
+    {"p90", "O"},
+    {"galilar", "Q"},
+    {"famas", "R"},
+    {"m4a1_silencer", "T"},
+    {"m4a1", "S"},
+    {"aug", "U"},
+    {"sg556", "V"},
+    {"ak47", "W"},
+    {"g3sg1", "X"},
+    {"scar20", "Y"},
+    {"awp", "Z"},
+    {"ssg08", "a"},
+    {"xm1014", "b"},
+    {"sawedoff", "c"},
+    {"mag7", "d"},
+    {"nova", "e"},
+    {"negev", "f"},
+    {"m249", "g"},
+    {"taser", "h"},
+    {"flashbang", "i"},
+    {"hegrenade", "j"},
+    {"smokegrenade", "k"},
+    {"molotov", "l"},
+    {"decoy", "m"},
+    {"incgrenade", "n"},
+    {"c4", "o"}
+};
+
 // https://www.unknowncheats.me/forum/counter-strike-2-a/608799-weapon-icon-esp.html
 const char* GunIcon(const std::string weapon)
 {
-	std::map<std::string, const char*> gunIcons = {
-		{"nova", "T"},
-		{"ak47", "A"},
-		{"awp", "C"},
-		{"m4a4", "M"},
-		{"deagle", "F"},
-		{"mp9", "R"},
-		{"famas", "H"},
-		{"ump45", "b"},
-		{"glock", "g"},
-	};
-
-	gunIcons["ct_knife"] = "]";
-	gunIcons["t_knife"] = "[";
-	gunIcons["deagle"] = "A";
-	gunIcons["elite"] = "B";
-	gunIcons["fiveseven"] = "C";
-	gunIcons["glock"] = "D";
-	gunIcons["revolver"] = "J";
-	gunIcons["p2000"] = "E";
-	gunIcons["p250"] = "F";
-	gunIcons["usp_silencer"] = "G";
-	gunIcons["tec9"] = "H";
-	gunIcons["cz75a"] = "I";
-	gunIcons["mac10"] = "K";
-	gunIcons["ump45"] = "L";
-	gunIcons["bizon"] = "M";
-	gunIcons["mp7"] = "N";
-	gunIcons["mp9"] = "P";
-	gunIcons["p90"] = "O";
-	gunIcons["galilar"] = "Q";
-	gunIcons["famas"] = "R";
-	gunIcons["m4a1_silencer"] = "T";
-	gunIcons["m4a1"] = "S";
-	gunIcons["aug"] = "U";
-	gunIcons["sg556"] = "V";
-	gunIcons["ak47"] = "W";
-	gunIcons["g3sg1"] = "X";
-	gunIcons["scar20"] = "Y";
-	gunIcons["awp"] = "Z";
-	gunIcons["ssg08"] = "a";
-	gunIcons["xm1014"] = "b";
-	gunIcons["sawedoff"] = "c";
-	gunIcons["mag7"] = "d";
-	gunIcons["nova"] = "e";
-	gunIcons["negev"] = "f";
-	gunIcons["m249"] = "g";
-	gunIcons["taser"] = "h";
-	gunIcons["flashbang"] = "i";
-	gunIcons["hegrenade"] = "j";
-	gunIcons["smokegrenade"] = "k";
-	gunIcons["molotov"] = "l";
-	gunIcons["decoy"] = "m";
-	gunIcons["incgrenade"] = "n";
-	gunIcons["c4"] = "o";
-
 	auto it = gunIcons.find(weapon);
 	if (it != gunIcons.end()) {
 		return it->second;
 	}
-
 	return "";
 }
