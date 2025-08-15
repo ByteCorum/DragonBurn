@@ -20,7 +20,9 @@
 #include <ShlObj.h>
 
 using namespace std;
+
 namespace fs = filesystem;
+string fileName;
 
 void Cheat();
 
