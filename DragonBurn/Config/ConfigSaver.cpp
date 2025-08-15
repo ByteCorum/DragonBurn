@@ -51,6 +51,7 @@ namespace MyConfigSaver
         ConfigData["ESP"]["OutLine"]=               ESPConfig::OutLine;
         ConfigData["ESP"]["BoxRounding"]=           ESPConfig::BoxRounding;
         ConfigData["ESP"]["ShowScoped"]=            ESPConfig::ShowIsScoped;
+        ConfigData["ESP"]["ShowBlind"]=             ESPConfig::ShowIsBlind;
         ConfigData["ESP"]["ArmorBar"]=              ESPConfig::ArmorBar;
         ConfigData["ESP"]["ArmorNum"]=              ESPConfig::ShowArmorNum;
 
@@ -271,6 +272,7 @@ namespace MyConfigSaver
             ESPConfig::OutLine = ReadData(ConfigData["ESP"], { "OutLine" }, false);
             ESPConfig::BoxRounding = ReadData(ConfigData["ESP"], { "BoxRounding" }, 0.f);
             ESPConfig::ShowIsScoped = ReadData(ConfigData["ESP"], { "ShowScoped" }, false);
+            ESPConfig::ShowIsBlind = ReadData(ConfigData["ESP"], { "ShowBlind" }, false);
             ESPConfig::ArmorBar = ReadData(ConfigData["ESP"], { "ArmorBar" }, false);
             ESPConfig::ShowArmorNum = ReadData(ConfigData["ESP"], { "ArmorNum" }, false);
 

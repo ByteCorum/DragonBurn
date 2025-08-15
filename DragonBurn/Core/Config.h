@@ -74,7 +74,6 @@ namespace ESPConfig
 {
 	inline bool ESPenabled = true;
 	inline bool AmmoBar = false;
-	inline bool ShowScoping = true;
 	inline bool ShowBoneESP = true;
 	inline bool ShowBoxESP = true;
 	inline bool ShowHealthBar = true;
@@ -94,6 +93,7 @@ namespace ESPConfig
 	inline bool MultiColor = false;
 	inline bool OutLine = true;
 	inline bool ShowIsScoped = true;
+	inline bool ShowIsBlind = false;
 	// 0: normal 1: Corner
 	inline int BoxType = 0;
 	inline float BoxRounding = 5;

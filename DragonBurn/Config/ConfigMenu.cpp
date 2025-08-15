@@ -136,6 +136,7 @@ namespace ConfigMenu {
 		ESPConfig::ArmorBar = false;
 		ESPConfig::ShowArmorNum = false;
 		ESPConfig::ShowIsScoped = true;
+		ESPConfig::ShowIsBlind = false;
 		ESPConfig::AmmoBar = false;
 		ESPConfig::OutLine = true;
 		ESPConfig::ShowHealthNum = false;
