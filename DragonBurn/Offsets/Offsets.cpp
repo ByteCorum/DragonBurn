@@ -40,7 +40,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Pawn.MaxHealth = client_dllJson["C_BaseEntity"] ["fields"] ["m_iMaxHealth"];
     this->Pawn.CurrentHealth = client_dllJson["C_BaseEntity"] ["fields"] ["m_iHealth"];
     this->Pawn.GameSceneNode = client_dllJson["C_BaseEntity"] ["fields"] ["m_pGameSceneNode"];
-    this->Pawn.BoneArray = 0x1F0;
+    this->Pawn.BoneArray = client_dllJson["CSkeletonInstance"]["fields"]["m_modelState"] + 0x80;
     this->Pawn.angEyeAngles = client_dllJson["C_CSPlayerPawnBase"] ["fields"] ["m_angEyeAngles"];
     this->Pawn.vecLastClipCameraPos = client_dllJson["C_CSPlayerPawnBase"] ["fields"] ["m_vecLastClipCameraPos"];
     this->Pawn.iShotsFired = client_dllJson["C_CSPlayerPawn"] ["fields"] ["m_iShotsFired"];
