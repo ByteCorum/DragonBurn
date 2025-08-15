@@ -201,8 +201,8 @@ void Cheats::Run()
 	Log::Debug("currentFPS: " + std::to_string(currentFPS));
 	if (currentFPS > MenuConfig::RenderFPS)
 	{
-		int FrameWait = round(1000000.0f / MenuConfig::RenderFPS);
-		std::this_thread::sleep_for(std::chrono::microseconds(FrameWait));
+		int FrameWait = round(1000.0f / MenuConfig::RenderFPS);
+		std::this_thread::sleep_for(std::chrono::milliseconds(FrameWait));
 	}
 }
 

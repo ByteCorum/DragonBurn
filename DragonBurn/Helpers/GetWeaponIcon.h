@@ -24,7 +24,7 @@ const char* GunIcon(const std::string weapon)
 	gunIcons["fiveseven"] = "C";
 	gunIcons["glock"] = "D";
 	gunIcons["revolver"] = "J";
-	gunIcons["hkp2000"] = "E";
+	gunIcons["p2000"] = "E";
 	gunIcons["p250"] = "F";
 	gunIcons["usp_silencer"] = "G";
 	gunIcons["tec9"] = "H";
@@ -33,7 +33,7 @@ const char* GunIcon(const std::string weapon)
 	gunIcons["ump45"] = "L";
 	gunIcons["bizon"] = "M";
 	gunIcons["mp7"] = "N";
-	gunIcons["mp9"] = "R";
+	gunIcons["mp9"] = "P";
 	gunIcons["p90"] = "O";
 	gunIcons["galilar"] = "Q";
 	gunIcons["famas"] = "R";
