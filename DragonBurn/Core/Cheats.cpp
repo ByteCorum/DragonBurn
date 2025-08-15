@@ -115,7 +115,7 @@ void Cheats::Run()
         {
             for (int boneIndex : AimControl::HitboxList)
             {
-                const auto& bonePosData = entity.GetBone().BonePosList[boneIndex];
+                auto& bonePosData = entity.GetBone().BonePosList[boneIndex];
                 float distToSight = bonePosData.ScreenPos.DistanceTo({ Gui.Window.Size.x / 2, Gui.Window.Size.y / 2 });
 
                 if (distToSight < MaxAimDistance)

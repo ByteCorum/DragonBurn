@@ -35,7 +35,7 @@ namespace Misc
 		Vec3 Pos = LocalPlayer.Pawn.Pos;
 		int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
 		char fpsText[32];
-		snprintf(fpsText, sizeof(fpsText), "  FPS: [%d]", currentFPS);
+		snprintf(fpsText, sizeof(fpsText), "  FPS: %d", currentFPS);
 
 		ImGui::Text("  DragonBurn");
 		ImGui::Text("  Kernel CS2 cheat");
