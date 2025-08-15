@@ -337,14 +337,17 @@ CBone CEntity::GetBone() const
 
 bool Client::GetSensitivity()
 {
-	DWORD64 dwSensitivity;
-	float flSensitivity;
-	memoryManager.ReadMemory(gGame.GetClientDLLAddress() + Offset.Sensitivity, dwSensitivity);
-	if (memoryManager.ReadMemory(dwSensitivity + 0x40, flSensitivity))
-	{
-		this->Sensitivity = flSensitivity;
-		return true;
-	}
-	else
+	DWORD64 ptr = 0;
+	if (!memoryManager.ReadMemory(gGame.GetClientDLLAddress() + Offset.Sensitivity, ptr))
 		return false;
+
+	if (ptr == 0)
+		return false;
+
+	float flSensitivity = 0.0f;
+	if (!memoryManager.ReadMemory(ptr + 0x48, flSensitivity))
+		return false;
+
+	this->Sensitivity = flSensitivity;
+	return true;
 }
