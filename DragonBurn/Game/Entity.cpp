@@ -84,43 +84,43 @@ bool CEntity::UpdatePawn(const DWORD64& PlayerPawnAddress)
 		return false;
 	this->Pawn.Address = PlayerPawnAddress;
 
-	if (!this->Pawn.GetCameraPos())
+	if (!this->Pawn.GetCameraPos())//
 		return false;
-	if (!this->Pawn.GetPos())
+	if (!this->Pawn.GetPos())//
 		return false;
-	if (!this->Pawn.GetViewAngle())
+	if (!this->Pawn.GetViewAngle())//
 		return false;
-	if (!this->Pawn.GetWeaponName())
+	if (!this->Pawn.GetWeaponName())//
 		return false;
-	if (!this->Pawn.GetAimPunchAngle())
+	if (!this->Pawn.GetAimPunchAngle())//
 		return false;
-	if (!this->Pawn.GetShotsFired())
+	if (!this->Pawn.GetShotsFired())//
 		return false;
-	if (!this->Pawn.GetHealth())
+	if (!this->Pawn.GetHealth())//
 		return false;
-	if (!this->Pawn.GetAmmo())
+	if (!this->Pawn.GetAmmo())//
 		return false;
-	if (!this->Pawn.GetMaxAmmo())
+	//if (!this->Pawn.GetMaxAmmo())
+	//	return false;
+	if (!this->Pawn.GetArmor())//
 		return false;
-	if (!this->Pawn.GetArmor())
-		return false;
-	if (!this->Pawn.GetTeamID())
+	if (!this->Pawn.GetTeamID())//
 		return false;
 	if (!this->Pawn.GetFov())
 		return false;
-	if (!this->Pawn.GetSpotted())
+	if (!this->Pawn.GetSpotted())//
 		return false;
-	if (!this->Pawn.GetFFlags())
+	//if (!this->Pawn.GetFFlags())
+	//	return false;
+	//if (!this->Pawn.GetDefusing())
+	//	return false;
+	if (!this->Pawn.GetFlashDuration())//
 		return false;
-	if (!this->Pawn.GetDefusing())
+	//if (!this->Pawn.GetVelocity())
+	//	return false;
+	if (!this->Pawn.GetAimPunchCache())//
 		return false;
-	if (!this->Pawn.GetFlashDuration())
-		return false;
-	if (!this->Pawn.GetVelocity())
-		return false;
-	if (!this->Pawn.GetAimPunchCache())
-		return false;
-	if (!this->Pawn.BoneData.UpdateAllBoneData(PlayerPawnAddress))
+	if (!this->Pawn.BoneData.UpdateAllBoneData(PlayerPawnAddress))//
 		return false;
 
 	return true;
@@ -274,18 +274,18 @@ bool PlayerPawn::GetAmmo()
 	return GetDataAddressWithOffset<int>(ClippingWeapon, Offset.WeaponBaseData.Clip1, this->Ammo);
 }
 
-bool PlayerPawn::GetMaxAmmo()
-{
-	DWORD64 ClippingWeapon = 0;
-	DWORD64 WeaponData = 0;
-	if (!memoryManager.ReadMemory<DWORD64>(Address + Offset.Pawn.pClippingWeapon, ClippingWeapon))
-		return false;
-	if (!memoryManager.ReadMemory<DWORD64>(ClippingWeapon + Offset.WeaponBaseData.WeaponDataPTR, WeaponData))
-		return false;
-
-	return GetDataAddressWithOffset<int>(WeaponData, Offset.WeaponBaseData.MaxClip, this->MaxAmmo);
-}
-
+//bool PlayerPawn::GetMaxAmmo()
+//{
+//	DWORD64 ClippingWeapon = 0;
+//	DWORD64 WeaponData = 0;
+//	if (!memoryManager.ReadMemory<DWORD64>(Address + Offset.Pawn.pClippingWeapon, ClippingWeapon))
+//		return false;
+//	if (!memoryManager.ReadMemory<DWORD64>(ClippingWeapon + Offset.WeaponBaseData.WeaponDataPTR, WeaponData))
+//		return false;
+//
+//	return GetDataAddressWithOffset<int>(WeaponData, Offset.WeaponBaseData.MaxClip, this->MaxAmmo);
+//}
+//
 bool PlayerPawn::GetFov()
 {
 	DWORD64 CameraServices = 0;
@@ -293,30 +293,30 @@ bool PlayerPawn::GetFov()
 		return false;
 	return GetDataAddressWithOffset<int>(CameraServices, Offset.Pawn.iFovStart, this->Fov);
 }
-
-bool PlayerPawn::GetFFlags()
-{
-	return GetDataAddressWithOffset<int>(Address, Offset.Pawn.fFlags, this->fFlags);
-}
-
-bool PlayerPawn::GetDefusing()
-{
-	return memoryManager.ReadMemory(Address + Offset.C4.m_bBeingDefused, this->isDefusing);
-}
+//
+//bool PlayerPawn::GetFFlags()
+//{
+//	return GetDataAddressWithOffset<int>(Address, Offset.Pawn.fFlags, this->fFlags);
+//}
+//
+//bool PlayerPawn::GetDefusing()
+//{
+//	return memoryManager.ReadMemory(Address + Offset.C4.m_bBeingDefused, this->isDefusing);
+//}
 
 bool PlayerPawn::GetFlashDuration()
 {
 	return memoryManager.ReadMemory(Address + Offset.Pawn.flFlashDuration, this->FlashDuration);
 }
 
-bool PlayerPawn::GetVelocity()
-{
-	Vec3 Velocity;
-	if (!memoryManager.ReadMemory(Address + Offset.Pawn.AbsVelocity, Velocity))
-		return false;
-	this->Speed = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y);
-	return true;
-}
+//bool PlayerPawn::GetVelocity()
+//{
+//	Vec3 Velocity;
+//	if (!memoryManager.ReadMemory(Address + Offset.Pawn.AbsVelocity, Velocity))
+//		return false;
+//	this->Speed = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y);
+//	return true;
+//}
 
 bool CEntity::IsAlive()
 {

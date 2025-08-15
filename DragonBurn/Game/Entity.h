@@ -50,21 +50,21 @@ public:
 	Vec3 Pos;
 	Vec2 ScreenPos;
 	Vec3 CameraPos;
-	float Speed;
+	//float Speed;
 	std::string WeaponName;
 	DWORD ShotsFired;
 	Vec2 AimPunchAngle;
 	C_UTL_VECTOR AimPunchCache;
 	int Health;
 	int Ammo;
-	int MaxAmmo;
+	//int MaxAmmo;
 	int Armor;
 	int TeamID;
 	int Fov;
 	DWORD64 bSpottedByMask;
-	int fFlags;
+	//int fFlags;
 	float FlashDuration;
-	bool isDefusing;
+	//bool isDefusing;
 
 public:
 	bool GetPos();
@@ -77,18 +77,18 @@ public:
 	bool GetTeamID();
 	bool GetFov();
 	bool GetSpotted();
-	bool GetFFlags();
+	//bool GetFFlags();
 	bool GetAimPunchCache();
 	bool GetAmmo();
-	bool GetMaxAmmo();
+	//bool GetMaxAmmo();
 	bool GetArmor();
-	bool GetDefusing();
+	//bool GetDefusing();
 	bool GetFlashDuration();
-	bool GetVelocity();
+	//bool GetVelocity();
 
-	constexpr bool HasFlag(const Flags Flag) const noexcept {
-		return fFlags & (int)Flag;
-	}
+	//constexpr bool HasFlag(const Flags Flag) const noexcept {
+	//	return fFlags & (int)Flag;
+	//}
 };
 
 class Client

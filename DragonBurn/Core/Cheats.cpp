@@ -169,7 +169,7 @@ void Cheats::Run()
 				{
 					ImVec2 AmmoBarPos = { Rect.x, Rect.y + Rect.w + 2 };
 					ImVec2 AmmoBarSize = { Rect.z,4 };
-					Render::DrawAmmoBar(EntityAddress, Entity.Pawn.MaxAmmo, Entity.Pawn.Ammo, AmmoBarPos, AmmoBarSize);
+					Render::DrawAmmoBar(EntityAddress, Entity.Pawn.Ammo+ Entity.Pawn.ShotsFired, Entity.Pawn.Ammo, AmmoBarPos, AmmoBarSize);
 				}
 
 				// Draw Armor
@@ -236,8 +236,6 @@ void Visual(const CEntity& LocalEntity)
 
 	// HeadShoot Line
 	Render::HeadShootLine(LocalEntity, MiscCFG::HeadShootLineColor);
-
-	Misc::AirCheck(LocalEntity);
 
 	RenderCrosshair(ImGui::GetBackgroundDrawList(), LocalEntity);
 }

@@ -113,23 +113,22 @@ namespace Misc
 		//	return;
 
 		bool spacePressed = GetAsyncKeyState(VK_SPACE);
-		bool isInAir = AirCheck(Local);
+		//bool isInAir = AirCheck(Local);
 
-		if (spacePressed && isInAir)
+		if (spacePressed /*&& isInAir*/)
 		{
 			//std::this_thread::sleep_for(std::chrono::microseconds(15625));
 			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
 			SendMessage(hwnd_cs2, WM_KEYDOWN, VK_SPACE, 0);
 		}
-
-		else if (spacePressed && !isInAir)
-		{
-			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-		}
-		else if (!spacePressed)
-		{
-			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-		}
+		//else if (spacePressed /*&& !isInAir*/)
+		//{
+		//	SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
+		//}
+		//else if (!spacePressed)
+		//{
+		//	SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
+		//}
 	}
 
 	void CleanTraces()
