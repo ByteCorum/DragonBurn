@@ -1,249 +1,200 @@
 #pragma once
 #define _USE_MATH_DEFINES
-#define NOMINMAX
-#include <cmath>
+#include <math.h>
 #include <chrono>
 #include <map>
-#include <unordered_map>
 #include <Windows.h>
+#include <unordered_map>
 #include "../Game/Entity.h"
 #include "../Helpers/Format.h"
 #include "../OS-ImGui/imgui/imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "../OS-ImGui/imgui/imgui_internal.h"
+#include "../Features/TriggerBot.h"
 
 namespace Render
 {
-	//--------------------------------------------------------------------------------------
-	// Small per-frame cache to avoid repeated calls into ImGui and window size math
-	//--------------------------------------------------------------------------------------
-	namespace detail {
-		inline ImDrawList* sDrawList = nullptr;
-		inline ImVec2             sWindowSize{};
-		inline ImVec2             sWindowCenter{};
 
-		inline ImDrawList* GetDrawList() noexcept {
-			// Fallback if user didn't call BeginFrame()
-			return sDrawList ? sDrawList : ImGui::GetBackgroundDrawList();
-		}
-
-		inline void UpdateWindowCache() noexcept {
-			// Rely on Gui.Window.Size instead of GetSystemMetrics (syscall)
-			sWindowSize.x = Gui.Window.Size.x;
-			sWindowSize.y = Gui.Window.Size.y;
-			sWindowCenter = { sWindowSize.x * 0.5f, sWindowSize.y * 0.5f };
-		}
-	}
-
-	// Call once at the start of your frame rendering (optional but recommended).
-	inline void BeginFrame() noexcept {
-		detail::sDrawList = ImGui::GetBackgroundDrawList();
-		detail::UpdateWindowCache();
-	}
-
-	//--------------------------------------------------------------------------------------
-	// Helpers
-	//--------------------------------------------------------------------------------------
-	inline ImVec2 GetScreenCenterImVec2() noexcept {
-		// Uses cached window size; no system metrics calls every frame
-		if (detail::sWindowSize.x == 0.f) detail::UpdateWindowCache();
-		return detail::sWindowCenter;
-	}
-
-	inline ImVec4 rgba2ImVec(int r, int g, int b, int a) noexcept {
-		const float inv = 1.0f / 255.0f;
-		return { r * inv, g * inv, b * inv, a * inv };
-	}
-
-	// Faster linear color mix (keeps alpha of Col_1)
-	inline ImColor Mix(const ImColor& a, const ImColor& b, float t) noexcept {
-		// Clamp t
-		if (t < 0.f) t = 0.f; else if (t > 1.f) t = 1.f;
-		ImVec4 av = a.Value, bv = b.Value;
-		return ImColor(
-			t * av.x + (1.0f - t) * bv.x,
-			t * av.y + (1.0f - t) * bv.y,
-			t * av.z + (1.0f - t) * bv.z,
-			av.w
-		);
-	}
-
-	//--------------------------------------------------------------------------------------
-	// ESP / Aim visuals
-	//--------------------------------------------------------------------------------------
-	inline void DrawHeadCircle(const CEntity& Entity, ImColor Color) noexcept
+	inline void DrawHeadCircle(const CEntity& Entity, ImColor Color)
 	{
-		if (!ESPConfig::ShowHeadBox) return;
+		if (!ESPConfig::ShowHeadBox)
+			return;
 
-		const auto& bones = Entity.GetBone().BonePosList;
-		if (bones.empty()) return;
+		const auto& BoneList = Entity.GetBone().BonePosList;
+		if (BoneList.empty()) return;
 
-		const BoneJointPos& Head = bones[BONEINDEX::head];
-		const BoneJointPos& Neck = bones[BONEINDEX::neck_0];
+		const BoneJointPos& Head = BoneList[BONEINDEX::head];
+		const BoneJointPos& Neck = BoneList[BONEINDEX::neck_0];
 
-		const float radius = std::fabs(Head.ScreenPos.y - Neck.ScreenPos.y) + 2.0f;
-		Gui.Circle(Head.ScreenPos, radius, Color, 1.2f);
+		Gui.Circle(Head.ScreenPos, std::abs(Head.ScreenPos.y - Neck.ScreenPos.y) + 2.0f, Color, 1.2f);
 	}
 
-	inline void DrawHealth(int Health, const ImVec2& Pos) noexcept
-	{
-		if (!ESPConfig::ShowHealthNum) return;
 
-		char buf[8];
-		_snprintf_s(buf, _TRUNCATE, "%d", Health);
-		Gui.StrokeText(buf, Pos, ImColor(0, 220, 0, 255), 12, false);
+	inline void DrawHealth(int Health, const ImVec2& Pos)
+	{
+		if (!ESPConfig::ShowHealthNum)
+			return;
+
+		char health_str[4];
+		snprintf(health_str, sizeof(health_str), "%d", Health);
+
+		Gui.StrokeText(health_str, Pos, ImColor(0, 220, 0, 255), 12, false);
 	}
 
-	inline void DrawDistance(const CEntity& LocalEntity, CEntity& Entity, ImVec4 Rect) noexcept
-	{
-		if (!ESPConfig::ShowDistance) return;
 
-		const int distance = static_cast<int>(Entity.Pawn.Pos.DistanceTo(LocalEntity.Pawn.Pos)) / 100;
-		char buf[16];
-		_snprintf_s(buf, _TRUNCATE, "%dm", distance);
-		Gui.StrokeText(buf, { Rect.x + Rect.z + 4.0f, Rect.y }, ImColor(0, 98, 98, 255), 14, false);
+	inline void DrawDistance(const CEntity& LocalEntity, CEntity& Entity, ImVec4 Rect)
+	{
+		if (!ESPConfig::ShowDistance)
+			return;
+
+		int distance = static_cast<int>(Entity.Pawn.Pos.DistanceTo(LocalEntity.Pawn.Pos)) / 100;
+		std::string dis_str = std::to_string(distance) + "m";
+
+		Gui.StrokeText(dis_str, { Rect.x + Rect.z + 4, Rect.y }, ImColor(0, 98, 98, 255), 14, false);
+
 	}
 
-	inline void DrawFovCircle(const CEntity& LocalEntity) noexcept
+	inline void DrawFovCircle(const CEntity& LocalEntity)
 	{
-		if (!ESPConfig::DrawFov) return;
+		if (!ESPConfig::DrawFov)
+			return;
 
-		constexpr float DEG_TO_RAD = (float)M_PI / 180.0f;
-		if (detail::sWindowSize.x == 0.f) detail::UpdateWindowCache();
+		constexpr float DEG_TO_RAD = M_PI / 180.f;
+		Vec2 CenterPoint = Gui.Window.Size / 2;
+		float HalfWindowSize = Gui.Window.Size.x / 2.f;
 
-		const ImVec2 center = detail::sWindowCenter;
-		const float halfWidth = detail::sWindowSize.x * 0.5f;
+		float LocalFovTan = tan(LocalEntity.Pawn.Fov * DEG_TO_RAD / 2.f);
+		float AimFovTan = tan(AimControl::AimFov * DEG_TO_RAD / 2.f);
+		float AimFovMinTan = tan(AimControl::AimFovMin * DEG_TO_RAD / 2.f);
 
-		const float localFovTan = std::tanf(LocalEntity.Pawn.Fov * DEG_TO_RAD * 0.5f);
-		const float aimFovTan = std::tanf(AimControl::AimFov * DEG_TO_RAD * 0.5f);
-		const float minFovTan = std::tanf(AimControl::AimFovMin * DEG_TO_RAD * 0.5f);
+		float Radius = (AimFovTan / LocalFovTan) * HalfWindowSize;
+		Gui.Circle(CenterPoint, Radius, LegitBotConfig::FovCircleColor, 1);
 
-		const float radius = (aimFovTan / (localFovTan > 1e-6f ? localFovTan : 1e-6f)) * halfWidth;
-		Gui.Circle(center, radius, LegitBotConfig::FovCircleColor, 1.0f);
-
-		if (AimControl::AimFovMin > 0.0f) {
-			const float minRadius = (minFovTan / (localFovTan > 1e-6f ? localFovTan : 1e-6f)) * halfWidth;
-			Gui.Circle(center, minRadius, LegitBotConfig::FovCircleColor, 1.0f);
+		if (AimControl::AimFovMin > 0)
+		{
+			float MinRadius = (AimFovMinTan / LocalFovTan) * HalfWindowSize;
+			Gui.Circle(CenterPoint, MinRadius, LegitBotConfig::FovCircleColor, 1);
 		}
 	}
 
 	inline void DrawCrossHair(ImDrawList* drawList, const ImVec2& pos, ImColor color) noexcept
 	{
-		// Expect caller to pass foreground or background list already.
-		// No trig, all precomputed scalars.
 		constexpr float gap = 0.1f;
-		constexpr float size = 6.0f;
+		constexpr int size = 6;
 		constexpr float thickness = 1.1f;
 
-		const float left = pos.x - (gap + size);
-		const float right = pos.x + (gap + 1.0f + size);
-		const float top = pos.y - (gap + size);
-		const float bottom = pos.y + (gap + 1.0f + size);
+		float left = pos.x - (gap + size);
+		float right = pos.x + (gap + 1 + size);
+		float top = pos.y - (gap + size);
+		float bottom = pos.y + (gap + 1 + size);
 
-		const float xMin = pos.x - thickness + 1.0f;
-		const float xMax = pos.x + thickness;
-		const float yMin = pos.y - thickness + 1.0f;
-		const float yMax = pos.y + thickness;
+		float xMin = pos.x - thickness + 1;
+		float xMax = pos.x + thickness;
+		float yMin = pos.y - thickness + 1;
+		float yMax = pos.y + thickness;
 
-		drawList->AddRectFilled({ left, yMin }, { pos.x - gap, yMax }, color); // Left
-		drawList->AddRectFilled({ pos.x + gap + 1, yMin }, { right, yMax }, color); // Right
-		drawList->AddRectFilled({ xMin, top }, { xMax, pos.y - gap }, color); // Top
-		drawList->AddRectFilled({ xMin, pos.y + gap + 1 }, { xMax, bottom }, color); // Bottom
+		drawList->AddRectFilled(ImVec2(left, yMin), ImVec2(pos.x - gap, yMax), color);  // Left
+		drawList->AddRectFilled(ImVec2(pos.x + gap + 1, yMin), ImVec2(right, yMax), color); // Right
+		drawList->AddRectFilled(ImVec2(xMin, top), ImVec2(xMax, pos.y - gap), color);  // Top
+		drawList->AddRectFilled(ImVec2(xMin, pos.y + gap + 1), ImVec2(xMax, bottom), color); // Bottom
 	}
 
-	inline void LineToEnemy(ImVec4 Rect, ImColor Color, float Thickness) noexcept
+	inline void LineToEnemy(ImVec4 Rect, ImColor Color, float Thickness)
 	{
-		if (!ESPConfig::ShowLineToEnemy) return;
-		if (detail::sWindowSize.x == 0.f) detail::UpdateWindowCache();
+		if (!ESPConfig::ShowLineToEnemy)
+			return;
 
-		const float centerX = detail::sWindowCenter.x;
-		const float centerY = detail::sWindowCenter.y;
+		const float CenterX = Gui.Window.Size.x * 0.5f;
+		const float CenterY = Gui.Window.Size.y * 0.5f;
+		const float StartX = Rect.x + Rect.z * 0.5f;
+		float StartY = Rect.y;
+		float EndX = CenterX, EndY = 0;
 
-		const float startX = Rect.x + Rect.z * 0.5f;
-		float startY = Rect.y;
-		float endX = centerX, endY = 0.0f;
-
-		switch (ESPConfig::LinePos) {
-		case 1: endY = centerY; break;
-		case 2: startY += Rect.w; endY = detail::sWindowSize.y; break;
+		switch (ESPConfig::LinePos)
+		{
+		case 1: EndY = CenterY; break;
+		case 2: StartY += Rect.w; EndY = Gui.Window.Size.y; break;
 		default: break;
 		}
 
-		Gui.Line({ startX, startY }, { endX, endY }, Color, Thickness);
+		Gui.Line({ StartX, StartY }, { EndX, EndY }, Color, Thickness);
 	}
 
-	inline void DrawFov(const CEntity& LocalEntity, float Size, ImColor Color, float Thickness) noexcept
+	inline void DrawFov(const CEntity& LocalEntity, float Size, ImColor Color, float Thickness)
 	{
-		if (!LegitBotConfig::ShowFovLine || MenuConfig::ShowMenu) return;
-		if (detail::sWindowSize.x == 0.f) detail::UpdateWindowCache();
+		if (!LegitBotConfig::ShowFovLine || MenuConfig::ShowMenu)
+			return;
 
-		constexpr float DEG_TO_RAD = (float)M_PI / 180.0f;
-		const ImVec2 pos = detail::sWindowCenter;
+		constexpr float DEG_TO_RAD = M_PI / 180.0f;
+		const Vec2 Pos = Gui.Window.Size * 0.5f;
+		const float radian = (LocalEntity.Pawn.Fov * 0.5f) * DEG_TO_RAD;
+		const float Length = Size * tan(radian);
 
-		const float halfFovRad = (LocalEntity.Pawn.Fov * 0.5f) * DEG_TO_RAD;
-		const float length = Size * std::tanf(halfFovRad);
+		std::array<Vec2, 2> LineEndPoints = {
+			Vec2(Pos.x - Length, Pos.y - Size),
+			Vec2(Pos.x + Length, Pos.y - Size)
+		};
 
-		const Vec2 leftEnd = { pos.x - length, pos.y - Size };
-		const Vec2 rightEnd = { pos.x + length, pos.y - Size };
-
-		Gui.Line(pos, leftEnd, Color, Thickness);
-		Gui.Line(pos, rightEnd, Color, Thickness);
+		Gui.Line(Pos, LineEndPoints[0], Color, 1.5f);
+		Gui.Line(Pos, LineEndPoints[1], Color, 1.5f);
 	}
 
-	inline void HeadShootLine(const CEntity& LocalEntity, ImColor Color) noexcept
+	inline void HeadShootLine(const CEntity& LocalEntity, ImColor Color)
 	{
-		if (!MiscCFG::ShowHeadShootLine || MenuConfig::ShowMenu) return;
-		if (detail::sWindowSize.x == 0.f) detail::UpdateWindowCache();
+		if (!MiscCFG::ShowHeadShootLine || MenuConfig::ShowMenu)
+			return;
 
-		const float halfX = detail::sWindowCenter.x;
-		const float halfY = detail::sWindowCenter.y;
+		// Pre-compute half dimensions
+		const float halfWindowX = Gui.Window.Size.x * 0.5f;
+		const float halfWindowY = Gui.Window.Size.y * 0.5f;
 
-		constexpr float DEG_TO_RAD = (float)M_PI / 180.0f;
-		const float fovRad = LocalEntity.Pawn.Fov * DEG_TO_RAD;
-		const float viewRad = LocalEntity.Pawn.ViewAngle.x * DEG_TO_RAD;
+		// Convert angles to radians
+		const float fovRadians = LocalEntity.Pawn.Fov * (M_PI / 180.0f);
+		const float viewAngleXRadians = LocalEntity.Pawn.ViewAngle.x * (M_PI / 180.0f);
 
-		const float fovSin = std::sinf(fovRad);
-		const float viewSin = std::sinf(viewRad);
+		// Compute sine values
+		const float fovSin = std::sin(fovRadians);
+		const float viewSin = std::sin(viewAngleXRadians);
 
-		// Pre-compute scale factor once (sin(90°) == 1)
-		const float scaleFactor = detail::sWindowSize.y / (2.0f * (fovSin > 1e-6f ? fovSin : 1e-6f));
+		// Pre-compute scale factor once (note: sin(90°) is 1, so it is removed)
+		const float scaleFactor = Gui.Window.Size.y / (2.0f * fovSin);
 
-		Vec2 pos{ halfX, halfY - scaleFactor * viewSin };
+		Vec2 Pos;
+		Pos.x = halfWindowX;
+		Pos.y = halfWindowY - scaleFactor * viewSin;
 
-		// Left shadow and body
-		Gui.RectangleFilled({ pos.x - 21.0f, pos.y - 1.0f }, { 17.0f, 3.0f }, Color & IM_COL32_A_MASK);
-		Gui.RectangleFilled({ pos.x - 20.0f, pos.y + 0.0f }, { 17.0f, 3.0f }, Color);
+		// Left rectangles
+		Gui.RectangleFilled(Vec2{ Pos.x - 21, Pos.y - 1 }, Vec2{ 17, 3 }, Color & IM_COL32_A_MASK);
+		Gui.RectangleFilled(Vec2{ Pos.x - 20, Pos.y }, Vec2{ 17, 3 }, Color);
 
-		// Right shadow and body
-		Gui.RectangleFilled({ pos.x + 5.0f,  pos.y - 1.0f }, { 17.0f, 3.0f }, Color & IM_COL32_A_MASK);
-		Gui.RectangleFilled({ pos.x + 6.0f,  pos.y + 0.0f }, { 17.0f, 3.0f }, Color);
+		// Right rectangles
+		Gui.RectangleFilled(Vec2{ Pos.x + 5, Pos.y - 1 }, Vec2{ 17, 3 }, Color & IM_COL32_A_MASK);
+		Gui.RectangleFilled(Vec2{ Pos.x + 6, Pos.y }, Vec2{ 17, 3 }, Color);
+
 	}
 
-	inline ImVec4 Get2DBox(const CEntity& Entity) noexcept
+	inline ImVec4 Get2DBox(const CEntity& Entity)
 	{
-		const auto& bones = Entity.GetBone().BonePosList;
-		if (bones.empty()) return { 0,0,0,0 };
+		BoneJointPos headBone = Entity.GetBone().BonePosList[BONEINDEX::head];
 
-		const BoneJointPos& head = bones[BONEINDEX::head];
-
-		const float diffY = Entity.Pawn.ScreenPos.y - head.ScreenPos.y;
+		const float diffY = Entity.Pawn.ScreenPos.y - headBone.ScreenPos.y;
 		const float sizeY = diffY * 1.09f;
 		const float sizeX = sizeY * 0.6f;
 
 		const float posX = Entity.Pawn.ScreenPos.x - sizeX * 0.5f;
-		const float posY = head.ScreenPos.y - sizeY * 0.08f;
+		const float posY = headBone.ScreenPos.y - sizeY * 0.08f;
 
-		return { posX, posY, sizeX, sizeY };
+		return ImVec4{ posX, posY, sizeX, sizeY };
+
 	}
 
-	inline void DrawBone(const CEntity& Entity, ImColor Color, float Thickness) noexcept
+	inline void DrawBone(const CEntity& Entity, ImColor Color, float Thickness)
 	{
-		if (!ESPConfig::ShowBoneESP) return;
+		if (!ESPConfig::ShowBoneESP)
+			return;
 
 		const auto& bonePosList = Entity.GetBone().BonePosList;
-		if (bonePosList.empty()) return;
-
-		BoneJointPos previous{}, current{};
+		BoneJointPos previous, current;
 
 		for (const auto& boneChain : BoneJointList::List)
 		{
@@ -251,11 +202,13 @@ namespace Render
 			for (const auto& index : boneChain)
 			{
 				current = bonePosList[index];
-				if (previous.Pos == Vec3(0, 0, 0)) {
+				if (previous.Pos == Vec3(0, 0, 0))
+				{
 					previous = current;
 					continue;
 				}
-				if (previous.IsVisible && current.IsVisible) {
+				if (previous.IsVisible && current.IsVisible)
+				{
 					Gui.Line(previous.ScreenPos, current.ScreenPos, Color, Thickness);
 				}
 				previous = current;
@@ -263,86 +216,92 @@ namespace Render
 		}
 	}
 
-	inline void ShowLosLine(const CEntity& Entity, const float Length, ImColor Color, float Thickness) noexcept
+	inline void ShowLosLine(const CEntity& Entity, const float Length, ImColor Color, float Thickness)
 	{
-		if (!ESPConfig::ShowEyeRay) return;
+		if (!ESPConfig::ShowEyeRay)
+			return;
 
 		const auto& bonePosList = Entity.GetBone().BonePosList;
-		if (bonePosList.empty()) return;
-
 		const BoneJointPos& head = bonePosList[BONEINDEX::head];
 		const Vec2 startPoint = head.ScreenPos;
 
-		constexpr float DEG_TO_RAD = (float)M_PI / 180.0f;
-		const float viewX = Entity.Pawn.ViewAngle.x * DEG_TO_RAD;
-		const float viewY = Entity.Pawn.ViewAngle.y * DEG_TO_RAD;
+		const float degToRad = M_PI / 180.0f;
+		const float viewAngleX = Entity.Pawn.ViewAngle.x * degToRad;
+		const float viewAngleY = Entity.Pawn.ViewAngle.y * degToRad;
 
-		const float cosX = std::cosf(viewX);
-		const float sinX = std::sinf(viewX);
-		const float cosY = std::cosf(viewY);
-		const float sinY = std::sinf(viewY);
+		const float lineLength = cos(viewAngleX) * Length;
 
-		const float lineLength = cosX * Length;
-
-		Vec3 temp{
-			head.Pos.x + cosY * lineLength,
-			head.Pos.y + sinY * lineLength,
-			head.Pos.z - sinX * Length
-		};
+		Vec3 temp;
+		temp.x = head.Pos.x + cos(viewAngleY) * lineLength;
+		temp.y = head.Pos.y + sin(viewAngleY) * lineLength;
+		temp.z = head.Pos.z - sin(viewAngleX) * Length;
 
 		Vec2 endPoint;
-		if (!gGame.View.WorldToScreen(temp, endPoint)) return;
+		if (!gGame.View.WorldToScreen(temp, endPoint))
+			return;
 
 		Gui.Line(startPoint, endPoint, Color, Thickness);
 	}
 
-	inline ImVec4 Get2DBoneRect(const CEntity& Entity) noexcept
+	inline ImVec4 Get2DBoneRect(const CEntity& Entity)
 	{
-		const auto& bones = Entity.GetBone().BonePosList;
-		if (bones.empty()) return { 0,0,0,0 };
+		const auto& bonePosList = Entity.GetBone().BonePosList;
+		if (bonePosList.empty())
+			return ImVec4(0, 0, 0, 0);
 
-		bool anyVisible = false;
-		Vec2 minPos = bones[0].ScreenPos;
-		Vec2 maxPos = bones[0].ScreenPos;
+		Vec2 minPos = bonePosList[0].ScreenPos;
+		Vec2 maxPos = bonePosList[0].ScreenPos;
 
-		for (const auto& j : bones)
+		for (const auto& boneJoint : bonePosList)
 		{
-			if (!j.IsVisible) continue;
-			anyVisible = true;
-			minPos.x = (std::min)(j.ScreenPos.x, minPos.x);
-			minPos.y = (std::min)(j.ScreenPos.y, minPos.y);
-			maxPos.x = (std::max)(j.ScreenPos.x, maxPos.x);
-			maxPos.y = (std::max)(j.ScreenPos.y, maxPos.y);
+			if (!boneJoint.IsVisible)
+				continue;
+			minPos.x = min(boneJoint.ScreenPos.x, minPos.x);
+			minPos.y = min(boneJoint.ScreenPos.y, minPos.y);
+			maxPos.x = max(boneJoint.ScreenPos.x, maxPos.x);
+			maxPos.y = max(boneJoint.ScreenPos.y, maxPos.y);
 		}
 
-		if (!anyVisible) return { 0,0,0,0 };
-
 		const Vec2 size{ maxPos.x - minPos.x, maxPos.y - minPos.y };
-		return { minPos.x, minPos.y, size.x, size.y };
+		return ImVec4(minPos.x, minPos.y, size.x, size.y);
 	}
 
-	//--------------------------------------------------------------------------------------
-	// Health / Armor / Ammo Bars
-	//--------------------------------------------------------------------------------------
+
 	class HealthBar
 	{
 	private:
 		using TimePoint_ = std::chrono::steady_clock::time_point;
-		static constexpr int ShowBackUpHealthDuration = 500;
+		const int ShowBackUpHealthDuration = 500;
+		float MaxHealth = 0.f;
+		float CurrentHealth = 0.f;
+		float LastestBackupHealth = 0.f;
+		ImVec2 RectPos{};
+		ImVec2 RectSize{};
+		bool InShowBackupHealth = false;
+		TimePoint_ BackupHealthTimePoint{};
+		int MaxAmmo = 0;
+		int CurrentAmmo = 0;
+		int MaxArmor = 0;
+		int CurrentArmor = 0;
 
-		float   MaxHealth = 0.f;
-		float   CurrentHealth = 0.f;
-		float   LastestBackupHealth = 0.f; // reserved (not used in current draw path)
-		ImVec2  RectPos{};
-		ImVec2  RectSize{};
-		bool    InShowBackupHealth = false; // reserved
-		TimePoint_ BackupHealthTimePoint{}; // reserved
-		int     MaxAmmo = 0;
-		int     CurrentAmmo = 0;
-		int     MaxArmor = 0;
-		int     CurrentArmor = 0;
+	public:
+		HealthBar() {}
 
-		// Colors
+		void HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowNum);
+		void ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowNum);
+		void AmmoBarH(float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size);
+
+	private:
+		inline ImColor Mix(const ImColor& Col_1, const ImColor& Col_2, float t)
+		{
+			ImColor col;
+			col.Value.x = t * Col_1.Value.x + (1.0f - t) * Col_2.Value.x;
+			col.Value.y = t * Col_1.Value.y + (1.0f - t) * Col_2.Value.y;
+			col.Value.z = t * Col_1.Value.z + (1.0f - t) * Col_2.Value.z;
+			col.Value.w = Col_1.Value.w;
+			return col;
+		}
+
 		ImColor FirstStageColor = ImColor(0, 255, 0, 255);
 		ImColor SecondStageColor = ImColor(255, 232, 0, 255);
 		ImColor ThirdStageColor = ImColor(255, 39, 0, 255);
@@ -352,128 +311,135 @@ namespace Render
 		ImColor AmmoColor = ImColor(255, 255, 0, 255);
 		ImColor ArmorColor = ImColor(0, 128, 255, 255);
 		ImColor ArmorWithHelmetColor = ImColor(255, 0, 255, 255);
-
-	public:
-		HealthBar() = default;
-
-		void HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowNum) noexcept
-		{
-			ImDrawList* dl = detail::GetDrawList();
-
-			this->MaxHealth = MaxHealth;
-			this->CurrentHealth = CurrentHealth;
-			this->RectPos = Pos;
-			this->RectSize = Size;
-
-			float proportion = (MaxHealth > 0.f) ? (CurrentHealth / MaxHealth) : 0.f;
-			if (proportion < 0.f) proportion = 0.f; else if (proportion > 1.f) proportion = 1.f;
-
-			const float height = RectSize.y * proportion;
-			const ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
-
-			dl->AddRectFilled(RectPos, rectBR, BackGroundColor, 5.0f, ImDrawFlags_RoundCornersAll);
-
-			const float t = std::pow(proportion, 2.5f);
-			const ImColor color = (proportion > 0.5f)
-				? Mix(FirstStageColor, SecondStageColor, t * 3.f - 1.f)
-				: Mix(SecondStageColor, ThirdStageColor, t * 4.f);
-
-			const ImVec2 healthTL = { RectPos.x, RectPos.y + RectSize.y - height };
-			dl->AddRectFilled(healthTL, rectBR, color, 0.0f);
-
-			dl->AddRect(RectPos, rectBR, FrameColor, 0.0f, ImDrawFlags_RoundCornersAll, 1.0f);
-
-			if (ShowNum && CurrentHealth < MaxHealth) {
-				char buf[16];
-				_snprintf_s(buf, _TRUNCATE, "%.0f", CurrentHealth);
-				Gui.StrokeText(buf, healthTL, ImColor(255, 255, 255), 13.0f, true);
-			}
-		}
-
-		void ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowNum) noexcept
-		{
-			ImDrawList* dl = detail::GetDrawList();
-
-			this->MaxArmor = static_cast<int>(MaxArmor);
-			this->CurrentArmor = static_cast<int>(CurrentArmor);
-			this->RectPos = Pos;
-			this->RectSize = Size;
-
-			float proportion = (MaxArmor > 0.f) ? (CurrentArmor / MaxArmor) : 0.f;
-			if (proportion < 0.f) proportion = 0.f; else if (proportion > 1.f) proportion = 1.f;
-
-			const float height = RectSize.y * proportion;
-			const ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
-
-			dl->AddRectFilled(RectPos, rectBR, BackGroundColor, 5.0f, ImDrawFlags_RoundCornersAll);
-
-			const ImColor color = HasHelmet ? ArmorWithHelmetColor : ArmorColor;
-			const ImVec2 armorTL = { RectPos.x, RectPos.y + RectSize.y - height };
-			dl->AddRectFilled(armorTL, rectBR, color, 0.0f);
-
-			dl->AddRect(RectPos, rectBR, FrameColor, 0.0f, ImDrawFlags_RoundCornersAll, 1.0f);
-
-			if (ShowNum && CurrentArmor < MaxArmor) {
-				char buf[16];
-				_snprintf_s(buf, _TRUNCATE, "%.0f", CurrentArmor);
-				Gui.StrokeText(buf, armorTL, ImColor(255, 255, 255), 13.0f, true);
-			}
-		}
-
-		void AmmoBarH(float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size) noexcept
-		{
-			ImDrawList* dl = detail::GetDrawList();
-
-			this->MaxAmmo = static_cast<int>(MaxAmmo);
-			this->CurrentAmmo = static_cast<int>(CurrentAmmo);
-			this->RectPos = Pos;
-			this->RectSize = Size;
-
-			float proportion = (MaxAmmo > 0.f) ? (CurrentAmmo / MaxAmmo) : 0.f;
-			if (proportion < 0.f) proportion = 0.f; else if (proportion > 1.f) proportion = 1.f;
-
-			const float width = RectSize.x * proportion;
-			const ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
-
-			dl->AddRectFilled(RectPos, rectBR, BackGroundColor, 5.0f, ImDrawFlags_RoundCornersAll);
-
-			const ImVec2 ammoBR = { RectPos.x + width, RectPos.y + RectSize.y };
-			dl->AddRectFilled(RectPos, ammoBR, AmmoColor, 0.0f);
-
-			dl->AddRect(RectPos, rectBR, FrameColor, 0.0f, ImDrawFlags_RoundCornersAll, 1.0f);
-		}
 	};
 
-	//--------------------------------------------------------------------------------------
-	// Bar API (kept identical)
-	//--------------------------------------------------------------------------------------
-	inline void DrawHealthBar(DWORD Sign, float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size) noexcept
+	//////////////////////////////////////////////////////////////////////////
+	// Vertical Health Bar
+	//////////////////////////////////////////////////////////////////////////
+	void HealthBar::HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowNum)
 	{
-		static std::unordered_map<DWORD, HealthBar> sHealthBars;
-		static bool reserved = false;
-		if (!reserved) { sHealthBars.reserve(64); reserved = true; } // typical players count
+		ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
 
-		HealthBar& hb = sHealthBars[Sign];
+		this->MaxHealth = MaxHealth;
+		this->CurrentHealth = CurrentHealth;
+		this->RectPos = Pos;
+		this->RectSize = Size;
+
+		float proportion = (MaxHealth > 0.f) ? CurrentHealth / MaxHealth : 0.f;
+		proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+
+		float height = RectSize.y * proportion;
+		ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
+
+		DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
+
+		float colorLerpT = powf(proportion, 2.5f);
+		ImColor color = (proportion > 0.5f && proportion <= 1.f) ?
+			Mix(FirstStageColor, SecondStageColor, colorLerpT * 3.f - 1.f) :
+			Mix(SecondStageColor, ThirdStageColor, colorLerpT * 4.f);
+
+		ImVec2 healthRectTL = { RectPos.x, RectPos.y + RectSize.y - height };
+		DrawList->AddRectFilled(healthRectTL, rectBR, color, 0);
+
+		DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
+
+		if (ShowNum && CurrentHealth < MaxHealth)
+		{
+			char healthStr[16];
+			snprintf(healthStr, sizeof(healthStr), "%.f", CurrentHealth);
+			Gui.StrokeText(healthStr, healthRectTL, ImColor(255, 255, 255), 13.f, true);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// Vertical Armor Bar
+	//////////////////////////////////////////////////////////////////////////
+	void HealthBar::ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowNum)
+	{
+		ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
+
+		this->MaxArmor = MaxArmor;
+		this->CurrentArmor = CurrentArmor;
+		this->RectPos = Pos;
+		this->RectSize = Size;
+
+		float proportion = (MaxArmor > 0.f) ? CurrentArmor / MaxArmor : 0.f;
+		proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+
+		float height = RectSize.y * proportion;
+		ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
+
+		DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
+
+		ImColor color = HasHelmet ? ArmorWithHelmetColor : ArmorColor;
+		ImVec2 armorRectTL = { RectPos.x, RectPos.y + RectSize.y - height };
+		DrawList->AddRectFilled(armorRectTL, rectBR, color, 0);
+
+		DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
+
+		if (ShowNum && CurrentArmor < MaxArmor)
+		{
+			char armorStr[16];
+			snprintf(armorStr, sizeof(armorStr), "%.f", CurrentArmor);
+			Gui.StrokeText(armorStr, armorRectTL, ImColor(255, 255, 255), 13.f, true);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// Horizontal Ammo Bar
+	//////////////////////////////////////////////////////////////////////////
+	void HealthBar::AmmoBarH(float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size)
+	{
+		ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
+
+		this->MaxAmmo = MaxAmmo;
+		this->CurrentAmmo = CurrentAmmo;
+		this->RectPos = Pos;
+		this->RectSize = Size;
+
+		float proportion = (MaxAmmo > 0) ? CurrentAmmo / static_cast<float>(MaxAmmo) : 0.f;
+		proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+
+		float width = RectSize.x * proportion;
+		ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
+
+		DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
+
+		ImVec2 ammoRectBR = { RectPos.x + width, RectPos.y + RectSize.y };
+		DrawList->AddRectFilled(RectPos, ammoRectBR, AmmoColor, 0);
+
+		DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
+	}
+
+	void DrawHealthBar(DWORD Sign, float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size)
+	{
+		static std::unordered_map<DWORD, HealthBar> HealthBarMap;
+		HealthBar& hb = HealthBarMap[Sign];
 		hb.HealthBarV(MaxHealth, CurrentHealth, Pos, Size, ESPConfig::ShowHealthNum);
 	}
 
-	inline void DrawAmmoBar(DWORD Sign, float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size) noexcept
+	void DrawAmmoBar(DWORD Sign, float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size)
 	{
-		static std::unordered_map<DWORD, HealthBar> sAmmoBars;
-		static bool reserved = false;
-		if (!reserved) { sAmmoBars.reserve(64); reserved = true; }
-
-		HealthBar& hb = sAmmoBars[Sign];
+		static std::unordered_map<DWORD, HealthBar> HealthBarMap;
+		HealthBar& hb = HealthBarMap[Sign];
 		hb.AmmoBarH(MaxAmmo, CurrentAmmo, Pos, Size);
 	}
-
-	inline void DrawArmorBar(DWORD Sign, float MaxArmor, float CurrentArmor, bool HasHelmet, const ImVec2& Pos, const ImVec2& Size) noexcept
+	void DrawArmorBar(DWORD Sign, float MaxArmor, float CurrentArmor, bool HasHelmet, const ImVec2& Pos, const ImVec2& Size)
 	{
-		static std::unordered_map<DWORD, HealthBar> sArmorBars;
-		static bool reserved = false;
-		if (!reserved) { sArmorBars.reserve(64); reserved = true; }
-
-		HealthBar& hb = sArmorBars[Sign];
+		static std::unordered_map<DWORD, HealthBar> HealthBarMap;
+		HealthBar& hb = HealthBarMap[Sign];
 		hb.ArmorBarV(HasHelmet, MaxArmor, CurrentArmor, Pos, Size, ESPConfig::ShowArmorNum);
+	}
+
+	ImVec2 GetScreenCenterImVec2()
+	{
+		int W = GetSystemMetrics(SM_CXSCREEN);
+		int H = GetSystemMetrics(SM_CYSCREEN);
+		return ImVec2(W / 2.0f, H / 2.0f);
+	}
+
+	inline ImVec4 rgba2ImVec(int r, int g, int b, int a)
+	{
+		return ImVec4(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 	}
 }
