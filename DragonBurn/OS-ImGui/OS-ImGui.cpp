@@ -77,7 +77,7 @@ namespace OSImGui
         ImDrawList* DrawList = ImGui::GetWindowDrawList();
         float Height = ImGui::GetFrameHeight()*1.5;
         float Width = Height;
-        float Radius = Height / 4-1;
+        float Radius = Height / 4 -2;
 
         ImGui::InvisibleButton(str_id, ImVec2(Width, Height-10));
         if (ImGui::IsItemClicked())
@@ -93,10 +93,13 @@ namespace OSImGui
         }
         // Hovered Color
         ImU32 Color;
-        Color = ImGui::GetColorU32(ImLerp(ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered), ImGui::GetStyleColorVec4(ImGuiCol_CheckMark),t));
+        Color = ImGui::GetColorU32(ImLerp(ImVec4(RGBA_TO_FLOAT(31, 36, 70, 255)), ImVec4(RGBA_TO_FLOAT(55, 63, 124, 255)),t));
         // Rendering
-        DrawList->AddRectFilled(ImVec2(p.x, p.y + Height * 0.30f), ImVec2(p.x + Width, p.y + Height * 0.70f), ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)), Height);
-        DrawList->AddCircleFilled(ImVec2(p.x + Radius + t * (Width - Radius * 2), p.y + Radius + 9.5), Radius, Color, 360);
+        DrawList->AddRectFilled(ImVec2(p.x, p.y + Height * 0.30f), ImVec2(p.x + Width, p.y + Height * 0.70f), IM_COL32(35, 35, 35, 255), Height);//
+        DrawList->AddCircleFilled(ImVec2(p.x + Radius + t * (Width - Radius * 2), p.y + Radius + 10), Radius, Color, 360);
+
+        //ImGui::SameLine();
+        //ImGui::Text(str_id);
     }
 
     void OSImGui::MyProgressBar(float fraction, const ImVec2& Size, const char* overlay, ImVec4 Color)
@@ -538,7 +541,7 @@ namespace OSImGui
         frame_sc.Min.y += frame_height_origin / 3;
         frame_sc.Max.y -= frame_height_origin / 3;
         //                                                                           grab color                            hover color                color
-        const ImU32 frame_col = ImGui::ColorConvertFloat4ToU32(g.ActiveId == id ? ImColor(ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered)) : hovered ? ImColor(ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered)) : ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)));//ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered), ImGui::GetStyleColorVec4(ImGuiCol_CheckMark)
+        const ImU32 frame_col = ImGui::ColorConvertFloat4ToU32(g.ActiveId == id ? ImColor(31, 36, 70, 255) : hovered ? ImColor(31, 36, 70, 255) : ImColor(35, 35, 35, 255));
         ImGui::RenderNavHighlight(frame_bb, id);
         window->DrawList->AddRectFilled(frame_sc.Min, frame_sc.Max, frame_col, grab_radius);
 
@@ -554,7 +557,7 @@ namespace OSImGui
             window->DrawList->AddRectFilled(
                 { grab_bb.GetCenter().x - grab_radius, grab_bb.GetCenter().y - grab_radius },
                 { grab_bb.GetCenter().x + grab_radius, grab_bb.GetCenter().y + grab_radius },
-                ImColor(ImGui::GetStyleColorVec4(ImGuiCol_CheckMark)), 20);
+                ImColor(55, 63, 124, 255), 20);
             //window->DrawList->AddLine(
             //    { grab_bb.GetCenter().x - grab_radius * 0.5f - 1, grab_bb.GetCenter().y - grab_radius * 0.75f },
             //    { grab_bb.GetCenter().x - grab_radius * 0.5f - 1, grab_bb.GetCenter().y + grab_radius * 0.75f },
