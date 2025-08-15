@@ -122,7 +122,7 @@ namespace ESP
 		return (it != weaponIconSizes.end()) ? it->second : DEFAULT_ICON_SIZE;
 	}
 
-	constexpr ImVec4 GetBoxRect(const CEntity& Entity, int BoxType) noexcept
+	ImVec4 GetBoxRect(const CEntity& Entity, int BoxType) noexcept
 	{
 		// Both cases do the same thing, so simplify
 		return Render::Get2DBox(Entity);
@@ -314,7 +314,7 @@ namespace ESP
 		}
 	}
 
-	constexpr void DrawPreviewBox(const ImVec2& startPos, const ImVec2& endPos,
+	void DrawPreviewBox(const ImVec2& startPos, const ImVec2& endPos,
 		ImColor boxColor, float rounding, float thickness, bool filled) noexcept
 	{
 		ImDrawList* drawList = ImGui::GetWindowDrawList();
