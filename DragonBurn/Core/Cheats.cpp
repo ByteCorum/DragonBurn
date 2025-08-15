@@ -41,154 +41,169 @@ void AIM(const CEntity&, std::vector<Vec3>);
 void MiscFuncs(CEntity&);
 
 void Cheats::Run()
-{
-    Menu();
+{	
+	Menu();
 
-    if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu)
-        return;
+	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu)
+		return;
 
-    // Read matrix once
-    if (!memoryManager.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix, sizeof(gGame.View.Matrix)))
-        return;
+	// Update matrix
+	if(!memoryManager.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix,64))
+		return;
 
-    gGame.UpdateEntityListEntry();
+	// Update EntityList Entry
+	gGame.UpdateEntityListEntry();
 
-    DWORD64 localControllerAddr = 0, localPawnAddr = 0;
-    if (!memoryManager.ReadMemory(gGame.GetLocalControllerAddress(), localControllerAddr) ||
-        !memoryManager.ReadMemory(gGame.GetLocalPawnAddress(), localPawnAddr))
-        return;
+	DWORD64 LocalControllerAddress = 0;
+	DWORD64 LocalPawnAddress = 0;
 
-    CEntity localEntity;
-    static int localPlayerControllerIndex = 1;
-    localEntity.UpdateClientData();
+	if (!memoryManager.ReadMemory(gGame.GetLocalControllerAddress(), LocalControllerAddress))
+		return;
+	if (!memoryManager.ReadMemory(gGame.GetLocalPawnAddress(), LocalPawnAddress))
+		return;
 
-    if (!localEntity.UpdateController(localControllerAddr))
-        return;
-    if (!localEntity.UpdatePawn(localPawnAddr) && !MenuConfig::WorkInSpec)
-        return;
+	// LocalEntity
+	CEntity LocalEntity, ServerEntity;
+	static int LocalPlayerControllerIndex = 1;
+	LocalEntity.UpdateClientData();
+	if (!LocalEntity.UpdateController(LocalControllerAddress))
+		return;
+	if (!LocalEntity.UpdatePawn(LocalPawnAddress) && !MenuConfig::WorkInSpec)
+		return;
 
-    // Prepare radar if needed
-    Base_Radar gameRadar;
-    const bool radarActive = RadarCFG::ShowRadar && (localEntity.Controller.TeamID != 0 || MenuConfig::ShowMenu);
-    if (radarActive)
-        RadarSetting(gameRadar);
+	// HealthBar Map
+	static std::map<DWORD64, Render::HealthBar> HealthBarMap;
 
-    // AimBot data
-    std::vector<Vec3> aimPosList;
-    aimPosList.reserve(16);
-    float MaxAimDistance = 100000;
+	// AimBot data
+	float DistanceToSight = 0;
+	float MaxAimDistance = 100000;
+	Vec3  HeadPos{ 0,0,0 };
+	Vec2  Angles{ 0,0 };
+	std::vector<Vec3> AimPosList;
 
-    // Entity loop
-    for (int i = 0; i < 64; ++i)
-    {
-        DWORD64 entityAddr = 0;
-        if (!memoryManager.ReadMemory(gGame.GetEntityListEntry() + (i + 1) * 0x78, entityAddr))
-            continue;
+	// Radar Data
+	Base_Radar GameRadar;
+	if ((RadarCFG::ShowRadar && LocalEntity.Controller.TeamID != 0) || (RadarCFG::ShowRadar && MenuConfig::ShowMenu))
+		RadarSetting(GameRadar);
 
-        if (entityAddr == localEntity.Controller.Address)
-        {
-            localPlayerControllerIndex = i;
-            continue;
-        }
+	for (int i = 0; i < 64; i++)
+	{
+		CEntity Entity;
+		DWORD64 EntityAddress = 0;
+		if (!memoryManager.ReadMemory<DWORD64>(gGame.GetEntityListEntry() + (i + 1) * 0x78, EntityAddress))
+			continue;
+		if (EntityAddress == LocalEntity.Controller.Address)
+		{
+			LocalPlayerControllerIndex = i;
+			continue;
+		}
+		if (!Entity.UpdateController(EntityAddress))
+			continue;
 
-        CEntity entity;
-        if (!entity.UpdateController(entityAddr) || !entity.UpdatePawn(entity.Pawn.Address))
-            continue;
+		if (!Entity.UpdatePawn(Entity.Pawn.Address))
+			continue;
 
-        SpecList::GetSpectatorList(entity, localEntity);
+		//speclist
+		SpecList::GetSpectatorList(Entity, LocalEntity);
 
-        if (MenuConfig::TeamCheck && entity.Controller.TeamID == localEntity.Controller.TeamID)
-            continue;
-        if (!entity.IsAlive())
-            continue;
+		if (MenuConfig::TeamCheck && Entity.Controller.TeamID == LocalEntity.Controller.TeamID)
+			continue;
 
-        // Radar
-        if (radarActive)
-            gameRadar.AddPoint(localEntity.Pawn.Pos, localEntity.Pawn.ViewAngle.y, entity.Pawn.Pos,
-                ImColor(237, 85, 106, 200), RadarCFG::RadarType, entity.Pawn.ViewAngle.y);
+		if (!Entity.IsAlive())
+			continue;
 
-        if (!entity.IsInScreen())
-            continue;
+		// Add entity to radar
+		if (RadarCFG::ShowRadar && LocalEntity.Controller.TeamID != 0)
+			GameRadar.AddPoint(LocalEntity.Pawn.Pos, LocalEntity.Pawn.ViewAngle.y, Entity.Pawn.Pos, ImColor(237, 85, 106, 200), RadarCFG::RadarType, Entity.Pawn.ViewAngle.y);
 
-        // AimBot bone selection
-        if (!AimControl::HitboxList.empty())
-        {
-            for (int boneIndex : AimControl::HitboxList)
-            {
-                const auto& bonePosData = entity.GetBone().BonePosList[boneIndex];
-                float distToSight = bonePosData.ScreenPos.DistanceTo({ Gui.Window.Size.x / 2, Gui.Window.Size.y / 2 });
+		if (!Entity.IsInScreen())
+			continue;
 
-                if (distToSight < MaxAimDistance)
-                {
-                    if (!LegitBotConfig::VisibleCheck ||
-                        (entity.Pawn.bSpottedByMask & (1ULL << localPlayerControllerIndex)) ||
-                        (localEntity.Pawn.bSpottedByMask & (1ULL << i)))
-                    {
-                        Vec3 aimPos = bonePosData.Pos;
-                        if (boneIndex == BONEINDEX::head)
-                            aimPos.z -= 1.f;
+		//update Bone select
+		if (AimControl::HitboxList.size() != 0)
+		{
+			for (int i = 0; i < AimControl::HitboxList.size(); i++)
+			{
+				Vec3 TempPos;
+				DistanceToSight = Entity.GetBone().BonePosList[AimControl::HitboxList[i]].ScreenPos.DistanceTo({ Gui.Window.Size.x / 2,Gui.Window.Size.y / 2 });
 
-                        aimPosList.push_back(aimPos);
-                        MaxAimDistance = distToSight;
-                    }
-                }
-            }
-        }
+				if (DistanceToSight < MaxAimDistance)
+				{
+					MaxAimDistance = DistanceToSight;
 
-        // ESP
-        if (ESPConfig::ESPenabled)
-        {
-            ImVec4 rect = ESP::GetBoxRect(entity, ESPConfig::BoxType);
-            int distance = static_cast<int>(entity.Pawn.Pos.DistanceTo(localEntity.Pawn.Pos) / 100);
+					if (!LegitBotConfig::VisibleCheck ||
+						Entity.Pawn.bSpottedByMask & (DWORD64(1) << (LocalPlayerControllerIndex)) ||
+						LocalEntity.Pawn.bSpottedByMask & (DWORD64(1) << (i)))
+					{
+						TempPos = Entity.GetBone().BonePosList[AimControl::HitboxList[i]].Pos;
+						if (AimControl::HitboxList[i] == BONEINDEX::head)
+							TempPos.z -= 1.f;
 
-            if (MenuConfig::RenderDistance == 0 || distance <= MenuConfig::RenderDistance)
-            {
-                ESP::RenderPlayerESP(localEntity, entity, rect, localPlayerControllerIndex, i);
-                Render::DrawDistance(localEntity, entity, rect);
+						AimPosList.push_back(TempPos);
+					}
+				}
+			}
+		}
 
-                // Health Bar
-                if (ESPConfig::ShowHealthBar)
-                {
-                    Render::DrawHealthBar(entityAddr, 100, entity.Pawn.Health,
-                        { rect.x - 6.f, rect.y }, { 4, rect.w });
-                }
+		if (ESPConfig::ESPenabled)
+		{
+			ImVec4 Rect = ESP::GetBoxRect(Entity, ESPConfig::BoxType);
+			int distance = static_cast<int>(Entity.Pawn.Pos.DistanceTo(LocalEntity.Pawn.Pos) / 100);
 
-                // Ammo Bar
-                if (ESPConfig::AmmoBar && entity.Pawn.Ammo != -1)
-                {
-                    Render::DrawAmmoBar(entityAddr, entity.Pawn.Ammo + entity.Pawn.ShotsFired, entity.Pawn.Ammo,
-                        { rect.x, rect.y + rect.w + 2 }, { rect.z, 4 });
-                }
+			if (MenuConfig::RenderDistance == 0 || (distance <= MenuConfig::RenderDistance && MenuConfig::RenderDistance > 0))
+			{
+				ESP::RenderPlayerESP(LocalEntity, Entity, Rect, LocalPlayerControllerIndex, i);
+				Render::DrawDistance(LocalEntity, Entity, Rect);
 
-                // Armor Bar
-                if (ESPConfig::ArmorBar && entity.Pawn.Armor > 0)
-                {
-                    bool hasHelmet = false;
-                    memoryManager.ReadMemory(entity.Controller.Address + Offset.PlayerController.HasHelmet, hasHelmet);
+				// Draw HealthBar
+				if (ESPConfig::ShowHealthBar)
+				{
+					ImVec2 HealthBarPos = { Rect.x - 6.f,Rect.y };
+					ImVec2 HealthBarSize = { 4 ,Rect.w };
+					Render::DrawHealthBar(EntityAddress, 100, Entity.Pawn.Health, HealthBarPos, HealthBarSize);
+				}
 
-                    ImVec2 armorBarPos = ESPConfig::ShowHealthBar ?
-                        ImVec2{ rect.x - 10.f, rect.y } : ImVec2{ rect.x - 6.f, rect.y };
+				// Draw Ammo
+				// When player is using knife or nade, Ammo = -1.
+				if (ESPConfig::AmmoBar && Entity.Pawn.Ammo != -1)
+				{
+					ImVec2 AmmoBarPos = { Rect.x, Rect.y + Rect.w + 2 };
+					ImVec2 AmmoBarSize = { Rect.z,4 };
+					Render::DrawAmmoBar(EntityAddress, Entity.Pawn.Ammo+ Entity.Pawn.ShotsFired, Entity.Pawn.Ammo, AmmoBarPos, AmmoBarSize);
+				}
 
-                    Render::DrawArmorBar(entityAddr, 100, entity.Pawn.Armor, hasHelmet, armorBarPos, { 4.f, rect.w });
-                }
-            }
-        }
-    }
+				// Draw Armor
+				// It is meaningless to render a empty bar
+				if (ESPConfig::ArmorBar && Entity.Pawn.Armor > 0)
+				{
+					bool HasHelmet;
+					ImVec2 ArmorBarPos;
+					memoryManager.ReadMemory(Entity.Controller.Address + Offset.PlayerController.HasHelmet, HasHelmet);
+					if (ESPConfig::ShowHealthBar)
+						ArmorBarPos = { Rect.x - 10.f,Rect.y };
+					else
+						ArmorBarPos = { Rect.x - 6.f,Rect.y };
+					ImVec2 ArmorBarSize = { 4.f,Rect.w };
+					Render::DrawArmorBar(EntityAddress, 100, Entity.Pawn.Armor, HasHelmet, ArmorBarPos, ArmorBarSize);
+				}
+			}
+		}
+	}
 
-    // Post-loop features
-    Visual(localEntity);
-    if (radarActive) Radar(gameRadar, localEntity);
-    Trigger(localEntity);
-    AIM(localEntity, aimPosList);
-    MiscFuncs(localEntity);
+	Visual(LocalEntity);
+	Radar(GameRadar, LocalEntity);
+	Trigger(LocalEntity);
+	AIM(LocalEntity, AimPosList);
+	MiscFuncs(LocalEntity);
 
-    // Frame limiting
-    int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
-    if (currentFPS > MenuConfig::RenderFPS)
-    {
-        int frameWait = static_cast<int>(1000.0f / MenuConfig::RenderFPS);
-        std::this_thread::sleep_for(std::chrono::milliseconds(frameWait));
-    }
+
+	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
+	Log::Debug("currentFPS: " + std::to_string(currentFPS));
+	if (currentFPS > MenuConfig::RenderFPS)
+	{
+		int FrameWait = round(1000.0f / MenuConfig::RenderFPS);
+		std::this_thread::sleep_for(std::chrono::milliseconds(FrameWait));
+	}
 }
 
 void Menu() 
