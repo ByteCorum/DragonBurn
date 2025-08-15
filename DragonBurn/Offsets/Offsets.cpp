@@ -59,9 +59,9 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->GlobalVar.FrameCount = 0x04;
     this->GlobalVar.MaxClients = 0x10;
     this->GlobalVar.IntervalPerTick = 0x14;
-    this->GlobalVar.CurrentTime = 0x2C;
-    this->GlobalVar.CurrentTime2 = 0x30;
-    this->GlobalVar.TickCount = 0x40;
+    this->GlobalVar.CurrentTime = 0x34;
+    this->GlobalVar.CurrentTime2 = 0x38;
+    this->GlobalVar.TickCount = 0x48;
     this->GlobalVar.IntervalPerTick2 = 0x44;
     this->GlobalVar.CurrentNetchan = 0x0048;
     this->GlobalVar.CurrentMap = 0x0180;
