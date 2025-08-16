@@ -132,7 +132,7 @@ https://github.com/ByteCorum/DragonBurn
 	}
 
 	Log::Info("Connecting to kernel mode driver");
-	if (memoryManager.ConnectDriver(L"\\\\.\\laithdriver"))
+	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
 		Log::PreviousLine();
 		Log::Fine("Successfully connected to kernel mode driver");
@@ -156,7 +156,7 @@ https://github.com/ByteCorum/DragonBurn
 	{
 		Log::PreviousLine();
 		Log::Info("Connecting to CS2(it may take some time)");
-		Sleep(20000);
+		Sleep(23000);
 	}
 
 	Log::PreviousLine();
