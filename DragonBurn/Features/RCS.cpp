@@ -36,7 +36,7 @@ void RCS::UpdateAngles(const CEntity& Local, Vec2& Angles)
 		newAngles.x += ScreenCenterX;
 		newAngles.y += ScreenCenterY;
 
-		Angles = newAngles;
+		Angles = newAngles;//
 		oldPunch = aimPunch;
 	}
 	else
