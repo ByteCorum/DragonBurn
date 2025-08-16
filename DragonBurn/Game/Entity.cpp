@@ -465,10 +465,8 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 	// Calculate per-entity data size
 	const SIZE_T CONTROLLER_DATA_SIZE = sizeof(int) * 3 + MAX_PATH + sizeof(INT64) + sizeof(DWORD);
 
-	const SIZE_T PAWN_DATA_SIZE = sizeof(Vec2) * 2 + sizeof(Vec3) * 3 + sizeof(DWORD64) * 5 +  // Changed from 3 to 5
-		sizeof(DWORD) * 2 + sizeof(int) * 3 + sizeof(float) +
-		sizeof(bool) + sizeof(C_UTL_VECTOR);
-
+	const SIZE_T PAWN_DATA_SIZE = sizeof(Vec2) * 2 + sizeof(Vec3) * 2 + sizeof(DWORD64) * 3 +
+		sizeof(DWORD) + sizeof(int) * 3 + sizeof(float) + sizeof(C_UTL_VECTOR);
 	const SIZE_T ENTITY_DATA_SIZE = CONTROLLER_DATA_SIZE + PAWN_DATA_SIZE;
 
 	SIZE_T currentOffset = 0;
