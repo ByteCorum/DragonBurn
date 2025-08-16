@@ -39,8 +39,8 @@ namespace Misc
 
 		ImGui::Text("  DragonBurn");
 		ImGui::Text("  Kernel CS2 cheat");
+		ImGui::Text("  Velocity: %.2f", LocalPlayer.Pawn.Speed);
 		ImGui::Text("%s", fpsText);
-		//ImGui::Text("  Vel: %.2f", LocalPlayer.Pawn.Speed);
 		//ImGui::Text("  Pos: %.1f, %.1f, %.1f ", Pos.x, Pos.y, Pos.z);
 		ImGui::Text("                                                      ");
 

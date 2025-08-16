@@ -81,7 +81,7 @@ public:
 	Vec3 Pos;
 	Vec2 ScreenPos;
 	Vec3 CameraPos;
-	//float Speed;
+	float Speed;
 	std::string WeaponName;
 	DWORD ShotsFired;
 	DWORD GameSceneNode;
@@ -116,7 +116,7 @@ public:
 	bool GetArmor();
 	//bool GetDefusing();
 	bool GetFlashDuration();
-	//bool GetVelocity();
+	bool GetVelocity();
 
 	//constexpr bool HasFlag(const Flags Flag) const noexcept {
 	//	return fFlags & (int)Flag;

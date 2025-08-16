@@ -110,8 +110,8 @@ bool CEntity::UpdatePawn(const DWORD64& PlayerPawnAddress)
 	//	return false;
 	if (!this->Pawn.GetFlashDuration())//
 		return false;
-	//if (!this->Pawn.GetVelocity())
-	//	return false;
+	if (!this->Pawn.GetVelocity())
+		return false;
 	if (!this->Pawn.GetAimPunchCache())//
 		return false;
 	if (!this->Pawn.BoneData.UpdateAllBoneData(PlayerPawnAddress))//
@@ -321,14 +321,14 @@ bool PlayerPawn::GetFlashDuration()
 	return memoryManager.ReadMemory(Address + Offset.Pawn.flFlashDuration, this->FlashDuration);
 }
 
-//bool PlayerPawn::GetVelocity()
-//{
-//	Vec3 Velocity;
-//	if (!memoryManager.ReadMemory(Address + Offset.Pawn.AbsVelocity, Velocity))
-//		return false;
-//	this->Speed = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y);
-//	return true;
-//}
+bool PlayerPawn::GetVelocity()
+{
+	Vec3 Velocity;
+	if (!memoryManager.ReadMemory(Address + Offset.Pawn.AbsVelocity, Velocity))
+		return false;
+	this->Speed = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y);
+	return true;
+}
 
 bool CEntity::IsAlive() const
 {
@@ -441,7 +441,7 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 		//requests.emplace_back(entity.Pawn.Address + Offset.Pawn.fFlags, sizeof(int));
 		//requests.emplace_back(entity.Pawn.Address + Offset.C4.m_bBeingDefused, sizeof(bool));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.aimPunchCache, sizeof(C_UTL_VECTOR));
-		//requests.emplace_back(entity.Pawn.Address + Offset.Pawn.AbsVelocity, sizeof(Vec3));
+		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.AbsVelocity, sizeof(Vec3));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.pClippingWeapon, sizeof(DWORD64));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.CameraServices, sizeof(DWORD64));
 	}
@@ -541,10 +541,10 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 		currentOffset += sizeof(C_UTL_VECTOR);
 
 		// Calculate velocity
-		/*Vec3 velocity;
+		Vec3 velocity;
 		memcpy(&velocity, buffer.data() + currentOffset, sizeof(Vec3));
 		entity.Pawn.Speed = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
-		currentOffset += sizeof(Vec3);*/
+		currentOffset += sizeof(Vec3);
 
 		// Extract dependent addresses
 		DWORD64 weaponAddr, cameraAddr;
