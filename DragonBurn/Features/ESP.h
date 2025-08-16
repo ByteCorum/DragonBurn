@@ -196,14 +196,14 @@ namespace ESP
         if (ESPConfig::ShowIsBlind) {
             if (Entity.Pawn.FlashDuration > 0.f)
             {
-                ImVec2 iconPos = { Rect.x, Rect.y + 12 };
+                ImVec2 iconPos = { Rect.x+3, Rect.y + 12 };
                 const ImVec2 flashOffsets[4] = { { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
                 for (const auto& off : flashOffsets)
                 {
                     ImVec2 pos = { iconPos.x + off.x, iconPos.y + off.y };
-                    ImGui::GetBackgroundDrawList()->AddText(ioFonts, 12.0f, pos, ImColor(0, 0, 0, 255), "i");
+                    ImGui::GetBackgroundDrawList()->AddText(ioFonts, 18.f, pos, ImColor(0, 0, 0, 255), "i");
                 }
-                ImGui::GetBackgroundDrawList()->AddText(ioFonts, 12.0f, iconPos, ImColor(131, 137, 150, 255), "i");
+                ImGui::GetBackgroundDrawList()->AddText(ioFonts, 18.f, iconPos, ImColor(131, 137, 150, 255), "i");
             }
         }
 
@@ -386,8 +386,8 @@ namespace ESP
             drawList->AddText(font1, 15.0f, centerPos, IM_COL32(131, 137, 150, 255), "s");
         }
         if (ESPConfig::ShowIsBlind) {
-            const ImVec2 flashed(centerPos.x, centerPos.y + 15);
-            drawList->AddText(font1, 15.0f, flashed, IM_COL32(131, 137, 150, 255), "i");
+            const ImVec2 flashed(centerPos.x+3, centerPos.y + 12);
+            drawList->AddText(font1, 20.0f, flashed, IM_COL32(131, 137, 150, 255), "i");
         }
     }
 }
