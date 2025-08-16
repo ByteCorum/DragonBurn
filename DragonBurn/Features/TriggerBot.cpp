@@ -133,6 +133,10 @@ bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetedE
     if (!CheckWeapon(currentWeapon))
         return false;
 
+    //check is velocity == 0
+    if(StopedOnly && LocalEntity.Pawn.Speed != 0)
+        return false;
+
     // Check flash duration
     if (!IgnoreFlash && LocalEntity.Pawn.FlashDuration > 0.0f)
         return false;

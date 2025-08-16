@@ -183,6 +183,7 @@ namespace MyConfigSaver
         ConfigData["Triggerbot"]["FakeShot"]=     TriggerBot::ShotDuration;
         ConfigData["Triggerbot"]["ScopeOnly"]=    TriggerBot::ScopeOnly;
         ConfigData["Triggerbot"]["IgnoreFlash"]=  TriggerBot::IgnoreFlash;
+        ConfigData["Triggerbot"]["StopedOnly"] = TriggerBot::StopedOnly;
         ConfigData["Triggerbot"]["AutoMode"]=     LegitBotConfig::TriggerAlways;
 
 
@@ -411,6 +412,7 @@ namespace MyConfigSaver
             TriggerBot::ShotDuration = ReadData(ConfigData["Triggerbot"],{"FakeShot"}, 200);
             TriggerBot::ScopeOnly = ReadData(ConfigData["Triggerbot"],{"ScopeOnly"}, false);
             TriggerBot::IgnoreFlash = ReadData(ConfigData["Triggerbot"],{"IgnoreFlash"}, false);
+            TriggerBot::StopedOnly = ReadData(ConfigData["Triggerbot"], { "StopedOnly" }, false);
             LegitBotConfig::TriggerAlways = ReadData(ConfigData["Triggerbot"],{"AutoMode"}, false);
             Text::Trigger::HotKey = KeyMgr::GetKeyName(TriggerBot::HotKey);
         }

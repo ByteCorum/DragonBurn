@@ -97,8 +97,9 @@ namespace Text {
         inline std::string WorkWithAimbot = "Work With Aimbot";
         inline std::string DelaySlider = "Shot Delay:";
         inline std::string FakeShotSlider = "Shot Duration:";
-        inline std::string IgnoreFlash = "Ignr Flash";
-        inline std::string VisCheck = "VisCheck";
+        inline std::string IgnoreFlash = "Ignore Flash";
+        inline std::string StopOnly = "Stop Check";
+        inline std::string VisCheck = "Visible Check";
     }
 
     namespace Misc
