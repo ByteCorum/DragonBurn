@@ -1,5 +1,4 @@
-﻿//
-//______                            ______                  
+﻿//______                            ______                  
 //|  _  \                           | ___ \                 
 //| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
 //| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
@@ -7,6 +6,8 @@
 //|___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
 //                  __/ |                                   
 //                 |___/                                    
+//
+//https://discord.gg/5WcvdzFybD
 //https://github.com/ByteCorum/DragonBurn
 
 #include "Core/Cheats.h"
@@ -57,6 +58,8 @@ void Cheat()
 |___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
                   __/ |                                   
                  |___/                                    
+
+https://discord.gg/5WcvdzFybD
 https://github.com/ByteCorum/DragonBurn
 
 
