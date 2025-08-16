@@ -15,6 +15,7 @@
 #include "Core/Init.h"
 #include "Config/ConfigSaver.h"
 #include "Helpers/Logger.h"
+#include "Helpers/UIAccess.h"
 #include <filesystem>
 #include <KnownFolders.h>
 #include <ShlObj.h>
@@ -28,6 +29,17 @@ void Cheat();
 
 int main()
 {
+
+//do not use uaicess for debugging/profiling (uiacess restarts the cheat)
+#ifndef DBDEBUG
+	DWORD err = PrepareForUIAccess();
+	if (err != ERROR_SUCCESS)
+	{
+		MessageBoxA(NULL, "Failed to elevate to UIAccess.", "Error", MB_OK);
+		return -1;
+	}
+#endif
+
 	Cheat();
 }
 
@@ -117,7 +129,7 @@ https://github.com/ByteCorum/DragonBurn
 	}
 
 	Log::Info("Connecting to kernel mode driver");
-	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kernel"))
+	if (memoryManager.ConnectDriver(L"\\\\.\\laithdriver"))
 	{
 		Log::PreviousLine();
 		Log::Fine("Successfully connected to kernel mode driver");

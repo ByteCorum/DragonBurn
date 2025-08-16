@@ -193,7 +193,7 @@ bool PlayerPawn::GetWeaponName()
 	DWORD64 WeaponNameAddress = 0;
 	char Buffer[256]{};
 	
-	WeaponNameAddress = memoryManager.TraceAddress(this->Address + Offset.Pawn.pClippingWeapon, { 0x10,0x20 ,0x0 });
+	WeaponNameAddress = memoryManager.TraceAddress(this->Address + Offset.Pawn.pClippingWeapon, { 0x10, 0x20, 0x0 });
 	if (WeaponNameAddress == 0)
 		return false;
 

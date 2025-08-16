@@ -10,10 +10,10 @@
 .gitignore      text
 *.md            text diff=Markdown
 *.cs            text diff=CSharp
-*.cpp           text diff=C++
-*.hpp           text diff=C++
-*.h             text diff=C
-*.c             text diff=C
+*.cpp           text diff=C++ eol=lf #add eol Line Feed to hide the stupid warning "This diff contains a change in line endings from 'LF' to 'CRLF'."
+*.hpp           text diff=C++ eol=lf #git add --renormalize .
+*.h             text diff=C eol=lf
+*.c             text diff=C eol=lf
 *.rc            text diff=Assembly
 CMakeLists.txt  text diff=CMake
 

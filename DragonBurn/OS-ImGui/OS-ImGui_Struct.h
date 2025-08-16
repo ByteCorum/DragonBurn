@@ -64,7 +64,7 @@ public:
 	{
 		return sqrtf(powf(x, 2) + powf(y, 2));
 	}
-	float DistanceTo(const Vec2& Pos)
+	float DistanceTo(const Vec2& Pos) const
 	{
 		return sqrtf(powf(Pos.x - x, 2) + powf(Pos.y - y, 2));
 	}
@@ -116,9 +116,36 @@ public:
 	{
 		return sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
 	}
-	float DistanceTo(const Vec3& Pos)
+
+	float DistanceTo(const Vec3& Pos) const
 	{
 		return sqrtf(powf(Pos.x - x, 2) + powf(Pos.y - y, 2) + powf(Pos.z - z, 2));
+	}
+
+	// Dot product with another Vec3
+	float DotProduct(const Vec3& other) const
+	{
+		return x * other.x + y * other.y + z * other.z;
+	}
+
+	// Normalize this vector (modify in place)
+	void Normalize()
+	{
+		float length = Length();
+		if (length > 0.0f)
+		{
+			x /= length;
+			y /= length;
+			z /= length;
+		}
+	}
+
+	// Get normalized version without modifying this vector
+	Vec3 Normalized() const
+	{
+		Vec3 result = *this;
+		result.Normalize();
+		return result;
 	}
 };
 
