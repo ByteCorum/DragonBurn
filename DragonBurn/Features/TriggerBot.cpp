@@ -1,4 +1,7 @@
 #include "TriggerBot.h"
+#include <chrono>
+#include <random>
+#include <thread>
 
 DWORD uHandle = 0;
 DWORD64 ListEntry = 0;
@@ -15,104 +18,196 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     if (LocalEntity.Controller.AliveStatus == 0)
         return;
 
-    if (!memoryManager.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset.Pawn.m_bWaitForNoAttack, WaitForNoAttack))
-        return;
-
+    // Get the entity under the crosshair
+    DWORD uHandle = 0;
     if (!memoryManager.ReadMemory<DWORD>(LocalEntity.Pawn.Address + Offset.Pawn.iIDEntIndex, uHandle))
+    {
+        g_HasValidTarget = false;
+        g_CanShoot = false;
         return;
+    }
 
     if (uHandle == -1)
+    {
+        g_HasValidTarget = false;
+        g_CanShoot = false;
         return;
+    }
 
-    ListEntry = memoryManager.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
+    DWORD64 ListEntry = memoryManager.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
     if (ListEntry == 0)
+    {
+        g_HasValidTarget = false;
+        g_CanShoot = false;
         return;
+    }
 
+    DWORD64 PawnAddress = 0;
     if (!memoryManager.ReadMemory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
-        return;
-
-    if (!Entity.UpdatePawn(PawnAddress))
-        return;
-
-    std::string curWeapon = GetWeapon(LocalEntity);
-    if (!CheckWeapon(curWeapon))
-        return;
-
-    if (!IgnoreFlash && LocalEntity.Pawn.FlashDuration > 0.f)
-        return;
-
-    if (ScopeOnly)
     {
-        bool isScoped;
-        memoryManager.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset.Pawn.isScoped, isScoped);
-        
-        if (!isScoped and CheckScopeWeapon(curWeapon))
-            return;
+        g_HasValidTarget = false;
+        g_CanShoot = false;
+        return;
     }
 
-    if (MenuConfig::TeamCheck)
-        AllowShoot = LocalEntity.Pawn.TeamID != Entity.Pawn.TeamID && Entity.Pawn.Health > 0;
-    else
-        AllowShoot = Entity.Pawn.Health > 0;
-
-
-    if (!AllowShoot)
+    CEntity targetedEntity;
+    if (!targetedEntity.UpdatePawn(PawnAddress))
+    {
+        g_HasValidTarget = false;
+        g_CanShoot = false;
         return;
-
-
-    std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-    std::chrono::duration<double, std::milli> difference = now - timepoint;
-    if (!recorded && difference.count() >= ShotDuration)
-    {
-        startTime = std::chrono::system_clock::now();
-        recorded = true;
     }
-    std::chrono::duration<double, std::milli> difference1 = now - startTime;
-    if (difference.count() >= ShotDuration && difference1.count() >= TriggerDelay)
+
+    // Validate the targeted entity
+    if (!CanTrigger(LocalEntity, targetedEntity))
     {
-        const bool isAlreadyShooting = GetAsyncKeyState(VK_LBUTTON) < 0;
-        if (!isAlreadyShooting)
+        g_HasValidTarget = false;
+        g_CanShoot = false;
+        return;
+    }
+
+    // If we reach here, we have a valid target
+    g_HasValidTarget = true;
+
+    auto now = std::chrono::system_clock::now();
+
+    // Handle shot duration cooldown
+    if (g_CanShoot)
+    {
+        auto timeSinceShot = std::chrono::duration_cast<std::chrono::milliseconds>(
+            now - g_LastShotTime).count();
+
+        if (timeSinceShot < ShotDuration)
         {
-            mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-            mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-            timepoint = std::chrono::system_clock::now();
-            recorded = false;
+            return; // Still in shot cooldown
+        }
+        else
+        {
+            g_CanShoot = false; // Reset shot state
+        }
+    }
+
+    // Process trigger logic if we have a valid target
+    if (g_HasValidTarget)
+    {
+        // Handle trigger delay
+        if (!g_CanShoot)
+        {
+            auto timeSinceFound = std::chrono::duration_cast<std::chrono::milliseconds>(
+                now - g_TargetFoundTime).count();
+
+            if (timeSinceFound >= TriggerDelay)
+            {
+                g_CanShoot = true;
+            }
+        }
+
+        // Execute shot if ready
+        if (g_CanShoot && (GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways))
+        {
+            ExecuteShot();
         }
     }
 }
 
+bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetedEntity)
+{
+    // Check if player is alive
+    if (LocalEntity.Controller.AliveStatus == 0)
+        return false;
+
+    // Check team
+    if (MenuConfig::TeamCheck && LocalEntity.Pawn.TeamID == TargetedEntity.Pawn.TeamID)
+        return false;
+
+    // Check if weapon is ready
+    bool waitForNoAttack = false;
+    if (!memoryManager.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset.Pawn.m_bWaitForNoAttack, waitForNoAttack))
+        return false;
+
+    if (waitForNoAttack)
+        return false;
+
+    // Check weapon type
+    std::string currentWeapon = GetWeapon(LocalEntity);
+    if (!CheckWeapon(currentWeapon))
+        return false;
+
+    //check is velocity == 0
+    if(StopedOnly && LocalEntity.Pawn.Speed != 0)
+        return false;
+
+    // Check flash duration
+    if (!IgnoreFlash && LocalEntity.Pawn.FlashDuration > 0.0f)
+        return false;
+
+    // Check scope requirement
+    if (ScopeOnly && CheckScopeWeapon(currentWeapon))
+    {
+        bool isScoped = false;
+        memoryManager.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset.Pawn.isScoped, isScoped);
+        if (!isScoped)
+            return false;
+    }
+
+    // Check if targeted entity is alive
+    if (TargetedEntity.Pawn.Health <= 0)
+        return false;
+
+    return true;
+}
+
+void TriggerBot::ExecuteShot()
+{
+    // Check if already shooting to avoid double-click
+    if (GetAsyncKeyState(VK_LBUTTON) < 0)
+        return;
+
+    // Update timing
+    g_LastShotTime = std::chrono::system_clock::now();
+
+    // Execute shot with random timing
+    std::random_device RandomDevice;
+    std::mt19937 RandomNumber(RandomDevice());
+    std::uniform_int_distribution<> Range(1, 5);
+    auto rand = std::chrono::microseconds(Range(RandomNumber));
+
+    mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+    std::this_thread::sleep_for(std::chrono::microseconds(Range(RandomNumber)));
+    mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+}
+
+
 std::string TriggerBot::GetWeapon(const CEntity& LocalEntity)
 {
-    DWORD64 WeaponNameAddress = 0;
-    char Buffer[256]{};
-
-    WeaponNameAddress = memoryManager.TraceAddress(LocalEntity.Pawn.Address + Offset.Pawn.pClippingWeapon, { 0x10, 0x20, 0x0 });
-    if (WeaponNameAddress == 0)
-        return "";
-
+    // Single memory read to get the weapon pointer
     DWORD64 CurrentWeapon;
-    short weaponIndex;
-    memoryManager.ReadMemory(LocalEntity.Pawn.Address + Offset.Pawn.pClippingWeapon, CurrentWeapon);
-    memoryManager.ReadMemory(CurrentWeapon + Offset.EconEntity.AttributeManager + Offset.WeaponBaseData.Item + Offset.WeaponBaseData.ItemDefinitionIndex, weaponIndex);
-
-    if (weaponIndex == -1)
+    if (!memoryManager.ReadMemory(LocalEntity.Pawn.Address + Offset.Pawn.pClippingWeapon, CurrentWeapon) || CurrentWeapon == 0)
         return "";
 
-    return CEntity::GetWeaponName(weaponIndex);
+    // Calculate the final address for weapon index directly
+    DWORD64 weaponIndexAddress = CurrentWeapon + Offset.EconEntity.AttributeManager +
+        Offset.WeaponBaseData.Item + Offset.WeaponBaseData.ItemDefinitionIndex;
+
+    // Single memory read to get weapon index
+    short weaponIndex;
+    if (!memoryManager.ReadMemory(weaponIndexAddress, weaponIndex) || weaponIndex == -1)
+        return "";
+
+    // Inline weapon name lookup
+    static const std::string defaultWeapon = "";
+    auto it = CEntity::weaponNames.find(weaponIndex);
+    return (it != CEntity::weaponNames.end()) ? it->second : defaultWeapon;
 }
 
 bool TriggerBot::CheckScopeWeapon(const std::string& WeaponName)
 {
-    if (WeaponName == "awp" || WeaponName == "g3Sg1" || WeaponName == "ssg08" || WeaponName == "scar20")
-        return true;
-    else
-        return false;
+    return (WeaponName == "awp" || WeaponName == "g3Sg1" || WeaponName == "ssg08" || WeaponName == "scar20");
 }
 
 bool TriggerBot::CheckWeapon(const std::string& WeaponName)
 {
-    if (WeaponName == "smokegrenade" || WeaponName == "flashbang" || WeaponName == "hegrenade" || WeaponName == "molotov" || WeaponName == "decoy" || WeaponName == "incgrenade" || WeaponName == "t_knife" || WeaponName == "ct_knife" || WeaponName == "c4")
-        return false;
-    else
-        return true;
+    return !(WeaponName == "smokegrenade" || WeaponName == "flashbang" || WeaponName == "hegrenade" ||
+        WeaponName == "molotov" || WeaponName == "decoy" || WeaponName == "incgrenade" ||
+        WeaponName == "t_knife" || WeaponName == "ct_knife" || WeaponName == "c4");
 }

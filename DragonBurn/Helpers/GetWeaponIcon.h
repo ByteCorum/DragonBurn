@@ -2,7 +2,7 @@
 #include <string>
 #include <map>
 
-static const std::map<std::string, const char*> gunIcons = 
+static const std::unordered_map<std::string, const char*> gunIcons = 
 {
     {"ct_knife", "]"},
     {"t_knife", "["},
@@ -24,7 +24,7 @@ static const std::map<std::string, const char*> gunIcons =
     {"p90", "O"},
     {"galilar", "Q"},
     {"famas", "R"},
-    {"m4a1", "T"},
+    {"m4a4", "T"},
     {"m4a1", "S"},
     {"aug", "U"},
     {"sg556", "V"},
