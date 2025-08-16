@@ -24,7 +24,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     if (uHandle == -1)
         return;
 
-    ListEntry = memoryManager.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10,0x0 });
+    ListEntry = memoryManager.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
     if (ListEntry == 0)
         return;
 
@@ -86,7 +86,7 @@ std::string TriggerBot::GetWeapon(const CEntity& LocalEntity)
     DWORD64 WeaponNameAddress = 0;
     char Buffer[256]{};
 
-    WeaponNameAddress = memoryManager.TraceAddress(LocalEntity.Pawn.Address + Offset.Pawn.pClippingWeapon, { 0x10,0x20 ,0x0 });
+    WeaponNameAddress = memoryManager.TraceAddress(LocalEntity.Pawn.Address + Offset.Pawn.pClippingWeapon, { 0x10, 0x20, 0x0 });
     if (WeaponNameAddress == 0)
         return "";
 

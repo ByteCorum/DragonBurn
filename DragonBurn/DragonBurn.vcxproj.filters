@@ -135,6 +135,9 @@
     <ClInclude Include="Helpers\Mouse.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="Helpers\UIAccess.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
     <ClInclude Include="Helpers\GetWeaponIcon.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -242,6 +245,9 @@
       <Filter>Features\Legit</Filter>
     </ClCompile>
     <ClCompile Include="Helpers\Mouse.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\UIAccess.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Core\GlobalVars.cpp">

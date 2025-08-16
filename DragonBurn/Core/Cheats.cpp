@@ -1,5 +1,4 @@
-﻿//
-//______                            ______                  
+﻿//______                            ______                  
 //|  _  \                           | ___ \                 
 //| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
 //| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
@@ -7,6 +6,8 @@
 //|___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
 //                  __/ |                                   
 //                 |___/                                    
+//
+//https://discord.gg/5WcvdzFybD
 //https://github.com/ByteCorum/DragonBurn
 
 #include <string>
@@ -44,8 +45,10 @@ void Cheats::Run()
 {	
 	Menu();
 
-	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu)
+	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu) {
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		return;
+	}
 
 	// Update matrix
 	if(!memoryManager.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix,64))
@@ -198,7 +201,6 @@ void Cheats::Run()
 
 
 	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
-	Log::Debug("currentFPS: " + std::to_string(currentFPS));
 	if (currentFPS > MenuConfig::RenderFPS)
 	{
 		int FrameWait = round(1000.0f / MenuConfig::RenderFPS);

@@ -9,13 +9,13 @@
 .gitattributes text
 .gitignore      text
 *.md            text diff=Markdown
-*.cs            text diff=CSharp
-*.cpp           text diff=C++
-*.hpp           text diff=C++
-*.h             text diff=C
-*.c             text diff=C
-*.rc            text diff=Assembly
-CMakeLists.txt  text diff=CMake
+*.cs            text diff=CSharp eol=lf
+*.cpp           text diff=C++ eol=lf
+*.hpp           text diff=C++ eol=lf
+*.h             text diff=C eol=lf
+*.c             text diff=C eol=lf
+*.rc            text diff=Assembly eol=lf
+CMakeLists.txt  text diff=CMake eol=lf
 
 
 
