@@ -42,7 +42,7 @@ namespace Render
 	}
 
 
-	inline void DrawDistance(const CEntity& LocalEntity, CEntity& Entity, ImVec4 Rect)
+	inline void DrawDistance(const CEntity& LocalEntity, const CEntity& Entity, ImVec4 Rect)
 	{
 		if (!ESPConfig::ShowDistance)
 			return;
@@ -54,26 +54,29 @@ namespace Render
 
 	}
 
-	inline void DrawFovCircle(const CEntity& LocalEntity)
+	inline void DrawFovCircle(ImDrawList* drawList, const CEntity& LocalEntity) noexcept
 	{
 		if (!ESPConfig::DrawFov)
 			return;
 
 		constexpr float DEG_TO_RAD = M_PI / 180.f;
-		Vec2 CenterPoint = Gui.Window.Size / 2;
-		float HalfWindowSize = Gui.Window.Size.x / 2.f;
+		constexpr float PERFECT_FOV = 69.0f; // static reference fov
+		
+		ImVec2 center = ImVec2(Gui.Window.Size.x / 2.0f, Gui.Window.Size.y / 2.0f);
+		float halfWindowSize = Gui.Window.Size.x / 2.0f;
 
-		float LocalFovTan = tan(LocalEntity.Pawn.Fov * DEG_TO_RAD / 2.f);
-		float AimFovTan = tan(AimControl::AimFov * DEG_TO_RAD / 2.f);
-		float AimFovMinTan = tan(AimControl::AimFovMin * DEG_TO_RAD / 2.f);
+		float prfctFovTan = tan(PERFECT_FOV * DEG_TO_RAD / 2.0f);
+		float aimFovTan = tan(AimControl::AimFov * DEG_TO_RAD / 2.0f);
 
-		float Radius = (AimFovTan / LocalFovTan) * HalfWindowSize;
-		Gui.Circle(CenterPoint, Radius, LegitBotConfig::FovCircleColor, 1);
+		float radius = (aimFovTan / prfctFovTan) * halfWindowSize;
+
+		drawList->AddCircle(center, radius, LegitBotConfig::FovCircleColor, 0, 1.5f);
 
 		if (AimControl::AimFovMin > 0)
 		{
-			float MinRadius = (AimFovMinTan / LocalFovTan) * HalfWindowSize;
-			Gui.Circle(CenterPoint, MinRadius, LegitBotConfig::FovCircleColor, 1);
+			float aimFovMinTan = tan(AimControl::AimFovMin * DEG_TO_RAD / 2.0f);
+			float minRadius = (aimFovMinTan / prfctFovTan) * halfWindowSize;
+			drawList->AddCircle(center, minRadius, LegitBotConfig::FovCircleColor, 0, 1.5f);
 		}
 	}
 
@@ -156,7 +159,7 @@ namespace Render
 		const float fovSin = std::sin(fovRadians);
 		const float viewSin = std::sin(viewAngleXRadians);
 
-		// Pre-compute scale factor once (note: sin(90°) is 1, so it is removed)
+		// Pre-compute scale factor once (note: sin(90ï¿½) is 1, so it is removed)
 		const float scaleFactor = Gui.Window.Size.y / (2.0f * fovSin);
 
 		Vec2 Pos;

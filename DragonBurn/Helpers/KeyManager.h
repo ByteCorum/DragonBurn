@@ -14,7 +14,7 @@ namespace KeyMgr
         case VK_MBUTTON: return "MMB";
         case VK_XBUTTON1: return "X1MB";
         case VK_XBUTTON2: return "X2MB";
-        case VK_BACK: return "Return";
+        case VK_BACK: return "Backspace";
         case VK_TAB: return "Tab";
         case VK_RETURN: return "Enter";
         case VK_SHIFT: return "Shift";
@@ -49,49 +49,56 @@ namespace KeyMgr
         case VK_F12: return "F12";
         default:
         {
-            char name[16];
+            wchar_t name[16]; // wide char for ToUnicode
             BYTE keyboardState[256];
             GetKeyboardState(keyboardState);
             UINT scanCode = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
-            int result = ToUnicode(vk_code, scanCode, keyboardState, reinterpret_cast<PWSTR>(name), sizeof(name) / sizeof(name[0]), 0);
+            int result = ToUnicode(vk_code, scanCode, keyboardState, name, sizeof(name) / sizeof(name[0]), 0);
             if (result > 0)
             {
-                name[result] = '\0';
-                return std::string(name);
+                name[result] = L'\0';
+                // Convert wide string to regular string
+                int size_needed = WideCharToMultiByte(CP_UTF8, 0, name, -1, NULL, 0, NULL, NULL);
+                std::string str(size_needed, 0);
+                WideCharToMultiByte(CP_UTF8, 0, name, -1, &str[0], size_needed, NULL, NULL);
+                str.pop_back(); // Remove null terminator
+                return str;
             }
             return "N/A";
         }
         }
     }
 
-	inline void GetPressedKey(int& vk_code, std::string& keyName)
-	{
-        int hotkey;
+    inline void GetPressedKey(int& vk_code, std::string& keyName)
+    {
+        int hotkey = 0;
         std::string buff = keyName;
         keyName = "...";
+
         while (true)
         {
+            hotkey = 0;
+            for (int key = 0; key < 256; key++)
+            {
+                if (GetAsyncKeyState(key) & 0x8000)
+                {
+                    hotkey = key;
+                    break;
+                }
+            }
 
-			for (int key = 0; key < 256; key++)
-			{
-				if (GetAsyncKeyState(key) & 0x8000)
-				{
-					hotkey = key;
-				}
-			}
             if (hotkey == MenuConfig::HotKey)
             {
                 keyName = buff;
                 break;
             }
-                
-
-			if (hotkey > 0 && hotkey < 256 )
-			{
-				vk_code = hotkey;
-				keyName = GetKeyName(hotkey);
+            if (hotkey > 0 && hotkey < 256)
+            {
+                vk_code = hotkey;
+                keyName = GetKeyName(hotkey);
                 break;
-			}
-		}
-	}
+            }
+            //Sleep(1);
+        }
+    }
 }

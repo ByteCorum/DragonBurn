@@ -35,7 +35,8 @@ void RCS::UpdateAngles(const CEntity& Local, Vec2& Angles)
 
 		newAngles.x += ScreenCenterX;
 		newAngles.y += ScreenCenterY;
-		Angles = newAngles;//
+
+		Angles = newAngles;
 		oldPunch = aimPunch;
 	}
 	else
@@ -43,17 +44,17 @@ void RCS::UpdateAngles(const CEntity& Local, Vec2& Angles)
 		oldPunch.x = oldPunch.y = 0.f;
 	}
 
-	//if (Local.Pawn.ShotsFired > RCSBullet)
-	//{
 	Vec2 PunchAngle;
-	if (Local.Pawn.AimPunchCache.Count <= 0 && Local.Pawn.AimPunchCache.Count > 0xFFFF)
+	if (Local.Pawn.AimPunchCache.Count <= 0 && Local.Pawn.AimPunchCache.Count > 0xFFFF) {
 		return;
-	if (!memoryManager.ReadMemory<Vec2>(Local.Pawn.AimPunchCache.Data + (Local.Pawn.AimPunchCache.Count - 1) * sizeof(Vec3), PunchAngle))
+	}
+
+	if (!memoryManager.ReadMemory<Vec2>(Local.Pawn.AimPunchCache.Data + (Local.Pawn.AimPunchCache.Count - 1) * sizeof(Vec3), PunchAngle)) {
 		return;
+	}
 
 	Angles.x = PunchAngle.x;
 	Angles.y = PunchAngle.y;
-	//}
 }
 
 void RCS::RecoilControl(CEntity LocalPlayer)
