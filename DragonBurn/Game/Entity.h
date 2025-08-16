@@ -53,6 +53,9 @@ public:
 	std::string PlayerName;
 	std::vector<std::string> spectators = {};
 
+	DWORD64 cachedEntityListEntry = 0;
+	DWORD lastCachedPawn = 0;
+
 public:
 	bool GetTeamID();
 	bool GetHealth();
@@ -148,8 +151,8 @@ private:
 			BatchField{ Offset.Pawn.flFlashDuration, &pawn.FlashDuration },
 			//BatchField{ Offset.Pawn.fFlags, &pawn.fFlags },
 			//BatchField{ Offset.C4.m_bBeingDefused, &pawn.isDefusing },
-			BatchField{ Offset.Pawn.aimPunchCache, &pawn.AimPunchCache }
-			// Additional fields not used in our implementation
+			BatchField{ Offset.Pawn.aimPunchCache, &pawn.AimPunchCache },
+			BatchField{ Offset.Pawn.GameSceneNode, &pawn.GameSceneNode }
 		);
 	}
 

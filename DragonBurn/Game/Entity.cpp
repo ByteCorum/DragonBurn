@@ -228,19 +228,35 @@ bool PlayerPawn::GetAimPunchCache()
 
 DWORD64 PlayerController::GetPlayerPawnAddress()
 {
-	DWORD64 EntityPawnListEntry = 0;
-	DWORD64 EntityPawnAddress = 0;
-
+	// Get current Pawn ID
 	if (!GetDataAddressWithOffset<DWORD>(Address, Offset.Entity.PlayerPawn, this->Pawn))
 		return 0;
 
-	if (!memoryManager.ReadMemory<DWORD64>(gGame.GetEntityListAddress(), EntityPawnListEntry))
-		return 0;
+	// Pre-calculate indices
+	const DWORD64 highIndex = (Pawn & 0x7FFF) >> 9;
+	const DWORD64 lowIndex = Pawn & 0x1FF;
 
-	if (!memoryManager.ReadMemory<DWORD64>(EntityPawnListEntry + 0x10 + 8 * ((Pawn & 0x7FFF) >> 9), EntityPawnListEntry))
-		return 0;
+	// Cache the entity list entry if it's the same high-level index
+	DWORD64 EntityPawnListEntry = 0;
 
-	if (!memoryManager.ReadMemory<DWORD64>(EntityPawnListEntry + 0x78 * (Pawn & 0x1FF), EntityPawnAddress))
+	if (cachedEntityListEntry == 0 || (lastCachedPawn & 0x7FFF) >> 9 != highIndex) {
+		// Need to refresh cache
+		if (!memoryManager.ReadMemory<DWORD64>(gGame.GetEntityListAddress(), EntityPawnListEntry))
+			return 0;
+
+		if (EntityPawnListEntry == 0) return 0;
+
+		if (!memoryManager.ReadMemory<DWORD64>(EntityPawnListEntry + 0x10 + 8 * highIndex, cachedEntityListEntry))
+			return 0;
+
+		lastCachedPawn = Pawn;
+	}
+
+	if (cachedEntityListEntry == 0) return 0;
+
+	// Final read using cached value
+	DWORD64 EntityPawnAddress = 0;
+	if (!memoryManager.ReadMemory<DWORD64>(cachedEntityListEntry + 0x78 * lowIndex, EntityPawnAddress))
 		return 0;
 
 	return EntityPawnAddress;
@@ -680,7 +696,7 @@ bool EntityBatchProcessor::ProcessDependenciesData(
 
 	// Extract final data
 	SIZE_T bufferOffset = 0;
-	for (const auto& entityIndex : requestMap) {
+	for (const auto& entityIndex/*[entityIndex, isMaxAmmo]*/ : requestMap) {
 		auto& entity = entities[entityIndex].second;
 
 		int value;
