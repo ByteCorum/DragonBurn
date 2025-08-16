@@ -67,7 +67,7 @@ void Cheats::Run()
 
 	// LocalEntity
 	CEntity LocalEntity;
-	static int LocalPlayerControllerIndex = 1;
+	int LocalPlayerControllerIndex = 0;
 	LocalEntity.UpdateClientData();
 	if (!LocalEntity.UpdateController(LocalControllerAddress))
 		return;
@@ -171,7 +171,7 @@ std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEnt
 }
 
 // process, prepare results
-std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int localPlayerControllerIndex)
+std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& localPlayerControllerIndex)
 {
 	// get batch-processed entities
 	auto entities = CollectEntityData(localEntity, localPlayerControllerIndex);
@@ -365,6 +365,7 @@ void Menu()
 void Visual(const CEntity& LocalEntity)
 {
 	// Fov circle
+	if (LocalEntity.IsAlive())
 	Render::DrawFovCircle(ImGui::GetBackgroundDrawList(), LocalEntity);
 
 	// Fov line
