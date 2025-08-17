@@ -21,17 +21,6 @@ inline std::string WStringToString(const std::wstring& wstr)
     return std::string(buffer.data());
 }
 
-inline std::vector<std::string> SplitString(const std::string& str, char delimiter) 
-{
-    std::vector<std::string> tokens;
-    std::istringstream stream(str);
-    std::string token;
-    while (std::getline(stream, token, delimiter)) {
-        tokens.push_back(token);
-    }
-    return tokens;
-}
-
 namespace Init
 {
     using namespace std;
@@ -74,17 +63,14 @@ namespace Init
 
         static int CheckCheatVersion()
         {
-            const std::string curVersionUrl = "https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version";
-            std::string curVersions;
+            std::string supportedVersions;
 
             if (!Web::CheckConnection())
                 return 0;
-            if (!Web::Get(curVersionUrl, curVersions))
+            if (!Web::Get("https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version", supportedVersions))
                 return 1;
 
-            std::vector<std::string> supportedVersions = SplitString(curVersions, ';');
-
-            if (std::find(supportedVersions.begin(), supportedVersions.end(), MenuConfig::version) != supportedVersions.end())
+            if (supportedVersions.find(MenuConfig::version) != std::string::npos)
                 return 3;
 
             return 2;
