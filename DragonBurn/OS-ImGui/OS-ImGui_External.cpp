@@ -182,7 +182,6 @@ namespace OSImGui
         static int frameSkip = 0;
 
         // Cache frequently used values
-        bool bypassOBS = MenuConfig::BypassOBS;
         constexpr DWORD excludeCapture = WDA_EXCLUDEFROMCAPTURE;
         constexpr DWORD includeCapture = WDA_NONE;
 
@@ -206,7 +205,7 @@ namespace OSImGui
             // note from laith: increasing N will cause a little esp delay but when set to 2 its almost unnoticable and the perfoamnce gain is giagantic (double FPS)
             if (frameSkip >= 2) {
                 // Set window display affinity based on OBS bypass setting
-                SetWindowDisplayAffinity(Window.hWnd, bypassOBS ? excludeCapture : includeCapture);
+                SetWindowDisplayAffinity(Window.hWnd, MenuConfig::BypassOBS ? excludeCapture : includeCapture);
 
                 // Use direct array access instead of creating temporary array
                 static constexpr float clearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
