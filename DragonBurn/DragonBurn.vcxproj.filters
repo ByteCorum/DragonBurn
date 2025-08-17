@@ -187,7 +187,7 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\KeyManager.h" />
-    <ClInclude Include="Resources\Resource.h" />
+    <ClInclude Include="Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\icon.ico">
