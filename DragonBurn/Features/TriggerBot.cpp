@@ -3,13 +3,6 @@
 #include <random>
 #include <thread>
 
-DWORD uHandle = 0;
-DWORD64 ListEntry = 0;
-DWORD64 PawnAddress = 0;
-CEntity Entity;
-bool AllowShoot = false;
-bool WaitForNoAttack = false;
-
 void TriggerBot::Run(const CEntity& LocalEntity)
 {
     if (MenuConfig::ShowMenu)
@@ -34,24 +27,16 @@ void TriggerBot::Run(const CEntity& LocalEntity)
         return;
     }
 
-    DWORD64 ListEntry = memoryManager.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
-    if (ListEntry == 0)
+    DWORD64 PawnAddress = CEntity::ResolveEntityHandle(uHandle);
+    if (PawnAddress == 0)
     {
         g_HasValidTarget = false;
         g_CanShoot = false;
         return;
     }
 
-    DWORD64 PawnAddress = 0;
-    if (!memoryManager.ReadMemory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
-    {
-        g_HasValidTarget = false;
-        g_CanShoot = false;
-        return;
-    }
-
-    CEntity targetedEntity;
-    if (!targetedEntity.UpdatePawn(PawnAddress))
+    CEntity targetEntity;
+    if (!targetEntity.UpdatePawn(PawnAddress))
     {
         g_HasValidTarget = false;
         g_CanShoot = false;
@@ -59,7 +44,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     }
 
     // Validate the targeted entity
-    if (!CanTrigger(LocalEntity, targetedEntity))
+    if (!CanTrigger(LocalEntity, targetEntity))
     {
         g_HasValidTarget = false;
         g_CanShoot = false;
@@ -110,14 +95,14 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     }
 }
 
-bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetedEntity)
+bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity)
 {
-    // Check if player is alive
-    if (LocalEntity.Controller.AliveStatus == 0)
+    // Check if target is in a valid state
+    if (TargetEntity.Pawn.Address == 0)
         return false;
 
     // Check team
-    if (MenuConfig::TeamCheck && LocalEntity.Pawn.TeamID == TargetedEntity.Pawn.TeamID)
+    if (MenuConfig::TeamCheck && LocalEntity.Pawn.TeamID == TargetEntity.Pawn.TeamID)
         return false;
 
     // Check if weapon is ready
@@ -150,10 +135,6 @@ bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetedE
             return false;
     }
 
-    // Check if targeted entity is alive
-    if (TargetedEntity.Pawn.Health <= 0)
-        return false;
-
     return true;
 }
 
@@ -176,7 +157,6 @@ void TriggerBot::ExecuteShot()
     std::this_thread::sleep_for(std::chrono::microseconds(Range(RandomNumber)));
     mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 }
-
 
 std::string TriggerBot::GetWeapon(const CEntity& LocalEntity)
 {

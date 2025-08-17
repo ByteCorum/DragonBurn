@@ -23,7 +23,7 @@ public:
     bool Attach(const DWORD pid);
     DWORD64 GetModuleBase(const wchar_t* moduleName);
     DWORD GetProcessID(const wchar_t* processName);
-    DWORD64 TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets);
+    //DWORD64 TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets);
     bool BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& requests, void* output_buffer);
 
     template <typename ReadType>
