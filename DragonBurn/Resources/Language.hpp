@@ -36,6 +36,7 @@ namespace Text {
         inline std::string HealthNum = "Health Number";
         inline std::string Ammo = "Ammo Bar";
         inline std::string ScopedESP = "Show Scoped";
+        inline std::string FlashedESP = "Show Flashed";
         inline std::string ShowArmorBar = "Armor Bar";
         inline std::string ArmorNum = "Armor Number";
     }
@@ -51,6 +52,7 @@ namespace Text {
         inline std::string VisCheck = "Visible Check";
         inline std::string JumpCheck = "On Ground Check";
         inline std::string FovSlider = "FOV: ";
+        inline std::string HumanizationStrength = "Humanization Strength: ";
         inline std::string FovMinSlider = "MiniFOV: ";
         inline std::string SmoothSlider = "Smooth: ";
         inline std::string BoneList = "Hitboxes";
@@ -58,6 +60,7 @@ namespace Text {
         inline std::string ScopeOnly = "Scope Check";
         inline std::string BulletSlider = "Start Bullet: ";
         inline std::string IgnoreFlash = "Ignore Flash";
+        inline std::string HumanizeVar = "Humanize Aimbot";
         inline std::string OnlyAuto = "Only Auto";
         inline std::string OnlyAutoTip = "Aim will only work in automatic shooting mode";
     }
@@ -91,9 +94,12 @@ namespace Text {
         inline std::string HotKey = "X2MB";
         inline std::string Toggle = "Always Active";
         inline std::string ScopeOnly = "Scope Only";
+        inline std::string WorkWithAimbot = "Work With Aimbot";
         inline std::string DelaySlider = "Shot Delay:";
         inline std::string FakeShotSlider = "Shot Duration:";
-        inline std::string IgnoreFlash = "Ignr Flash";
+        inline std::string IgnoreFlash = "Ignore Flash";
+        inline std::string StopOnly = "Stop Check";
+        inline std::string VisCheck = "Visible Check";
     }
 
     namespace Misc

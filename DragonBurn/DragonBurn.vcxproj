@@ -140,7 +140,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>DBDEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -158,7 +158,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -196,6 +196,7 @@
     <ClInclude Include="Helpers\KeyManager.h" />
     <ClInclude Include="Helpers\Logger.h" />
     <ClInclude Include="Helpers\Mouse.h" />
+    <ClInclude Include="Helpers\UIAccess.h" />
     <ClInclude Include="Helpers\WebApi.h" />
     <ClInclude Include="Offsets\Offsets.h" />
     <ClInclude Include="OS-ImGui\imgui\imconfig.h" />
@@ -213,7 +214,7 @@
     <ClInclude Include="OS-ImGui\OS-ImGui_Struct.h" />
     <ClInclude Include="OS-ImGui\stb\stb_image.h" />
     <ClInclude Include="Core\MemoryMgr.h" />
-    <ClInclude Include="Resources\Resource.h" />
+    <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="Resources\Font.hpp" />
     <ClInclude Include="Resources\Images.hpp" />
     <ClInclude Include="Resources\Language.hpp" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Game\Entity.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Helpers\Mouse.cpp" />
+    <ClCompile Include="Helpers\UIAccess.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Offsets\Offsets.cpp" />
     <ClCompile Include="OS-ImGui\imgui\imgui.cpp" />

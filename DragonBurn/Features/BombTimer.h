@@ -73,7 +73,7 @@ namespace bmb
 		ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
 		ImGui::SetNextWindowPos(MenuConfig::BombWinPos, ImGuiCond_Once);
 		ImGui::SetNextWindowSize({ windowWidth, 0 }, ImGuiCond_Once);
-		ImGui::GetStyle().WindowRounding = 8.0f;
+
 		ImGui::Begin("Bomb Timer", nullptr, flags);
 
 		if (MenuConfig::BombWinChengePos)
@@ -89,13 +89,13 @@ namespace bmb
 		
 		if (isPlanted && remaining >= 0)
 		{
-			if (remaining <= 10 && !IsBeingDefused)
+			if (IsBeingDefused && remaining >= 5)
+			{
+			color = ImColor(32, 178, 170);
+			}	
+			else if (remaining <= 10 && !IsBeingDefused)
 			{
 				color = ImColor(113, 34, 51);
-			}
-			else if (IsBeingDefused)
-			{
-				color = ImColor(32, 178, 170);
 			}
 			else
 			{

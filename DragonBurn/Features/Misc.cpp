@@ -23,7 +23,7 @@ namespace Misc
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
 		ImGui::SetNextWindowPos(MenuConfig::MarkWinPos, ImGuiCond_Once);
 		ImGui::SetNextWindowBgAlpha(0.8f);
-		ImGui::GetStyle().WindowRounding = 8.0f;
+
 		ImGui::Begin("Watermark", nullptr, windowFlags);
 
 		if (MenuConfig::MarkWinChengePos)
@@ -33,11 +33,15 @@ namespace Misc
 		}
 
 		Vec3 Pos = LocalPlayer.Pawn.Pos;
+		int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
+		char fpsText[32];
+		snprintf(fpsText, sizeof(fpsText), "  FPS: %d", currentFPS);
 
 		ImGui::Text("  DragonBurn");
 		ImGui::Text("  Kernel CS2 cheat");
-		ImGui::Text("  Vel: %.2f", LocalPlayer.Pawn.Speed);
-		ImGui::Text("  Pos: %.1f, %.1f, %.1f ", Pos.x, Pos.y, Pos.z);
+		ImGui::Text("  Velocity: %.2f", LocalPlayer.Pawn.Speed);
+		ImGui::Text("%s", fpsText);
+		//ImGui::Text("  Pos: %.1f, %.1f, %.1f ", Pos.x, Pos.y, Pos.z);
 		ImGui::Text("                                                      ");
 
 		MenuConfig::MarkWinPos = ImGui::GetWindowPos();
@@ -109,23 +113,22 @@ namespace Misc
 		//	return;
 
 		bool spacePressed = GetAsyncKeyState(VK_SPACE);
-		bool isInAir = AirCheck(Local);
+		//bool isInAir = AirCheck(Local);
 
-		if (spacePressed && isInAir)
+		if (spacePressed /*&& isInAir*/)
 		{
 			//std::this_thread::sleep_for(std::chrono::microseconds(15625));
 			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
 			SendMessage(hwnd_cs2, WM_KEYDOWN, VK_SPACE, 0);
 		}
-
-		else if (spacePressed && !isInAir)
-		{
-			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-		}
-		else if (!spacePressed)
-		{
-			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-		}
+		//else if (spacePressed /*&& !isInAir*/)
+		//{
+		//	SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
+		//}
+		//else if (!spacePressed)
+		//{
+		//	SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
+		//}
 	}
 
 	void CleanTraces()

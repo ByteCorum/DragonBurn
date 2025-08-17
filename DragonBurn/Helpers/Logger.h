@@ -39,9 +39,10 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << ctx << '\n';
 
-		if (pause)
+		if (pause) {
 			SetConsoleTextAttribute(hConsole, 8);
 			system("pause");
+		}
 	}
 
 	inline void Error(std::string ctx, bool fatal = true)
@@ -55,8 +56,9 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 8);
 		system("pause");
 
-		if(fatal)
+		if (fatal) {
 			exit(0);
+		}
 	}
 
 	inline void Fine(std::string ctx)

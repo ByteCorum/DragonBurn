@@ -12,31 +12,27 @@ namespace OSImGui
         io.Fonts->AddFontDefault();
         (void)io;
 
-        ImWchar ranges[] = {
-            0x0020, 0x007F,   // Basic Latin characters
-            0x00A0, 0x00FF,   // Latin characters with diacritics
-            0x0400, 0x04FF,   // Cyrillic
-            0x4E00, 0x9FFF,   // Simplified Chinese characters
-            0x3040, 0x309F,   // Japanese Hiragana
-            0x30A0, 0x30FF,   // Japanese Katakana
-            0xFF00, 0xFFEF,   // Full-width characters
-            0x2500, 0x257F,   // Lines and borders
-            0x2600, 0x26FF,   // Weather symbols and other basic symbols
-            0x2700, 0x27BF,   // Check symbols and other graphic symbols
-            0x1F600, 0x1F64F, // Emoji
-            0 // End of ranges
-        };
+        //ImWchar ranges[] = {
+        //    0x0020, 0x007F,   // Basic Latin characters
+        //    0x00A0, 0x00FF,   // Latin characters with diacritics
+        //    0x0400, 0x04FF,   // Cyrillic
+        //    0x4E00, 0x9FFF,   // Simplified Chinese characters
+        //    0x3040, 0x309F,   // Japanese Hiragana
+        //    0x30A0, 0x30FF,   // Japanese Katakana
+        //    0xFF00, 0xFFEF,   // Full-width characters
+        //    0x2500, 0x257F,   // Lines and borders
+        //    0x2600, 0x26FF,   // Weather symbols and other basic symbols
+        //    0x2700, 0x27BF,   // Check symbols and other graphic symbols
+        //    0x1F600, 0x1F64F, // Emoji
+        //    0 // End of ranges
+        //};
 
 
         ImFontAtlas* fontAtlas = new ImFontAtlas();
         ImFontConfig arialConfig;
         arialConfig.FontDataOwnedByAtlas = false;
 
-#ifndef DBDEBUG
-        ImFont* arialFont = fontAtlas->AddFontFromMemoryTTF((void*)MainFont, sizeof(MainFont), 20.0f, &arialConfig, ranges);
-#else
         ImFont* arialFont = fontAtlas->AddFontFromMemoryTTF((void*)MainFont, sizeof(MainFont), 20.0f, &arialConfig, fontAtlas->GetGlyphRangesDefault());
-#endif
         
         ImFontConfig iconConfig;
         iconConfig.MergeMode = true;

@@ -5,12 +5,12 @@
 namespace MenuConfig
 {
 	inline std::string name = "DragonBurn";
-	inline std::string version = "2.0.5.0";
+	inline std::string version = "3.0.0.0";
 	inline std::string author = "ByteCorum";
 
 	inline std::string path = "";
 	inline std::string docPath = "";
-	inline int RenderFPS = 10000.0f;
+	inline int RenderFPS = 1000;
 	inline int RenderDistance = 1000;
 
 
@@ -74,7 +74,6 @@ namespace ESPConfig
 {
 	inline bool ESPenabled = true;
 	inline bool AmmoBar = false;
-	inline bool ShowScoping = true;
 	inline bool ShowBoneESP = true;
 	inline bool ShowBoxESP = true;
 	inline bool ShowHealthBar = true;
@@ -94,6 +93,7 @@ namespace ESPConfig
 	inline bool MultiColor = false;
 	inline bool OutLine = true;
 	inline bool ShowIsScoped = true;
+	inline bool ShowIsBlind = false;
 	// 0: normal 1: Corner
 	inline int BoxType = 0;
 	inline float BoxRounding = 5;

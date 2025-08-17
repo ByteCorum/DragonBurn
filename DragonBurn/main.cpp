@@ -1,5 +1,4 @@
-﻿//
-//______                            ______                  
+﻿//______                            ______                  
 //|  _  \                           | ___ \                 
 //| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
 //| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
@@ -7,6 +6,8 @@
 //|___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
 //                  __/ |                                   
 //                 |___/                                    
+//
+//https://discord.gg/5WcvdzFybD
 //https://github.com/ByteCorum/DragonBurn
 
 #include "Core/Cheats.h"
@@ -15,6 +16,7 @@
 #include "Core/Init.h"
 #include "Config/ConfigSaver.h"
 #include "Helpers/Logger.h"
+#include "Helpers/UIAccess.h"
 #include <filesystem>
 #include <KnownFolders.h>
 #include <ShlObj.h>
@@ -28,6 +30,17 @@ void Cheat();
 
 int main()
 {
+
+//do not use uaicess for debugging/profiling (uiacess restarts the cheat)
+#ifndef DBDEBUG
+	DWORD err = PrepareForUIAccess();
+	if (err != ERROR_SUCCESS)
+	{
+		MessageBoxA(NULL, "Failed to elevate to UIAccess.", "Error", MB_OK);
+		return -1;
+	}
+#endif
+
 	Cheat();
 }
 
@@ -45,6 +58,8 @@ void Cheat()
 |___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
                   __/ |                                   
                  |___/                                    
+
+https://discord.gg/5WcvdzFybD
 https://github.com/ByteCorum/DragonBurn
 
 
@@ -117,7 +132,7 @@ https://github.com/ByteCorum/DragonBurn
 	}
 
 	Log::Info("Connecting to kernel mode driver");
-	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kernel"))
+	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
 		Log::PreviousLine();
 		Log::Fine("Successfully connected to kernel mode driver");
@@ -141,7 +156,7 @@ https://github.com/ByteCorum/DragonBurn
 	{
 		Log::PreviousLine();
 		Log::Info("Connecting to CS2(it may take some time)");
-		Sleep(20000);
+		Sleep(23000);
 	}
 
 	Log::PreviousLine();

@@ -51,6 +51,7 @@ namespace MyConfigSaver
         ConfigData["ESP"]["OutLine"]=               ESPConfig::OutLine;
         ConfigData["ESP"]["BoxRounding"]=           ESPConfig::BoxRounding;
         ConfigData["ESP"]["ShowScoped"]=            ESPConfig::ShowIsScoped;
+        ConfigData["ESP"]["ShowBlind"]=             ESPConfig::ShowIsBlind;
         ConfigData["ESP"]["ArmorBar"]=              ESPConfig::ArmorBar;
         ConfigData["ESP"]["ArmorNum"]=              ESPConfig::ShowArmorNum;
 
@@ -182,6 +183,7 @@ namespace MyConfigSaver
         ConfigData["Triggerbot"]["FakeShot"]=     TriggerBot::ShotDuration;
         ConfigData["Triggerbot"]["ScopeOnly"]=    TriggerBot::ScopeOnly;
         ConfigData["Triggerbot"]["IgnoreFlash"]=  TriggerBot::IgnoreFlash;
+        ConfigData["Triggerbot"]["StopedOnly"] = TriggerBot::StopedOnly;
         ConfigData["Triggerbot"]["AutoMode"]=     LegitBotConfig::TriggerAlways;
 
 
@@ -271,6 +273,7 @@ namespace MyConfigSaver
             ESPConfig::OutLine = ReadData(ConfigData["ESP"], { "OutLine" }, false);
             ESPConfig::BoxRounding = ReadData(ConfigData["ESP"], { "BoxRounding" }, 0.f);
             ESPConfig::ShowIsScoped = ReadData(ConfigData["ESP"], { "ShowScoped" }, false);
+            ESPConfig::ShowIsBlind = ReadData(ConfigData["ESP"], { "ShowBlind" }, false);
             ESPConfig::ArmorBar = ReadData(ConfigData["ESP"], { "ArmorBar" }, false);
             ESPConfig::ShowArmorNum = ReadData(ConfigData["ESP"], { "ArmorNum" }, false);
 
@@ -409,6 +412,7 @@ namespace MyConfigSaver
             TriggerBot::ShotDuration = ReadData(ConfigData["Triggerbot"],{"FakeShot"}, 200);
             TriggerBot::ScopeOnly = ReadData(ConfigData["Triggerbot"],{"ScopeOnly"}, false);
             TriggerBot::IgnoreFlash = ReadData(ConfigData["Triggerbot"],{"IgnoreFlash"}, false);
+            TriggerBot::StopedOnly = ReadData(ConfigData["Triggerbot"], { "StopedOnly" }, false);
             LegitBotConfig::TriggerAlways = ReadData(ConfigData["Triggerbot"],{"AutoMode"}, false);
             Text::Trigger::HotKey = KeyMgr::GetKeyName(TriggerBot::HotKey);
         }

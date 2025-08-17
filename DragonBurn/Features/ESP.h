@@ -13,7 +13,7 @@ namespace ESP
 		float offsetX;
 		float offsetY;
 	};
-	std::unordered_map<std::string, WeaponIconSize> weaponIconSizes = 
+	static std::unordered_map<std::string, WeaponIconSize> weaponIconSizes = 
 	{
 {"t_knife", {13.0f, 13.0f, -5.0f, 0.0f}},
 {"ct_knife", {13.0f, 13.0f, -5.0f, 0.0f}},
@@ -22,9 +22,9 @@ namespace ESP
 {"fiveseven", {13.0f, 13.0f, 0.0f, 0.0f}},
 {"glock", {13.0f, 13.0f, 0.0f, 0.0f}},
 {"revolver", {13.0f, 13.0f, -3.0f, 0.0f}},
-{"hkp2000", {13.0f, 13.0f, 0.0f, 0.0f}},
+{"p2000", {13.0f, 13.0f, 0.0f, 0.0f}},
 {"p250", {13.0f, 13.0f, 0.0f, 0.0f}},
-{"usp_silencer", {13.0f, 13.0f, 0.0f, 0.0f}},
+{"usp", {13.0f, 13.0f, 0.0f, 0.0f}},
 {"tec9", {13.0f, 13.0f, 0.0f, 0.0f}},
 {"cz75a", {13.0f, 13.0f, 0.0f, 0.0f}},
 {"mac10", {13.0f, 13.0f, 0.0f, 0.0f}},
@@ -35,7 +35,6 @@ namespace ESP
 {"p90", {13.0f, 13.0f, -7.0f, 0.0f}},
 {"galilar", {13.0f, 13.0f, -10.0f, 0.0f}},
 {"famas", {13.0f, 13.0f, -10.0f, 0.0f}},
-{"m4a1_silencer", {13.0f, 13.0f, -10.0f, 0.0f}},
 {"m4a1", {13.0f, 13.0f, -10.0f, 0.0f}},
 {"aug", {13.0f, 13.0f, -7.0f, 0.0f}},
 {"sg556", {13.0f, 13.0f, -10.0f, 0.0f}},
@@ -180,19 +179,33 @@ namespace ESP
 			ImGui::GetBackgroundDrawList()->AddText(ioFonts, 10.0f, textPosition, ImColor(255, 255, 255, 255), weaponIcon.c_str());
 		}
 
-		if (ESPConfig::ShowIsScoped) {
-			bool isScoped;
-			memoryManager.ReadMemory<bool>(Entity.Pawn.Address + Offset.Pawn.isScoped, isScoped);
-			if (isScoped) {
-				ImVec2 iconPos = { Rect.x, Rect.y };
-				const ImVec2 scopeOffsets[4] = { { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
-				for (const auto& off : scopeOffsets) {
-					ImVec2 pos = { iconPos.x + off.x, iconPos.y + off.y };
-					ImGui::GetBackgroundDrawList()->AddText(ioFonts, 12.0f, pos, ImColor(0, 0, 0, 255), "s");
-				}
-				ImGui::GetBackgroundDrawList()->AddText(ioFonts, 12.0f, iconPos, ImColor(131, 137, 150, 255), "s");
-			}
-		}
+        if (ESPConfig::ShowIsScoped) {
+            bool isScoped;
+            memoryManager.ReadMemory<bool>(Entity.Pawn.Address + Offset.Pawn.isScoped, isScoped);
+            if (isScoped) {
+                ImVec2 iconPos = { Rect.x, Rect.y };
+                const ImVec2 scopeOffsets[4] = { { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
+                for (const auto& off : scopeOffsets) {
+                    ImVec2 pos = { iconPos.x + off.x, iconPos.y + off.y };
+                    ImGui::GetBackgroundDrawList()->AddText(ioFonts, 12.0f, pos, ImColor(0, 0, 0, 255), "s");
+                }
+                ImGui::GetBackgroundDrawList()->AddText(ioFonts, 12.0f, iconPos, ImColor(131, 137, 150, 255), "s");
+            }
+        }
+
+        if (ESPConfig::ShowIsBlind) {
+            if (Entity.Pawn.FlashDuration > 0.f)
+            {
+                ImVec2 iconPos = { Rect.x+3, Rect.y + 12 };
+                const ImVec2 flashOffsets[4] = { { -1, -1 }, { -1, 1 }, { 1, 1 }, { 1, -1 } };
+                for (const auto& off : flashOffsets)
+                {
+                    ImVec2 pos = { iconPos.x + off.x, iconPos.y + off.y };
+                    ImGui::GetBackgroundDrawList()->AddText(ioFonts, 18.f, pos, ImColor(0, 0, 0, 255), "i");
+                }
+                ImGui::GetBackgroundDrawList()->AddText(ioFonts, 18.f, iconPos, ImColor(131, 137, 150, 255), "i");
+            }
+        }
 
 		if (ESPConfig::ShowPlayerName) {
 			Gui.StrokeText(Entity.Controller.PlayerName, { Rect.x + Rect.z / 2, Rect.y - 10 }, ImColor(255, 255, 255, 255), 10, true);
@@ -371,6 +384,10 @@ namespace ESP
         }
         if (ESPConfig::ShowIsScoped) {
             drawList->AddText(font1, 15.0f, centerPos, IM_COL32(131, 137, 150, 255), "s");
+        }
+        if (ESPConfig::ShowIsBlind) {
+            const ImVec2 flashed(centerPos.x+3, centerPos.y + 12);
+            drawList->AddText(font1, 20.0f, flashed, IM_COL32(131, 137, 150, 255), "i");
         }
     }
 }

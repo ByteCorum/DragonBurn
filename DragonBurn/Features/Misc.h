@@ -85,16 +85,16 @@ namespace Misc
 		return Entity;
 	}
 
-	inline bool AirCheck(const CEntity& Local)
-	{
-		const bool hasFlagInAir = Local.Pawn.HasFlag(PlayerPawn::Flags::IN_AIR);
-		return hasFlagInAir;
-	}
-	inline bool CrouchCheck(const CEntity& Local)
-	{
-		const bool hasFlagDucking = Local.Pawn.HasFlag(PlayerPawn::Flags::IN_CROUCH);
-		return hasFlagDucking;
-	}
+	//inline bool AirCheck(const CEntity& Local)
+	//{
+	//	const bool hasFlagInAir = Local.Pawn.HasFlag(PlayerPawn::Flags::IN_AIR);
+	//	return hasFlagInAir;
+	//}
+	//inline bool CrouchCheck(const CEntity& Local)
+	//{
+	//	const bool hasFlagDucking = Local.Pawn.HasFlag(PlayerPawn::Flags::IN_CROUCH);
+	//	return hasFlagDucking;
+	//}
 
 	class HitMarker 
 	{

@@ -17,7 +17,6 @@ namespace SpecList
         float requiredHeight = LocalEntity.Controller.spectators.size() * (fontHeight + 5) + 20;
         ImGui::SetNextWindowPos(MenuConfig::SpecWinPos, ImGuiCond_Once);
         ImGui::SetNextWindowSize({ 150.0f, requiredHeight }, ImGuiCond_Always);
-        ImGui::GetStyle().WindowRounding = 8.0f;
 
         ImGui::Begin("Spectators", NULL, flags);
 
@@ -39,20 +38,9 @@ namespace SpecList
         LocalEntity.Controller.spectators.clear();
     }
 
-    uintptr_t getAddressBase(uintptr_t entityList, uintptr_t playerPawn)
-    {
-        uintptr_t listEntrySecond;
-        memoryManager.ReadMemory<uintptr_t>(entityList + 0x8 * ((playerPawn & 0x7FFF) >> 9) + 16, listEntrySecond);
-
-        uintptr_t isPawn;
-        memoryManager.ReadMemory<uintptr_t>(listEntrySecond + 120 * (playerPawn & 0x1FF), isPawn);
-
-        return listEntrySecond == 0 ? 0 : isPawn;
-    }
-
     void GetSpectatorList(CEntity Entity, CEntity& LocalEntity)
     {
-        if (!MiscCFG::SpecList || LocalEntity.Controller.TeamID == 0)
+        if (!MiscCFG::SpecList)
             return;
 
         uintptr_t LocalPlayer;
@@ -69,7 +57,7 @@ namespace SpecList
         uintptr_t entityList;
         memoryManager.ReadMemory<uintptr_t>(gGame.GetEntityListAddress(),entityList);
 
-        uintptr_t pawn = getAddressBase(entityList, spectatorPawn);
+        uintptr_t pawn = CEntity::ResolveEntityHandle(spectatorPawn);
 
         uintptr_t observed;
         memoryManager.ReadMemory<uintptr_t>(pawn + Offset.PlayerController.m_pObserverServices, observed);
@@ -77,7 +65,7 @@ namespace SpecList
         uint64_t observedTarget;
         memoryManager.ReadMemory<uintptr_t>(observed + Offset.PlayerController.m_hObserverTarget, observedTarget);
 
-        uintptr_t spectatorTarget = getAddressBase(entityList, observedTarget);
+        uintptr_t spectatorTarget = CEntity::ResolveEntityHandle(observedTarget);
 
         if (observed)
         {

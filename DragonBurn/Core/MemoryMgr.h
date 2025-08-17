@@ -4,116 +4,93 @@
 #include <string>
 #include <vector>
 
-#define DRAGON_DEVICE 0x8000
-#define IOCTL_GET_PID CTL_CODE(DRAGON_DEVICE, 0x4452, METHOD_NEITHER, FILE_ANY_ACCESS)
-#define IOCTL_GET_MODULE_BASE CTL_CODE(DRAGON_DEVICE, 0x4462, METHOD_NEITHER, FILE_ANY_ACCESS)
-#define IOCTL_READ_PROCESS_MEMORY CTL_CODE(DRAGON_DEVICE, 0x4472, METHOD_NEITHER, FILE_ANY_ACCESS)
-#define IOCTL_WRITE_PROCESS_MEMORY CTL_CODE(DRAGON_DEVICE, 0x4482, METHOD_NEITHER, FILE_ANY_ACCESS)
-#define IOCTL_WRITE_PROCESS_MEMORY_PROTECTED CTL_CODE(DRAGON_DEVICE, 0x4492, METHOD_NEITHER, FILE_ANY_ACCESS)
+#include <unordered_map>
 
+#define DRAGON_DEVICE 0x8000
+#define IOCTL_ATTACH CTL_CODE(DRAGON_DEVICE, 0x4452, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IOCTL_READ CTL_CODE(DRAGON_DEVICE, 0x4453, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IOCTL_GET_MODULE_BASE CTL_CODE(DRAGON_DEVICE, 0x4454, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IOCTL_GET_PID CTL_CODE(DRAGON_DEVICE, 0x4455, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IOCTL_BATCH_READ CTL_CODE(DRAGON_DEVICE, 0x4456, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
 class MemoryMgr
 {
 public:
-	MemoryMgr();
-	~MemoryMgr();
-
-	bool ConnectDriver(const LPCWSTR);
-	bool DisconnectDriver();
-	bool Attach(const DWORD);
-
-    DWORD64 GetModuleBase(const wchar_t*);
-    DWORD GetProcessID(const wchar_t*);
+    MemoryMgr();
+    ~MemoryMgr();
+    bool ConnectDriver(const LPCWSTR name);
+    bool DisconnectDriver();
+    bool Attach(const DWORD pid);
+    DWORD64 GetModuleBase(const wchar_t* moduleName);
+    DWORD GetProcessID(const wchar_t* processName);
+    //DWORD64 TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets);
+    bool BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& requests, void* output_buffer);
 
     template <typename ReadType>
     bool ReadMemory(DWORD64 address, ReadType& value, SIZE_T size = sizeof(ReadType))
     {
         if (kernelDriver != nullptr && ProcessID != 0)
         {
-            READ_PACK ReadPack;
-            ReadPack.pid = ProcessID;
-            ReadPack.address = reinterpret_cast<PVOID>(address);
-            ReadPack.buff = &value;
-            ReadPack.size = size;
+            if (address == 0 || address >= 0x7FFFFFFFFFFF || size == 0 || size > 0x1000) {
+                return false;
+            }
+
+            if (address + size < address) {
+                return false;
+            }
+
+            Request readRequest;
+            readRequest.process_id = ULongToHandle(ProcessID);
+            readRequest.target = reinterpret_cast<PVOID>(address);
+            readRequest.buffer = &value;
+            readRequest.size = size;
 
             BOOL result = DeviceIoControl(kernelDriver,
-                IOCTL_READ_PROCESS_MEMORY,
-                &ReadPack,
-                sizeof(ReadPack),
-                &ReadPack,
-                sizeof(ReadPack),
+                IOCTL_READ,
+                &readRequest,
+                sizeof(readRequest),
+                &readRequest,
+                sizeof(readRequest),
                 nullptr,
                 nullptr);
-
-            return result == TRUE ; // && bytesReturned == size
+            return result == TRUE;
         }
         return false;
     }
 
-    //template <typename WriteType>
-    //bool WriteMemory(DWORD64 address, WriteType& value, SIZE_T size = sizeof(WriteType))
-    //{
-    //    if (kernelDriver != INVALID_HANDLE_VALUE && ProcessID != 0)
-    //    {
-    //        WRITE_PACK WritePack;
-    //        WritePack.pid = ProcessID;
-    //        WritePack.address = reinterpret_cast<PVOID>(address);
-    //        WritePack.buff = const_cast<void*>(value);
-    //        WritePack.size = size;
+    template<typename T>
+    bool BatchReadStructured(const std::vector<DWORD64>& addresses, std::vector<T>& results) {
+        if (addresses.empty()) return false;
 
-    //        BOOL result = DeviceIoControl(kernelDriver,
-    //            IOCTL_WRITE_PROCESS_MEMORY,
-    //            &WritePack,
-    //            sizeof(WritePack),
-    //            nullptr,
-    //            0,
-    //            nullptr,
-    //            nullptr);
+        std::vector<std::pair<DWORD64, SIZE_T>> requests;
+        requests.reserve(addresses.size());
 
-    //        return result == TRUE;
-    //    }
-    //    return false;
-    //}
+        for (DWORD64 addr : addresses) {
+            requests.emplace_back(addr, sizeof(T));
+        }
 
-    //template <typename WriteType>
-    //bool WriteMemoryProtected(DWORD64 address, WriteType& value, SIZE_T size = sizeof(WriteType))
-    //{
-    //    if (kernelDriver != INVALID_HANDLE_VALUE && ProcessID != 0)
-    //    {
-    //        WRITE_PACK WritePack;
-    //        WritePack.pid = ProcessID;
-    //        WritePack.address = reinterpret_cast<PVOID>(address);
-    //        WritePack.buff = const_cast<void*>(value);
-    //        WritePack.size = size;
-
-    //        BOOL result = DeviceIoControl(kernelDriver,
-    //            IOCTL_WRITE_PROCESS_MEMORY_PROTECTED,
-    //            &WritePack,
-    //            sizeof(WritePack),
-    //            nullptr,
-    //            0,
-    //            nullptr,
-    //            nullptr);
-
-    //        return result == TRUE;
-    //    }
-    //    return false;
-    //}
-
-	DWORD64 TraceAddress(DWORD64, std::vector<DWORD>);
+        results.resize(addresses.size());
+        return BatchReadMemory(requests, results.data());
+    }
 
 private:
-	DWORD ProcessID;
-	HANDLE kernelDriver;
+    DWORD ProcessID = 0;
+    HANDLE kernelDriver = nullptr;
 
-    // Structure for getting pid by name
+    typedef struct _Request
+    {
+        HANDLE process_id;
+        PVOID target;
+        PVOID buffer;
+        SIZE_T size;
+    } Request, * PRequest;
+
     typedef struct _PID_PACK
     {
         UINT32 pid;
         WCHAR name[1024];
     } PID_PACK, * P_PID_PACK;
 
-    // Structure for getting module address base
     typedef struct _MODULE_PACK {
         UINT32 pid;
         UINT64 baseAddress;
@@ -121,24 +98,20 @@ private:
         WCHAR moduleName[1024];
     } MODULE_PACK, * P_MODULE_PACK;
 
-    // Structure for writing memory to a process
-    typedef struct _WRITE_PACK {
-        UINT32 pid;
-        PVOID address;
-        SIZE_T size;
-        PVOID buff;
-    } WRITE_PACK, * P_WRITE_PACK;
 
-    // Structure for reading memory from a process
-    typedef struct _READ_PACK
-    {
-        UINT32 pid;
-        PVOID address;
+    // Batch read structures
+    struct BatchReadRequest {
+        DWORD64 address;
         SIZE_T size;
-        PVOID buff;
-    } READ_PACK, * P_READ_PACK;
+        SIZE_T offset_in_buffer; // Offset where this read's data starts in the output buffer
+    };
 
+    struct BatchReadHeader {
+        HANDLE process_id;
+        UINT32 num_requests;
+        SIZE_T total_buffer_size;
+        // Followed by BatchReadRequest array, then output buffer
+    };
 };
 
 inline MemoryMgr memoryManager;
-
