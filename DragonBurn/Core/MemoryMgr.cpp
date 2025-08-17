@@ -116,6 +116,7 @@ DWORD64 MemoryMgr::GetModuleBase(const wchar_t* moduleName)
         return 0;
 }
 
+/*
 DWORD64 MemoryMgr::TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets)
 {
     if (kernelDriver == nullptr || ProcessID == 0)
@@ -152,6 +153,7 @@ DWORD64 MemoryMgr::TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets)
     uint64_t finalAddress = buffer + offsets.back();
     return (finalAddress < buffer) ? 0 : finalAddress; // Check overflow
 }
+*/
 
 bool MemoryMgr::BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& requests, void* output_buffer) {
     if (kernelDriver == nullptr || ProcessID == 0 || requests.empty()) {

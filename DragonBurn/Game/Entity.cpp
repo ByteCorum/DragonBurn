@@ -347,6 +347,44 @@ CBone CEntity::GetBone() const
 	return this->Pawn.BoneData;
 }
 
+DWORD64 CEntity::ResolveEntityHandle(uint32_t handle)
+{
+	static DWORD64 cachedEntityListEntry = 0;
+	static DWORD lastCachedPawn = 0;
+
+	if (handle == 0)
+		return 0;
+
+	// Pre-calculate indices
+	const DWORD64 highIndex = (handle & 0x7FFF) >> 9;
+	const DWORD64 lowIndex = handle & 0x1FF;
+
+	// Cache the entity list entry if it's the same high-level index
+	DWORD64 EntityListEntry = 0;
+
+	if (cachedEntityListEntry == 0 || (lastCachedPawn & 0x7FFF) >> 9 != highIndex) {
+		// Need to refresh cache
+		if (!memoryManager.ReadMemory<DWORD64>(gGame.GetEntityListAddress(), EntityListEntry))
+			return 0;
+
+		if (EntityListEntry == 0) return 0;
+
+		if (!memoryManager.ReadMemory<DWORD64>(EntityListEntry + 0x10 + 8 * highIndex, cachedEntityListEntry))
+			return 0;
+
+		lastCachedPawn = handle;
+	}
+
+	if (cachedEntityListEntry == 0) return 0;
+
+	// Final read using cached value
+	DWORD64 EntityAddress = 0;
+	if (!memoryManager.ReadMemory<DWORD64>(cachedEntityListEntry + 0x78 * lowIndex, EntityAddress))
+		return 0;
+
+	return EntityAddress;
+}
+
 bool Client::GetSensitivity()
 {
 	DWORD64 ptr = 0;

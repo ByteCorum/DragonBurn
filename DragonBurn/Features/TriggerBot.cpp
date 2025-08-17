@@ -3,13 +3,6 @@
 #include <random>
 #include <thread>
 
-DWORD uHandle = 0;
-DWORD64 ListEntry = 0;
-DWORD64 PawnAddress = 0;
-CEntity Entity;
-bool AllowShoot = false;
-bool WaitForNoAttack = false;
-
 void TriggerBot::Run(const CEntity& LocalEntity)
 {
     if (MenuConfig::ShowMenu)
@@ -34,24 +27,16 @@ void TriggerBot::Run(const CEntity& LocalEntity)
         return;
     }
 
-    DWORD64 ListEntry = memoryManager.TraceAddress(gGame.GetEntityListAddress(), { 0x8 * (uHandle >> 9) + 0x10, 0x0 });
-    if (ListEntry == 0)
+    DWORD64 PawnAddress = CEntity::ResolveEntityHandle(uHandle);
+    if (PawnAddress == 0)
     {
         g_HasValidTarget = false;
         g_CanShoot = false;
         return;
     }
 
-    DWORD64 PawnAddress = 0;
-    if (!memoryManager.ReadMemory<DWORD64>(ListEntry + 0x78 * (uHandle & 0x1FF), PawnAddress))
-    {
-        g_HasValidTarget = false;
-        g_CanShoot = false;
-        return;
-    }
-
-    CEntity targetedEntity;
-    if (!targetedEntity.UpdatePawn(PawnAddress))
+    CEntity targetEntity;
+    if (!targetEntity.UpdatePawn(PawnAddress))
     {
         g_HasValidTarget = false;
         g_CanShoot = false;
@@ -59,7 +44,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     }
 
     // Validate the targeted entity
-    if (!CanTrigger(LocalEntity, targetedEntity))
+    if (!CanTrigger(LocalEntity, targetEntity))
     {
         g_HasValidTarget = false;
         g_CanShoot = false;

@@ -185,6 +185,8 @@ public:
 	bool IsInScreen();
 	CBone GetBone() const;
 
+	static DWORD64 ResolveEntityHandle(uint32_t handle);
+
 	static std::unordered_map<int, std::string> weaponNames;
 	static inline std::string GetWeaponName(int weaponID) {
 		auto it = weaponNames.find(weaponID);
