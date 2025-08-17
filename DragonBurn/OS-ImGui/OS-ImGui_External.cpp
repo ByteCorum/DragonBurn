@@ -182,7 +182,7 @@ namespace OSImGui
         static int frameSkip = 0;
 
         // Cache frequently used values
-        const bool bypassOBS = MenuConfig::BypassOBS;
+        bool bypassOBS = MenuConfig::BypassOBS;
         constexpr DWORD excludeCapture = WDA_EXCLUDEFROMCAPTURE;
         constexpr DWORD includeCapture = WDA_NONE;
 
