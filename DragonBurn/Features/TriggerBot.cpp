@@ -110,14 +110,14 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     }
 }
 
-bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetedEntity)
+bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity)
 {
-    // Check if player is alive
-    if (LocalEntity.Controller.AliveStatus == 0)
+    // Check if target is in a valid state
+    if (TargetEntity.Pawn.Address == 0)
         return false;
 
     // Check team
-    if (MenuConfig::TeamCheck && LocalEntity.Pawn.TeamID == TargetedEntity.Pawn.TeamID)
+    if (MenuConfig::TeamCheck && LocalEntity.Pawn.TeamID == TargetEntity.Pawn.TeamID)
         return false;
 
     // Check if weapon is ready
@@ -150,10 +150,6 @@ bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetedE
             return false;
     }
 
-    // Check if targeted entity is alive
-    if (TargetedEntity.Pawn.Health <= 0)
-        return false;
-
     return true;
 }
 
@@ -176,7 +172,6 @@ void TriggerBot::ExecuteShot()
     std::this_thread::sleep_for(std::chrono::microseconds(Range(RandomNumber)));
     mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 }
-
 
 std::string TriggerBot::GetWeapon(const CEntity& LocalEntity)
 {
