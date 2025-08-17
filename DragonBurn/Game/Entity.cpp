@@ -15,7 +15,7 @@ std::unordered_map<int, std::string> CEntity::weaponNames = {
 	{11, "g3Sg1"},
 	{13, "galilar"},
 	{14, "m249"},
-	{16, "m4a1"},
+	{16, "m4a4"},
 	{17, "mac10"},
 	{19, "p90"},
 	{23, "mp5sd"},
@@ -44,7 +44,7 @@ std::unordered_map<int, std::string> CEntity::weaponNames = {
 	{48, "incgrenade"},
 	{49, "c4"},
 	{59, "t_knife"},
-	{60, "m4a1_silencer"},
+	{60, "m4a1"},
 	{61, "usp"},
 	{63, "cz75a"},
 	{64, "revolver"}
