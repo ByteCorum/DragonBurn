@@ -181,13 +181,13 @@ namespace Render
 		BoneJointPos headBone = Entity.GetBone().BonePosList[BONEINDEX::head];
 
 		const float diffY = Entity.Pawn.ScreenPos.y - headBone.ScreenPos.y;
-		const float sizeY = diffY * 1.09f;
-		const float sizeX = sizeY * 0.6f;
+		const float height = diffY * 1.09f;
+		const float width = height * 0.6f;
 
-		const float posX = Entity.Pawn.ScreenPos.x - sizeX * 0.5f;
-		const float posY = headBone.ScreenPos.y - sizeY * 0.08f;
+		const float posX = headBone.ScreenPos.x - width * 0.5f;
+		const float posY = headBone.ScreenPos.y - height * 0.08f;
 
-		return ImVec4{ posX, posY, sizeX, sizeY };
+		return ImVec4{ posX, posY, width, height };
 
 	}
 

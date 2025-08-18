@@ -339,7 +339,7 @@ bool PlayerPawn::GetVelocity()
 
 bool CEntity::IsAlive() const
 {
-	return this->Controller.AliveStatus == 1 && this->Pawn.Address != 0 && this->Pawn.Health > 0 && this->Pawn.Health <= 100 && (this->Pawn.LifeState == 0 || this->Pawn.LifeState != 256);
+	return this->Controller.AliveStatus == 1 && this->Pawn.Health > 0 && this->Pawn.Health <= 100 && (this->Pawn.LifeState == 0 || this->Pawn.LifeState != 256);
 }
 
 bool CEntity::IsInScreen()
