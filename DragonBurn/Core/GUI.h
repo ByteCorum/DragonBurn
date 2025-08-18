@@ -421,7 +421,7 @@ namespace GUI
 
 					float FovMin = 0.f, FovMax = 30.f, MinFovMax = 1.f;
 					int BulletMin = 0, BulletMax = 5;
-					float SmoothMin = 2.f, SmoothMax = 15.f;
+					float SmoothMin = 0.f, SmoothMax = 15.f;
 					PutSwitch(Text::Aimbot::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::AimBot);
 					if (LegitBotConfig::AimBot)
 					{
