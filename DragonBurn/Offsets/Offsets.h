@@ -66,6 +66,7 @@ public:
 		DWORD bSpottedByMask;
 		DWORD AbsVelocity;
 		DWORD m_bWaitForNoAttack;
+		DWORD m_lifeState;
 
 	} Pawn;
 

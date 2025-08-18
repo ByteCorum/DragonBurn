@@ -97,6 +97,7 @@ public:
 	//int fFlags;
 	float FlashDuration;
 	//bool isDefusing;
+	BYTE LifeState = 0;
 
 public:
 	bool GetPos();
@@ -117,6 +118,7 @@ public:
 	//bool GetDefusing();
 	bool GetFlashDuration();
 	bool GetVelocity();
+	bool GetLifeState();
 
 	//constexpr bool HasFlag(const Flags Flag) const noexcept {
 	//	return fFlags & (int)Flag;

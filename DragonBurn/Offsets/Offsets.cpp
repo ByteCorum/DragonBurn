@@ -54,6 +54,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Pawn.bSpottedByMask = DWORD(client_dllJson["C_CSPlayerPawn"]["fields"]["m_entitySpottedState"]) + DWORD(client_dllJson["EntitySpottedState_t"]["fields"]["m_bSpottedByMask"]);
     this->Pawn.AbsVelocity = client_dllJson["C_BaseEntity"]["fields"]["m_vecAbsVelocity"];
     this->Pawn.m_bWaitForNoAttack = client_dllJson["C_CSPlayerPawn"]["fields"]["m_bWaitForNoAttack"];
+    this->Pawn.m_lifeState = client_dllJson["C_BaseEntity"]["fields"]["m_lifeState"];
 
     this->GlobalVar.RealTime = 0x00;
     this->GlobalVar.FrameCount = 0x04;
