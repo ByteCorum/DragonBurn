@@ -37,7 +37,7 @@ void RadarSetting(Base_Radar&);
 void Menu();
 void Visual(const CEntity&);
 void Radar(Base_Radar, const CEntity&);
-void Trigger(const CEntity&);
+void Trigger(const CEntity&, const std::vector<EntityResult>&);
 void AIM(const CEntity&, std::vector<Vec3>);
 void MiscFuncs(CEntity&);
 
@@ -96,10 +96,7 @@ void Cheats::Run()
 
 	Visual(LocalEntity);
 	Radar(GameRadar, LocalEntity);
-	Trigger(LocalEntity);
-	AIM(LocalEntity, AimPosList);
 	MiscFuncs(LocalEntity);
-
 
 	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
 	if (currentFPS > MenuConfig::RenderFPS)
@@ -107,6 +104,14 @@ void Cheats::Run()
 		int FrameWait = round(1000.0f / MenuConfig::RenderFPS);
 		std::this_thread::sleep_for(std::chrono::milliseconds(FrameWait));
 	}
+	
+	// run trigger & aim every new tick
+	if (m_currentTick != m_previousTick)
+	{
+		Trigger(LocalEntity, entityResults);
+		AIM(LocalEntity, AimPosList);
+	}
+	m_previousTick = m_currentTick;
 }
 
 // collect entity data
@@ -165,7 +170,6 @@ std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEnt
 
 	// update cache
 	cachedResults = entities;
-	m_previousTick = m_currentTick;
 
 	return cachedResults;
 }
@@ -395,11 +399,11 @@ void Radar(Base_Radar Radar, const CEntity& LocalEntity)
 	}
 }
 
-void Trigger(const CEntity& LocalEntity)
+void Trigger(const CEntity& LocalEntity, const std::vector<EntityResult>& entityResults)
 {
 	// TriggerBot
 	if (LegitBotConfig::TriggerBot && (GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways))
-		TriggerBot::Run(LocalEntity);
+		TriggerBot::Run(LocalEntity, entityResults);
 }
 
 void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)

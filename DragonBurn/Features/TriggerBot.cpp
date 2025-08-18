@@ -2,8 +2,9 @@
 #include <chrono>
 #include <random>
 #include <thread>
+#include <algorithm>
 
-void TriggerBot::Run(const CEntity& LocalEntity)
+void TriggerBot::Run(const CEntity& LocalEntity, const std::vector<EntityResult>& entityResults)
 {
     if (MenuConfig::ShowMenu)
         return;
@@ -27,16 +28,19 @@ void TriggerBot::Run(const CEntity& LocalEntity)
         return;
     }
 
-    DWORD64 PawnAddress = CEntity::ResolveEntityHandle(uHandle);
-    if (PawnAddress == 0)
+    CEntity targetEntity;
+    bool foundTarget = false;
+    for (const auto& result : entityResults)
     {
-        g_HasValidTarget = false;
-        g_CanShoot = false;
-        return;
+        if (result.entity.Controller.Address == CEntity::ResolveEntityHandle(uHandle))
+    {
+            targetEntity = result.entity;
+            foundTarget = true;
+            break;
+    }
     }
 
-    CEntity targetEntity;
-    if (!targetEntity.UpdatePawn(PawnAddress))
+    if (!foundTarget)
     {
         g_HasValidTarget = false;
         g_CanShoot = false;
