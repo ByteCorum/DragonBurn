@@ -194,7 +194,7 @@ namespace OSImGui
         return false;
     }
 
-    std::map<int, std::pair<char, char>> keyMap = {
+    static std::map<int, std::pair<char, char>> keyMap = {
 {VK_OEM_1, {';', ':'}},         // Semicolon
 {VK_OEM_PLUS, {'=', '+'}},      // Equals
 {VK_OEM_COMMA, {',', '<'}},     // Comma
