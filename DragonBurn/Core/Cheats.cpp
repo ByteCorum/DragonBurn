@@ -37,7 +37,7 @@ void RadarSetting(Base_Radar&);
 void Menu();
 void Visual(const CEntity&);
 void Radar(Base_Radar, const CEntity&);
-void Trigger(const CEntity&, const std::vector<EntityResult>&);
+void Trigger(const CEntity&);
 void AIM(const CEntity&, std::vector<Vec3>);
 void MiscFuncs(CEntity&);
 
@@ -108,7 +108,7 @@ void Cheats::Run()
 	// run trigger & aim every new tick
 	if (m_currentTick != m_previousTick)
 	{
-		Trigger(LocalEntity, entityResults);
+		Trigger(LocalEntity);
 		AIM(LocalEntity, AimPosList);
 	}
 	m_previousTick = m_currentTick;
@@ -399,11 +399,11 @@ void Radar(Base_Radar Radar, const CEntity& LocalEntity)
 	}
 }
 
-void Trigger(const CEntity& LocalEntity, const std::vector<EntityResult>& entityResults)
+void Trigger(const CEntity& LocalEntity)
 {
 	// TriggerBot
 	if (LegitBotConfig::TriggerBot && (GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways))
-		TriggerBot::Run(LocalEntity, entityResults);
+		TriggerBot::Run(LocalEntity);
 }
 
 void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
