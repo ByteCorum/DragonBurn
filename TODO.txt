@@ -1,0 +1,15 @@
+HEIGHT PRIORITY
+Bomb carrier esp
+Define is bomb defing with kits or without
+Fix aimbot smooth
+Make rcs more smooth
+
+MEDIUM PRIORITY
+Use binds from game instead const keys
+Different config for each of weapon type
+Make UEFI mapper
+
+LOW PRIORITY
+Vpk parser
+Grenade helper
+Movement helper
