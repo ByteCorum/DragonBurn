@@ -115,11 +115,17 @@ namespace Misc
 		bool spacePressed = GetAsyncKeyState(VK_SPACE);
 		//bool isInAir = AirCheck(Local);
 
+		static DWORD lastJumped = GetTickCount64();
+		DWORD currentTick = GetTickCount64();
+
 		if (spacePressed /*&& isInAir*/)
 		{
-			//std::this_thread::sleep_for(std::chrono::microseconds(15625));
-			SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-			SendMessage(hwnd_cs2, WM_KEYDOWN, VK_SPACE, 0);
+			if (currentTick - lastJumped >= MenuConfig::BunnyHopDelay)
+			{
+				SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
+				SendMessage(hwnd_cs2, WM_KEYDOWN, VK_SPACE, 0);
+				lastJumped = currentTick;
+			}
 		}
 		//else if (spacePressed /*&& !isInAir*/)
 		//{

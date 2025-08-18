@@ -37,7 +37,7 @@ void RadarSetting(Base_Radar&);
 void Menu();
 void Visual(const CEntity&);
 void Radar(Base_Radar, const CEntity&);
-void Trigger(const CEntity&);
+void Trigger(const CEntity&, const std::vector<EntityResult>&);
 void AIM(const CEntity&, std::vector<Vec3>);
 void MiscFuncs(CEntity&);
 
@@ -96,10 +96,7 @@ void Cheats::Run()
 
 	Visual(LocalEntity);
 	Radar(GameRadar, LocalEntity);
-	Trigger(LocalEntity);
-	AIM(LocalEntity, AimPosList);
 	MiscFuncs(LocalEntity);
-
 
 	int currentFPS = static_cast<int>(ImGui::GetIO().Framerate);
 	if (currentFPS > MenuConfig::RenderFPS)
@@ -107,6 +104,14 @@ void Cheats::Run()
 		int FrameWait = round(1000.0f / MenuConfig::RenderFPS);
 		std::this_thread::sleep_for(std::chrono::milliseconds(FrameWait));
 	}
+	
+	// run trigger & aim every new tick
+	if (m_currentTick != m_previousTick)
+	{
+		Trigger(LocalEntity, entityResults);
+		AIM(LocalEntity, AimPosList);
+	}
+	m_previousTick = m_currentTick;
 }
 
 // collect entity data
@@ -165,7 +170,6 @@ std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEnt
 
 	// update cache
 	cachedResults = entities;
-	m_previousTick = m_currentTick;
 
 	return cachedResults;
 }
@@ -256,8 +260,12 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 		}
 
 		// process aimbot data
-		if (AimControl::HitboxList.size() != 0)
-		{
+		if (!AimControl::HitboxList.empty()) {
+			float minDistance = FLT_MAX;
+			Vec3 bestAimPos{ 0, 0, 0 };
+
+			ImVec2 screenCenter{ Gui.Window.Size.x / 2, Gui.Window.Size.y / 2 };
+
 			constexpr float DEG_TO_RAD = M_PI / 180.f;
 			constexpr float PERFECT_FOV = 69.0f;
 			float halfWindowSize = Gui.Window.Size.x / 2.f;
@@ -265,25 +273,27 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 			float aimFovTan = tan(AimControl::AimFov * DEG_TO_RAD / 2.f);
 			float aimFovRadius = (aimFovTan / prfctFovTan) * halfWindowSize;
 
-			for (int i = 0; i < AimControl::HitboxList.size(); i++)
-			{
-				Vec3 TempPos;
-				float DistanceToSight = entity.GetBone().BonePosList[AimControl::HitboxList[i]].ScreenPos.DistanceTo(
-					{ Gui.Window.Size.x / 2, Gui.Window.Size.y / 2 });
+			for (size_t i = 0; i < AimControl::HitboxList.size(); ++i) {
+				int hitboxID = AimControl::HitboxList[i];
 
-				if (DistanceToSight <= aimFovRadius && DistanceToSight < MaxAimDistance)
-				{
-					MaxAimDistance = DistanceToSight;
+				float distanceToSight = entity.GetBone().BonePosList[hitboxID].ScreenPos.DistanceTo(
+					{ screenCenter.x, screenCenter.y });
+
+				if (distanceToSight < minDistance && distanceToSight <= aimFovRadius) {
+					minDistance = distanceToSight;
 
 					if (!LegitBotConfig::VisibleCheck ||
 						entity.Pawn.bSpottedByMask & (DWORD64(1) << (localPlayerControllerIndex)) ||
-						localEntity.Pawn.bSpottedByMask & (DWORD64(1) << (entityIndex)))
-					{
-						TempPos = entity.GetBone().BonePosList[AimControl::HitboxList[i]].Pos;
-						if (AimControl::HitboxList[i] == BONEINDEX::head)
-							TempPos.z -= 1.f;
+						localEntity.Pawn.bSpottedByMask & (DWORD64(1) << (entityIndex))) {
+						Vec3 tempPos = entity.GetBone().BonePosList[hitboxID].Pos;
 
-						aimPosList.push_back(TempPos);
+						/*if (hitboxID == BONEINDEX::head) {
+							tempPos.z -= 1.0f;
+						}*/
+
+						bestAimPos = tempPos;
+						aimPosList.push_back(bestAimPos);
+						MaxAimDistance = distanceToSight;
 					}
 				}
 			}
@@ -389,35 +399,33 @@ void Radar(Base_Radar Radar, const CEntity& LocalEntity)
 	}
 }
 
-void Trigger(const CEntity& LocalEntity)
+void Trigger(const CEntity& LocalEntity, const std::vector<EntityResult>& entityResults)
 {
 	// TriggerBot
 	if (LegitBotConfig::TriggerBot && (GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways))
-		TriggerBot::Run(LocalEntity);
+		TriggerBot::Run(LocalEntity, entityResults);
 }
 
 void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
 {
-	// Aimbot
 	DWORD lastTick = 0;
 	DWORD currentTick = GetTickCount64();
-	if (LegitBotConfig::AimBot) 
-	{
-		if (LegitBotConfig::AimAlways || GetAsyncKeyState(AimControl::HotKey)) {
-			if (AimPosList.size() != 0) {
-				AimControl::AimBot(LocalEntity, LocalEntity.Pawn.CameraPos, AimPosList);
-			}
-		}
 
-		if (LegitBotConfig::AimToggleMode && (GetAsyncKeyState(AimControl::HotKey) & 0x8000) && currentTick - lastTick >= 200) {
-			AimControl::switchToggle();
-			lastTick = currentTick;
-		}
+	if (!LegitBotConfig::AimBot) {
+		RCS::RecoilControl(LocalEntity);
+		return;
 	}
 
-	if (!LegitBotConfig::AimBot)
-		RCS::RecoilControl(LocalEntity);
+	bool shouldAim = LegitBotConfig::AimAlways || GetAsyncKeyState(AimControl::HotKey);
+	if (shouldAim && !AimPosList.empty()) {
+		AimControl::AimBot(LocalEntity, LocalEntity.Pawn.CameraPos, AimPosList);
+	}
 
+	if (LegitBotConfig::AimToggleMode && (GetAsyncKeyState(AimControl::HotKey) & 0x8000) &&
+		currentTick - lastTick >= 200) {
+		AimControl::switchToggle();
+		lastTick = currentTick;
+	}
 }
 
 void MiscFuncs(CEntity& LocalEntity)

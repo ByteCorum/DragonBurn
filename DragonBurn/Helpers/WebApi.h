@@ -3,19 +3,11 @@
 #include <Windows.h>
 #include <vector>
 #include <regex>
+#include <stdexcept>
 
 namespace Web
 {
-    inline bool CheckConnection()
-    {
-        int result = system("ping google.com > nul");
-        if (result == 0)
-            return true;
-        else
-            return false;
-    }
-
-    inline bool Get(std::string url, std::string& response)
+    inline void Get(std::string url, std::string& response)
     {
         response = "";
         std::string cmd = "curl -s -X GET " + url;
@@ -24,25 +16,15 @@ namespace Web
         std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
 
         if (!pipe)
-        {
-            return false;
-        }
+           throw std::runtime_error("failed to get curl request");
         while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr)
-        {
             response += buffer.data();
-        }
+
+        if (response == "")
+            throw std::runtime_error("bad internet connection");
 
         std::regex pattern("\\d{3}:");
         if (std::regex_search(response, pattern))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    inline bool Post(std::string url, std::string& params)
-    {
-        return true;
+            throw std::runtime_error(response);
     }
 }

@@ -1,5 +1,6 @@
 #include "OS-ImGui_External.h"
 #include "../Core/Config.h"
+#include "../Helpers/Logger.h"
 
 // D3D11 Device
 namespace OSImGui
@@ -123,6 +124,19 @@ namespace OSImGui
         MainLoop();
     }
 
+    void RegisterRawInput(HWND hwnd) {
+        RAWINPUTDEVICE rid;
+        rid.usUsagePage = 0x01;			// Generic Desktop Controls
+        rid.usUsage = 0x02;				// Mouse
+        rid.dwFlags = RIDEV_INPUTSINK;	// Capture input even if the window is unfocused
+        rid.hwndTarget = hwnd;
+
+        if (!RegisterRawInputDevices(&rid, 1, sizeof(rid))) {
+            Log::Warning("Failed to register raw input!");
+        }
+    }
+
+
     void OSImGui_External::AttachAnotherWindow(std::string DestWindowName, std::string DestWindowClassName, std::function<void()> CallBack)
     {
         if (!CallBack)
@@ -161,6 +175,9 @@ namespace OSImGui
             throw; // Re-throw without copying
         }
 
+        RegisterRawInput(Window.hWnd);
+
+
         MainLoop();
     }
 
@@ -177,6 +194,89 @@ namespace OSImGui
         return false;
     }
 
+    static std::map<int, std::pair<char, char>> keyMap = {
+{VK_OEM_1, {';', ':'}},         // Semicolon
+{VK_OEM_PLUS, {'=', '+'}},      // Equals
+{VK_OEM_COMMA, {',', '<'}},     // Comma
+{VK_OEM_MINUS, {'-', '_'}},     // Minus
+{VK_OEM_PERIOD, {'.', '>'}},    // Period
+{VK_OEM_2, {'/', '?'}},         // Slash
+{VK_OEM_3, {'`', '~'}},         // Backtick
+{VK_OEM_4, {'[', '{'}},         // Left bracket
+{VK_OEM_5, {'\\', '|'}},        // Backslash
+{VK_OEM_6, {']', '}'}},         // Right bracket
+{VK_OEM_7, {'\'', '\"'}},       // Quote
+{'1', {'1', '!'}},              // 1
+{'2', {'2', '@'}},              // 2
+{'3', {'3', '#'}},              // 3
+{'4', {'4', '$'}},              // 4
+{'5', {'5', '%'}},              // 5
+{'6', {'6', '^'}},              // 6
+{'7', {'7', '&'}},              // 7
+{'8', {'8', '*'}},              // 8
+{'9', {'9', '('}},              // 9
+{'0', {'0', ')'}}               // 0
+    };
+
+    void toggleKey(int vkKey, bool& toggleState, ImGuiIO& io) {
+
+        bool shiftHeld = (GetAsyncKeyState(VK_LSHIFT) & 0x8000) || (GetAsyncKeyState(VK_RSHIFT) & 0x8000);
+
+        char charCode = 0;
+
+        if (vkKey >= 'A' && vkKey <= 'Z') {
+            charCode = shiftHeld ? (char)vkKey : (char)(vkKey + 32); // A-Z
+        }
+        else if (vkKey >= '0' && vkKey <= '9') {
+            charCode = shiftHeld ? keyMap[(char)vkKey].second : keyMap[(char)vkKey].first; // 0-9
+        }
+        else if (keyMap.find(vkKey) != keyMap.end()) { // Special
+            charCode = shiftHeld ? keyMap[vkKey].second : keyMap[vkKey].first;
+        }
+        else if (vkKey == VK_SPACE) {
+            charCode = (char)VK_SPACE;
+        }
+
+        if (toggleState && (GetAsyncKeyState(vkKey) & 0x8000)) {
+            if (charCode != 0)
+                io.AddInputCharacter(charCode);
+            toggleState = false;
+        }
+        else if (!toggleState && !(GetAsyncKeyState(vkKey) & 0x8000)) {
+            toggleState = true;
+        }
+    }
+
+    void toggleKey(int vkKey, bool& toggleState, ImGuiMouseButton_ imguiKey, ImGuiIO& io) {
+        if (toggleState && (GetAsyncKeyState(vkKey) & 0x8000)) {
+            io.AddMouseButtonEvent(imguiKey, true);
+            toggleState = false;
+        }
+        else if (!toggleState && !(GetAsyncKeyState(vkKey) & 0x8000)) {
+            io.AddMouseButtonEvent(imguiKey, false);
+            toggleState = true;
+        }
+    }
+
+    void toggleKey(int vkKey, bool& toggleState, ImGuiKey imguiKey, ImGuiKey imguiModKey, ImGuiIO& io) {
+        if (toggleState && (GetAsyncKeyState(vkKey) & 0x8000)) {
+            io.AddKeyEvent(imguiKey, true);
+
+            if (imguiModKey) {
+                ImGui::GetKeyData(imguiModKey)->Down = true;
+            }
+            toggleState = false;
+        }
+        else if (!toggleState && !(GetAsyncKeyState(vkKey) & 0x8000)) {
+            io.AddKeyEvent(imguiKey, false);
+
+            if (imguiModKey) {
+                ImGui::GetKeyData(imguiModKey)->Down = false;
+            }
+            toggleState = true;
+        }
+    }
+
     void OSImGui_External::MainLoop()
     {
         static int frameSkip = 0;
@@ -187,8 +287,53 @@ namespace OSImGui
 
         while (!EndFlag)
         {
-            if (PeekEndMessage()) break;
-            if (Type == ATTACH && !UpdateWindowData()) break;
+            if (PeekEndMessage()) 
+                break;
+
+            if (Type == ATTACH && !UpdateWindowData()) 
+                break;
+
+            ImGuiIO& io = ImGui::GetIO();
+
+            static bool keyState[256] = { true }; // Track keys
+
+            for (int vkKey = 'A'; vkKey <= 'Z'; ++vkKey) {
+                toggleKey(vkKey, keyState[vkKey], io); // A-Z
+            }
+
+            for (int vkKey = '0'; vkKey <= '9'; ++vkKey) {
+                toggleKey(vkKey, keyState[vkKey], io); // 0-9
+            }
+
+            static bool LMouseState = true, RMouseState = true, MMouseState = true;
+            static bool LeftCtrl = true, LeftShift = true, Backspace = true, Enter = true, Tab = true, Delete = true, ArrowUp = true, ArrowDown = true, ArrowLeft = true, ArrowRight = true;
+
+            toggleKey(VK_LBUTTON, LMouseState, ImGuiMouseButton_Left, io);
+            toggleKey(VK_RBUTTON, RMouseState, ImGuiMouseButton_Right, io);
+            toggleKey(VK_MBUTTON, MMouseState, ImGuiMouseButton_Middle, io);
+            toggleKey(VK_LCONTROL, LeftCtrl, ImGuiKey_LeftCtrl, ImGuiMod_Ctrl, io);
+            toggleKey(VK_LSHIFT, LeftShift, ImGuiKey_LeftShift, ImGuiMod_Shift, io);
+            toggleKey(VK_BACK, Backspace, ImGuiKey_Backspace, ImGuiMod_None, io);
+            toggleKey(VK_RETURN, Enter, ImGuiKey_Enter, ImGuiMod_None, io);
+            toggleKey(VK_TAB, Tab, ImGuiKey_Tab, ImGuiMod_None, io);
+            toggleKey(VK_DELETE, Delete, ImGuiKey_Delete, ImGuiMod_None, io);
+            toggleKey(VK_UP, ArrowUp, ImGuiKey_UpArrow, ImGuiMod_None, io);
+            toggleKey(VK_DOWN, ArrowDown, ImGuiKey_DownArrow, ImGuiMod_None, io);
+            toggleKey(VK_LEFT, ArrowLeft, ImGuiKey_LeftArrow, ImGuiMod_None, io);
+            toggleKey(VK_RIGHT, ArrowRight, ImGuiKey_RightArrow, ImGuiMod_None, io);
+
+            toggleKey(VK_OEM_1, keyState[VK_OEM_1], io);			// ;
+            toggleKey(VK_OEM_PLUS, keyState[VK_OEM_PLUS], io);		// =
+            toggleKey(VK_OEM_COMMA, keyState[VK_OEM_COMMA], io);	// <
+            toggleKey(VK_OEM_MINUS, keyState[VK_OEM_MINUS], io);	// -
+            toggleKey(VK_OEM_PERIOD, keyState[VK_OEM_PERIOD], io);	// >
+            toggleKey(VK_SPACE, keyState[VK_SPACE], io);			// Space
+            toggleKey(VK_OEM_2, keyState[VK_OEM_2], io);			// /
+            toggleKey(VK_OEM_3, keyState[VK_OEM_3], io);			// `
+            toggleKey(VK_OEM_4, keyState[VK_OEM_4], io);			// [
+            toggleKey(VK_OEM_5, keyState[VK_OEM_5], io);			// |
+            toggleKey(VK_OEM_6, keyState[VK_OEM_6], io);			// ]
+            toggleKey(VK_OEM_7, keyState[VK_OEM_7], io);			// /
 
             ++frameSkip; // Prefix increment is slightly more efficient
 
@@ -205,7 +350,9 @@ namespace OSImGui
             // note from laith: increasing N will cause a little esp delay but when set to 2 its almost unnoticable and the perfoamnce gain is giagantic (double FPS)
             if (frameSkip >= 2) {
                 // Set window display affinity based on OBS bypass setting
+
                 SetWindowDisplayAffinity(Window.hWnd, MenuConfig::BypassOBS ? excludeCapture : includeCapture);
+
 
                 // Use direct array access instead of creating temporary array
                 static constexpr float clearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };

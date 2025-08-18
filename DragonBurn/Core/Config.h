@@ -5,12 +5,14 @@
 namespace MenuConfig
 {
 	inline std::string name = "DragonBurn";
-	inline std::string version = "3.0.1.0";
+	inline std::string version = "3.0.2.0";
 	inline std::string author = "ByteCorum";
 
 	inline std::string path = "";
 	inline std::string docPath = "";
 	inline int RenderFPS = 1000;
+	inline int AimDelay = 1;
+	inline int BunnyHopDelay = 25;
 	inline int RenderDistance = 1000;
 
 

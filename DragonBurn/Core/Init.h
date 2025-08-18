@@ -6,6 +6,7 @@
 #include <chrono>
 #include <thread>
 #include <psapi.h>
+#include <stdexcept>
 #include "../Offsets/Offsets.h"
 #include "../Helpers/WebApi.h"
 #include "../Core/Config.h"
@@ -61,42 +62,30 @@ namespace Init
         //    SetConsoleTitle(title);
         //}
 
-        static int CheckCheatVersion()
+        static bool CheckCheatVersion()
         {
             std::string supportedVersions;
-
-            if (!Web::CheckConnection())
-                return 0;
-            if (!Web::Get("https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version", supportedVersions))
-                return 1;
+            Web::Get("https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version", supportedVersions);
 
             if (supportedVersions.find(MenuConfig::version) != std::string::npos)
-                return 3;
-
-            return 2;
+                return true;
+            return false;
         }
 	};
 
     class Client
     {
     public:
-        static int CheckCS2Version()
+        static bool CheckCS2Version()
         {
-            long curVer;
-            const std::string cloudVersionUrl = "https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/cs2-version";
-            std::string buff;
-            long cloudVersion;
+            std::string supportedVersion;
+            Web::Get("https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/cs2-version", supportedVersion);
+            if (supportedVersion == "-1")
+                return true;
 
-            if (!Web::Get(cloudVersionUrl, buff))
-                return 2;
-            cloudVersion = stoi(buff);
-            if (cloudVersion == -1)
-                return 3;
-
-            DWORD pid = memoryManager.GetProcessID(L"cs2.exe");
+            //getting processPath
             std::string processPath;
-
-            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, memoryManager.GetProcessID(L"cs2.exe"));
             if (hProcess) 
             {
                 wchar_t buffer[MAX_PATH];
@@ -109,37 +98,34 @@ namespace Init
                 else
                 {
                     CloseHandle(hProcess);
-                    return 0;
+                    throw std::runtime_error("failed to get process path");
                 }
             }
             else 
-                return 0;
+                throw std::runtime_error("failed to open process");
 
+            // get path to built_from_cl.txt
             int pos = processPath.rfind("bin");
             if (pos != std::string::npos) 
-                processPath = processPath.substr(0, pos + 3);
+                processPath = processPath.substr(0, pos + 3) + "\\built_from_cl.txt";
             else
-                return 0;
+                throw std::runtime_error("failed to find version file");
 
-            processPath += "\\built_from_cl.txt";
-
+            //reading file
             std::ifstream file(processPath);
             if (file.is_open()) 
             {
-                std::string line;
-                if (std::getline(file, line))
-                    curVer = stoi(line);
-                else
-                    return 0;
+                std::string gameVersion;
+                std::getline(file, gameVersion);
                 file.close();
+
+                if (supportedVersion == gameVersion)
+                    return true;
+                else
+                    return false;
             }
             else
-                return 0;
-
-            if (cloudVersion == curVer)
-                return 3;
-            else
-                return 1;
+                throw std::runtime_error("failed to get game version");
         }
 
         // Check if the game window is activated

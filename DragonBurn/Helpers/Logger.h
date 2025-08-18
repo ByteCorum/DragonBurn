@@ -93,6 +93,16 @@ namespace Log
 
 	inline void PreviousLine()
 	{
-		std::cout << "\033[1A\033[0G                                                                                \033[0G";
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+		CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+		if (GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+			csbi.dwCursorPosition.Y--;
+			SetConsoleCursorPosition(hConsole, csbi.dwCursorPosition);
+
+			DWORD written;
+			FillConsoleOutputCharacter(hConsole, ' ', 80, csbi.dwCursorPosition, &written);
+			SetConsoleCursorPosition(hConsole, csbi.dwCursorPosition);
+		}
 	}
 }

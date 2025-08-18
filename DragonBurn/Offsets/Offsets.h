@@ -11,7 +11,7 @@ class Offsets
 public:
 	Offsets();
 	~Offsets();
-	int UpdateOffsets();
+	void UpdateOffsets();
 
 	DWORD EntityList;
 	DWORD Matrix;
@@ -66,6 +66,7 @@ public:
 		DWORD bSpottedByMask;
 		DWORD AbsVelocity;
 		DWORD m_bWaitForNoAttack;
+		DWORD m_lifeState;
 
 	} Pawn;
 
