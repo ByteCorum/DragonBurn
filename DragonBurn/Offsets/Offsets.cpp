@@ -92,19 +92,13 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->C4.m_nBombSite = client_dllJson["C_PlantedC4"]["fields"]["m_nBombSite"];
 }
 
-int Offsets::UpdateOffsets()
+void Offsets::UpdateOffsets()
 {
-    const std::string offsetsUrl = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json";
-    const std::string buttonsUrl = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json";
-    const std::string client_dllUrl = "https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json";
     std::string offsetsData, buttonsData, client_dllData;
 
-    if (!Web::CheckConnection())
-        return 0;
-    if (!Web::Get(offsetsUrl, offsetsData) || !Web::Get(buttonsUrl, buttonsData) || !Web::Get(client_dllUrl, client_dllData))
-        return 1;
+    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
+    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
+    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
 
     SetOffsets(offsetsData, buttonsData, client_dllData);
-
-    return 2;
 }

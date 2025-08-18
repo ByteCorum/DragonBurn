@@ -11,7 +11,7 @@ class Offsets
 public:
 	Offsets();
 	~Offsets();
-	int UpdateOffsets();
+	void UpdateOffsets();
 
 	DWORD EntityList;
 	DWORD Matrix;

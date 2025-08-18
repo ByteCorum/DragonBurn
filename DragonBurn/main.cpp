@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <KnownFolders.h>
 #include <ShlObj.h>
+#include <format>
 
 using namespace std;
 
@@ -72,63 +73,34 @@ https://github.com/ByteCorum/DragonBurn
 
 #ifndef DBDEBUG
 	Log::Info("Checking cheat version");
-	switch (Init::Verify::CheckCheatVersion())
+	try 
 	{
-	case 0:
+		bool result = Init::Verify::CheckCheatVersion();
 		Log::PreviousLine();
-		Log::Error("Bad internet connection");
-		break;
-
-	case 1:
-		Log::PreviousLine();
-		Log::Error("Failed to get currently supported versions");
-		break;
-		
-	case 2:
-		Log::PreviousLine();
-		Log::Error("Your cheat version is out of support");
-		break;
-		
-	case 3:
-		Log::PreviousLine();
-		Log::Fine("Your cheat version is up to date and supported");
-		break;
-
-	default:
-		
-		Log::PreviousLine();
-		Log::Error("Unknown connection error");
-		break;
-
+		if (result)
+			Log::Fine("Your cheat version is up to date and supported");
+		else
+			Log::Error("Your cheat version is out of support");
 	}
+	catch (runtime_error error)
+	{
+		Log::PreviousLine();
+		Log::Error(format("Error: {}", error.what()));
+	}
+
 #endif
 
 	Log::Info("Updating offsets");
-	switch (Offset.UpdateOffsets())
+	try 
 	{
-	case 0:
-		
-		Log::PreviousLine();
-		Log::Error("Bad internet connection");
-		break;
-
-	case 1:
-		
-		Log::PreviousLine();
-		Log::Error("Failed to UpdateOffsets");
-		break;
-
-	case 2:
+		Offset.UpdateOffsets();
 		Log::PreviousLine();
 		Log::Fine("Offsets updated");
-		break;
-
-	default:
-		
+	}
+	catch (runtime_error error)
+	{
 		Log::PreviousLine();
-		Log::Error("Unknown connection error");
-		break;
-
+		Log::Error(format("Error: {}",error.what()));
 	}
 
 	Log::Info("Connecting to kernel mode driver");
@@ -164,30 +136,18 @@ https://github.com/ByteCorum/DragonBurn
 	Log::Info("Linking to CS2");
 
 #ifndef DBDEBUG
-	switch (Init::Client::CheckCS2Version()) 
+	try 
 	{
-	case 0:
+		if (!Init::Client::CheckCS2Version()) 
+		{
+			Log::PreviousLine();
+			Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
+		}
+	}
+	catch(runtime_error error)
+	{
 		Log::PreviousLine();
-		Log::Error("Failed to get the current game version");
-		break;
-
-	case 1:
-		Log::PreviousLine();
-		Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
-		break;
-
-	case 2:
-		Log::PreviousLine();
-		Log::Error("Failed to get cloud version");
-		break;
-
-	case 3:
-		break;
-
-	default:
-		Log::PreviousLine();
-		Log::Error("Failed to get the current game version");
-		break;
+		Log::Error(format("Error: {}", error.what()));
 	}
 #endif
 
