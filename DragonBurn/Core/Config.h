@@ -11,6 +11,8 @@ namespace MenuConfig
 	inline std::string path = "";
 	inline std::string docPath = "";
 	inline int RenderFPS = 1000;
+	inline int AimDelay = 1;
+	inline int BunnyHopDelay = 25;
 	inline int RenderDistance = 1000;
 
 

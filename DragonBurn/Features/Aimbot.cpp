@@ -142,10 +142,14 @@ void AimControl::AimBot(const CEntity& Local, Vec3 LocalPos, std::vector<Vec3>& 
             }
         }
 
-        mouse_event(MOUSEEVENTF_MOVE, TargetX, TargetY, NULL, NULL);
+        static DWORD lastAimTime = GetTickCount64();
+        DWORD currentTick = GetTickCount64();
 
-        int FrameWait = round(1000000.0f / MenuConfig::RenderFPS);
-        std::this_thread::sleep_for(std::chrono::microseconds(FrameWait));
+        if (currentTick - lastAimTime >= MenuConfig::AimDelay)
+        {
+            mouse_event(MOUSEEVENTF_MOVE, TargetX, TargetY, NULL, NULL);
+            lastAimTime = currentTick;
+        }
     }
     else
         HasTarget = false;
@@ -191,7 +195,7 @@ void AimControl::AimBot(const CEntity& Local, Vec3 LocalPos, std::vector<Vec3>& 
 //    // Iterate through all candidate aim positions
 //    for (const auto& aimPos : AimPosList)
 //    {
-//        // Calculate the opponent’s relative position from our local position
+//        // Calculate the opponentï¿½s relative position from our local position
 //        Vec3 diff = aimPos - LocalPos;
 //        // Horizontal distance: sqrt(diff.x^2 + diff.y^2)
 //        float horizDist = sqrtf(diff.x * diff.x + diff.y * diff.y);
