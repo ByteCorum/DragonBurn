@@ -52,7 +52,6 @@ namespace Text {
         inline std::string VisCheck = "Visible Check";
         inline std::string JumpCheck = "On Ground Check";
         inline std::string FovSlider = "FOV: ";
-        inline std::string HumanizationStrength = "Humanization Strength: ";
         inline std::string FovMinSlider = "MiniFOV: ";
         inline std::string SmoothSlider = "Smooth: ";
         inline std::string BoneList = "Hitboxes";

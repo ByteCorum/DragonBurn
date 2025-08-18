@@ -160,6 +160,7 @@ namespace MyConfigSaver
         ConfigData["Aimbot"]["Hitboxes"]=         AimControl::HitboxList;
         ConfigData["Aimbot"]["VisibleCheck"]=     LegitBotConfig::VisibleCheck;
         ConfigData["Aimbot"]["IgnoreFlash"]=      AimControl::IgnoreFlash;
+        ConfigData["Aimbot"]["HumanizeVar"]=      AimControl::HumanizeVar;
         ConfigData["Aimbot"]["ScopeOnly"]=        AimControl::ScopeOnly;
         ConfigData["Aimbot"]["OnlyAuto"] =        AimControl::onlyAuto;
 
@@ -390,6 +391,7 @@ namespace MyConfigSaver
             AimControl::HitboxList = LoadVector(ConfigData["Aimbot"], "Hitboxes", { BONEINDEX::head });
             LegitBotConfig::VisibleCheck = ReadData(ConfigData["Aimbot"],{"VisibleCheck"}, true);
             AimControl::IgnoreFlash = ReadData(ConfigData["Aimbot"],{"IgnoreFlash"}, false);
+            AimControl::HumanizeVar = ReadData(ConfigData["Aimbot"],{"HumanizeVar"}, false);
             AimControl::ScopeOnly = ReadData(ConfigData["Aimbot"],{"ScopeOnly"}, false);
             AimControl::onlyAuto = ReadData(ConfigData["Aimbot"], { "OnlyAuto" }, false);
             Text::Aimbot::HotKey = KeyMgr::GetKeyName(AimControl::HotKey);
