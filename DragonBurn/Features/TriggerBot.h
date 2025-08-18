@@ -1,13 +1,9 @@
 #pragma once
 #include <chrono>
-#include <vector>
 
 #include "../Game/Game.h"
 #include "../Game/Entity.h"
 #include "../Core/Config.h"
-
-#include "../Core/Cheats.h"
-struct EntityResult;
 
 namespace TriggerBot
 {
@@ -29,7 +25,7 @@ namespace TriggerBot
 	inline bool g_CanShoot = false;
 
     // Main functions
-	void Run(const CEntity& LocalEntity, const std::vector<EntityResult>& entityResults);
+	void Run(const CEntity& LocalEntity);
 
     // Validation functions
     bool CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity);
