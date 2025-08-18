@@ -82,7 +82,7 @@ https://github.com/ByteCorum/DragonBurn
 		else
 			Log::Error("Your cheat version is out of support");
 	}
-	catch (runtime_error error)
+	catch (const std::runtime_error& error)
 	{
 		Log::PreviousLine();
 		Log::Error(format("Error: {}", error.what()));
@@ -97,7 +97,7 @@ https://github.com/ByteCorum/DragonBurn
 		Log::PreviousLine();
 		Log::Fine("Offsets updated");
 	}
-	catch (runtime_error error)
+	catch (const std::runtime_error& error)
 	{
 		Log::PreviousLine();
 		Log::Error(format("Error: {}",error.what()));
@@ -144,7 +144,7 @@ https://github.com/ByteCorum/DragonBurn
 			Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
 		}
 	}
-	catch(runtime_error error)
+	catch(const std::runtime_error& error)
 	{
 		Log::PreviousLine();
 		Log::Error(format("Error: {}", error.what()));
