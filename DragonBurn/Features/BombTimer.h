@@ -114,17 +114,29 @@ namespace bmb
 		ImGui::TextUnformatted(" ");
 		ImGui::SameLine();
 		Gui.MyProgressBar(barLength, { 180, 15 }, "", color);
-		//if (isPlanted && remaining >= 0 && IsBeingDefused)
-		//{
-		//	ImVec2 progressBarPos = ImGui::GetCursorPos();
-		//	ImGui::SetCursorPos(ImVec2(progressBarPos.x + 45, progressBarPos.y - 27));
+		if (isPlanted && remaining >= 0 && IsBeingDefused)
+		{
+			ImVec2 pos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(pos.x + 45, pos.y - 27));
 
-		//	std::ostringstream defuseSS;
-		//	defuseSS.precision(2);
-		//	defuseRemaining = plantTime - DefuseTime;
-		//	defuseSS << "Defusing: " << std::fixed << defuseRemaining << " s";
-		//	ImGui::Text(defuseSS.str().c_str());
-		//}
+			float defuseRemaining = 0.0f;
+			DWORD64 globalVars = 0;
+			if (memoryManager.ReadMemory<DWORD64>(gGame.GetClientDLLAddress() + Offset.GlobalVars, globalVars) && globalVars)
+			{
+				globalvars gv{ globalVars };
+				if (gv.GetcurrentTime() && gv.g_fCurrentTime > 0.0f)
+				{
+					float defuseEndTime = 0.0f;
+					if (memoryManager.ReadMemory<float>(bomb + Offset.C4.m_flDefuseCountDown, defuseEndTime) && defuseEndTime > 0.0f)
+					{
+						defuseRemaining = defuseEndTime - gv.g_fCurrentTime;
+						if (defuseRemaining < 0.0f || defuseRemaining > 10.0f) defuseRemaining = 0.0f;
+					}
+				}
+			}
+
+			ImGui::Text("Defusing: %.2f s", defuseRemaining);
+		}
 		if (isPlanted && !isBombPlanted)
 		{
 			isPlanted = false;
