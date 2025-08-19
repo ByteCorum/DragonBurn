@@ -65,6 +65,11 @@ void Cheats::Run()
 	if (!memoryManager.ReadMemory(gGame.GetLocalPawnAddress(), LocalPawnAddress))
 		return;
 
+	if (LocalPawnAddress == 0 || LocalControllerAddress == 0) {
+        cachedResults.clear();
+        return;
+    }
+
 	// LocalEntity
 	CEntity LocalEntity;
 	int LocalPlayerControllerIndex = 0;
@@ -110,6 +115,12 @@ void Cheats::Run()
 	{
 		Trigger(LocalEntity);
 		AIM(LocalEntity, AimPosList);
+		
+		std::vector<CEntity> allEntities;
+		for (const auto& pair : cachedResults) {
+			allEntities.push_back(pair.second);
+		}
+		SpecList::GetSpectatorList(allEntities, LocalEntity);
 	}
 	m_previousTick = m_currentTick;
 }
@@ -117,8 +128,6 @@ void Cheats::Run()
 // collect entity data
 std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEntity, int& localPlayerControllerIndex)
 {
-	// static cache for previous results - update only if needed
-	static std::vector<std::pair<int, CEntity>> cachedResults;
 	// update only on new tick
 	if (m_currentTick == m_previousTick)
 	{
@@ -189,13 +198,6 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 		result.entityIndex = entityIndex;
 		result.entity = entity;
 
-		// process spectator list
-		if (!entity.IsAlive())
-		{
-			SpecList::GetSpectatorList(static_cast<CEntity>(entity), localEntity);
-		}
-
-		// skip invalid
 		if (!entity.IsAlive())
 		{
 			continue;
@@ -222,7 +224,7 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 		result.isValid = true;
 		results.push_back(result);
 	}
-
+	
 	return results;
 }
 
@@ -240,6 +242,8 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 	{
 		if (!result.isValid)
 		{
+			if (HealthBarMap.count(result.entity.Controller.Address))
+				HealthBarMap.erase(result.entity.Controller.Address);
 			continue;
 		}
 

@@ -80,6 +80,9 @@ namespace ESP
 
 	void RenderPlayerESP(const CEntity& LocalEntity, const CEntity& Entity, ImVec4 Rect, int LocalPlayerControllerIndex, int Index)
 	{
+		if (Entity.Pawn.Pos == Vec3(0, 0, 0))
+			return;
+
 		// Cache frequently used values
 		std::string weaponIcon = GunIcon(Entity.Pawn.WeaponName);
 		const auto ioFonts = ImGui::GetIO().Fonts->Fonts[1];

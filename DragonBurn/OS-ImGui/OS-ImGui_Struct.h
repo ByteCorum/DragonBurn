@@ -104,7 +104,7 @@ public:
 	{
 		return { x / n,y / n,z / n };
 	}
-	bool operator==(Vec3 Vec3_)
+	bool operator==(Vec3 Vec3_) const
 	{
 		return x == Vec3_.x && y == Vec3_.y && z == Vec3_.z;
 	}
