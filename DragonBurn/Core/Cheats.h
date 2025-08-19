@@ -19,6 +19,9 @@ struct EntityResult {
 
 namespace Cheats
 {
+	static DWORD m_currentTick = 0;
+	static DWORD m_previousTick = 0;
+	static std::vector<std::pair<int, CEntity>> cachedResults;
 
 	void Run();
 	
@@ -26,9 +29,6 @@ namespace Cheats
 	std::vector<EntityResult> ProcessEntities(CEntity& localEntity, int& localPlayerControllerIndex);
 	void HandleEnts(const std::vector<EntityResult>& entities, CEntity& localEntity, 
 		int localPlayerControllerIndex, Base_Radar& gameRadar, std::vector<Vec3>& aimPosList);
-
-	static DWORD m_currentTick = 0;
-	static DWORD m_previousTick = 0;
 }
 
 struct {

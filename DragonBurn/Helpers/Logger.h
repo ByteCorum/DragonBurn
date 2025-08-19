@@ -39,7 +39,8 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << ctx << '\n';
 
-		if (pause) {
+		if (pause) 
+		{
 			SetConsoleTextAttribute(hConsole, 8);
 			system("pause");
 		}
@@ -56,9 +57,8 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 8);
 		system("pause");
 
-		if (fatal) {
-			exit(0);
-		}
+		if (fatal)
+			exit(-1);
 	}
 
 	inline void Fine(std::string ctx)
@@ -79,9 +79,7 @@ namespace Log
 		std::cout << line;
 
 		if (write)
-		{
 			WriteLog(line);
-		}
 #endif
 	}
 

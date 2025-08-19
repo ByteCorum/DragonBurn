@@ -241,6 +241,9 @@
     <ClCompile Include="Features\Radar.cpp">
       <Filter>Features\Visual</Filter>
     </ClCompile>
+    <ClCompile Include="Features\SpectatorList.cpp">
+      <Filter>Features\Misc</Filter>
+    </ClCompile>
     <ClCompile Include="Features\TriggerBot.cpp">
       <Filter>Features\Legit</Filter>
     </ClCompile>

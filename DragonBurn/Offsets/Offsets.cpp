@@ -31,7 +31,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
 
     this->Pawn.BulletServices = client_dllJson["C_CSPlayerPawn"]["fields"]["m_pBulletServices"];
     this->Pawn.CameraServices = client_dllJson["C_BasePlayerPawn"]["fields"]["m_pCameraServices"];
-    this->Pawn.pClippingWeapon = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_pClippingWeapon"];
+    this->Pawn.pClippingWeapon = client_dllJson["C_CSPlayerPawn"]["fields"]["m_pClippingWeapon"];
     this->Pawn.isScoped = client_dllJson["C_CSPlayerPawn"]["fields"]["m_bIsScoped"];
     this->Pawn.isDefusing = client_dllJson["C_CSPlayerPawn"]["fields"]["m_bIsDefusing"];
     this->Pawn.TotalHit = client_dllJson["CCSPlayer_BulletServices"]["fields"]["m_totalHitsOnServer"];
@@ -41,8 +41,8 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Pawn.CurrentHealth = client_dllJson["C_BaseEntity"]["fields"]["m_iHealth"];
     this->Pawn.GameSceneNode = client_dllJson["C_BaseEntity"]["fields"]["m_pGameSceneNode"];
     this->Pawn.BoneArray = client_dllJson["CSkeletonInstance"]["fields"]["m_modelState"] + 0x80;
-    this->Pawn.angEyeAngles = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_angEyeAngles"];
-    this->Pawn.vecLastClipCameraPos = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_vecLastClipCameraPos"];
+    this->Pawn.angEyeAngles = client_dllJson["C_CSPlayerPawn"]["fields"]["m_angEyeAngles"];
+    this->Pawn.vecLastClipCameraPos = client_dllJson["C_CSPlayerPawn"]["fields"]["m_vecLastClipCameraPos"];
     this->Pawn.iShotsFired = client_dllJson["C_CSPlayerPawn"]["fields"]["m_iShotsFired"];
     this->Pawn.flFlashDuration = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_flFlashDuration"];
     this->Pawn.aimPunchAngle = client_dllJson["C_CSPlayerPawn"]["fields"]["m_aimPunchAngle"];
