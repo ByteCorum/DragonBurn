@@ -91,11 +91,11 @@ namespace bmb
 		{
 			if (IsBeingDefused && remaining >= 5)
 			{
-			color = ImColor(32, 178, 170);
+				color = ImColor(32, 178, 170);
 			}	
-			else if (remaining <= 10 && !IsBeingDefused)
+			else if (remaining <= 10)
 			{
-				color = ImColor(113, 34, 51);
+				color = ImColor(160, 48, 73);
 			}
 			else
 			{
@@ -114,6 +114,7 @@ namespace bmb
 		ImGui::TextUnformatted(" ");
 		ImGui::SameLine();
 		Gui.MyProgressBar(barLength, { 180, 15 }, "", color);
+
 		if (isPlanted && remaining >= 0 && IsBeingDefused)
 		{
 			ImVec2 pos = ImGui::GetCursorPos();
