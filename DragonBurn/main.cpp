@@ -82,7 +82,7 @@ https://github.com/ByteCorum/DragonBurn
 		else
 			Log::Error("Your cheat version is out of support");
 	}
-	catch (const std::runtime_error& error)
+	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
 		Log::Error(format("Error: {}", error.what()));
@@ -97,7 +97,7 @@ https://github.com/ByteCorum/DragonBurn
 		Log::PreviousLine();
 		Log::Fine("Offsets updated");
 	}
-	catch (const std::runtime_error& error)
+	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
 		Log::Error(format("Error: {}",error.what()));
@@ -144,7 +144,7 @@ https://github.com/ByteCorum/DragonBurn
 			Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
 		}
 	}
-	catch(const std::runtime_error& error)
+	catch(const std::exception& error)
 	{
 		Log::PreviousLine();
 		Log::Error(format("Error: {}", error.what()));
@@ -209,8 +209,8 @@ https://github.com/ByteCorum/DragonBurn
 	{
 		Gui.AttachAnotherWindow("Counter-Strike 2", "SDL_app", Cheats::Run);
 	}
-	catch (OSImGui::OSException& e)
+	catch (std::exception& error)
 	{
-		Log::Error(e.what());
+		Log::Error(error.what());
 	}
 }

@@ -100,12 +100,5 @@ void Offsets::UpdateOffsets()
     Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
     Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
 
-    try
-    {
-        SetOffsets(offsetsData, buttonsData, client_dllData);
-    }
-    catch (const std::exception& error)
-    {
-        throw std::runtime_error(error.what());
-    }
+    SetOffsets(offsetsData, buttonsData, client_dllData);
 }
