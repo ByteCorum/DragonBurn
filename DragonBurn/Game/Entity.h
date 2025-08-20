@@ -120,6 +120,8 @@ public:
 	bool GetVelocity();
 	bool GetLifeState();
 
+	std::vector<short> GetWeaponInventory(DWORD64 entityList) const;
+
 	//constexpr bool HasFlag(const Flags Flag) const noexcept {
 	//	return fFlags & (int)Flag;
 	//}
@@ -197,6 +199,15 @@ public:
 		}
 		return "Weapon_None";
 	}
+
+	static bool matchesPattern(const std::string& target, const std::string& pattern) {
+		if (!pattern.empty() && pattern.back() == '_') {
+			return target.compare(0, pattern.size(), pattern) == 0;
+		}
+		return target.find(pattern) != std::string::npos;
+	}
+
+	static std::vector<CEntity> GetAllEntitiesByClass(DWORD64 client, const CView& ViewMatrix, const std::string& type);
 };
 
 struct EntityBatchData {

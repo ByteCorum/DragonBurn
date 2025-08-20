@@ -208,6 +208,59 @@ bool PlayerPawn::GetWeaponName()
 	return true;
 }
 
+std::vector<CEntity> CEntity::GetAllEntitiesByClass(DWORD64 client, const CView& ViewMatrix, const std::string& type) {
+	constexpr int maxEntities = 1024;
+	std::vector<CEntity> result;
+
+	DWORD64 entityList = 0;
+	if (!memoryManager.ReadMemory<DWORD64>(client + Offset.EntityList, entityList)) return result;
+	if (!entityList) return result;
+
+	for (int i = 0; i < maxEntities; i++) {
+		//skibidi shit
+		DWORD64 listEntry = 0;
+		if (!memoryManager.ReadMemory<DWORD64>(entityList + 0x8 * ((i & 0x7FFF) >> 9) + 16, listEntry)) continue;
+		if (!listEntry) continue;
+
+		DWORD64 entityAddress = 0;
+		if (!memoryManager.ReadMemory<DWORD64>(listEntry + 0x78 * (i & 0x1FF), entityAddress)) continue;
+		if (!entityAddress) continue;
+
+		DWORD64 identity = 0;
+		if (!memoryManager.ReadMemory<DWORD64>(entityAddress + Offset.Entity.m_pEntity, identity)) continue;
+		
+		DWORD64 classNamePtr = 0;
+		if (!memoryManager.ReadMemory<DWORD64>(identity + Offset.Entity.designerName, classNamePtr)) continue;
+		
+		char className[64]{};
+		if (!memoryManager.ReadMemory(classNamePtr, className, sizeof(className))) continue;
+		std::string classNameStr(className);
+
+		if (!matchesPattern(classNameStr, type)) {
+			continue;
+		}
+
+		CEntity foundEntity;
+		foundEntity.Pawn.Address = entityAddress;
+
+		DWORD64 sceneNode = 0;
+		if (!memoryManager.ReadMemory<DWORD64>(entityAddress + Offset.Pawn.GameSceneNode, sceneNode)) continue;
+		if (!sceneNode) continue;
+
+		Vec3 pos = {};
+		if (!memoryManager.ReadMemory<Vec3>(sceneNode + Offset.GameSceneNode.vecOrigin, pos)) continue;
+		foundEntity.Pawn.Pos = pos;
+
+		Vec2 w2s = {};
+		if (!ViewMatrix.WorldToScreen(pos, w2s)) continue;
+		foundEntity.Pawn.ScreenPos = w2s;
+
+		result.push_back(foundEntity);
+	}
+
+	return result;
+}
+
 bool PlayerPawn::GetShotsFired()
 {
 	return GetDataAddressWithOffset<DWORD>(Address, Offset.Pawn.iShotsFired, this->ShotsFired);
@@ -335,6 +388,58 @@ bool PlayerPawn::GetVelocity()
 		return false;
 	this->Speed = sqrt(Velocity.x * Velocity.x + Velocity.y * Velocity.y);
 	return true;
+}
+
+std::vector<short> PlayerPawn::GetWeaponInventory(DWORD64 entityList) const
+{
+	std::vector<short> weapons;
+
+	DWORD64 weaponServices = 0;
+	if (!memoryManager.ReadMemory<DWORD64>(Address + Offset.Pawn.m_pWeaponServices, weaponServices))
+		return weapons;
+	if (weaponServices == 0)
+		return weapons;
+
+	int weaponsCount = 0;
+	if (!memoryManager.ReadMemory<int>(weaponServices + Offset.WeaponBaseData.hMyWeapons, weaponsCount))
+		return weapons;
+	if (weaponsCount <= 0 || weaponsCount > 64)
+		return weapons;
+
+	DWORD64 weaponsData = 0;
+	if (!memoryManager.ReadMemory<DWORD64>(weaponServices + Offset.WeaponBaseData.hMyWeapons + 0x8, weaponsData))
+		return weapons;
+	if (weaponsData == 0)
+		return weapons;
+
+	for (int i = 0; i < weaponsCount; i++)
+	{
+		DWORD64 weaponHandleOffset = weaponsData + (i * 0x4);
+
+		DWORD weaponHandle = 0;
+		if (!memoryManager.ReadMemory<DWORD>(weaponHandleOffset, weaponHandle))
+			continue;
+		if (weaponHandle == 0 || weaponHandle == 0xFFFFFFFF)
+			continue;
+
+		int entityIndex = weaponHandle & 0x7FFF;
+		if (entityIndex >= 0x4000)
+			continue;
+
+		DWORD64 weaponPtr = CEntity::ResolveEntityHandle(weaponHandle);
+		if (weaponPtr == 0)
+			continue;
+
+		short weaponID = 0;
+		if (!memoryManager.ReadMemory<short>(weaponPtr + Offset.EconEntity.AttributeManager +
+			Offset.WeaponBaseData.Item +
+			Offset.WeaponBaseData.ItemDefinitionIndex, weaponID))
+			continue;
+		if (weaponID > 0 && weaponID < 100)
+			weapons.push_back(weaponID);
+	}
+
+	return weapons;
 }
 
 bool CEntity::IsAlive() const
