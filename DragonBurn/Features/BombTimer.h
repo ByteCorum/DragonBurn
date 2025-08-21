@@ -136,10 +136,13 @@ namespace bmb
 				}
 			}
 
-			ImGuiIO& io = ImGui::GetIO();
-			io.FontGlobalScale = 0.8f;
-			ImGui::TextColored(color, "Defusing: %.3f s", defuseRemaining);
-			io.FontGlobalScale = 1.f;
+			ImFont* font = ImGui::GetFont();
+			float oldScale = font->Scale;
+			font->Scale = 0.7f;
+			ImGui::PushFont(font);
+			ImGui::TextColored(ImColor(0, 0, 0, 160), "Defusing: %.3f s", defuseRemaining);
+			font->Scale = oldScale;
+			ImGui::PopFont();
 		}
 		if (isPlanted && !isBombPlanted)
 		{
