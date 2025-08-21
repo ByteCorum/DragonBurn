@@ -194,7 +194,7 @@ namespace ESP
 				}
 			}
 
-			if (hasC4) {
+			if (hasC4 && Entity.Pawn.WeaponName != "c4") {
 				WeaponIconSize iconSize = weaponIconSizes["c4"];
 				ImVec2 c4TextPosition = { Rect.x + (Rect.z - iconSize.width) / 2 + iconSize.offsetX,
 										  Rect.y + Rect.w + 1 + iconSize.offsetY + (ESPConfig::AmmoBar ? 6.f : 0.f) + (ESPConfig::ShowWeaponESP && Entity.Pawn.WeaponName != "Weapon_None" ? 13.f : 0.f) };

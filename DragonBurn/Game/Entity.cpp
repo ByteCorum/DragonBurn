@@ -110,8 +110,6 @@ bool CEntity::UpdatePawn(const DWORD64& PlayerPawnAddress)
 	//	return false;
 	if (!this->Pawn.GetFlashDuration())//
 		return false;
-	if (!this->Pawn.GetLifeState())
-		return false;
 	if (!this->Pawn.GetVelocity())
 		return false;
 	if (!this->Pawn.GetAimPunchCache())//
@@ -206,59 +204,6 @@ bool PlayerPawn::GetWeaponName()
 	WeaponName = (it != CEntity::weaponNames.end()) ? it->second : defaultWeapon;
 
 	return true;
-}
-
-std::vector<CEntity> CEntity::GetAllEntitiesByClass(DWORD64 client, const CView& ViewMatrix, const std::string& type) {
-	constexpr int maxEntities = 1024;
-	std::vector<CEntity> result;
-
-	DWORD64 entityList = 0;
-	if (!memoryManager.ReadMemory<DWORD64>(client + Offset.EntityList, entityList)) return result;
-	if (!entityList) return result;
-
-	for (int i = 0; i < maxEntities; i++) {
-		//skibidi shit
-		DWORD64 listEntry = 0;
-		if (!memoryManager.ReadMemory<DWORD64>(entityList + 0x8 * ((i & 0x7FFF) >> 9) + 16, listEntry)) continue;
-		if (!listEntry) continue;
-
-		DWORD64 entityAddress = 0;
-		if (!memoryManager.ReadMemory<DWORD64>(listEntry + 0x78 * (i & 0x1FF), entityAddress)) continue;
-		if (!entityAddress) continue;
-
-		DWORD64 identity = 0;
-		if (!memoryManager.ReadMemory<DWORD64>(entityAddress + Offset.Entity.m_pEntity, identity)) continue;
-		
-		DWORD64 classNamePtr = 0;
-		if (!memoryManager.ReadMemory<DWORD64>(identity + Offset.Entity.designerName, classNamePtr)) continue;
-		
-		char className[64]{};
-		if (!memoryManager.ReadMemory(classNamePtr, className, sizeof(className))) continue;
-		std::string classNameStr(className);
-
-		if (!matchesPattern(classNameStr, type)) {
-			continue;
-		}
-
-		CEntity foundEntity;
-		foundEntity.Pawn.Address = entityAddress;
-
-		DWORD64 sceneNode = 0;
-		if (!memoryManager.ReadMemory<DWORD64>(entityAddress + Offset.Pawn.GameSceneNode, sceneNode)) continue;
-		if (!sceneNode) continue;
-
-		Vec3 pos = {};
-		if (!memoryManager.ReadMemory<Vec3>(sceneNode + Offset.GameSceneNode.vecOrigin, pos)) continue;
-		foundEntity.Pawn.Pos = pos;
-
-		Vec2 w2s = {};
-		if (!ViewMatrix.WorldToScreen(pos, w2s)) continue;
-		foundEntity.Pawn.ScreenPos = w2s;
-
-		result.push_back(foundEntity);
-	}
-
-	return result;
 }
 
 bool PlayerPawn::GetShotsFired()
@@ -376,11 +321,6 @@ bool PlayerPawn::GetFlashDuration()
 	return memoryManager.ReadMemory(Address + Offset.Pawn.flFlashDuration, this->FlashDuration);
 }
 
-bool PlayerPawn::GetLifeState()
-{
-	return GetDataAddressWithOffset<BYTE>(Address, Offset.Pawn.m_lifeState, this->LifeState);
-}
-
 bool PlayerPawn::GetVelocity()
 {
 	Vec3 Velocity;
@@ -444,7 +384,7 @@ std::vector<short> PlayerPawn::GetWeaponInventory(DWORD64 entityList) const
 
 bool CEntity::IsAlive() const
 {
-	return this->Controller.AliveStatus == 1 && this->Pawn.Health > 0 && this->Pawn.Health <= 100 && (this->Pawn.LifeState == 0 || this->Pawn.LifeState != 256);
+	return this->Controller.AliveStatus == 1 && this->Pawn.Health > 0 && this->Pawn.Health <= 100;
 }
 
 bool CEntity::IsInScreen()
@@ -564,7 +504,7 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 	std::vector<DWORD64>& cameraAddresses) {
 
 	std::vector<std::pair<DWORD64, SIZE_T>> requests;
-	requests.reserve(entities.size() * 21); // 6 controller + 15 pawn = 21 per entity
+	requests.reserve(entities.size() * 20); // 6 controller + 14 pawn = 21 per entity
 
 	// Build all requests for Phase 1
 	for (const auto& [entityIndex, entity] : entities) {
@@ -594,7 +534,6 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.AbsVelocity, sizeof(Vec3));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.pClippingWeapon, sizeof(DWORD64));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.CameraServices, sizeof(DWORD64));
-		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.m_lifeState, sizeof(BYTE));
 	}
 
 	// Calculate total buffer size
@@ -617,7 +556,7 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 	const SIZE_T CONTROLLER_DATA_SIZE = sizeof(int) * 3 + MAX_PATH + sizeof(INT64) + sizeof(DWORD);
 
 	const SIZE_T PAWN_DATA_SIZE = sizeof(Vec2) * 2 + sizeof(Vec3) * 3 + sizeof(DWORD64) * 3 +
-		sizeof(DWORD) + sizeof(int) * 3 + sizeof(float) + sizeof(C_UTL_VECTOR) + sizeof(BYTE);
+		sizeof(DWORD) + sizeof(int) * 3 + sizeof(float) + sizeof(C_UTL_VECTOR);
 	const SIZE_T ENTITY_DATA_SIZE = CONTROLLER_DATA_SIZE + PAWN_DATA_SIZE;
 
 	SIZE_T currentOffset = 0;
@@ -704,9 +643,6 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 
 		memcpy(&cameraAddr, buffer.data() + currentOffset, sizeof(DWORD64));
 		currentOffset += sizeof(DWORD64);
-
-		memcpy(&entity.Pawn.LifeState, buffer.data() + currentOffset, sizeof(BYTE));
-		currentOffset += sizeof(BYTE);
 
 		weaponAddresses.push_back(weaponAddr);
 		cameraAddresses.push_back(cameraAddr);

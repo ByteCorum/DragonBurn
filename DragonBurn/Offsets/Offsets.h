@@ -36,8 +36,6 @@ public:
 		DWORD IsAlive;
 		DWORD PlayerPawn;
 		DWORD iszPlayerName;
-		DWORD designerName;
-		DWORD m_pEntity;
 	}Entity;
 
 	struct
@@ -68,7 +66,6 @@ public:
 		DWORD bSpottedByMask;
 		DWORD AbsVelocity;
 		DWORD m_bWaitForNoAttack;
-		DWORD m_lifeState;
 		DWORD m_pWeaponServices;
 
 	} Pawn;
@@ -116,11 +113,6 @@ public:
 		DWORD ItemDefinitionIndex;
 		DWORD hMyWeapons;
 	} WeaponBaseData;
-
-	struct
-	{
-		DWORD vecOrigin;
-	} GameSceneNode;
 
 	struct
 	{

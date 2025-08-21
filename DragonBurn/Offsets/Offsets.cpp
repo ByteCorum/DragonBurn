@@ -28,8 +28,6 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Entity.IsAlive = client_dllJson["CCSPlayerController"]["fields"]["m_bPawnIsAlive"];
     this->Entity.PlayerPawn = client_dllJson["CCSPlayerController"]["fields"]["m_hPlayerPawn"];
     this->Entity.iszPlayerName = client_dllJson["CBasePlayerController"]["fields"]["m_iszPlayerName"];
-    this->Entity.designerName = client_dllJson["CEntityIdentity"]["fields"]["m_designerName"];
-    this->Entity.m_pEntity = client_dllJson["CEntityInstance"]["fields"]["m_pEntity"];
 
     this->Pawn.BulletServices = client_dllJson["C_CSPlayerPawn"]["fields"]["m_pBulletServices"];
     this->Pawn.CameraServices = client_dllJson["C_BasePlayerPawn"]["fields"]["m_pCameraServices"];
@@ -56,7 +54,6 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Pawn.bSpottedByMask = DWORD(client_dllJson["C_CSPlayerPawn"]["fields"]["m_entitySpottedState"]) + DWORD(client_dllJson["EntitySpottedState_t"]["fields"]["m_bSpottedByMask"]);
     this->Pawn.AbsVelocity = client_dllJson["C_BaseEntity"]["fields"]["m_vecAbsVelocity"];
     this->Pawn.m_bWaitForNoAttack = client_dllJson["C_CSPlayerPawn"]["fields"]["m_bWaitForNoAttack"];
-    this->Pawn.m_lifeState = client_dllJson["C_BaseEntity"]["fields"]["m_lifeState"];
     this->Pawn.m_pWeaponServices = client_dllJson["C_BasePlayerPawn"]["fields"]["m_pWeaponServices"];
 
     this->GlobalVar.RealTime = 0x00;
@@ -94,8 +91,6 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->C4.m_bBeingDefused = client_dllJson["C_PlantedC4"]["fields"]["m_bBeingDefused"];
     this->C4.m_flDefuseCountDown = client_dllJson["C_PlantedC4"]["fields"]["m_flDefuseCountDown"];
     this->C4.m_nBombSite = client_dllJson["C_PlantedC4"]["fields"]["m_nBombSite"];
-
-    this->GameSceneNode.vecOrigin = client_dllJson["CGameSceneNode"]["fields"]["m_vecAbsOrigin"];
 }
 
 void Offsets::UpdateOffsets()
