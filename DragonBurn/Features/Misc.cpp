@@ -17,7 +17,7 @@ namespace Misc
 
 	void Watermark(const CEntity& LocalPlayer) noexcept
 	{
-		if ((!MiscCFG::WaterMark || LocalPlayer.Controller.TeamID == 0) && !(MiscCFG::WaterMark && MenuConfig::ShowMenu))
+		if (!MiscCFG::WaterMark || (LocalPlayer.Pawn.TeamID == 0 && !MenuConfig::ShowMenu))
 			return;
 
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize;
@@ -66,9 +66,7 @@ namespace Misc
 	void HitManager(CEntity& LocalPlayer, int& PreviousTotalHits) noexcept
 	{
 		if ((!MiscCFG::HitSound && !MiscCFG::HitMarker) || LocalPlayer.Controller.TeamID == 0 || MenuConfig::ShowMenu || !LocalPlayer.IsAlive())
-		{
 			return;
-		}
 
 		uintptr_t pBulletServices;
 		int totalHits;

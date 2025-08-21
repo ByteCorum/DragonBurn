@@ -40,7 +40,7 @@ namespace bmb
 
 	void RenderWindow(int inGame)
 	{
-		if ((!MiscCFG::bmbTimer || inGame == 0) && !(MiscCFG::bmbTimer && MenuConfig::ShowMenu))
+		if ((!MiscCFG::bmbTimer) || (inGame == 0 && !MenuConfig::ShowMenu))
 			return;
 
 		uintptr_t bomb;
@@ -104,7 +104,7 @@ namespace bmb
 
 			std::ostringstream ss;
 			ss.precision(3);
-			ss << "Bomb on " << (!getBombSite(isBombPlanted) ? "A" : "B") << ": " << std::fixed << remaining << " s";
+			ss << "Bomb on " << (!getBombSite(isBombPlanted) ? "A" : "B") << ": " << std::fixed << std::round(remaining * 1000.0) / 1000.0 << " s";
 			Gui.MyText(std::move(ss).str().c_str(), true);
 		}
 		else {
@@ -136,7 +136,10 @@ namespace bmb
 				}
 			}
 
-			ImGui::Text("Defusing: %.2f s", defuseRemaining);
+			ImGuiIO& io = ImGui::GetIO();
+			io.FontGlobalScale = 0.8f;
+			ImGui::TextColored(color, "Defusing: %.3f s", defuseRemaining);
+			io.FontGlobalScale = 1.f;
 		}
 		if (isPlanted && !isBombPlanted)
 		{
