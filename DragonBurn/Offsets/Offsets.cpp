@@ -47,7 +47,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Pawn.flFlashDuration = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_flFlashDuration"];
     this->Pawn.aimPunchAngle = client_dllJson["C_CSPlayerPawn"]["fields"]["m_aimPunchAngle"];
     this->Pawn.aimPunchCache = client_dllJson["C_CSPlayerPawn"]["fields"]["m_aimPunchCache"];
-    this->Pawn.iIDEntIndex = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_iIDEntIndex"];
+    this->Pawn.iIDEntIndex = client_dllJson["C_CSPlayerPawn"]["fields"]["m_iIDEntIndex"];
     this->Pawn.iTeamNum = client_dllJson["C_BaseEntity"]["fields"]["m_iTeamNum"];
     this->Pawn.iFovStart = client_dllJson["CCSPlayerBase_CameraServices"]["fields"]["m_iFOVStart"];
     this->Pawn.fFlags = client_dllJson["C_BaseEntity"]["fields"]["m_fFlags"];
