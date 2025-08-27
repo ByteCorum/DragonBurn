@@ -112,8 +112,8 @@ https://github.com/ByteCorum/DragonBurn
 	else
 	{
 		Log::PreviousLine();
+		Log::Warning("first, run DragonBurn-kernel.exe/ Once.");
 		Log::Error("Failed to connect to kernel mode driver");
-		Log::Error("first, run DragonBurn-kernel.exe/ Once.");
 	}
 
 	std::cout << '\n';
