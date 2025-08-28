@@ -14,7 +14,6 @@ namespace MenuConfig
 	inline int AimDelay = 1;
 	inline int BunnyHopDelay = 25;
 	inline int RenderDistance = 1000;
-	inline bool secure = true;
 
 	struct {
 		// 0: Visual 1: Aimbot 2: Misc 3: Config
