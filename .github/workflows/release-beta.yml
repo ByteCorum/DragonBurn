@@ -13,6 +13,36 @@ jobs:
         with:
           webhook_id: ${{ secrets.WEBHOOK_ID }}
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          color: "#465173"
           username: "DragonBurn-beta"
-          message: "${{ github.repository }}\nCommit: ${{ github.event.head_commit.message }}[${{ github.sha }}]\n[Beta-release build](${{ steps.upload-step.outputs.artifact-url }})"
+          discord: |
+            {
+              "embeds": [
+                {
+                  "title": "${{ github.repository }}",
+                  "description": "Beta-release build",
+                  "color": 465173,
+                  "author":
+                  {
+                    "name": "${{ github.actor }}",
+                    "icon_url": "https://github.com/${{ github.actor }}.png?size=48"
+                  },
+                  "fields": [
+                    {
+                      "name": "Commit",
+                      "value": "${{ github.event.head_commit.message }}[`${{ github.sha }}`]",
+                      "inline": true
+                    },
+                    {
+                      "name": "Binaries",
+                      "value": "111",
+                      "inline": true
+                    }
+                  ],
+                  "timestamp": "${{ github.event.head_commit.timestamp }}",
+                  "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
+                  "footer": {
+                    "text": "GitHub Actions | ${{ github.workflow }}"
+                  }
+                }
+              ]
+            }
