@@ -15,34 +15,10 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           username: "DragonBurn-beta"
           discord: |
-            {
-              "embeds": [
-                {
-                  "title": "${{ github.repository }}",
-                  "description": "Beta-release build",
-                  "color": 465173,
-                  "author":
-                  {
-                    "name": "${{ github.actor }}",
-                    "icon_url": "https://github.com/${{ github.actor }}.png?size=48"
-                  },
-                  "fields": [
-                    {
-                      "name": "Commit",
-                      "value": "${{ github.event.head_commit.message }}[`${{ github.sha }}`]",
-                      "inline": true
-                    },
-                    {
-                      "name": "Binaries",
-                      "value": "111",
-                      "inline": true
-                    }
-                  ],
-                  "timestamp": "${{ github.event.head_commit.timestamp }}",
-                  "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}",
-                  "footer": {
-                    "text": "GitHub Actions | ${{ github.workflow }}"
-                  }
-                }
-              ]
-            }
+            **_DragonBurn beta release_**
+
+            - **Commit SHA:** `${{ github.sha }}`
+            - **Commit Message:** `${{ github.event.head_commit.message }}`
+            - **Author:** `${{ github.actor }}`
+
+            [View the commit on GitHub](${{ github.event.head_commit.url }})
