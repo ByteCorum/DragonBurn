@@ -9,11 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send release to discord
-        uses: appleboy/discord-action@master
-        with:
-          webhook_id: ${{ secrets.WEBHOOK_ID }}
-          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
-          color: "#465173"
-          username: "DragonBurn-beta"
-          message: "${{ github.repository }}\nCommit: ${{ github.event.head_commit.message }}[${{ github.sha }}]\n[Beta-release build]()"
-          file: "D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe"
+        run: |
+          curl -H 'Content-Type: multipart/form-data' \
+          -X POST \
+          -F "payload_json={\"content\": \"**${{ github.repository }}**\nCommit: ${{ github.event.head_commit.message }}[`${{ github.sha }}`]\"}" \
+          -F "file="D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe"; filename=\"DragonBurn-${{ github.sha }}\"" ${{ secrets.WEBHOOK_URL }}
