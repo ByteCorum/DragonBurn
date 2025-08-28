@@ -24,7 +24,7 @@ public:
     bool Attach(const DWORD pid);
     DWORD64 GetModuleBase(const wchar_t* moduleName);
     DWORD GetProcessID(const wchar_t* processName);
-
+    //DWORD64 TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets);
     bool BatchReadMemory(const std::vector<std::pair<DWORD64, SIZE_T>>& requests, void* output_buffer);
 
     template <typename ReadType>
@@ -59,6 +59,41 @@ public:
         return false;
     }
 
+    template <typename WriteType>
+    bool WriteMemory(DWORD64 address, WriteType& value, SIZE_T size = sizeof(WriteType))
+    {
+        if (MenuConfig::secure)
+            return true;
+
+        //if (kernelDriver != nullptr && ProcessID != 0)
+        //{
+        //    if (address == 0 || address >= 0x7FFFFFFFFFFF || size == 0 || size > 0x1000) {
+        //        return false;
+        //    }
+
+        //    if (address + size < address) {
+        //        return false;
+        //    }
+
+        //    Request readRequest;
+        //    readRequest.process_id = ULongToHandle(ProcessID);
+        //    readRequest.target = reinterpret_cast<PVOID>(address);
+        //    readRequest.buffer = &value;
+        //    readRequest.size = size;
+
+        //    BOOL result = DeviceIoControl(kernelDriver,
+        //        IOCTL_READ,
+        //        &readRequest,
+        //        sizeof(readRequest),
+        //        &readRequest,
+        //        sizeof(readRequest),
+        //        nullptr,
+        //        nullptr);
+        //    return result == TRUE;
+        //}
+        //return false;
+    }
+
     template<typename T>
     bool BatchReadStructured(const std::vector<DWORD64>& addresses, std::vector<T>& results) {
         if (addresses.empty()) return false;
@@ -72,43 +107,6 @@ public:
 
         results.resize(addresses.size());
         return BatchReadMemory(requests, results.data());
-    }
-
-    //DWORD64 TraceAddress(DWORD64 baseAddress, std::vector<DWORD> offsets);
-
-    template <typename WriteType>
-    bool WriteMemory(DWORD64 address, const WriteType& value, SIZE_T size = sizeof(WriteType))
-    {
-        if (MenuConfig::secure)
-            return true;
-        if (kernelDriver != nullptr && ProcessID != 0)
-        {
-            if (address == 0 || address >= 0x7FFFFFFFFFFF || size == 0 || size > 0x1000) {
-                return false;
-            }
-
-            if (address + size < address) {
-                return false;
-            }
-
-            Request writeRequest;
-            writeRequest.process_id = ULongToHandle(ProcessID);
-            writeRequest.target = reinterpret_cast<PVOID>(address);
-            writeRequest.buffer = const_cast<void*>((const void*)&value);
-            writeRequest.size = size;
-
-            BOOL result = DeviceIoControl(kernelDriver,
-                IOCTL_WRITE,
-                &writeRequest,
-                sizeof(writeRequest),
-                nullptr,
-                0,
-                nullptr,
-                nullptr);
-
-            return result == TRUE;
-        }
-        return false;
     }
 
 private:
@@ -135,6 +133,7 @@ private:
         SIZE_T size;
         WCHAR moduleName[1024];
     } MODULE_PACK, * P_MODULE_PACK;
+
 
     // Batch read structures
     struct BatchReadRequest {
