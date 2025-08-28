@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/tests-100/100-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/code quality-A+-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&logo=&logoColor=whit">
-  <img src="https://img.shields.io/badge/DragonBurn-v3.1.4.0-blue?style=for-the-badge&logo=&logoColor=whit">
+  <img src="https://img.shields.io/badge/DragonBurn-v3.2.5.0-blue?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/CS2-000000?style=for-the-badge&logo=counter-strike&logoColor=white">
   <img src="https://img.shields.io/badge/Kernel mode-28004D?style=for-the-badge&logo=webdriverio&logoColor=FFFFFF">
   <img src="https://img.shields.io/badge/offsets auto update-D06B57?style=for-the-badge&logo=databricks&logoColor=FFFFFF">
@@ -48,6 +48,8 @@ Press END key to open/close menu.
 - Gradient Filled Box ESP
 - Skeleton
 - Snap Line
+- Bomb esp
+- Bomb carrier esp
 - Visual Color
 - Eye Ray
 - Health Bar
