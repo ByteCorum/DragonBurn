@@ -10,7 +10,51 @@ jobs:
     steps:
       - name: Send release to discord
         run: |
-          curl -H 'Content-Type: multipart/form-data' \
-          -X POST \
-          -F "payload_json={\"content\": \"**${{ github.repository }}**\nCommit: ${{ github.event.head_commit.message }}[`${{ github.sha }}`]\"}" \
-          -F "file="D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe"; filename=\"DragonBurn-${{ github.sha }}\"" ${{ secrets.WEBHOOK_URL }}
+            curl -H 'Content-Type: application/json' \
+            -X POST \
+            -d '{
+              "content": "**${{ github.repository }}**\nCommit: ${{ github.event.head_commit.message }} [`${{ github.sha }}`]",
+              "embeds": [
+                {
+                  "title": "🚀 Deployment Successful!",
+                  "description": "Your code has been successfully deployed to production.",
+                  "color": 65280,
+                  "fields": [
+                    {
+                      "name": "📦 Repository",
+                      "value": "${{ github.repository }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "🌿 Branch", 
+                      "value": "${{ github.ref_name }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "👤 Author",
+                      "value": "${{ github.actor }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "💾 Commit",
+                      "value": "[${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})",
+                      "inline": false
+                    },
+                    {
+                      "name": "📝 Commit Message",
+                      "value": "${{ github.event.head_commit.message }}",
+                      "inline": false
+                    }
+                  ],
+                  "thumbnail": {
+                    "url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  },
+                  "footer": {
+                    "text": "GitHub Actions",
+                    "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  },
+                  "timestamp": "${{ github.event.head_commit.timestamp }}"
+                }
+              ]
+            }' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
