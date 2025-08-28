@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <string>
 #include <vector>
+#include "Config.h"
 #include <unordered_map>
 
 #define DRAGON_DEVICE 0x8000
@@ -11,7 +12,7 @@
 #define IOCTL_GET_MODULE_BASE CTL_CODE(DRAGON_DEVICE, 0x4454, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 #define IOCTL_GET_PID CTL_CODE(DRAGON_DEVICE, 0x4455, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 #define IOCTL_BATCH_READ CTL_CODE(DRAGON_DEVICE, 0x4456, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
-//#define IOCTL_WRITE CTL_CODE(DRAGON_DEVICE, 0x4457, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IOCTL_WRITE CTL_CODE(DRAGON_DEVICE, 0x4457, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 
 class MemoryMgr
 {
@@ -45,6 +46,41 @@ public:
             readRequest.buffer = &value;
             readRequest.size = size;
 
+            BOOL result = DeviceIoControl(kernelDriver,
+                IOCTL_READ,
+                &readRequest,
+                sizeof(readRequest),
+                &readRequest,
+                sizeof(readRequest),
+                nullptr,
+                nullptr);
+            return result == TRUE;
+        }
+        return false;
+    }
+
+    template <typename WriteType>
+    bool WriteMemory(DWORD64 address, WriteType& value, SIZE_T size = sizeof(WriteType))
+    {
+        if (MenuConfig::secure)
+            return true;
+    
+        if (kernelDriver != nullptr && ProcessID != 0)
+        {
+            if (address == 0 || address >= 0x7FFFFFFFFFFF || size == 0 || size > 0x1000) {
+                return false;
+            }
+    
+            if (address + size < address) {
+                return false;
+            }
+    
+            Request readRequest;
+            readRequest.process_id = ULongToHandle(ProcessID);
+            readRequest.target = reinterpret_cast<PVOID>(address);
+            readRequest.buffer = &value;
+            readRequest.size = size;
+    
             BOOL result = DeviceIoControl(kernelDriver,
                 IOCTL_READ,
                 &readRequest,
