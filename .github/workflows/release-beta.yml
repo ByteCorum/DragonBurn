@@ -15,4 +15,4 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           color: "#465173"
           username: "DragonBurn-beta"
-          message: "${{ github.repository }} new commit ${{ github.event.head_commit.message }}[${{ github.sha }}] beta-release build:\n${{ steps.upload-step.outputs.artifact-url }}"
+          message: "${{ github.repository }}\nCommit: ${{ github.event.head_commit.message }}[${{ github.sha }}]\n[Beta-release build](${{ steps.upload-step.outputs.artifact-url }})"
