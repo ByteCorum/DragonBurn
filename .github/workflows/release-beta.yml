@@ -15,7 +15,7 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           color: "#465173"
           username: "DragonBurn-beta"
-          embeds: |
+          message: |
           [
             {
               "title": "🚀 Deployment Successful!",
