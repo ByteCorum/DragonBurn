@@ -9,14 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send release to discord
-        env:
-          COMMIT_MSG: ${{ github.event.head_commit.message }}
-          REPO: ${{ github.repository }}
-          AUTHOR: ${{ github.actor }}
-          BRANCH: ${{ github.ref_name }}
-          SHA: ${{ github.sha }}
         run: |
           curl -H "Content-Type: application/json" \
           -X POST \
-          -d "{\"embeds\":[{\"title\":\"🚀 Deployment Successful!\",\"description\":\"Code deployed to production\",\"color\":65280,\"fields\":[{\"name\":\"📦 Repository\",\"value\":\"$REPO\",\"inline\":true},{\"name\":\"🌿 Branch\",\"value\":\"$BRANCH\",\"inline\":true},{\"name\":\"👤 Author\",\"value\":\"$AUTHOR\",\"inline\":true},{\"name\":\"💾 Commit\",\"value\":\"[\`${SHA:0:7}\`](https://github.com/$REPO/commit/$SHA)\",\"inline\":false}],\"thumbnail\":{\"url\":\"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"},\"footer\":{\"text\":\"GitHub Actions\",\"icon_url\":\"https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png\"},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)\"}]}" \
-          "${{ secrets.DISCORD_WEBHOOK_URL }}"
+          --data-binary "{\"embeds\":[{\"title\":\"DragonBurn\",\"description\":\"Beta-release build\",\"fields\":[{\"name\":\"Branch\",\"value\":\"${{ github.ref_name }}\",\"inline\":false},{\"name\":\"Commit name\",\"value\":\"${{ github.event.head_commit.message }}\",\"inline\":true},{\"name\":\"Commit sha\",\"value\":\"${{ github.sha }}\",\"inline\":true},{\"name\":\"Binaries\",\"value\":\"---\",\"inline\":false}],\"color\":4608371,\"footer\":{\"text\":\"DragonBurn community\",\"icon_url\":\"https://github.com/ByteCorum/DragonBurn/blob/stable/Assets/logo_square.png?raw=true\"},\"thumbnail\":{\"url\":\"https://github.com/ByteCorum/DragonBurn/blob/stable/Assets/logo_square.png?raw=true\"}}]}" \
+          "https://discord.com/api/webhooks/1410693136350445761/fKgyRei6RikVvf8pdV5KXCoFRrWGApK6UewuXtvWiH2wHimrihHNOS2YvPVug1WIRn65"
