@@ -2,35 +2,27 @@ name: build-check x64 release
 
 on:
   push:
-    branches: [ stable, WIP, kernel ]
+    branches: [stable, WIP, kernel]
   pull_request:
-    branches: [ stable, WIP, kernel ]
+    branches: [stable, WIP, kernel]
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
 
-    - name: Building project
-      run: |
-        msbuild DragonBurn.sln -t:Rebuild -p:Configuration=Release -p:Platform=x64
+      - name: Building project
+        run: |
+          msbuild DragonBurn.sln -t:Rebuild -p:Configuration=Release -p:Platform=x64
 
-    - name: Archive usermode
-      uses: actions/upload-artifact@v4
-      with:
-        name: Usermode app
-        path: |
-          D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe
-    
-    - name: Archive kernelmode
-      uses: actions/upload-artifact@v4
-      with:
-        name: Kernelmode driver
-        path: |
-          D:\a\DragonBurn\DragonBurn\built\DragonBurn-kernel.sys
-      
+      - name: Archive usermode
+        uses: actions/upload-artifact@v4
+        with:
+          name: DragonBurn_${{ github.sha }}
+          path: |
+            D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe
