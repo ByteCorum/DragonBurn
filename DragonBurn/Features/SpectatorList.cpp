@@ -70,7 +70,7 @@ namespace SpecList
 
     void SpectatorWindowList(CEntity& LocalEntity)
     {
-        if (!MiscCFG::SpecList || (!MenuConfig::ShowMenu && g_spec_data.current_spectators.empty()))
+        if (!MiscCFG::SpecList || (LocalEntity.Pawn.TeamID == 0 && !MenuConfig::ShowMenu))//&& g_spec_data.current_spectators.empty()
             return;
 
         ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize;
@@ -98,7 +98,7 @@ namespace SpecList
             for (const auto& spectator : g_spec_data.current_spectators)
             {
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5);
-                ImGui::TextColored(ImColor(150, 200, 150, 255), spectator.c_str());
+                ImGui::Text(spectator.c_str());
             }
         }
 

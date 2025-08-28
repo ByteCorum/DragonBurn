@@ -20,7 +20,6 @@
 #include <filesystem>
 #include <KnownFolders.h>
 #include <ShlObj.h>
-#include <format>
 
 using namespace std;
 
@@ -67,9 +66,7 @@ https://github.com/ByteCorum/DragonBurn
 )LOGO", 13);
 
 	if (!Init::Verify::CheckWindowVersion())
-	{
 		Log::Warning("Your os is unsupported, bugs may occurred", true);
-	}
 
 #ifndef DBDEBUG
 	Log::Info("Checking cheat version");
@@ -85,9 +82,8 @@ https://github.com/ByteCorum/DragonBurn
 	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
-		Log::Error(format("Error: {}", error.what()));
+		Log::Error(error.what());
 	}
-
 #endif
 
 	Log::Info("Updating offsets");
@@ -100,7 +96,7 @@ https://github.com/ByteCorum/DragonBurn
 	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
-		Log::Error(format("Error: {}",error.what()));
+		Log::Error(error.what());
 	}
 
 	Log::Info("Connecting to kernel mode driver");
@@ -112,6 +108,7 @@ https://github.com/ByteCorum/DragonBurn
 	else
 	{
 		Log::PreviousLine();
+		Log::Warning("First, run DragonBurn-kernel.exe");
 		Log::Error("Failed to connect to kernel mode driver");
 	}
 
@@ -147,7 +144,7 @@ https://github.com/ByteCorum/DragonBurn
 	catch(const std::exception& error)
 	{
 		Log::PreviousLine();
-		Log::Error(format("Error: {}", error.what()));
+		Log::Error(error.what());
 	}
 #endif
 
@@ -173,30 +170,26 @@ https://github.com/ByteCorum/DragonBurn
 	MenuConfig::path = documentsPath;
 	MenuConfig::docPath = documentsPath;
 	MenuConfig::path += "\\DragonBurn";
-
-	if (fs::exists(MenuConfig::docPath + "\\Adobe Software Data"))
+	try
 	{
-		fs::rename(MenuConfig::docPath + "\\Adobe Software Data", MenuConfig::path);
-	}
-
-	if (fs::exists(MenuConfig::path))
-	{
-		Log::Fine("Config folder connected: " + MenuConfig::path);
-	}
-	else
-	{
-		if (fs::create_directory(MenuConfig::path))
-		{
+		if (fs::exists(MenuConfig::docPath + "\\Adobe Software Data"))
+			fs::rename(MenuConfig::docPath + "\\Adobe Software Data", MenuConfig::path);
+		if (fs::exists(MenuConfig::path))
 			Log::Fine("Config folder connected: " + MenuConfig::path);
-		}
 		else
 		{
-			Log::Error("Failed to create the config directory");
+			if (fs::create_directory(MenuConfig::path))
+				Log::Fine("Config folder connected: " + MenuConfig::path);
+			else
+				Log::Error("Failed to create the config directory");
 		}
+		if (fs::exists(MenuConfig::path + "\\default.cfg"))
+			MenuConfig::defaultConfig = true;
 	}
-
-	if (fs::exists(MenuConfig::path + "\\default.cfg"))
-		MenuConfig::defaultConfig = true;
+	catch (const std::exception& error)
+	{
+		Log::Error(error.what());
+	}
 
 	Log::Fine("DragonBurn loaded");
 

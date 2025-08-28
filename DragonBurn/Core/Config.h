@@ -5,7 +5,7 @@
 namespace MenuConfig
 {
 	inline std::string name = "DragonBurn";
-	inline std::string version = "3.1.4.0";
+	inline std::string version = "3.2.5.0";
 	inline std::string author = "ByteCorum";
 
 	inline std::string path = "";
@@ -14,7 +14,6 @@ namespace MenuConfig
 	inline int AimDelay = 1;
 	inline int BunnyHopDelay = 25;
 	inline int RenderDistance = 1000;
-
 
 	struct {
 		// 0: Visual 1: Aimbot 2: Misc 3: Config

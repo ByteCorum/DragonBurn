@@ -47,14 +47,14 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->Pawn.flFlashDuration = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_flFlashDuration"];
     this->Pawn.aimPunchAngle = client_dllJson["C_CSPlayerPawn"]["fields"]["m_aimPunchAngle"];
     this->Pawn.aimPunchCache = client_dllJson["C_CSPlayerPawn"]["fields"]["m_aimPunchCache"];
-    this->Pawn.iIDEntIndex = client_dllJson["C_CSPlayerPawnBase"]["fields"]["m_iIDEntIndex"];
+    this->Pawn.iIDEntIndex = client_dllJson["C_CSPlayerPawn"]["fields"]["m_iIDEntIndex"];
     this->Pawn.iTeamNum = client_dllJson["C_BaseEntity"]["fields"]["m_iTeamNum"];
     this->Pawn.iFovStart = client_dllJson["CCSPlayerBase_CameraServices"]["fields"]["m_iFOVStart"];
     this->Pawn.fFlags = client_dllJson["C_BaseEntity"]["fields"]["m_fFlags"];
     this->Pawn.bSpottedByMask = DWORD(client_dllJson["C_CSPlayerPawn"]["fields"]["m_entitySpottedState"]) + DWORD(client_dllJson["EntitySpottedState_t"]["fields"]["m_bSpottedByMask"]);
     this->Pawn.AbsVelocity = client_dllJson["C_BaseEntity"]["fields"]["m_vecAbsVelocity"];
     this->Pawn.m_bWaitForNoAttack = client_dllJson["C_CSPlayerPawn"]["fields"]["m_bWaitForNoAttack"];
-    this->Pawn.m_lifeState = client_dllJson["C_BaseEntity"]["fields"]["m_lifeState"];
+    this->Pawn.m_pWeaponServices = client_dllJson["C_BasePlayerPawn"]["fields"]["m_pWeaponServices"];
 
     this->GlobalVar.RealTime = 0x00;
     this->GlobalVar.FrameCount = 0x04;
@@ -86,6 +86,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->WeaponBaseData.MaxClip = client_dllJson["CBasePlayerWeaponVData"]["fields"]["m_iMaxClip1"];
     this->WeaponBaseData.Item = client_dllJson["C_AttributeContainer"]["fields"]["m_Item"];
     this->WeaponBaseData.ItemDefinitionIndex = client_dllJson["C_EconItemView"]["fields"]["m_iItemDefinitionIndex"];
+    this->WeaponBaseData.hMyWeapons = client_dllJson["CPlayer_WeaponServices"]["fields"]["m_hMyWeapons"];
 
     this->C4.m_bBeingDefused = client_dllJson["C_PlantedC4"]["fields"]["m_bBeingDefused"];
     this->C4.m_flDefuseCountDown = client_dllJson["C_PlantedC4"]["fields"]["m_flDefuseCountDown"];

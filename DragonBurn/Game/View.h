@@ -6,7 +6,7 @@ class CView
 public:
 	float Matrix[4][4]{};
 
-	bool WorldToScreen(const Vec3& Pos, Vec2& ToPos)
+	bool WorldToScreen(const Vec3& Pos, Vec2& ToPos) const
 	{
 		float View = 0.f;
 		float SightX = Gui.Window.Size.x / 2, SightY = Gui.Window.Size.y / 2;

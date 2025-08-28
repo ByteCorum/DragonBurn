@@ -66,7 +66,7 @@ public:
 		DWORD bSpottedByMask;
 		DWORD AbsVelocity;
 		DWORD m_bWaitForNoAttack;
-		DWORD m_lifeState;
+		DWORD m_pWeaponServices;
 
 	} Pawn;
 
@@ -111,6 +111,7 @@ public:
 		DWORD MaxClip;
 		DWORD Item;
 		DWORD ItemDefinitionIndex;
+		DWORD hMyWeapons;
 	} WeaponBaseData;
 
 	struct

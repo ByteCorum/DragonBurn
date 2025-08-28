@@ -1,5 +1,5 @@
 HEIGHT PRIORITY
-Bomb carrier esp
+-
 
 MEDIUM PRIORITY
 Use binds from game instead const keys
