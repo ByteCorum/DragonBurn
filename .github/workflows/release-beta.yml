@@ -15,46 +15,5 @@ jobs:
           webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
           color: "#465173"
           username: "DragonBurn-beta"
-          message: |
-          [
-            {
-              "title": "🚀 Deployment Successful!",
-              "description": "Your code has been successfully deployed to production.",
-              "color": 65280,
-              "fields": [
-                {
-                  "name": "📦 Repository",
-                  "value": "${{ github.repository }}",
-                  "inline": true
-                },
-                {
-                  "name": "🌿 Branch",
-                  "value": "${{ github.ref_name }}",
-                  "inline": true
-                },
-                {
-                  "name": "👤 Author",
-                  "value": "${{ github.actor }}",
-                  "inline": true
-                },
-                {
-                  "name": "💾 Commit",
-                  "value": "[${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})",
-                  "inline": false
-                },
-                {
-                  "name": "📝 Commit Message",
-                  "value": "${{ github.event.head_commit.message }}",
-                  "inline": false
-                }
-              ],
-              "thumbnail": {
-                "url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-              },
-              "footer": {
-                "text": "GitHub Actions",
-                "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-              },
-              "timestamp": "${{ github.event.head_commit.timestamp }}"
-            }
-          ]
+          message: "${{ github.repository }}\nCommit: ${{ github.event.head_commit.message }}[${{ github.sha }}]\n[Beta-release build]()"
+          file: "D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe"
