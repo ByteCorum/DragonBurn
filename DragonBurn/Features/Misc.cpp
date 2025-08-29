@@ -190,6 +190,7 @@ namespace Misc
         }
     };
 
+	// Maybe add a automatic detection?
     if (MiscCFG::Azerty)
     {
         check_and_stop('Q', 'D');
