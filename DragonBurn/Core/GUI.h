@@ -448,7 +448,7 @@ namespace GUI
 
 						static const float MinHumanize = 0.0f;
 						static const float MaxHumanize = 1.0f;
-						PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 0.5f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
+						PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
 
 						PutSliderFloat(Text::Aimbot::FovSlider.c_str(), 10.f, &AimControl::AimFov, &AimControl::AimFovMin, &FovMax, "%.1f");
 						PutSliderFloat(Text::Aimbot::FovMinSlider.c_str(), 10.f, &AimControl::AimFovMin, &FovMin, &MinFovMax, "%.2f");
