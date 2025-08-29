@@ -239,6 +239,11 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 			result.espRect = ESP::GetBoxRect(entity, ESPConfig::BoxType);
 		}
 
+		// sound esp
+		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address) {
+			SoundSystem::_sound->push_sound(result.entity, result.entityIndex, localEntity);
+		}
+
 		result.isValid = true;
 		results.push_back(result);
 	}
@@ -284,11 +289,6 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 		if (!result.isInScreen)
 		{
 			continue;
-		}
-
-		// sound esp
-		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address) {
-			SoundSystem::_sound->push_sound(result.entity, result.entityIndex, localEntity);
 		}
 
 		// process aimbot data
