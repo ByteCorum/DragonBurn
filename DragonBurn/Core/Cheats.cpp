@@ -27,12 +27,29 @@
 #include "../Features/BombTimer.h"
 #include "../Features/SpectatorList.h"
 #include "../Helpers/Logger.h"
+#include "../Features/AutoAccept.h"
+#include "../Features/SoundESP.h"
 
 int PreviousTotalHits = 0;
 
 void RenderCrosshair(ImDrawList*, const CEntity&);
 
 void RadarSetting(Base_Radar&);
+
+std::string Cheats::GetCurrentMapName() {
+    if (!g_globalVars || !g_globalVars->g_cCurrentMap) {
+        return "";
+    }
+
+    char currentMap[256] = { 0 };
+    if (!memoryManager.ReadMemory(reinterpret_cast<DWORD64>(g_globalVars->g_cCurrentMap),
+        currentMap, sizeof(currentMap) - 1)) {
+        return "";
+    }
+
+    currentMap[255] = '\0';
+    return std::string(currentMap);
+}
 
 void Menu();
 void Visual(const CEntity&);
@@ -66,6 +83,7 @@ void Cheats::Run()
 		return;
 
 	if (LocalPawnAddress == 0 || LocalControllerAddress == 0) {
+        g_globalVars->UpdateGlobalvars();
         cachedResults.clear();
         return;
     }
@@ -211,7 +229,7 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 
 		// check if in screen
 		result.isInScreen = entity.IsInScreen();
-		
+
 		// calculate distance
 		result.distance = static_cast<int>(entity.Pawn.Pos.DistanceTo(localEntity.Pawn.Pos) / 100);
 
@@ -257,10 +275,20 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 				entity.Pawn.Pos, ImColor(237, 85, 106, 200), RadarCFG::RadarType, entity.Pawn.ViewAngle.y);
 		}
 
-		// skip not in screen
+		// Out-of-FOV arrow
+		if (localEntity.IsAlive()) {
+			ESP::RenderOutOfFOVArrow(localEntity, result.entity);
+		}
+
+        // skip not in screen
 		if (!result.isInScreen)
 		{
 			continue;
+		}
+
+		// sound esp
+		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address) {
+			SoundSystem::_sound->push_sound(result.entity, result.entityIndex, localEntity);
 		}
 
 		// process aimbot data
@@ -439,7 +467,23 @@ void MiscFuncs(CEntity& LocalEntity)
 	SpecList::SpectatorWindowList(LocalEntity);
 	bmb::RenderWindow(LocalEntity.Controller.TeamID);
 	Misc::Watermark(LocalEntity);
+	Misc::AntiAFKKickUpdate();
+	// knife bot
+	if (MiscCFG::AutoKnife) {
+		std::vector<CEntity> enemyList;
+		enemyList.reserve(Cheats::cachedResults.size());
+		for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+		Misc::AutoKnifeExecute(LocalEntity, enemyList);
+	}
+	// zeus bot
+	if (MiscCFG::AutoZeus) {
+		std::vector<CEntity> enemyList;
+		enemyList.reserve(Cheats::cachedResults.size());
+		for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+		Misc::zeusbot(LocalEntity, enemyList);
+	}
 	//Misc::FastStop();
+	AutoAccept::UpdateAutoAccept();
 }
 
 void RadarSetting(Base_Radar& Radar)

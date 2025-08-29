@@ -100,6 +100,12 @@ namespace MyConfigSaver
         ConfigData["ESP"]["FilledVisColor"]["b"]=   ESPConfig::BoxFilledVisColor.Value.z;
         ConfigData["ESP"]["FilledVisColor"]["a"]=   ESPConfig::BoxFilledVisColor.Value.w;
 
+        ConfigData["ESP"]["OutOfFOVArrow"]=         ESPConfig::ShowOutOfFOVArrow;
+        ConfigData["ESP"]["OutOfFOVRadius"]=        ESPConfig::OutOfFOVRadiusFactor;
+        ConfigData["ESP"]["OutOfFOVColor"]["r"]=    ESPConfig::OutOfFOVArrowColor.Value.x;
+        ConfigData["ESP"]["OutOfFOVColor"]["g"]=    ESPConfig::OutOfFOVArrowColor.Value.y;
+        ConfigData["ESP"]["OutOfFOVColor"]["b"]=    ESPConfig::OutOfFOVArrowColor.Value.z;
+        ConfigData["ESP"]["OutOfFOVColor"]["a"]=    ESPConfig::OutOfFOVArrowColor.Value.w;
 
 
         //ConfigData["Crosshairs"]["Enable"]=        CrosshairsCFG::ShowCrossHair;
@@ -153,6 +159,7 @@ namespace MyConfigSaver
         ConfigData["Aimbot"]["Hotkey"]=           AimControl::HotKey;
         ConfigData["Aimbot"]["AimBullet"]=        AimControl::AimBullet;
         ConfigData["Aimbot"]["Fov"]=              AimControl::AimFov;
+        ConfigData["Aimbot"]["HumanizationStrength"]=              AimControl::HumanizationStrength;
         ConfigData["Aimbot"]["FovMin"]=           AimControl::AimFovMin;
         ConfigData["Aimbot"]["FovCircle"]=        ESPConfig::DrawFov;
 
@@ -216,6 +223,20 @@ namespace MyConfigSaver
         ConfigData["Misc"]["SniperCrosshairColor"]["b"] = MiscCFG::SniperCrosshairColor.Value.z;
         ConfigData["Misc"]["SniperCrosshairColor"]["a"] = MiscCFG::SniperCrosshairColor.Value.w;
 
+        ConfigData["Misc"]["AutoAccept"] = MiscCFG::AutoAccept;
+
+        ConfigData["Misc"]["EnemySound"] = MiscCFG::EnemySound;
+        ConfigData["Misc"]["EnemySoundColor"]["r"] = MiscCFG::EnemySoundColor.Value.x;
+        ConfigData["Misc"]["EnemySoundColor"]["g"] = MiscCFG::EnemySoundColor.Value.y;
+        ConfigData["Misc"]["EnemySoundColor"]["b"] = MiscCFG::EnemySoundColor.Value.z;
+        ConfigData["Misc"]["EnemySoundColor"]["a"] = MiscCFG::EnemySoundColor.Value.w;
+
+        ConfigData["Misc"]["AutoKnife"] = MiscCFG::AutoKnife;
+        ConfigData["Misc"]["AutoKnifeDistance"] = MiscCFG::AutoKnifeDistance;
+        ConfigData["Misc"]["AutoZeus"] = MiscCFG::AutoZeus;
+        ConfigData["Misc"]["AutoZeusDistance"] = MiscCFG::AutoZeusDistance;
+        ConfigData["Misc"]["AntiAFKKick"] = MiscCFG::AntiAFKKick;
+
         ConfigData["Misc"]["TeamCheck"]=        MenuConfig::TeamCheck;
         ConfigData["Misc"]["AntiRecord"]=       MenuConfig::BypassOBS;
         ConfigData["Misc"]["MenuKey"] =         MenuConfig::HotKey;
@@ -277,6 +298,13 @@ namespace MyConfigSaver
             ESPConfig::ShowIsBlind = ReadData(ConfigData["ESP"], { "ShowBlind" }, false);
             ESPConfig::ArmorBar = ReadData(ConfigData["ESP"], { "ArmorBar" }, false);
             ESPConfig::ShowArmorNum = ReadData(ConfigData["ESP"], { "ArmorNum" }, false);
+
+            ESPConfig::ShowOutOfFOVArrow = ReadData(ConfigData["ESP"], { "OutOfFOVArrow" }, false);
+            ESPConfig::OutOfFOVRadiusFactor = ReadData(ConfigData["ESP"], { "OutOfFOVRadius" }, 0.95f);
+            ESPConfig::OutOfFOVArrowColor.Value.x = ReadData(ConfigData["ESP"], { "OutOfFOVColor","r" }, 1.0f);
+            ESPConfig::OutOfFOVArrowColor.Value.y = ReadData(ConfigData["ESP"], { "OutOfFOVColor","g" }, 0.7f);
+            ESPConfig::OutOfFOVArrowColor.Value.z = ReadData(ConfigData["ESP"], { "OutOfFOVColor","b" }, 0.2f);
+            ESPConfig::OutOfFOVArrowColor.Value.w = ReadData(ConfigData["ESP"], { "OutOfFOVColor","a" }, 0.9f);
 
             ESPConfig::BoneColor.Value.x = ReadData(ConfigData["ESP"], { "BoneColor","r" }, 0.f);
             ESPConfig::BoneColor.Value.y = ReadData(ConfigData["ESP"], { "BoneColor","g" }, 0.f);
@@ -381,6 +409,7 @@ namespace MyConfigSaver
             AimControl::HotKey = ReadData(ConfigData["Aimbot"],{"Hotkey"}, 0);
             AimControl::AimBullet = ReadData(ConfigData["Aimbot"],{"AimBullet"}, 0);
             AimControl::AimFov = ReadData(ConfigData["Aimbot"],{"Fov"}, 5.f);
+            AimControl::HumanizationStrength = ReadData(ConfigData["Aimbot"],{"HumanizationStrength"}, 0.5f);
             AimControl::AimFovMin = ReadData(ConfigData["Aimbot"],{"FovMin"}, .5f);
             ESPConfig::DrawFov = ReadData(ConfigData["Aimbot"],{"FovCircle"}, false);
             LegitBotConfig::FovCircleColor.Value.x = ReadData(ConfigData["Aimbot"],{"CircleColor","r"}, 0.f);
@@ -443,6 +472,27 @@ namespace MyConfigSaver
             MiscCFG::SniperCrosshairColor.Value.y = ReadData(ConfigData["Misc"], { "SniperCrosshairColor","g" }, 0.f);
             MiscCFG::SniperCrosshairColor.Value.z = ReadData(ConfigData["Misc"], { "SniperCrosshairColor","b" }, 0.f);
             MiscCFG::SniperCrosshairColor.Value.w = ReadData(ConfigData["Misc"], { "SniperCrosshairColor","a" }, 255.f);
+
+            MiscCFG::AutoAccept = ReadData(ConfigData["Misc"], { "AutoAccept" }, false);
+
+            MiscCFG::EnemySound = ReadData(ConfigData["Misc"], { "EnemySound" }, false);
+            MiscCFG::EnemySoundColor.Value.x = ReadData(ConfigData["Misc"], { "EnemySoundColor","r" }, 255.f);
+            MiscCFG::EnemySoundColor.Value.y = ReadData(ConfigData["Misc"], { "EnemySoundColor","g" }, 0.f);
+            MiscCFG::EnemySoundColor.Value.z = ReadData(ConfigData["Misc"], { "EnemySoundColor","b" }, 0.f);
+            MiscCFG::EnemySoundColor.Value.w = ReadData(ConfigData["Misc"], { "EnemySoundColor","a" }, 255.f);
+
+            MiscCFG::AutoKnife = ReadData(ConfigData["Misc"], { "AutoKnife" }, false);
+            MiscCFG::AutoKnifeDistance = ReadData(ConfigData["Misc"], { "AutoKnifeDistance" }, 70.0f);
+            MiscCFG::AutoZeus = ReadData(ConfigData["Misc"], { "AutoZeus" }, false);
+            MiscCFG::AutoZeusDistance = ReadData(ConfigData["Misc"], { "AutoZeusDistance" }, 130.0f);
+            MiscCFG::AntiAFKKick = ReadData(ConfigData["Misc"], { "AntiAFKKick" }, false);
+
+            MiscCFG::AutoKnife = ReadData(ConfigData["Misc"], { "AutoKnife" }, false);
+            MiscCFG::AutoKnifeDistance = ReadData(ConfigData["Misc"], { "AutoKnifeDistance" }, 70.0f);
+            MiscCFG::AutoZeus = ReadData(ConfigData["Misc"], { "AutoZeus" }, false);
+            MiscCFG::AutoZeusDistance = ReadData(ConfigData["Misc"], { "AutoZeusDistance" }, 130.0f);
+            MiscCFG::AntiAFKKick = ReadData(ConfigData["Misc"], { "AntiAFKKick" }, false);
+
             MenuConfig::TeamCheck = ReadData(ConfigData["Misc"],{"TeamCheck"}, true);
             MenuConfig::BypassOBS = ReadData(ConfigData["Misc"],{"AntiRecord"}, false);
             MenuConfig::HotKey = ReadData(ConfigData["Misc"], { "MenuKey" }, VK_END);

@@ -1,5 +1,6 @@
 #include "RCS.h"
 #include "../Helpers/Logger.h"
+#include <cmath>
 
 void RCS::UpdateAngles(const CEntity& Local, Vec2& Angles)
 {
@@ -36,7 +37,7 @@ void RCS::UpdateAngles(const CEntity& Local, Vec2& Angles)
 		newAngles.x += ScreenCenterX;
 		newAngles.y += ScreenCenterY;
 
-		Angles = newAngles;//
+		Angles = newAngles;
 		oldPunch = aimPunch;
 	}
 	else
@@ -69,15 +70,15 @@ void RCS::RecoilControl(CEntity LocalPlayer)
 		Vec2 viewAngles = LocalPlayer.Pawn.ViewAngle;
 		Vec2 delta = viewAngles - (viewAngles + (OldPunch - (LocalPlayer.Pawn.AimPunchAngle * 2.f)));
 
-		int MouseX = (int)(delta.y / (LocalPlayer.Client.Sensitivity * 0.011f) * RCSScale.x);
-		int MouseY = (int)(delta.x / (LocalPlayer.Client.Sensitivity * 0.011f) * RCSScale.y);
+        int MouseX = static_cast<int>(std::round((delta.y * RCSScale.x / LocalPlayer.Client.Sensitivity) / -0.022f));
+        int MouseY = static_cast<int>(std::round((delta.x * RCSScale.y / LocalPlayer.Client.Sensitivity) / 0.022f));
 
 		if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000))
 		{
-			mouse_event(MOUSEEVENTF_MOVE, MouseX, -MouseY, NULL, NULL);
+            mouse_event(MOUSEEVENTF_MOVE, MouseX, MouseY, NULL, NULL);
 		}
 
-		OldPunch = LocalPlayer.Pawn.AimPunchAngle * 2.0f;
+		OldPunch = LocalPlayer.Pawn.AimPunchAngle;
 	}
 	else
 		OldPunch = Vec2{ 0,0 };

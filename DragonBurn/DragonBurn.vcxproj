@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Config\ConfigMenu.h" />
     <ClInclude Include="Config\ConfigSaver.h" />
+    <ClInclude Include="Core\AnimationSystem.hpp" />
     <ClInclude Include="Core\Config.h" />
     <ClInclude Include="Core\Cheats.h" />
     <ClInclude Include="Core\Globals.h" />
@@ -180,11 +181,13 @@
     <ClInclude Include="Core\Init.h" />
     <ClInclude Include="Core\Render.h" />
     <ClInclude Include="Features\Aimbot.h" />
+    <ClInclude Include="Features\AutoAccept.h" />
     <ClInclude Include="Features\BombTimer.h" />
     <ClInclude Include="Features\ESP.h" />
     <ClInclude Include="Features\Misc.h" />
     <ClInclude Include="Features\Radar.h" />
     <ClInclude Include="Features\RCS.h" />
+    <ClInclude Include="Features\SoundESP.h" />
     <ClInclude Include="Features\SpectatorList.h" />
     <ClInclude Include="Features\TriggerBot.h" />
     <ClInclude Include="Game\Bone.h" />
@@ -227,12 +230,15 @@
   <ItemGroup>
     <ClCompile Include="Config\ConfigMenu.cpp" />
     <ClCompile Include="Config\ConfigSaver.cpp" />
+    <ClCompile Include="Core\AnimationSystem.cpp" />
     <ClCompile Include="Core\Cheats.cpp" />
     <ClCompile Include="Core\GlobalVars.cpp" />
     <ClCompile Include="Features\Aimbot.cpp" />
+    <ClCompile Include="Features\AutoAccept.cpp" />
     <ClCompile Include="Features\Misc.cpp" />
     <ClCompile Include="Features\Radar.cpp" />
     <ClCompile Include="Features\RCS.cpp" />
+    <ClCompile Include="Features\SoundESP.cpp" />
     <ClCompile Include="Features\SpectatorList.cpp" />
     <ClCompile Include="Features\TriggerBot.cpp" />
     <ClCompile Include="Game\Bone.cpp" />

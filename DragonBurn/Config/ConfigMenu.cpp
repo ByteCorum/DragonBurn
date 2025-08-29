@@ -204,6 +204,18 @@ namespace ConfigMenu {
 		MiscCFG::ShowHeadShootLine = false;
 		MiscCFG::HeadShootLineColor = ImColor(131, 137, 150, 200);
 
+		MiscCFG::AutoAccept = false;
+
+        MiscCFG::EnemySound = false;
+        MiscCFG::EnemySoundColor = ImColor(255, 255, 255, 255);
+
+        MiscCFG::AutoKnife = false;
+        MiscCFG::AutoKnifeDistance = 70.0f;
+        MiscCFG::AutoZeus = false;
+        MiscCFG::AutoZeusDistance = 130.0f;
+
+        MiscCFG::AntiAFKKick = false;
+
 		AimControl::HotKey = 1;
 		Text::Aimbot::HotKey = KeyMgr::GetKeyName(AimControl::HotKey);
 		AimControl::AimFov = 10;

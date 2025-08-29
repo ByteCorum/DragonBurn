@@ -111,6 +111,11 @@ namespace ESPConfig
 	inline ImColor FilledColor = ImColor(59, 71, 148, 128);
 	inline ImColor BoxFilledVisColor = ImColor(0, 98, 98, 128);
 	inline ImColor FilledColor2 = ImColor(59, 71, 148, 128);
+
+    inline bool ShowOutOfFOVArrow = false;
+    inline float OutOfFOVRadiusFactor = 0.95f;
+    inline float OutOfFOVArrowSize = 12.0f;
+    inline ImColor OutOfFOVArrowColor = ImColor(255, 180, 50, 230);
 }
 
 //namespace CrosshairsCFG
@@ -171,4 +176,17 @@ namespace MiscCFG
 	inline ImColor BombTimerCol = ImColor(131, 137, 150, 255);
 	inline bool ShowHeadShootLine = false;
 	inline ImColor HeadShootLineColor = ImColor(131, 137, 150, 200);
+
+    inline bool AutoAccept = false;
+
+    inline bool EnemySound = false;
+    inline ImColor EnemySoundColor = ImColor(255, 255, 255, 255);
+
+    inline bool AutoKnife = false;
+    inline float AutoKnifeDistance = 70.0f;
+
+    inline bool AutoZeus = false;
+    inline float AutoZeusDistance = 130.0f;
+
+    inline bool AntiAFKKick = false;
 }
