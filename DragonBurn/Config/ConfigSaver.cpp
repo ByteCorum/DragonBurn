@@ -207,6 +207,8 @@ namespace MyConfigSaver
         ConfigData["Misc"]["TimerColor"]["a"]=  MiscCFG::BombTimerCol.Value.w;
 
         ConfigData["Misc"]["Bhop"]=             MiscCFG::BunnyHop;
+		ConfigData["Misc"]["Azerty"]=             MiscCFG::Azerty;
+        ConfigData["Misc"]["FastStopDelay"]=             MiscCFG::FastStopDelay;
         //ConfigData["Misc"]["FastStop"] =        MiscCFG::FastStop;
         ConfigData["Misc"]["SpecList"]=         MiscCFG::SpecList;
 
@@ -436,7 +438,9 @@ namespace MyConfigSaver
             MiscCFG::BombTimerCol.Value.z = ReadData(ConfigData["Misc"],{"TimerColor","b"}, 0.f);
             MiscCFG::BombTimerCol.Value.w = ReadData(ConfigData["Misc"],{"TimerColor","a"}, 255.f);
             MiscCFG::BunnyHop = ReadData(ConfigData["Misc"],{"Bhop"}, false);
-            //MiscCFG::FastStop = ReadData(ConfigData["Misc"],{"FastStop"}, false);
+			MiscCFG::Azerty = ReadData(ConfigData["Misc"],{"Azerty"}, false);
+			MiscCFG::FastStopDelay = ReadData(ConfigData["Misc"],{"FastStopDelay"}, 50);
+            MiscCFG::FastStop = ReadData(ConfigData["Misc"],{"FastStop"}, false);
             MiscCFG::SpecList = ReadData(ConfigData["Misc"],{"SpecList"}, false);
             MiscCFG::SniperCrosshair = ReadData(ConfigData["Misc"], { "SniperCrosshair" }, false);
             MiscCFG::SniperCrosshairColor.Value.x = ReadData(ConfigData["Misc"], { "SniperCrosshairColor","r" }, 0.f);

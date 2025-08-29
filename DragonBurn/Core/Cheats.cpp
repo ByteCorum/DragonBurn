@@ -439,7 +439,7 @@ void MiscFuncs(CEntity& LocalEntity)
 	SpecList::SpectatorWindowList(LocalEntity);
 	bmb::RenderWindow(LocalEntity.Controller.TeamID);
 	Misc::Watermark(LocalEntity);
-	//Misc::FastStop();
+	Misc::FastStop();
 }
 
 void RadarSetting(Base_Radar& Radar)

@@ -159,6 +159,7 @@ namespace RadarCFG
 
 namespace MiscCFG
 {
+	inline bool Azerty = false;
 	inline bool BunnyHop = false;
 	inline bool WaterMark = true;
 	inline bool SniperCrosshair = true;
@@ -166,7 +167,8 @@ namespace MiscCFG
 	inline int	HitSound = 0;
 	inline bool HitMarker = false;
 	inline bool bmbTimer = true;
-	//inline bool FastStop = false;
+	inline bool FastStop = false;
+	inline int FastStopDelay = 50;
 	inline bool SpecList = false;
 	inline ImColor BombTimerCol = ImColor(131, 137, 150, 255);
 	inline bool ShowHeadShootLine = false;

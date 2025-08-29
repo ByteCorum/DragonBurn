@@ -118,6 +118,9 @@ namespace Text {
         inline std::string TeamCheck = "Team Check";
         inline std::string AntiRecord = "Anti Record";
         inline std::string SniperCrosshair = "Sniper Crosshair";
+        inline std::string FastStop = "Fast Stop";
+		inline std::string Azerty = "Azerty";
+		inline std::string FastStopDelay = "Fast Stop Delay";
     }
 
     namespace Config
