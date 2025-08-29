@@ -144,6 +144,51 @@ namespace Misc
 		catch (...) {}
 	}
 
+	static void PerformKeyStop(int opposite_key, int delay_ms)
+	{
+		keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), 0, 0);
+		std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
+		keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), KEYEVENTF_KEYUP, 0);
+	}
+
+	static void CheckAndStopKey(int key, int opposite_key, std::map<int, bool>& key_released_map, std::chrono::steady_clock::time_point& last_stop_time)
+	{
+		short key_state = GetAsyncKeyState(key);
+		bool previously_released = key_released_map[key];
+
+		if (key_state & 0x8000)
+		{
+			key_released_map[key] = true;
+		}
+		else if (previously_released)
+		{
+			int pressed_keys = 0;
+			if (MiscCFG::KeyboardLayout == 1) // AZERTY
+			{
+				if (GetAsyncKeyState('Q') & 0x8000) pressed_keys++;
+				if (GetAsyncKeyState('D') & 0x8000) pressed_keys++;
+				if (GetAsyncKeyState('Z') & 0x8000) pressed_keys++;
+				if (GetAsyncKeyState('S') & 0x8000) pressed_keys++;
+			}
+			else // QWERTY (or default)
+			{
+				if (GetAsyncKeyState('A') & 0x8000) pressed_keys++;
+				if (GetAsyncKeyState('D') & 0x8000) pressed_keys++;
+				if (GetAsyncKeyState('W') & 0x8000) pressed_keys++;
+				if (GetAsyncKeyState('S') & 0x8000) pressed_keys++;
+			}
+
+			if (pressed_keys == 0)
+			{
+				last_stop_time = std::chrono::steady_clock::now();
+				std::thread(PerformKeyStop, opposite_key, MiscCFG::FastStopDelay).detach();
+			}
+			key_released_map[key] = false;
+		}
+	}
+
+		
+
 	void FastStop() noexcept
 {
     if (!MiscCFG::FastStop)
@@ -161,49 +206,20 @@ namespace Misc
         return;
     }
 
-    auto check_and_stop = [&](int key, int opposite_key) {
-        short key_state = GetAsyncKeyState(key);
-        bool previously_released = key_released_map[key];
-
-        if (key_state & 0x8000)
-        {
-            key_released_map[key] = true;
-        }
-        else if (previously_released)
-        {
-            int pressed_keys = 0;
-            if (GetAsyncKeyState(MiscCFG::Azerty ? 'Q' : 'A') & 0x8000) pressed_keys++;
-            if (GetAsyncKeyState('D') & 0x8000) pressed_keys++;
-            if (GetAsyncKeyState(MiscCFG::Azerty ? 'Z' : 'W') & 0x8000) pressed_keys++;
-            if (GetAsyncKeyState('S') & 0x8000) pressed_keys++;
-
-            if (pressed_keys == 0)
-            {
-                last_stop_time = std::chrono::steady_clock::now();
-                std::thread([opposite_key]() {
-                    keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), 0, 0);
-                    std::this_thread::sleep_for(std::chrono::milliseconds(MiscCFG::FastStopDelay));
-                    keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), KEYEVENTF_KEYUP, 0);
-                    }).detach();
-            }
-            key_released_map[key] = false;
-        }
-    };
-
-	// Maybe add a automatic detection?
-    if (MiscCFG::Azerty)
+    // Maybe add a automatic detection?
+    if (MiscCFG::KeyboardLayout == 1) // AZERTY
     {
-        check_and_stop('Q', 'D');
-        check_and_stop('D', 'Q');
-        check_and_stop('Z', 'S');
-        check_and_stop('S', 'Z');
+        CheckAndStopKey('Q', 'D', key_released_map, last_stop_time);
+        CheckAndStopKey('D', 'Q', key_released_map, last_stop_time);
+        CheckAndStopKey('Z', 'S', key_released_map, last_stop_time);
+        CheckAndStopKey('S', 'Z', key_released_map, last_stop_time);
     }
-    else
+    else // QWERTY (or default)
     {
-        check_and_stop('A', 'D');
-        check_and_stop('D', 'A');
-        check_and_stop('W', 'S');
-        check_and_stop('S', 'W');
+        CheckAndStopKey('A', 'D', key_released_map, last_stop_time);
+        CheckAndStopKey('D', 'A', key_released_map, last_stop_time);
+        CheckAndStopKey('W', 'S', key_released_map, last_stop_time);
+        CheckAndStopKey('S', 'W', key_released_map, last_stop_time);
     }
 }
 }

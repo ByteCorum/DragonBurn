@@ -191,6 +191,10 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error(error.what());
 	}
 
+    // Detect keyboard layout
+    MiscCFG::KeyboardLayout = Misc::DetectKeyboardLayout();
+    Log::Fine("Detected keyboard layout: " + std::to_string(MiscCFG::KeyboardLayout)); // Optional: for debugging
+
 	Log::Fine("DragonBurn loaded");
 
 #ifndef DBDEBUG

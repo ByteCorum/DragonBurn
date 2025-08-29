@@ -207,7 +207,7 @@ namespace MyConfigSaver
         ConfigData["Misc"]["TimerColor"]["a"]=  MiscCFG::BombTimerCol.Value.w;
 
         ConfigData["Misc"]["Bhop"]=             MiscCFG::BunnyHop;
-		ConfigData["Misc"]["Azerty"]=             MiscCFG::Azerty;
+		ConfigData["Misc"]["KeyboardLayout"]=             MiscCFG::KeyboardLayout;
         ConfigData["Misc"]["FastStopDelay"]=             MiscCFG::FastStopDelay;
         //ConfigData["Misc"]["FastStop"] =        MiscCFG::FastStop;
         ConfigData["Misc"]["SpecList"]=         MiscCFG::SpecList;
@@ -438,7 +438,7 @@ namespace MyConfigSaver
             MiscCFG::BombTimerCol.Value.z = ReadData(ConfigData["Misc"],{"TimerColor","b"}, 0.f);
             MiscCFG::BombTimerCol.Value.w = ReadData(ConfigData["Misc"],{"TimerColor","a"}, 255.f);
             MiscCFG::BunnyHop = ReadData(ConfigData["Misc"],{"Bhop"}, false);
-			MiscCFG::Azerty = ReadData(ConfigData["Misc"],{"Azerty"}, false);
+			MiscCFG::KeyboardLayout = ReadData(ConfigData["Misc"],{"KeyboardLayout"}, 0);
 			MiscCFG::FastStopDelay = ReadData(ConfigData["Misc"],{"FastStopDelay"}, 50);
             MiscCFG::FastStop = ReadData(ConfigData["Misc"],{"FastStop"}, false);
             MiscCFG::SpecList = ReadData(ConfigData["Misc"],{"SpecList"}, false);

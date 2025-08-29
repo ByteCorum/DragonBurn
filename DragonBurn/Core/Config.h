@@ -159,7 +159,7 @@ namespace RadarCFG
 
 namespace MiscCFG
 {
-	inline bool Azerty = false;
+	inline int KeyboardLayout = 0; // 0: QWERTY, 1: AZERTY
 	inline bool BunnyHop = false;
 	inline bool WaterMark = true;
 	inline bool SniperCrosshair = true;

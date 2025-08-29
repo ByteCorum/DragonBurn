@@ -24,6 +24,12 @@
 
 namespace Misc
 {
+	enum KeyboardLayout {
+		QWERTY = 0,
+		AZERTY = 1,
+		OTHER  = -1
+	};
+
 	inline bool Zoom = false;
 
 	static inline std::vector<ImColor> colorList = {
@@ -135,6 +141,33 @@ namespace Misc
 		std::chrono::steady_clock::time_point _startTime;
 
 	};
+
+	// New helper function for key events
+	static void PerformKeyStop(int opposite_key, int delay_ms);
+
+	// New helper function to check and stop keys
+	static void CheckAndStopKey(int key, int opposite_key, std::map<int, bool>& key_released_map, std::chrono::steady_clock::time_point& last_stop_time);
+	static inline int DetectKeyboardLayout()
+	{
+	    char layoutName[KL_NAMELENGTH];
+	    if (GetKeyboardLayoutNameA(layoutName))
+	    {
+	        std::string sLayoutName(layoutName);
+	        // QWERTY family
+	        if (sLayoutName == "00000409" || sLayoutName == "00000809" ||
+	            sLayoutName == "00001009" || sLayoutName == "00001809" ||
+	            sLayoutName == "00004009" || sLayoutName == "00010409" ||
+	            sLayoutName == "00020409" || sLayoutName == "00030409" ||
+	            sLayoutName == "00040409" || sLayoutName == "00050409")
+	            return QWERTY;
+	        // AZERTY family
+	        if (sLayoutName == "0000040C" || sLayoutName == "0000080C" ||
+	            sLayoutName == "0000100C" || sLayoutName == "0000140C" ||
+	            sLayoutName == "0000180C")
+	            return AZERTY;
+	    }
+	    return OTHER; // inconnu
+	}
 
 	void Watermark(const CEntity&) noexcept;
 	void HitManager(CEntity&, int&) noexcept;
