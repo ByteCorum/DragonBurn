@@ -3,7 +3,6 @@
 #include <iostream>
 #include <Shellapi.h>
 #include <filesystem>
-#include "..\Core\Cheats.h"
 namespace fs = std::filesystem;
 
 namespace System {
@@ -58,7 +57,6 @@ namespace Misc
 		ImGui::Text("%s", fpsText);
 		//ImGui::Text("  Pos: %.1f, %.1f, %.1f ", Pos.x, Pos.y, Pos.z);
 		ImGui::Text("                                                      ");
-		ImGui::Text("  Map: %s", Cheats::GetCurrentMapName().c_str());
 
 		MenuConfig::MarkWinPos = ImGui::GetWindowPos();
 		ImGui::End();
