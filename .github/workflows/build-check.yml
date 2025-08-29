@@ -30,6 +30,7 @@ jobs:
   release:
     needs: ["build"]
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     steps:
       - name: Send release to discord
         run: |
