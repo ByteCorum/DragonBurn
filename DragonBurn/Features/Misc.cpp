@@ -7,10 +7,6 @@ namespace fs = std::filesystem;
 
 namespace Misc
 {
-	//bool aKeyPressed = false;
-	//bool dKeyPressed = false;
-	//bool wKeyPressed = false;
-	//bool sKeyPressed = false;
 	HitMarker hitMarker(0, std::chrono::steady_clock::now());
 	const float HitMarker::SIZE = 10.f;
 	const float HitMarker::GAP = 3.f;
@@ -148,20 +144,65 @@ namespace Misc
 		catch (...) {}
 	}
 
-	//void FastStop() noexcept
-	//{
-	//	if (!MiscCFG::FastStop)
-	//		return;
-	//	// Disable when bhopping
-	//	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-	//		return;
-	//	// Disable when slow walking
-	//	if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
-	//		return;
+	void FastStop() noexcept
+{
+    if (!MiscCFG::FastStop)
+        return;
 
-	//	Misc::StopKeyEvent('A', &aKeyPressed, 'D', 50.f);
-	//	Misc::StopKeyEvent('D', &dKeyPressed, 'A', 50.f);
-	//	Misc::StopKeyEvent('W', &wKeyPressed, 'S', 50.f);
-	//	Misc::StopKeyEvent('S', &sKeyPressed, 'W', 50.f);
-	//}
+    if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+        return;
+
+    static std::map<int, bool> key_released_map;
+    static auto last_stop_time = std::chrono::steady_clock::now();
+
+    auto now = std::chrono::steady_clock::now();
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last_stop_time).count() < MiscCFG::FastStopDelay + 20)
+    {
+        return;
+    }
+
+    auto check_and_stop = [&](int key, int opposite_key) {
+        short key_state = GetAsyncKeyState(key);
+        bool previously_released = key_released_map[key];
+
+        if (key_state & 0x8000)
+        {
+            key_released_map[key] = true;
+        }
+        else if (previously_released)
+        {
+            int pressed_keys = 0;
+            if (GetAsyncKeyState(MiscCFG::Azerty ? 'Q' : 'A') & 0x8000) pressed_keys++;
+            if (GetAsyncKeyState('D') & 0x8000) pressed_keys++;
+            if (GetAsyncKeyState(MiscCFG::Azerty ? 'Z' : 'W') & 0x8000) pressed_keys++;
+            if (GetAsyncKeyState('S') & 0x8000) pressed_keys++;
+
+            if (pressed_keys == 0)
+            {
+                last_stop_time = std::chrono::steady_clock::now();
+                std::thread([opposite_key]() {
+                    keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), 0, 0);
+                    std::this_thread::sleep_for(std::chrono::milliseconds(MiscCFG::FastStopDelay));
+                    keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), KEYEVENTF_KEYUP, 0);
+                    }).detach();
+            }
+            key_released_map[key] = false;
+        }
+    };
+
+    if (MiscCFG::Azerty)
+    {
+        check_and_stop('Q', 'D');
+        check_and_stop('D', 'Q');
+        check_and_stop('Z', 'S');
+        check_and_stop('S', 'Z');
+    }
+    else
+    {
+        check_and_stop('A', 'D');
+        check_and_stop('D', 'A');
+        check_and_stop('W', 'S');
+        check_and_stop('S', 'W');
+    }
+}
 }

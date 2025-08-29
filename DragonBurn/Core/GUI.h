@@ -616,7 +616,10 @@ namespace GUI
 					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
 					PutSwitch(Text::Misc::HitMerker.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop);
-					//PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
+					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
+					PutSwitch(Text::Misc::Azerty.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::Azerty);
+						int Fmin = 0, Fmax = 100;
+						PutSliderInt(Text::Misc::FastStopDelay.c_str(), 10.f, &MiscCFG::FastStopDelay, &Fmin, &Fmax, "%d ms");
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
 
 					ImGui::NextColumn();

@@ -66,19 +66,7 @@ namespace Misc
 		localtime_s(ptm, &now);
 	}
 
-	static inline void StopKeyEvent(int WalkKey, bool* KeyStatus, int StopKey, float duration) {
-		if (GetAsyncKeyState(WalkKey) & 0x8000) {
-			*KeyStatus = true;
-		}
-		else {
-			if (*KeyStatus) {
-				keybd_event(StopKey, MapVirtualKey(StopKey, 0), KEYEVENTF_SCANCODE, 0);
-				Sleep(50);
-				keybd_event(StopKey, MapVirtualKey(StopKey, 0), KEYEVENTF_KEYUP, 0);
-				*KeyStatus = false;
-			}
-		}
-	}
+	
 
 	static inline uintptr_t GetSmokeEntity(int i, uintptr_t EntityListEntry) {
 		uintptr_t Entity = EntityListEntry + 0x78 * (i + 1);
@@ -152,5 +140,5 @@ namespace Misc
 	void HitManager(CEntity&, int&) noexcept;
 	void BunnyHop(const CEntity&) noexcept;
 	void CleanTraces();
-	//void FastStop() noexcept;// junk
+	void FastStop() noexcept;
 }
