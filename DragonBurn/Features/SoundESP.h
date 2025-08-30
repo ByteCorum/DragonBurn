@@ -1,28 +1,31 @@
 #pragma once
 #include "../Game/Entity.h"
-#include "../OS-ImGui/OS-ImGui_Struct.h"
-#include <vector>
 
-namespace SoundSystem {
-	struct sound_info_t {
-		Vec3 player_origin;
-        bool has_changed;
-        double spawn_time; // time when this sound was emitted (for ripple animation)
-        int entity_index;  // -1 for local, otherwise entity index
-        DWORD64 controller_address; // owner identity to avoid index reuse artifacts
-        DWORD64 pawn_address;
-        INT64 steam_id;
-	};
+namespace SoundESP {
+    struct SoundEffect {
+        Vec3 origin;
+        double spawnTime;
+        CEntity entity;
+    };
 
-	class sound_info {
-	public:
-		void push_sound( const CEntity& entity, int idx, const CEntity& localEntity );
-		// Remove stored ripples for entities not present in the provided list
-		void prune_by_alive_indices(const std::vector<int>& alive_indices);
+    struct AnimationContext {
+        float value = 0.0f;
+        unsigned int id = 0;
+        
+        void SetValue(float newValue, bool clamp = true) {
+            value = clamp ? std::clamp(newValue, 0.0f, 1.0f) : newValue;
+        }
+    };
 
-		std::vector<sound_info_t> s_info;
-		std::vector<sound_info_t> s_info_l;
-	};
+    inline float MaxDistance = 1000.0f;
+    inline float EffectSpeed = 340.0f;
+    inline float MaxRadius = 150.0f;
+    inline float MinMovementSpeed = 15.0f;
+    inline double MinSpawnInterval = 0.85;
 
-	inline const auto _sound = std::make_unique< sound_info >( );
+    void ProcessSound(const CEntity& entity, int entityIndex, const CEntity& localEntity);
+    void Render();
+
+    void RenderSound(const Vec3& origin, float radius, const ImColor& color);
+    float GetAnimationValue(const std::string& key, float deltaTime);
 }

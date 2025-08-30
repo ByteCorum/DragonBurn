@@ -162,9 +162,6 @@
     <ClInclude Include="Core\Globals.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\AnimationSystem.hpp">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Cheats.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -263,9 +260,6 @@
       <Filter>Helpers</Filter>
     </ClCompile>
     <ClCompile Include="Core\GlobalVars.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\AnimationSystem.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Cheats.cpp">

@@ -241,7 +241,7 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 
 		// sound esp
 		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address) {
-			SoundSystem::_sound->push_sound(result.entity, result.entityIndex, localEntity);
+			SoundESP::ProcessSound(result.entity, result.entityIndex, localEntity);
 		}
 
 		result.isValid = true;
@@ -468,6 +468,7 @@ void MiscFuncs(CEntity& LocalEntity)
 	bmb::RenderWindow(LocalEntity.Controller.TeamID);
 	Misc::Watermark(LocalEntity);
 	Misc::AntiAFKKickUpdate();
+	SoundESP::Render();
 	// knife bot
 	if (MiscCFG::AutoKnife) {
 		std::vector<CEntity> enemyList;

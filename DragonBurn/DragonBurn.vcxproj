@@ -172,7 +172,6 @@
   <ItemGroup>
     <ClInclude Include="Config\ConfigMenu.h" />
     <ClInclude Include="Config\ConfigSaver.h" />
-    <ClInclude Include="Core\AnimationSystem.hpp" />
     <ClInclude Include="Core\Config.h" />
     <ClInclude Include="Core\Cheats.h" />
     <ClInclude Include="Core\Globals.h" />
@@ -230,7 +229,6 @@
   <ItemGroup>
     <ClCompile Include="Config\ConfigMenu.cpp" />
     <ClCompile Include="Config\ConfigSaver.cpp" />
-    <ClCompile Include="Core\AnimationSystem.cpp" />
     <ClCompile Include="Core\Cheats.cpp" />
     <ClCompile Include="Core\GlobalVars.cpp" />
     <ClCompile Include="Features\Aimbot.cpp" />
