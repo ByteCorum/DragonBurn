@@ -1,11 +1,6 @@
 #pragma once
-#include "..\Core\Config.h"
 #include "..\Game\Entity.h"
-#include <vector>
-#include <string>
-#include <iostream>
 #include <unordered_set>
-#include <unordered_map>
 
 namespace SpecList
 {

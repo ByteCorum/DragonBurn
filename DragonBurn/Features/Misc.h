@@ -157,4 +157,14 @@ namespace Misc
     void ExecuteCommand(const std::string& command) noexcept;
     void zeusbot(const CEntity& local, const std::vector<CEntity>& entities) noexcept;
     void AntiAFKKickUpdate() noexcept;
+
+	namespace AutoAccept
+	{
+		void StartAutoAccept();
+		void StopAutoAccept();
+		bool DetectAcceptButton();
+		void ClickAcceptButton(int x, int y);
+		bool IsGreenPixel(COLORREF color);
+		void UpdateAutoAccept();
+	}
 }

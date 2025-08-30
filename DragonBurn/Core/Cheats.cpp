@@ -27,7 +27,6 @@
 #include "../Features/BombTimer.h"
 #include "../Features/SpectatorList.h"
 #include "../Helpers/Logger.h"
-#include "../Features/AutoAccept.h"
 #include "../Features/SoundESP.h"
 
 int PreviousTotalHits = 0;
@@ -484,7 +483,7 @@ void MiscFuncs(CEntity& LocalEntity)
 		Misc::zeusbot(LocalEntity, enemyList);
 	}
 	//Misc::FastStop();
-	AutoAccept::UpdateAutoAccept();
+	Misc::AutoAccept::UpdateAutoAccept();
 }
 
 void RadarSetting(Base_Radar& Radar)

@@ -177,9 +177,6 @@
     <ClInclude Include="Features\Aimbot.h">
       <Filter>Features\Legit</Filter>
     </ClInclude>
-    <ClInclude Include="Features\AutoAccept.h">
-      <Filter>Features\Misc</Filter>
-    </ClInclude>
     <ClInclude Include="Helpers\WebApi.h">
       <Filter>Helpers</Filter>
     </ClInclude>
@@ -270,9 +267,6 @@
     </ClCompile>
     <ClCompile Include="Features\Aimbot.cpp">
       <Filter>Features\Legit</Filter>
-    </ClCompile>
-    <ClCompile Include="Features\AutoAccept.cpp">
-      <Filter>Features\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Offsets\Offsets.cpp">
       <Filter>Offsets</Filter>
