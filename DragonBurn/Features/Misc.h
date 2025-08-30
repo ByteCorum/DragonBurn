@@ -27,6 +27,7 @@ namespace Misc
 	enum KeyboardLayout {
 		QWERTY = 0,
 		AZERTY = 1,
+		QWERTZ = 2,
 		OTHER  = -1
 	};
 
@@ -149,24 +150,43 @@ namespace Misc
 	static void CheckAndStopKey(int key, int opposite_key, std::map<int, bool>& key_released_map, std::chrono::steady_clock::time_point& last_stop_time);
 	static inline int DetectKeyboardLayout()
 	{
-	    char layoutName[KL_NAMELENGTH];
-	    if (GetKeyboardLayoutNameA(layoutName))
-	    {
-	        std::string sLayoutName(layoutName);
-	        // QWERTY family
-	        if (sLayoutName == "00000409" || sLayoutName == "00000809" ||
-	            sLayoutName == "00001009" || sLayoutName == "00001809" ||
-	            sLayoutName == "00004009" || sLayoutName == "00010409" ||
-	            sLayoutName == "00020409" || sLayoutName == "00030409" ||
-	            sLayoutName == "00040409" || sLayoutName == "00050409")
-	            return QWERTY;
-	        // AZERTY family
-	        if (sLayoutName == "0000040C" || sLayoutName == "0000080C" ||
-	            sLayoutName == "0000100C" || sLayoutName == "0000140C" ||
-	            sLayoutName == "0000180C")
-	            return AZERTY;
-	    }
-	    return OTHER; // inconnu
+		char layoutName[KL_NAMELENGTH];
+		if (GetKeyboardLayoutNameA(layoutName))
+		{
+			std::string sLayoutName(layoutName);
+			std::transform(sLayoutName.begin(), sLayoutName.end(), sLayoutName.begin(), ::toupper);
+
+			// QWERTY family
+			if (sLayoutName == "00000409" || sLayoutName == "00000809" ||
+				sLayoutName == "00001009" || sLayoutName == "00001809" ||
+				sLayoutName == "00004009" || sLayoutName == "00010409" ||
+				sLayoutName == "00020409" || sLayoutName == "00030409" ||
+				sLayoutName == "00040409" || sLayoutName == "00050409" ||
+				sLayoutName == "00000419" || // Russian
+				sLayoutName == "00000422")   // Ukrainian
+			{
+				return QWERTY;
+			}
+
+			// AZERTY family
+			if (sLayoutName == "0000040C" || sLayoutName == "0000080C" ||
+				sLayoutName == "0000100C" || sLayoutName == "0000140C" ||
+				sLayoutName == "0000180C")
+			{
+				return AZERTY;
+			}
+
+			// QWERTZ family
+			if (sLayoutName == "00000407" || sLayoutName == "00000807" || // German
+				sLayoutName == "00000C07" || // Austrian
+				sLayoutName == "0000040E" || // Hungarian
+				sLayoutName == "0000041B" || // Slovak
+				sLayoutName == "00000405")   // Czech
+			{
+				return QWERTZ;
+			}
+		}
+		return OTHER; // inconnu
 	}
 
 	void Watermark(const CEntity&) noexcept;

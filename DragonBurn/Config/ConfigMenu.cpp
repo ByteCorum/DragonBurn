@@ -151,6 +151,8 @@ namespace ConfigMenu {
 		MiscCFG::SpecList = false;
 		MiscCFG::BombTimerCol = ImColor(131, 137, 150, 255);
 		MiscCFG::bmbTimer = true;
+		MiscCFG::FastStop = false;
+		MiscCFG::FastStopDelay = 100;
 
 		ESPConfig::VisibleColor = ImColor(59, 71, 148, 180);
 		ESPConfig::VisibleCheck = false;
