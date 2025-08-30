@@ -241,7 +241,7 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 
 		// sound esp
 		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address) {
-			SoundESP::ProcessSound(result.entity, result.entityIndex, localEntity);
+			SoundESP::ProcessSound(result.entity, localEntity);
 		}
 
 		result.isValid = true;
