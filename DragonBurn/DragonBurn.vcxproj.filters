@@ -283,9 +283,6 @@
     <ClCompile Include="Features\RCS.cpp">
       <Filter>Features\Legit</Filter>
     </ClCompile>
-    <ClCompile Include="Features\SoundESP.cpp">
-      <Filter>Features\Visual</Filter>
-    </ClCompile>
     <ClCompile Include="Core\MemoryMgr.cpp">
       <Filter>Core</Filter>
     </ClCompile>
