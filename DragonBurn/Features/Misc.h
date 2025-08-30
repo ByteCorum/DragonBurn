@@ -24,11 +24,23 @@
 
 namespace Misc
 {
-	enum KeyboardLayout {
-		QWERTY = 0,
-		AZERTY = 1,
-		QWERTZ = 2,
-		OTHER  = -1
+	enum class KeyboardLayout {
+		QWERTY,
+		AZERTY,
+		QWERTZ,
+		UNKNOWN
+	};
+
+	// New struct for key mappings
+	struct KeyLayout {
+		int forward, backward, left, right;
+	};
+
+	// Map of keyboard layouts to key mappings
+	static std::map<KeyboardLayout, KeyLayout> keyLayouts = {
+		{KeyboardLayout::QWERTY, {'W', 'S', 'A', 'D'}},
+		{KeyboardLayout::AZERTY, {'Z', 'S', 'Q', 'D'}},
+		{KeyboardLayout::QWERTZ, {'W', 'S', 'A', 'D'}}
 	};
 
 	inline bool Zoom = false;
@@ -143,12 +155,8 @@ namespace Misc
 
 	};
 
-	// New helper function for key events
-	static void PerformKeyStop(int opposite_key, int delay_ms);
-
-	// New helper function to check and stop keys
-	static void CheckAndStopKey(int key, int opposite_key, std::map<int, bool>& key_released_map, std::chrono::steady_clock::time_point& last_stop_time);
-	static inline int DetectKeyboardLayout()
+	
+	static inline KeyboardLayout DetectKeyboardLayout()
 	{
 		char layoutName[KL_NAMELENGTH];
 		if (GetKeyboardLayoutNameA(layoutName))
@@ -165,7 +173,7 @@ namespace Misc
 				sLayoutName == "00000419" || // Russian
 				sLayoutName == "00000422")   // Ukrainian
 			{
-				return QWERTY;
+				return KeyboardLayout::QWERTY;
 			}
 
 			// AZERTY family
@@ -173,7 +181,7 @@ namespace Misc
 				sLayoutName == "0000100C" || sLayoutName == "0000140C" ||
 				sLayoutName == "0000180C")
 			{
-				return AZERTY;
+				return KeyboardLayout::AZERTY;
 			}
 
 			// QWERTZ family
@@ -183,10 +191,10 @@ namespace Misc
 				sLayoutName == "0000041B" || // Slovak
 				sLayoutName == "00000405")   // Czech
 			{
-				return QWERTZ;
+				return KeyboardLayout::QWERTZ;
 			}
 		}
-		return OTHER; // inconnu
+		return KeyboardLayout::UNKNOWN; // idk keyboard, QWERTY WILL BE USED
 	}
 
 	void Watermark(const CEntity&) noexcept;

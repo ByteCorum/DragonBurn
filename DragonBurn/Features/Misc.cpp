@@ -162,26 +162,18 @@ namespace Misc
 		}
 		else if (previously_released)
 		{
-			int pressed_keys = 0;
-			if (MiscCFG::KeyboardLayout == 1) // AZERTY
-			{
-				if (GetAsyncKeyState('Q') & 0x8000) pressed_keys++;
-				if (GetAsyncKeyState('D') & 0x8000) pressed_keys++;
-				if (GetAsyncKeyState('Z') & 0x8000) pressed_keys++;
-				if (GetAsyncKeyState('S') & 0x8000) pressed_keys++;
-			}
-			else // QWERTY (or default)
-			{
-				if (GetAsyncKeyState('A') & 0x8000) pressed_keys++;
-				if (GetAsyncKeyState('D') & 0x8000) pressed_keys++;
-				if (GetAsyncKeyState('W') & 0x8000) pressed_keys++;
-				if (GetAsyncKeyState('S') & 0x8000) pressed_keys++;
-			}
-
-			if (pressed_keys == 0)
-			{
-				last_stop_time = std::chrono::steady_clock::now();
-				std::thread(PerformKeyStop, opposite_key, MiscCFG::FastStopDelay).detach();
+			KeyboardLayout currentLayout = static_cast<KeyboardLayout>(MiscCFG::KeyboardLayout);
+			auto it = keyLayouts.find(currentLayout);
+			if (it != keyLayouts.end()) {
+				const auto& layout = it->second;
+				if (!(GetAsyncKeyState(layout.left) & 0x8000) &&
+					!(GetAsyncKeyState(layout.right) & 0x8000) &&
+					!(GetAsyncKeyState(layout.forward) & 0x8000) &&
+					!(GetAsyncKeyState(layout.backward) & 0x8000))
+				{
+					last_stop_time = std::chrono::steady_clock::now();
+					std::thread(PerformKeyStop, opposite_key, MiscCFG::FastStopDelay).detach();
+				}
 			}
 			key_released_map[key] = false;
 		}
@@ -206,20 +198,14 @@ namespace Misc
         return;
     }
 
-    // Maybe add a automatic detection?
-    if (MiscCFG::KeyboardLayout == 1) // AZERTY
-    {
-        CheckAndStopKey('Q', 'D', key_released_map, last_stop_time);
-        CheckAndStopKey('D', 'Q', key_released_map, last_stop_time);
-        CheckAndStopKey('Z', 'S', key_released_map, last_stop_time);
-        CheckAndStopKey('S', 'Z', key_released_map, last_stop_time);
-    }
-    else // QWERTY (or default)
-    {
-        CheckAndStopKey('A', 'D', key_released_map, last_stop_time);
-        CheckAndStopKey('D', 'A', key_released_map, last_stop_time);
-        CheckAndStopKey('W', 'S', key_released_map, last_stop_time);
-        CheckAndStopKey('S', 'W', key_released_map, last_stop_time);
-    }
+	KeyboardLayout currentLayout = static_cast<KeyboardLayout>(MiscCFG::KeyboardLayout);
+		auto it = keyLayouts.find(currentLayout);
+		if (it != keyLayouts.end()) {
+			const auto& layout = it->second;
+			CheckAndStopKey(layout.left, layout.right, key_released_map, last_stop_time);
+			CheckAndStopKey(layout.right, layout.left, key_released_map, last_stop_time);
+			CheckAndStopKey(layout.forward, layout.backward, key_released_map, last_stop_time);
+			CheckAndStopKey(layout.backward, layout.forward, key_released_map, last_stop_time);
+		}
 }
 }

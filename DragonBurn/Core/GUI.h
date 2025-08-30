@@ -619,12 +619,6 @@ namespace GUI
 					PutSwitch(Text::Misc::HitMerker.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop);
 					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
-					if (MiscCFG::FastStop)
-					{
-						
-						int Fmin = 0, Fmax = 100;
-						PutSliderInt(Text::Misc::FastStopDelay.c_str(), 10.f, &MiscCFG::FastStopDelay, &Fmin, &Fmax, "%d ms", Text::Misc::FastStopDelayTip.c_str());
-					}
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
 
 					ImGui::NextColumn();
