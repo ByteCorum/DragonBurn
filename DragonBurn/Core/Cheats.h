@@ -29,6 +29,8 @@ namespace Cheats
 	std::vector<EntityResult> ProcessEntities(CEntity& localEntity, int& localPlayerControllerIndex);
 	void HandleEnts(const std::vector<EntityResult>& entities, CEntity& localEntity, 
 		int localPlayerControllerIndex, Base_Radar& gameRadar, std::vector<Vec3>& aimPosList);
+
+	std::string GetCurrentMapName();
 }
 
 struct {

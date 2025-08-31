@@ -201,5 +201,20 @@ namespace Misc
 	void HitManager(CEntity&, int&) noexcept;
 	void BunnyHop(const CEntity&) noexcept;
 	void CleanTraces();
+
 	void FastStop() noexcept;
+  void AutoKnifeExecute(const CEntity& local, const std::vector<CEntity>& entities, int autoKnifeKey = 0) noexcept;
+  void ExecuteCommand(const std::string& command) noexcept;
+  void zeusbot(const CEntity& local, const std::vector<CEntity>& entities) noexcept;
+  void AntiAFKKickUpdate() noexcept;
+
+	namespace AutoAccept
+	{
+		void StartAutoAccept();
+		void StopAutoAccept();
+		bool DetectAcceptButton();
+		void ClickAcceptButton(int x, int y);
+		bool IsGreenPixel(COLORREF color);
+		void UpdateAutoAccept();
+	}
 }

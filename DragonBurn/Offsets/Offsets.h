@@ -67,6 +67,7 @@ public:
 		DWORD AbsVelocity;
 		DWORD m_bWaitForNoAttack;
 		DWORD m_pWeaponServices;
+		DWORD m_flEmitSoundTime;
 
 	} Pawn;
 

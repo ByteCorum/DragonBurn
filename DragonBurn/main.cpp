@@ -160,6 +160,12 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error("Failed to Init Address");
 	}
 
+	g_globalVars = std::make_unique<globalvars>();
+	if (!g_globalVars->UpdateGlobalvars()) {
+		Log::PreviousLine();
+		Log::Error("Failed to update global variables");
+	}
+
 	Log::PreviousLine();
 	Log::Fine("Linked to CS2");
 

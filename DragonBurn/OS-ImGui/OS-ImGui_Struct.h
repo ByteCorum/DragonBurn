@@ -81,6 +81,10 @@ public:
 	{
 		return { x + Vec3_.x,y + Vec3_.y,z + Vec3_.z };
 	}
+	Vec3 operator+(const Vec3& Vec3_) const
+	{
+		return { x + Vec3_.x,y + Vec3_.y,z + Vec3_.z };
+	}
 	Vec3 operator-(Vec3 Vec3_)
 	{
 		return { x - Vec3_.x,y - Vec3_.y,z - Vec3_.z };
