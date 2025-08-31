@@ -96,7 +96,7 @@ namespace Misc
 	{
 		if (!MiscCFG::BunnyHop ||  MenuConfig::ShowMenu || Local.Controller.TeamID == 0)
 			return;
-
+		
 		HWND hwnd_cs2 = FindWindowA(NULL, "Counter-Strike 2");
 		if (hwnd_cs2 == NULL) {
 			hwnd_cs2 = FindWindowA(NULL, "Counter-Strike 2");
