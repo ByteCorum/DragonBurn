@@ -66,7 +66,7 @@ namespace LegitBotConfig
 	inline bool TriggerBot = true;
 	inline bool TriggerAlways = false;
 
-	inline bool RCS = false;
+	inline bool RCS = true;
 
 
 }
@@ -74,6 +74,7 @@ namespace LegitBotConfig
 namespace ESPConfig
 {
 	inline int HotKey = VK_F6;
+	inline bool keyWasPressed = false;
 	inline bool ESPenabled = true;
 	inline bool AmmoBar = false;
 	inline bool ShowBoneESP = true;

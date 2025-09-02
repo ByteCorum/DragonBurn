@@ -324,15 +324,13 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 		}
 
 		// handle esp hotkey
-		std::chrono::duration<double, std::milli> difference = std::chrono::system_clock::now() - timepoint;
 		SHORT keyState = GetAsyncKeyState(ESPConfig::HotKey);
 		if (keyState & 0x8000)
-			keyWasPressed = true;
-		if (keyWasPressed && !(keyState & 0x8000) && difference.count() >= 1000)
+			ESPConfig::keyWasPressed = true;
+		if (ESPConfig::keyWasPressed && !(keyState & 0x8000))
 		{
 			ESPConfig::ESPenabled = !ESPConfig::ESPenabled;
-			std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
-			keyWasPressed = false;
+			ESPConfig::keyWasPressed = false;
 		}
 
 		// render esp
@@ -387,23 +385,17 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 
 void Menu() 
 {
-	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-	std::chrono::duration<double, std::milli> difference = now - timepoint;
 	SHORT keyState = GetAsyncKeyState(MenuConfig::HotKey);
-	if (keyState & 0x8000) {
+	if (keyState & 0x8000)
 		keyWasPressed = true;
-	}
-	if (keyWasPressed && !(keyState & 0x8000) && difference.count() >= 1000)
+	if (keyWasPressed && !(keyState & 0x8000))
 	{
 		MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
-		std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
 		keyWasPressed = false;
 	}
 
 	if (MenuConfig::ShowMenu)
-	{
 		GUI::DrawGui();
-	}
 
 	GUI::InitHitboxList();
 }
