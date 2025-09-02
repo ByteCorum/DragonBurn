@@ -216,15 +216,11 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 		result.entity = entity;
 
 		if (!entity.IsAlive())
-		{
 			continue;
-		}
 
 		// skip teammates if team check enabled
 		if (MenuConfig::TeamCheck && entity.Controller.TeamID == localEntity.Controller.TeamID)
-		{
 			continue;
-		}
 
 		// check if in screen
 		result.isInScreen = entity.IsInScreen();
@@ -234,14 +230,11 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 
 		// calculate esp box rect
 		if (ESPConfig::ESPenabled && result.isInScreen)
-		{
 			result.espRect = ESP::GetBoxRect(entity, ESPConfig::BoxType);
-		}
 
 		// sound esp
-		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address) {
+		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address)
 			SoundESP::ProcessSound(result.entity, localEntity);
-		}
 
 		result.isValid = true;
 		results.push_back(result);
@@ -418,8 +411,8 @@ void Menu()
 void Visual(const CEntity& LocalEntity)
 {
 	// Fov circle
-	if (LocalEntity.IsAlive())
-	Render::DrawFovCircle(ImGui::GetBackgroundDrawList(), LocalEntity);
+	if (LocalEntity.Controller.TeamID != 0 && !MenuConfig::ShowMenu)
+		Render::DrawFovCircle(ImGui::GetBackgroundDrawList(), LocalEntity);
 
 	// Fov line
 	Render::DrawFov(LocalEntity, LegitBotConfig::FovLineSize, LegitBotConfig::FovLineColor, 1);
@@ -540,20 +533,15 @@ void RadarSetting(Base_Radar& Radar)
 
 void RenderCrosshair(ImDrawList* drawList, const CEntity& LocalEntity)
 {
-	//if (!CrosshairsCFG::ShowCrossHair || LocalEntity.Controller.TeamID == 0)
-	//	return;
+	if (!MiscCFG::SniperCrosshair || LocalEntity.Controller.TeamID == 0 || MenuConfig::ShowMenu)
+		return;
 
 	bool isScoped;
 	memoryManager.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset.Pawn.isScoped, isScoped);
-
 	std::string curWeapon = TriggerBot::GetWeapon(LocalEntity);
-	if (!MiscCFG::SniperCrosshair || LocalEntity.Controller.TeamID == 0 || !TriggerBot::CheckScopeWeapon(curWeapon) || isScoped || MenuConfig::ShowMenu)
+
+	if (!TriggerBot::CheckScopeWeapon(curWeapon) || isScoped)
 		return;
 
 	Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), MiscCFG::SniperCrosshairColor);
-
-	//if (CrosshairsCFG::isAim && MenuConfig::TargetingCrosshairs)
-		//Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::TargetedColor));
-	//else
-		//Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::CrossHairColor));
 }
