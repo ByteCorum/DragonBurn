@@ -108,7 +108,6 @@ https://github.com/ByteCorum/DragonBurn
 	else
 	{
 		Log::PreviousLine();
-		Log::Warning("First, run DragonBurn-kernel.exe");
 		Log::Error("Failed to connect to kernel mode driver");
 	}
 
@@ -160,6 +159,12 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error("Failed to Init Address");
 	}
 
+	g_globalVars = std::make_unique<globalvars>();
+	if (!g_globalVars->UpdateGlobalvars()) {
+		Log::PreviousLine();
+		Log::Error("Failed to update global variables");
+	}
+
 	Log::PreviousLine();
 	Log::Fine("Linked to CS2");
 
@@ -191,7 +196,10 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error(error.what());
 	}
 
+	Misc::Layout = Misc::DetectKeyboardLayout();
+
 	Log::Fine("DragonBurn loaded");
+
 
 #ifndef DBDEBUG
 	Sleep(3000);

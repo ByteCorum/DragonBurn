@@ -185,6 +185,7 @@
     <ClInclude Include="Features\Misc.h" />
     <ClInclude Include="Features\Radar.h" />
     <ClInclude Include="Features\RCS.h" />
+    <ClInclude Include="Features\SoundESP.h" />
     <ClInclude Include="Features\SpectatorList.h" />
     <ClInclude Include="Features\TriggerBot.h" />
     <ClInclude Include="Game\Bone.h" />
@@ -233,7 +234,6 @@
     <ClCompile Include="Features\Misc.cpp" />
     <ClCompile Include="Features\Radar.cpp" />
     <ClCompile Include="Features\RCS.cpp" />
-    <ClCompile Include="Features\SpectatorList.cpp" />
     <ClCompile Include="Features\TriggerBot.cpp" />
     <ClCompile Include="Game\Bone.cpp" />
     <ClCompile Include="Game\Entity.cpp" />

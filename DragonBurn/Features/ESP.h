@@ -419,4 +419,72 @@ namespace ESP
             drawList->AddText(font1, 20.0f, flashed, IM_COL32(131, 137, 150, 255), "i");
         }
     }
+
+    // Utility: clamp a point to a padded screen rectangle
+    ImVec2 ClampToBounds(const ImVec2& p, float minX, float minY, float maxX, float maxY)
+    {
+        return ImVec2(min(max(p.x, minX), maxX), min(max(p.y, minY), maxY));
+    }
+
+    // Draw an equilateral triangle oriented by angle
+    void DrawArrowAt(ImDrawList* dl, const ImVec2& pos, float angleRad, float size, ImU32 col)
+    {
+        // Equilateral triangle vertices around pos
+        const float a = angleRad;
+        const float a1 = a;                  // tip
+        const float a2 = a + 2.0f * IM_PI / 3.0f; // +120°
+        const float a3 = a - 2.0f * IM_PI / 3.0f; // -120°
+        ImVec2 v1 = ImVec2(pos.x + cosf(a1) * size, pos.y + sinf(a1) * size);
+        ImVec2 v2 = ImVec2(pos.x + cosf(a2) * size, pos.y + sinf(a2) * size);
+        ImVec2 v3 = ImVec2(pos.x + cosf(a3) * size, pos.y + sinf(a3) * size);
+        dl->AddTriangleFilled(v1, v2, v3, col);
+        dl->AddTriangle(v1, v2, v3, IM_COL32(0,0,0,200), 1.0f);
+    }
+
+    void RenderOutOfFOVArrow(const CEntity& local, const CEntity& entity)
+    {
+        if (!ESPConfig::ShowOutOfFOVArrow)
+            return;
+
+        // If already on screen (within viewport), skip
+        Vec2 sp;
+        bool w2s = gGame.View.WorldToScreen(entity.Pawn.Pos, sp);
+        const ImVec2 screen = ImVec2(Gui.Window.Size.x, Gui.Window.Size.y);
+        // If in front and inside viewport, skip indicator
+        if (w2s && sp.x >= 0.0f && sp.x <= screen.x && sp.y >= 0.0f && sp.y <= screen.y)
+            return;
+
+        if (screen.x <= 1.f || screen.y <= 1.f)
+            return;
+
+        // Match original polar mapping and aspect ratio correction
+        const ImVec2 center = ImVec2(screen.x * 0.5f, screen.y * 0.5f);
+        // Interpret OutOfFOVRadiusFactor as percent (0..100) if > 1, else scale
+        float Rpercent = 0.90f; // radius
+        if (Rpercent <= 1.0f) Rpercent *= 100.0f;
+        Rpercent = min(max(Rpercent, 0.0f), 100.0f);
+        const float ring = screen.y / ((120.0f - Rpercent) / 10.0f);
+
+        // Radar-like rotation: angleRad = localYawRad - atan2(target.y - local.y, target.x - local.x)
+        const float localYawRad = local.Pawn.ViewAngle.y * (IM_PI / 180.0f);
+        float angRad = localYawRad - atan2f(entity.Pawn.Pos.y - local.Pawn.Pos.y, entity.Pawn.Pos.x - local.Pawn.Pos.x);
+
+        // Small deterministic jitter to reduce overlap between multiple targets at same bearing
+        const uint64_t seed = (uint64_t)entity.Pawn.Address ^ ((uint64_t)entity.Controller.Address << 13);
+        const float jitterStep = 2.0f * (IM_PI / 180.0f); // 2 degrees
+        const int jitterIdx = (int)(seed & 0x7) - 3;      // [-3..4]
+        angRad += jitterIdx * jitterStep;
+
+        // Screen mapping (match radar’s sin/cos usage) with aspect correction on X
+        const float px = sinf(angRad);
+        const float py = -cosf(angRad);
+        // Keep indicators strictly on a true circle in screen pixels (no aspect scaling)
+        ImVec2 pos(center.x + ring * px, center.y + ring * py);
+        pos = ClampToBounds(pos, 6.0f, 6.0f, screen.x - 6.0f, screen.y - 6.0f);
+
+        ImDrawList* dl = ImGui::GetBackgroundDrawList();
+        // Orient triangle along on-screen direction center->pos
+        float orient = atan2f(py, px);
+        DrawArrowAt(dl, pos, orient, 12.0f, ESPConfig::OutOfFOVArrowColor);
+    }
 }
