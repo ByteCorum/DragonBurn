@@ -2,7 +2,7 @@
 name: Bug Report
 about: Please take your time and provide us some info about an issue that you've faced.
 title: 'Bug: <subject>'
-labels: bug
+labels: bug, new
 assignees: ByteCorum
 
 ---
