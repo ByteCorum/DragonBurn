@@ -24,9 +24,7 @@ jobs:
             }
 
             let prComment = `**Thank you for contributing into our project!**
-
             We appreciate the invest of your time and efforts to help us improve our project.
-
             Your pull request will be reviewed as soon as possible!`;
 
             // Post the comment
