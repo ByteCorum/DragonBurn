@@ -1,0 +1,74 @@
+---
+# Type Labels
+- name: "bug"
+  color: ee0701
+  description: "Something isn't working as expected or causes issues."
+- name: "question"
+  color: cc317c
+  description: "Further information is requested or clarification needed."
+- name: "suggestion"
+  color: 84b6eb
+  description: "Ideas for improvements or new features."
+- name: "docs"
+  color: 0075ca
+  description: "Documentation improvements or additions."
+- name: "feat"
+  color: 0e8a16
+  description: "New feature or functionality."
+- name: "fix"
+  color: ee0701
+  description: "Bug fix or correction."
+- name: "style"
+  color: f9d0c4
+  description: "Code style, formatting, or cosmetic changes."
+- name: "refactor"
+  color: fbca04
+  description: "Code restructuring without changing functionality."
+- name: "test"
+  color: 1d76db
+  description: "Adding or updating tests."
+- name: "chore"
+  color: fef2c0
+  description: "Maintenance tasks, build processes, or tooling changes."
+
+# Priority Labels
+- name: "high-priority"
+  color: b60205
+  description: "High priority issue that should be addressed urgently."
+- name: "medium-priority"
+  color: fbca04
+  description: "Medium priority issue for normal workflow."
+- name: "low-priority"
+  color: 0e8a16
+  description: "Low priority issue that can be addressed when time permits."
+- name: "no-priority"
+  color: e4e669
+  description: "No specific priority assigned."
+
+# Status Labels
+- name: "wip-status"
+  color: ff9500
+  description: "Work in progress - currently being worked on."
+- name: "suspended-status"
+  color: 5319e7
+  description: "Work has been suspended or put on hold."
+- name: "invalid-status"
+  color: 000000
+  description: "This issue or pull request is not valid."
+- name: "duplicate-status"
+  color: cccccc
+  description: "This issue or pull request already exists."
+- name: "wontfix-status"
+  color: ffffff
+  description: "This will not be worked on or fixed."
+
+# Impact Labels
+- name: "major"
+  color: d73a4a
+  description: "Major changes with significant impact."
+- name: "minor"
+  color: 0075ca
+  description: "Minor changes with limited impact."
+- name: "regular"
+  color: 28a745
+  description: "Regular changes as part of normal development."

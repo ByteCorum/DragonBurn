@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contact Author
+    url: https://discord.com/users/798503509522645012
+    about: Author's discord account.
+  - name: Stackoverflow
+    url: https://stackoverflow.com/users/26622521/bytecorum
+    about: Maybe you can find solution on stackoverflow.

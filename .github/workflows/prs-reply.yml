@@ -1,0 +1,48 @@
+name: Auto-Reply to Pull Requests
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  pull_request_target:
+    types: [opened, ready_for_review]
+
+jobs:
+  auto-reply:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - name: Reply to pull request
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const isDraft = pr.draft;
+
+            // Skip if it's a draft PR being opened (not converted to ready)
+            if (isDraft && context.payload.action === 'opened') {
+              return;
+            }
+
+            let prComment = `**Thank you for contributing into our project!**
+
+            We appreciate the invest of your time and efforts to help us improve our project.
+
+            Your pull request will be reviewed as soon as possible!`;
+
+            // Post the comment
+            await github.rest.issues.createComment({
+              issue_number: pr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: prComment
+            });
+
+            // Add reaction to show the bot has processed the issue
+            await github.rest.reactions.createForIssue({
+              issue_number: pr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              content: 'eyes'
+            });
