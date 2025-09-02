@@ -27,8 +27,7 @@ namespace MyConfigSaver
         ConfigData["0"]["Version"] = MenuConfig::version;
         ConfigData["0"]["Author"] = author;
 
-
-
+        ConfigData["ESP"]["Hotkey"] =               ESPConfig::HotKey;
         ConfigData["ESP"]["Enable"]=                ESPConfig::ESPenabled;
         ConfigData["ESP"]["BoneESP"]=               ESPConfig::ShowBoneESP;
         ConfigData["ESP"]["BoxESP"]=                ESPConfig::ShowBoxESP;
@@ -273,6 +272,7 @@ namespace MyConfigSaver
 
         if (ConfigData.contains("ESP"))
         {
+            ESPConfig::HotKey = ReadData(ConfigData["ESP"], { "Hotkey" }, VK_F6);
             ESPConfig::ESPenabled = ReadData(ConfigData["ESP"], { "Enable" }, false);
             ESPConfig::ShowBoneESP = ReadData(ConfigData["ESP"], { "BoneESP" }, false);
             ESPConfig::ShowBoxESP = ReadData(ConfigData["ESP"],{"BoxESP"}, false);

@@ -164,6 +164,7 @@ namespace ConfigMenu {
 
 		ESPConfig::ShowDistance = false;
 		ESPConfig::ShowBoneESP = true;
+		ESPConfig::HotKey = VK_F6;
 		ESPConfig::ShowBoxESP = true;
 		ESPConfig::ShowHealthBar = true;
 		ESPConfig::ShowWeaponESP = true;

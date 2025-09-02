@@ -330,6 +330,18 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 			}
 		}
 
+		// handle esp hotkey
+		std::chrono::duration<double, std::milli> difference = std::chrono::system_clock::now() - timepoint;
+		SHORT keyState = GetAsyncKeyState(ESPConfig::HotKey);
+		if (keyState & 0x8000)
+			keyWasPressed = true;
+		if (keyWasPressed && !(keyState & 0x8000) && difference.count() >= 1000)
+		{
+			ESPConfig::ESPenabled = !ESPConfig::ESPenabled;
+			std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
+			keyWasPressed = false;
+		}
+
 		// render esp
 		if (ESPConfig::ESPenabled)
 		{

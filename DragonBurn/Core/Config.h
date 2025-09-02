@@ -73,6 +73,7 @@ namespace LegitBotConfig
 
 namespace ESPConfig
 {
+	inline int HotKey = VK_F6;
 	inline bool ESPenabled = true;
 	inline bool AmmoBar = false;
 	inline bool ShowBoneESP = true;

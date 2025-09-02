@@ -311,8 +311,19 @@ namespace GUI
 					ImGui::GradientText("ESP");
 					float MinRounding = 0.f, MaxRouding = 5.f;
 					PutSwitch(Text::ESP::Toggle.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
+					ImGui::TextDisabled(Text::ESP::HotKeyList.c_str());
+					ImGui::SameLine();
+					AlignRight(70.f);
+					if (ImGui::Button(Text::ESP::HotKey.c_str(), { 70.f, 25.f }))
+					{
+						std::thread([&]() {
+							KeyMgr::GetPressedKey(ESPConfig::HotKey, Text::ESP::HotKey);
+							}).detach();
+					}
+
 					if (ESPConfig::ESPenabled)
 					{
+
 						PutSwitch(Text::ESP::Box.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowBoxESP, true, "###BoxCol", reinterpret_cast<float*>(&ESPConfig::BoxColor));
 						if (ESPConfig::ShowBoxESP)
 						{
