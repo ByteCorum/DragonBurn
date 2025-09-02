@@ -13,7 +13,7 @@ namespace Text {
     namespace ESP
     {
         inline std::string Toggle = "Toggle";
-        inline std::string HotKeyList = "Hotkey";
+        inline std::string HotKeyList = "   Hotkey";
         inline std::string HotKey = "F6";
         inline std::string FeatureName = "ESP";
         inline std::string Box = "Box";

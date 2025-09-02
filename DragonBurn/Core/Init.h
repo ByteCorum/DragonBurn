@@ -11,7 +11,6 @@
 #include "../Helpers/WebApi.h"
 #include "../Core/Config.h"
 
-inline std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
 inline bool keyWasPressed = false;
 
 inline std::string WStringToString(const std::wstring& wstr)
