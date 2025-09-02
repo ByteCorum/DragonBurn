@@ -197,7 +197,10 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error(error.what());
 	}
 
+	Misc::Layout = Misc::DetectKeyboardLayout();
+
 	Log::Fine("DragonBurn loaded");
+
 
 #ifndef DBDEBUG
 	Sleep(3000);

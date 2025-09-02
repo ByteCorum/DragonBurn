@@ -178,13 +178,15 @@ namespace GUI
 		Gui.SliderScalarEx2("", ImGuiDataType_Float, v, p_min, p_max, "", ImGuiSliderFlags_None);
 		ImGui::PopID();
 	}
-	void PutSliderInt(const char* string, float CursorX, int* v, const void* p_min, const void* p_max, const char* format)
+	void PutSliderInt(const char* string, float CursorX, int* v, const void* p_min, const void* p_max, const char* format, const char* Tip = NULL)
 	{
 		ImGui::PushID(string);
 		float CurrentCursorX = ImGui::GetCursorPosX();
 		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX-15;
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(string);
+		if (Tip && ImGui::IsItemHovered())
+			ImGui::SetTooltip(Tip);
 		ImGui::SameLine();
 		ImGui::TextDisabled(format, *v);
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
@@ -621,7 +623,7 @@ namespace GUI
 					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
 					PutSwitch(Text::Misc::HitMerker.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop);
-					//PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
+					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
 					PutSwitch("Auto Accept", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
                     PutSwitch("Sound esp", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&MiscCFG::EnemySoundColor));

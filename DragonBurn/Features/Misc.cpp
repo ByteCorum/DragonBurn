@@ -23,10 +23,6 @@ namespace System {
 
 namespace Misc
 {
-	//bool aKeyPressed = false;
-	//bool dKeyPressed = false;
-	//bool wKeyPressed = false;
-	//bool sKeyPressed = false;
 	HitMarker hitMarker(0, std::chrono::steady_clock::now());
 	const float HitMarker::SIZE = 10.f;
 	const float HitMarker::GAP = 3.f;
@@ -116,7 +112,7 @@ namespace Misc
 	{
 		if (!MiscCFG::BunnyHop ||  MenuConfig::ShowMenu || Local.Controller.TeamID == 0)
 			return;
-
+		
 		HWND hwnd_cs2 = FindWindowA(NULL, "Counter-Strike 2");
 		if (hwnd_cs2 == NULL) {
 			hwnd_cs2 = FindWindowA(NULL, "Counter-Strike 2");
@@ -164,22 +160,70 @@ namespace Misc
 		catch (...) {}
 	}
 
-	//void FastStop() noexcept
-	//{
-	//	if (!MiscCFG::FastStop)
-	//		return;
-	//	// Disable when bhopping
-	//	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-	//		return;
-	//	// Disable when slow walking
-	//	if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
-	//		return;
 
-	//	Misc::StopKeyEvent('A', &aKeyPressed, 'D', 50.f);
-	//	Misc::StopKeyEvent('D', &dKeyPressed, 'A', 50.f);
-	//	Misc::StopKeyEvent('W', &wKeyPressed, 'S', 50.f);
-	//	Misc::StopKeyEvent('S', &sKeyPressed, 'W', 50.f);
-	//}
+	static void PerformKeyStop(int opposite_key, int delay_ms)
+	{
+		keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), 0, 0);
+		std::this_thread::sleep_for(std::chrono::milliseconds(delay_ms));
+		keybd_event(opposite_key, MapVirtualKey(opposite_key, 0), KEYEVENTF_KEYUP, 0);
+	}
+
+	static void CheckAndStopKey(int key, int opposite_key, std::map<int, bool>& key_released_map, std::chrono::steady_clock::time_point& last_stop_time)
+	{
+		short key_state = GetAsyncKeyState(key);
+		bool previously_released = key_released_map[key];
+
+		if (key_state & 0x8000)
+		{
+			key_released_map[key] = true;
+		}
+		else if (previously_released)
+		{
+			auto it = keyLayouts.find(Layout);
+			if (it != keyLayouts.end()) {
+				const auto& layout = it->second;
+				if (!(GetAsyncKeyState(layout.left) & 0x8000) &&
+					!(GetAsyncKeyState(layout.right) & 0x8000) &&
+					!(GetAsyncKeyState(layout.forward) & 0x8000) &&
+					!(GetAsyncKeyState(layout.backward) & 0x8000))
+				{
+					last_stop_time = std::chrono::steady_clock::now();
+					std::thread(PerformKeyStop, opposite_key, MiscCFG::FastStopDelay).detach();
+				}
+			}
+			key_released_map[key] = false;
+		}
+	}
+
+		
+
+	void FastStop() noexcept
+	{
+		if (!MiscCFG::FastStop)
+			return;
+
+		if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+			return;
+
+		static std::map<int, bool> key_released_map;
+		static auto last_stop_time = std::chrono::steady_clock::now();
+
+		auto now = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last_stop_time).count() < MiscCFG::FastStopDelay + 20)
+		{
+			return;
+		}
+
+		auto it = keyLayouts.find(Layout);
+		if (it != keyLayouts.end()) {
+			const auto& layout = it->second;
+			CheckAndStopKey(layout.left, layout.right, key_released_map, last_stop_time);
+			CheckAndStopKey(layout.right, layout.left, key_released_map, last_stop_time);
+			CheckAndStopKey(layout.forward, layout.backward, key_released_map, last_stop_time);
+			CheckAndStopKey(layout.backward, layout.forward, key_released_map, last_stop_time);
+		}
+	}
+
 
 	void ExecuteCommand(const std::string& Command_Str) noexcept
 	{

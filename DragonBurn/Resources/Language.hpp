@@ -121,6 +121,7 @@ namespace Text {
         inline std::string TeamCheck = "Team Check";
         inline std::string AntiRecord = "Anti Record";
         inline std::string SniperCrosshair = "Sniper Crosshair";
+        inline std::string FastStop = "Fast Stop";
         inline std::string AutoKnifeBot = "Auto Knife Bot";
         inline std::string AutoZeusBot = "Auto Zeus Bot";
         inline std::string AutoBotDistance = "Distance";

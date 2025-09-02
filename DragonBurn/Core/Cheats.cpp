@@ -461,29 +461,29 @@ void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
 
 void MiscFuncs(CEntity& LocalEntity)
 {
-	Misc::HitManager(LocalEntity, PreviousTotalHits);
-	Misc::BunnyHop(LocalEntity);
-	SpecList::SpectatorWindowList(LocalEntity);
-	bmb::RenderWindow(LocalEntity.Controller.TeamID);
-	Misc::Watermark(LocalEntity);
-	Misc::AntiAFKKickUpdate();
-	SoundESP::Render();
-	// knife bot
-	if (MiscCFG::AutoKnife) {
-		std::vector<CEntity> enemyList;
-		enemyList.reserve(Cheats::cachedResults.size());
-		for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
-		Misc::AutoKnifeExecute(LocalEntity, enemyList);
-	}
-	// zeus bot
-	if (MiscCFG::AutoZeus) {
-		std::vector<CEntity> enemyList;
-		enemyList.reserve(Cheats::cachedResults.size());
-		for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
-		Misc::zeusbot(LocalEntity, enemyList);
-	}
-	//Misc::FastStop();
-	Misc::AutoAccept::UpdateAutoAccept();
+    Misc::HitManager(LocalEntity, PreviousTotalHits);
+    Misc::BunnyHop(LocalEntity);
+    SpecList::SpectatorWindowList(LocalEntity);
+    bmb::RenderWindow(LocalEntity.Controller.TeamID);
+    Misc::Watermark(LocalEntity);
+    Misc::AntiAFKKickUpdate();
+    SoundESP::Render();
+    // knife bot
+    if (MiscCFG::AutoKnife) {
+        std::vector<CEntity> enemyList;
+        enemyList.reserve(Cheats::cachedResults.size());
+        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+        Misc::AutoKnifeExecute(LocalEntity, enemyList);
+    }
+    // zeus bot
+    if (MiscCFG::AutoZeus) {
+        std::vector<CEntity> enemyList;
+        enemyList.reserve(Cheats::cachedResults.size());
+        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+        Misc::zeusbot(LocalEntity, enemyList);
+    }
+    Misc::FastStop();
+    Misc::AutoAccept::UpdateAutoAccept();
 }
 
 void RadarSetting(Base_Radar& Radar)

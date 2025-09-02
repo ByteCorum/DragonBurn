@@ -24,6 +24,25 @@
 
 namespace Misc
 {
+	enum class KeyboardLayout {
+		QWERTY,
+		AZERTY,
+		QWERTZ,
+		UNKNOWN
+	};
+
+	struct KeyLayout {
+		int forward, backward, left, right;
+	};
+
+	static KeyboardLayout Layout = KeyboardLayout::UNKNOWN;
+
+	static std::map<KeyboardLayout, KeyLayout> keyLayouts = {
+		{KeyboardLayout::QWERTY, {'W', 'S', 'A', 'D'}},
+		{KeyboardLayout::AZERTY, {'Z', 'S', 'Q', 'D'}},
+		{KeyboardLayout::QWERTZ, {'W', 'S', 'A', 'D'}}
+	};
+
 	inline bool Zoom = false;
 
 	static inline std::vector<ImColor> colorList = {
@@ -66,19 +85,7 @@ namespace Misc
 		localtime_s(ptm, &now);
 	}
 
-	static inline void StopKeyEvent(int WalkKey, bool* KeyStatus, int StopKey, float duration) {
-		if (GetAsyncKeyState(WalkKey) & 0x8000) {
-			*KeyStatus = true;
-		}
-		else {
-			if (*KeyStatus) {
-				keybd_event(StopKey, MapVirtualKey(StopKey, 0), KEYEVENTF_SCANCODE, 0);
-				Sleep(50);
-				keybd_event(StopKey, MapVirtualKey(StopKey, 0), KEYEVENTF_KEYUP, 0);
-				*KeyStatus = false;
-			}
-		}
-	}
+	
 
 	static inline uintptr_t GetSmokeEntity(int i, uintptr_t EntityListEntry) {
 		uintptr_t Entity = EntityListEntry + 0x78 * (i + 1);
@@ -148,15 +155,47 @@ namespace Misc
 
 	};
 
+	
+	static inline KeyboardLayout DetectKeyboardLayout()
+	{
+		char layoutName[KL_NAMELENGTH];
+		if (GetKeyboardLayoutNameA(layoutName))
+		{
+			std::string sLayoutName(layoutName);
+			std::transform(sLayoutName.begin(), sLayoutName.end(), sLayoutName.begin(), ::toupper);
+
+			if (sLayoutName == "00000409" || sLayoutName == "00000809" ||
+				sLayoutName == "00001009" || sLayoutName == "00001809" ||
+				sLayoutName == "00004009" || sLayoutName == "00010409" ||
+				sLayoutName == "00020409" || sLayoutName == "00030409" ||
+				sLayoutName == "00040409" || sLayoutName == "00050409" ||
+				sLayoutName == "00000419" ||
+				sLayoutName == "00000422")
+				return KeyboardLayout::QWERTY;
+
+			if (sLayoutName == "0000040C" || sLayoutName == "0000080C" ||
+				sLayoutName == "0000100C" || sLayoutName == "0000140C" ||
+				sLayoutName == "0000180C")
+				return KeyboardLayout::AZERTY;
+
+			if (sLayoutName == "00000407" || sLayoutName == "00000807" ||
+				sLayoutName == "00000C07" || sLayoutName == "0000040E" ||
+				sLayoutName == "0000041B" || sLayoutName == "00000405")
+				return KeyboardLayout::QWERTZ;
+		}
+		return KeyboardLayout::UNKNOWN;
+	}
+
 	void Watermark(const CEntity&) noexcept;
 	void HitManager(CEntity&, int&) noexcept;
 	void BunnyHop(const CEntity&) noexcept;
 	void CleanTraces();
-	//void FastStop() noexcept;// junk
-    void AutoKnifeExecute(const CEntity& local, const std::vector<CEntity>& entities, int autoKnifeKey = 0) noexcept;
-    void ExecuteCommand(const std::string& command) noexcept;
-    void zeusbot(const CEntity& local, const std::vector<CEntity>& entities) noexcept;
-    void AntiAFKKickUpdate() noexcept;
+
+	void FastStop() noexcept;
+  void AutoKnifeExecute(const CEntity& local, const std::vector<CEntity>& entities, int autoKnifeKey = 0) noexcept;
+  void ExecuteCommand(const std::string& command) noexcept;
+  void zeusbot(const CEntity& local, const std::vector<CEntity>& entities) noexcept;
+  void AntiAFKKickUpdate() noexcept;
 
 	namespace AutoAccept
 	{
