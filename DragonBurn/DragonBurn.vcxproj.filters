@@ -129,6 +129,9 @@
     <ClInclude Include="Features\RCS.h">
       <Filter>Features\Legit</Filter>
     </ClInclude>
+    <ClInclude Include="Features\SoundESP.h">
+      <Filter>Features\Visual</Filter>
+    </ClInclude>
     <ClInclude Include="Features\TriggerBot.h">
       <Filter>Features\Legit</Filter>
     </ClInclude>
@@ -240,9 +243,6 @@
     </ClCompile>
     <ClCompile Include="Features\Radar.cpp">
       <Filter>Features\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="Features\SpectatorList.cpp">
-      <Filter>Features\Misc</Filter>
     </ClCompile>
     <ClCompile Include="Features\TriggerBot.cpp">
       <Filter>Features\Legit</Filter>

@@ -151,6 +151,8 @@ namespace ConfigMenu {
 		MiscCFG::SpecList = false;
 		MiscCFG::BombTimerCol = ImColor(131, 137, 150, 255);
 		MiscCFG::bmbTimer = true;
+		MiscCFG::FastStop = false;
+		MiscCFG::FastStopDelay = 100;
 
 		ESPConfig::VisibleColor = ImColor(59, 71, 148, 180);
 		ESPConfig::VisibleCheck = false;
@@ -162,6 +164,7 @@ namespace ConfigMenu {
 
 		ESPConfig::ShowDistance = false;
 		ESPConfig::ShowBoneESP = true;
+		ESPConfig::HotKey = VK_F6;
 		ESPConfig::ShowBoxESP = true;
 		ESPConfig::ShowHealthBar = true;
 		ESPConfig::ShowWeaponESP = true;
@@ -203,6 +206,18 @@ namespace ConfigMenu {
 
 		MiscCFG::ShowHeadShootLine = false;
 		MiscCFG::HeadShootLineColor = ImColor(131, 137, 150, 200);
+
+		MiscCFG::AutoAccept = false;
+
+        MiscCFG::EnemySound = false;
+        MiscCFG::EnemySoundColor = ImColor(255, 255, 255, 255);
+
+        MiscCFG::AutoKnife = false;
+        MiscCFG::AutoKnifeDistance = 70.0f;
+        MiscCFG::AutoZeus = false;
+        MiscCFG::AutoZeusDistance = 130.0f;
+
+        MiscCFG::AntiAFKKick = false;
 
 		AimControl::HotKey = 1;
 		Text::Aimbot::HotKey = KeyMgr::GetKeyName(AimControl::HotKey);

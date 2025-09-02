@@ -27,12 +27,28 @@
 #include "../Features/BombTimer.h"
 #include "../Features/SpectatorList.h"
 #include "../Helpers/Logger.h"
+#include "../Features/SoundESP.h"
 
 int PreviousTotalHits = 0;
 
 void RenderCrosshair(ImDrawList*, const CEntity&);
 
 void RadarSetting(Base_Radar&);
+
+std::string Cheats::GetCurrentMapName() {
+    if (!g_globalVars || !g_globalVars->g_cCurrentMap) {
+        return "";
+    }
+
+    char currentMap[256] = { 0 };
+    if (!memoryManager.ReadMemory(reinterpret_cast<DWORD64>(g_globalVars->g_cCurrentMap),
+        currentMap, sizeof(currentMap) - 1)) {
+        return "";
+    }
+
+    currentMap[255] = '\0';
+    return std::string(currentMap);
+}
 
 void Menu();
 void Visual(const CEntity&);
@@ -66,6 +82,7 @@ void Cheats::Run()
 		return;
 
 	if (LocalPawnAddress == 0 || LocalControllerAddress == 0) {
+        g_globalVars->UpdateGlobalvars();
         cachedResults.clear();
         return;
     }
@@ -199,27 +216,25 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 		result.entity = entity;
 
 		if (!entity.IsAlive())
-		{
 			continue;
-		}
 
 		// skip teammates if team check enabled
 		if (MenuConfig::TeamCheck && entity.Controller.TeamID == localEntity.Controller.TeamID)
-		{
 			continue;
-		}
 
 		// check if in screen
 		result.isInScreen = entity.IsInScreen();
-		
+
 		// calculate distance
 		result.distance = static_cast<int>(entity.Pawn.Pos.DistanceTo(localEntity.Pawn.Pos) / 100);
 
 		// calculate esp box rect
 		if (ESPConfig::ESPenabled && result.isInScreen)
-		{
 			result.espRect = ESP::GetBoxRect(entity, ESPConfig::BoxType);
-		}
+
+		// sound esp
+		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address)
+			SoundESP::ProcessSound(result.entity, localEntity);
 
 		result.isValid = true;
 		results.push_back(result);
@@ -257,7 +272,12 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 				entity.Pawn.Pos, ImColor(237, 85, 106, 200), RadarCFG::RadarType, entity.Pawn.ViewAngle.y);
 		}
 
-		// skip not in screen
+		// Out-of-FOV arrow
+		if (localEntity.IsAlive()) {
+			ESP::RenderOutOfFOVArrow(localEntity, result.entity);
+		}
+
+        // skip not in screen
 		if (!result.isInScreen)
 		{
 			continue;
@@ -301,6 +321,18 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 					}
 				}
 			}
+		}
+
+		// handle esp hotkey
+		std::chrono::duration<double, std::milli> difference = std::chrono::system_clock::now() - timepoint;
+		SHORT keyState = GetAsyncKeyState(ESPConfig::HotKey);
+		if (keyState & 0x8000)
+			keyWasPressed = true;
+		if (keyWasPressed && !(keyState & 0x8000) && difference.count() >= 1000)
+		{
+			ESPConfig::ESPenabled = !ESPConfig::ESPenabled;
+			std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
+			keyWasPressed = false;
 		}
 
 		// render esp
@@ -379,8 +411,8 @@ void Menu()
 void Visual(const CEntity& LocalEntity)
 {
 	// Fov circle
-	if (LocalEntity.IsAlive())
-	Render::DrawFovCircle(ImGui::GetBackgroundDrawList(), LocalEntity);
+	if (LocalEntity.Controller.TeamID != 0 && !MenuConfig::ShowMenu)
+		Render::DrawFovCircle(ImGui::GetBackgroundDrawList(), LocalEntity);
 
 	// Fov line
 	Render::DrawFov(LocalEntity, LegitBotConfig::FovLineSize, LegitBotConfig::FovLineColor, 1);
@@ -434,12 +466,29 @@ void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
 
 void MiscFuncs(CEntity& LocalEntity)
 {
-	Misc::HitManager(LocalEntity, PreviousTotalHits);
-	Misc::BunnyHop(LocalEntity);
-	SpecList::SpectatorWindowList(LocalEntity);
-	bmb::RenderWindow(LocalEntity.Controller.TeamID);
-	Misc::Watermark(LocalEntity);
-	//Misc::FastStop();
+    Misc::HitManager(LocalEntity, PreviousTotalHits);
+    Misc::BunnyHop(LocalEntity);
+    SpecList::SpectatorWindowList(LocalEntity);
+    bmb::RenderWindow(LocalEntity.Controller.TeamID);
+    Misc::Watermark(LocalEntity);
+    Misc::AntiAFKKickUpdate();
+    SoundESP::Render();
+    // knife bot
+    if (MiscCFG::AutoKnife) {
+        std::vector<CEntity> enemyList;
+        enemyList.reserve(Cheats::cachedResults.size());
+        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+        Misc::AutoKnifeExecute(LocalEntity, enemyList);
+    }
+    // zeus bot
+    if (MiscCFG::AutoZeus) {
+        std::vector<CEntity> enemyList;
+        enemyList.reserve(Cheats::cachedResults.size());
+        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+        Misc::zeusbot(LocalEntity, enemyList);
+    }
+    Misc::FastStop();
+    Misc::AutoAccept::UpdateAutoAccept();
 }
 
 void RadarSetting(Base_Radar& Radar)
@@ -484,20 +533,15 @@ void RadarSetting(Base_Radar& Radar)
 
 void RenderCrosshair(ImDrawList* drawList, const CEntity& LocalEntity)
 {
-	//if (!CrosshairsCFG::ShowCrossHair || LocalEntity.Controller.TeamID == 0)
-	//	return;
+	if (!MiscCFG::SniperCrosshair || LocalEntity.Controller.TeamID == 0 || MenuConfig::ShowMenu)
+		return;
 
 	bool isScoped;
 	memoryManager.ReadMemory<bool>(LocalEntity.Pawn.Address + Offset.Pawn.isScoped, isScoped);
-
 	std::string curWeapon = TriggerBot::GetWeapon(LocalEntity);
-	if (!MiscCFG::SniperCrosshair || LocalEntity.Controller.TeamID == 0 || !TriggerBot::CheckScopeWeapon(curWeapon) || isScoped || MenuConfig::ShowMenu)
+
+	if (!TriggerBot::CheckScopeWeapon(curWeapon) || isScoped)
 		return;
 
 	Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), MiscCFG::SniperCrosshairColor);
-
-	//if (CrosshairsCFG::isAim && MenuConfig::TargetingCrosshairs)
-		//Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::TargetedColor));
-	//else
-		//Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), ImGui::ColorConvertFloat4ToU32(CrosshairsCFG::CrossHairColor));
 }

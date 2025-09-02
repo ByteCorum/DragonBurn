@@ -32,3 +32,5 @@ public:
     bool GetCurrentMap();
     bool GetCurrentMapName();
 };
+
+inline std::unique_ptr<globalvars> g_globalVars = nullptr;

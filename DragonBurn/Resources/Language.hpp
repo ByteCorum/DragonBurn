@@ -13,6 +13,8 @@ namespace Text {
     namespace ESP
     {
         inline std::string Toggle = "Toggle";
+        inline std::string HotKeyList = "Hotkey";
+        inline std::string HotKey = "F6";
         inline std::string FeatureName = "ESP";
         inline std::string Box = "Box";
         inline std::string BoxRounding = "Box Rounding: ";
@@ -39,6 +41,8 @@ namespace Text {
         inline std::string FlashedESP = "Show Flashed";
         inline std::string ShowArmorBar = "Armor Bar";
         inline std::string ArmorNum = "Armor Number";
+        inline std::string OutOfFOVArrow = "Offscreen";
+        inline std::string OutOfFOVRadius = "Arrow Radius Factor";
     }
 
     namespace Aimbot
@@ -52,6 +56,7 @@ namespace Text {
         inline std::string VisCheck = "Visible Check";
         inline std::string JumpCheck = "On Ground Check";
         inline std::string FovSlider = "FOV: ";
+        inline std::string HumanizationStrength = "Humanization Strength: ";
         inline std::string FovMinSlider = "MiniFOV: ";
         inline std::string SmoothSlider = "Smooth: ";
         inline std::string BoneList = "Hitboxes";
@@ -118,6 +123,12 @@ namespace Text {
         inline std::string TeamCheck = "Team Check";
         inline std::string AntiRecord = "Anti Record";
         inline std::string SniperCrosshair = "Sniper Crosshair";
+        inline std::string FastStop = "Fast Stop";
+        inline std::string AutoKnifeBot = "Auto Knife Bot";
+        inline std::string AutoZeusBot = "Auto Zeus Bot";
+        inline std::string AutoBotDistance = "Distance";
+        inline std::string AntiAFK = "Anti AFK";
+        inline std::string AntiAFKInterval = "Interval";
     }
 
     namespace Config

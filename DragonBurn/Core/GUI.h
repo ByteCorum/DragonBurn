@@ -178,13 +178,15 @@ namespace GUI
 		Gui.SliderScalarEx2("", ImGuiDataType_Float, v, p_min, p_max, "", ImGuiSliderFlags_None);
 		ImGui::PopID();
 	}
-	void PutSliderInt(const char* string, float CursorX, int* v, const void* p_min, const void* p_max, const char* format)
+	void PutSliderInt(const char* string, float CursorX, int* v, const void* p_min, const void* p_max, const char* format, const char* Tip = NULL)
 	{
 		ImGui::PushID(string);
 		float CurrentCursorX = ImGui::GetCursorPosX();
 		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX-15;
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(string);
+		if (Tip && ImGui::IsItemHovered())
+			ImGui::SetTooltip(Tip);
 		ImGui::SameLine();
 		ImGui::TextDisabled(format, *v);
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
@@ -309,8 +311,19 @@ namespace GUI
 					ImGui::GradientText("ESP");
 					float MinRounding = 0.f, MaxRouding = 5.f;
 					PutSwitch(Text::ESP::Toggle.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
+					ImGui::TextDisabled(Text::ESP::HotKeyList.c_str());
+					ImGui::SameLine();
+					AlignRight(70.f);
+					if (ImGui::Button(Text::ESP::HotKey.c_str(), { 70.f, 25.f }))
+					{
+						std::thread([&]() {
+							KeyMgr::GetPressedKey(ESPConfig::HotKey, Text::ESP::HotKey);
+							}).detach();
+					}
+
 					if (ESPConfig::ESPenabled)
 					{
+
 						PutSwitch(Text::ESP::Box.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowBoxESP, true, "###BoxCol", reinterpret_cast<float*>(&ESPConfig::BoxColor));
 						if (ESPConfig::ShowBoxESP)
 						{
@@ -337,6 +350,7 @@ namespace GUI
 							ImGui::Combo("###LinePos", &ESPConfig::LinePos, "Top\0Center\0Bottom\0");
 						}
 						PutSwitch(Text::ESP::EyeRay.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowEyeRay, true, "###LineCol", reinterpret_cast<float*>(&ESPConfig::EyeRayColor));
+						PutSwitch(Text::ESP::OutOfFOVArrow.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowOutOfFOVArrow, true, "###OutFOVCol", reinterpret_cast<float*>(&ESPConfig::OutOfFOVArrowColor));
 						PutSwitch(Text::ESP::HealthBar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHealthBar);
 						if (ESPConfig::ShowHealthBar)
 							PutSwitch(Text::ESP::HealthNum.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHealthNum);
@@ -444,6 +458,10 @@ namespace GUI
 						PutSwitch(Text::Aimbot::IgnoreFlash.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::IgnoreFlash);
 						PutSwitch(Text::Aimbot::HumanizeVar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::HumanizeVar);
 						PutSwitch(Text::Aimbot::ScopeOnly.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::ScopeOnly);
+
+						static const float MinHumanize = 0.0f;
+						static const float MaxHumanize = 1.0f;
+						PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
 
 						PutSliderFloat(Text::Aimbot::FovSlider.c_str(), 10.f, &AimControl::AimFov, &AimControl::AimFovMin, &FovMax, "%.1f");
 						PutSliderFloat(Text::Aimbot::FovMinSlider.c_str(), 10.f, &AimControl::AimFovMin, &FovMin, &MinFovMax, "%.2f");
@@ -616,8 +634,13 @@ namespace GUI
 					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
 					PutSwitch(Text::Misc::HitMerker.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop);
-					//PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
+					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
+					PutSwitch("Auto Accept", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
+                    PutSwitch("Sound esp", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&MiscCFG::EnemySoundColor));
+                    PutSwitch("Knife bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);
+                    PutSwitch("Zeus bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoZeus);
+                    PutSwitch("Anti-afk", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AntiAFKKick);
 
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
