@@ -387,11 +387,11 @@ void Menu()
 {
 	SHORT keyState = GetAsyncKeyState(MenuConfig::HotKey);
 	if (keyState & 0x8000)
-		keyWasPressed = true;
-	if (keyWasPressed && !(keyState & 0x8000))
+		MenuConfig::keyWasPressed = true;
+	if (MenuConfig::keyWasPressed && !(keyState & 0x8000))
 	{
 		MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
-		keyWasPressed = false;
+		MenuConfig::keyWasPressed = false;
 	}
 
 	if (MenuConfig::ShowMenu)

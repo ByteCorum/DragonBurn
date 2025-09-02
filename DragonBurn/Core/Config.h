@@ -46,6 +46,7 @@ namespace MenuConfig
 	inline bool SpecWinChengePos = false;
 	inline bool BombWinChengePos = false;
 	inline int HotKey = VK_END;
+	inline bool keyWasPressed = false;
 }
 
 namespace LegitBotConfig

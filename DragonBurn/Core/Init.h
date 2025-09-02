@@ -11,8 +11,6 @@
 #include "../Helpers/WebApi.h"
 #include "../Core/Config.h"
 
-inline bool keyWasPressed = false;
-
 inline std::string WStringToString(const std::wstring& wstr)
 {
     int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
