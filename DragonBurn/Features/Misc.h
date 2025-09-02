@@ -31,12 +31,12 @@ namespace Misc
 		UNKNOWN
 	};
 
-	// New struct for key mappings
 	struct KeyLayout {
 		int forward, backward, left, right;
 	};
 
-	// Map of keyboard layouts to key mappings
+	static KeyboardLayout Layout = KeyboardLayout::UNKNOWN;
+
 	static std::map<KeyboardLayout, KeyLayout> keyLayouts = {
 		{KeyboardLayout::QWERTY, {'W', 'S', 'A', 'D'}},
 		{KeyboardLayout::AZERTY, {'Z', 'S', 'Q', 'D'}},
@@ -164,37 +164,26 @@ namespace Misc
 			std::string sLayoutName(layoutName);
 			std::transform(sLayoutName.begin(), sLayoutName.end(), sLayoutName.begin(), ::toupper);
 
-			// QWERTY family
 			if (sLayoutName == "00000409" || sLayoutName == "00000809" ||
 				sLayoutName == "00001009" || sLayoutName == "00001809" ||
 				sLayoutName == "00004009" || sLayoutName == "00010409" ||
 				sLayoutName == "00020409" || sLayoutName == "00030409" ||
 				sLayoutName == "00040409" || sLayoutName == "00050409" ||
-				sLayoutName == "00000419" || // Russian
-				sLayoutName == "00000422")   // Ukrainian
-			{
+				sLayoutName == "00000419" ||
+				sLayoutName == "00000422")
 				return KeyboardLayout::QWERTY;
-			}
 
-			// AZERTY family
 			if (sLayoutName == "0000040C" || sLayoutName == "0000080C" ||
 				sLayoutName == "0000100C" || sLayoutName == "0000140C" ||
 				sLayoutName == "0000180C")
-			{
 				return KeyboardLayout::AZERTY;
-			}
 
-			// QWERTZ family
-			if (sLayoutName == "00000407" || sLayoutName == "00000807" || // German
-				sLayoutName == "00000C07" || // Austrian
-				sLayoutName == "0000040E" || // Hungarian
-				sLayoutName == "0000041B" || // Slovak
-				sLayoutName == "00000405")   // Czech
-			{
+			if (sLayoutName == "00000407" || sLayoutName == "00000807" ||
+				sLayoutName == "00000C07" || sLayoutName == "0000040E" ||
+				sLayoutName == "0000041B" || sLayoutName == "00000405")
 				return KeyboardLayout::QWERTZ;
-			}
 		}
-		return KeyboardLayout::UNKNOWN; // idk keyboard, QWERTY WILL BE USED
+		return KeyboardLayout::UNKNOWN;
 	}
 
 	void Watermark(const CEntity&) noexcept;

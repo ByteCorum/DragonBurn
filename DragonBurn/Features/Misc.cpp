@@ -179,8 +179,7 @@ namespace Misc
 		}
 		else if (previously_released)
 		{
-			KeyboardLayout currentLayout = static_cast<KeyboardLayout>(MiscCFG::KeyboardLayout);
-			auto it = keyLayouts.find(currentLayout);
+			auto it = keyLayouts.find(Layout);
 			if (it != keyLayouts.end()) {
 				const auto& layout = it->second;
 				if (!(GetAsyncKeyState(layout.left) & 0x8000) &&
@@ -199,24 +198,23 @@ namespace Misc
 		
 
 	void FastStop() noexcept
-{
-    if (!MiscCFG::FastStop)
-        return;
+	{
+		if (!MiscCFG::FastStop)
+			return;
 
-    if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_LSHIFT) & 0x8000)
-        return;
+		if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+			return;
 
-    static std::map<int, bool> key_released_map;
-    static auto last_stop_time = std::chrono::steady_clock::now();
+		static std::map<int, bool> key_released_map;
+		static auto last_stop_time = std::chrono::steady_clock::now();
 
-    auto now = std::chrono::steady_clock::now();
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last_stop_time).count() < MiscCFG::FastStopDelay + 20)
-    {
-        return;
-    }
+		auto now = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last_stop_time).count() < MiscCFG::FastStopDelay + 20)
+		{
+			return;
+		}
 
-	KeyboardLayout currentLayout = static_cast<KeyboardLayout>(MiscCFG::KeyboardLayout);
-		auto it = keyLayouts.find(currentLayout);
+		auto it = keyLayouts.find(Layout);
 		if (it != keyLayouts.end()) {
 			const auto& layout = it->second;
 			CheckAndStopKey(layout.left, layout.right, key_released_map, last_stop_time);
@@ -224,7 +222,7 @@ namespace Misc
 			CheckAndStopKey(layout.forward, layout.backward, key_released_map, last_stop_time);
 			CheckAndStopKey(layout.backward, layout.forward, key_released_map, last_stop_time);
 		}
-}
+	}
 
 
 	void ExecuteCommand(const std::string& Command_Str) noexcept
