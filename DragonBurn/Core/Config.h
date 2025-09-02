@@ -5,7 +5,7 @@
 namespace MenuConfig
 {
 	inline std::string name = "DragonBurn";
-	inline std::string version = "3.2.5.0";
+	inline std::string version = "3.3.5.0b";
 	inline std::string author = "ByteCorum";
 
 	inline std::string path = "";
