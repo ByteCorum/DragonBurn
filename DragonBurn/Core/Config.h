@@ -73,6 +73,8 @@ namespace LegitBotConfig
 
 namespace ESPConfig
 {
+	inline std::chrono::time_point<std::chrono::system_clock> timepoint = std::chrono::system_clock::now();
+	inline bool keyWasPressed = false;
 	inline int HotKey = VK_F6;
 	inline bool ESPenabled = true;
 	inline bool AmmoBar = false;
