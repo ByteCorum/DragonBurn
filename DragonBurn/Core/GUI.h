@@ -310,7 +310,7 @@ namespace GUI
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
 					ImGui::GradientText("ESP");
 					float MinRounding = 0.f, MaxRouding = 5.f;
-					PutSwitch(Text::ESP::Toggle.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
+					PutSwitch(Text::ESP::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
 					ImGui::TextDisabled(Text::ESP::HotKeyList.c_str());
 					ImGui::SameLine();
