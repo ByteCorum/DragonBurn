@@ -231,6 +231,7 @@ namespace ConfigMenu {
 		TriggerBot::ShotDuration = 400;
 
 		RCS::RCSBullet = 1;
+		LegitBotConfig::RCS = true;
 
 		RCS::RCSScale = ImVec2(1.4f, 1.4f);
 		AimControl::onlyAuto = false;

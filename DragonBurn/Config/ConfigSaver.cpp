@@ -429,7 +429,7 @@ namespace MyConfigSaver
 
         if (ConfigData.contains("RCS"))
         {
-            LegitBotConfig::RCS = ReadData(ConfigData["RCS"],{"Enable"}, false);
+            LegitBotConfig::RCS = ReadData(ConfigData["RCS"],{"Enable"}, true);
             RCS::RCSBullet = ReadData(ConfigData["RCS"], { "RCSBullet" }, 1);
             RCS::RCSScale.x = ReadData(ConfigData["RCS"],{"Yaw"}, 1.f);
             RCS::RCSScale.y = ReadData(ConfigData["RCS"],{"Pitch"}, 1.f);

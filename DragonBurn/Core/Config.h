@@ -66,7 +66,7 @@ namespace LegitBotConfig
 	inline bool TriggerBot = true;
 	inline bool TriggerAlways = false;
 
-	inline bool RCS = false;
+	inline bool RCS = true;
 
 
 }
