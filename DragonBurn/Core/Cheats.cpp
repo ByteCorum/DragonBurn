@@ -123,18 +123,18 @@ void Cheats::Run()
 			allEntities.push_back(pair.second);
 		}
 		SpecList::GetSpectatorList(allEntities, LocalEntity);
+		m_previousTick = m_currentTick;
 	}
-	m_previousTick = m_currentTick;
 }
 
 // collect entity data
 std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEntity, int& localPlayerControllerIndex)
 {
 	// update only on new tick
-	if (m_currentTick == m_previousTick)
-	{
-		return cachedResults;
-	}
+	//if (m_currentTick == m_previousTick)
+	//{
+	//	return cachedResults;
+	//}
 
 	std::vector<EntityBatchData> batchData;
 	batchData.reserve(64);
@@ -301,8 +301,8 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 						localEntity.Pawn.bSpottedByMask & (DWORD64(1) << (entityIndex))) {
 						aimPosList.push_back(bestAimPos);
 						MaxAimDistance = minDistance;
+					}
 				}
-			}
 		}
 
 		// render esp
