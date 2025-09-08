@@ -177,6 +177,7 @@ namespace OSImGui
 
         RegisterRawInput(Window.hWnd);
 
+        g_keyboard_hook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, GetModuleHandle(NULL), 0);
 
         MainLoop();
     }
@@ -297,43 +298,45 @@ namespace OSImGui
 
             static bool keyState[256] = { true }; // Track keys
 
-            for (int vkKey = 'A'; vkKey <= 'Z'; ++vkKey) {
-                toggleKey(vkKey, keyState[vkKey], io); // A-Z
-            }
+            if (MenuConfig::ShowMenu) {
+                for (int vkKey = 'A'; vkKey <= 'Z'; ++vkKey) {
+                    toggleKey(vkKey, keyState[vkKey], io); // A-Z
+                }
 
-            for (int vkKey = '0'; vkKey <= '9'; ++vkKey) {
-                toggleKey(vkKey, keyState[vkKey], io); // 0-9
-            }
+                for (int vkKey = '0'; vkKey <= '9'; ++vkKey) {
+                    toggleKey(vkKey, keyState[vkKey], io); // 0-9
+                }
 
-            static bool LMouseState = true, RMouseState = true, MMouseState = true;
-            static bool LeftCtrl = true, LeftShift = true, Backspace = true, Enter = true, Tab = true, Delete = true, ArrowUp = true, ArrowDown = true, ArrowLeft = true, ArrowRight = true;
+                static bool LMouseState = true, RMouseState = true, MMouseState = true;
+                static bool LeftCtrl = true, LeftShift = true, Backspace = true, Enter = true, Tab = true, Delete = true, ArrowUp = true, ArrowDown = true, ArrowLeft = true, ArrowRight = true;
 
-            toggleKey(VK_LBUTTON, LMouseState, ImGuiMouseButton_Left, io);
-            toggleKey(VK_RBUTTON, RMouseState, ImGuiMouseButton_Right, io);
-            toggleKey(VK_MBUTTON, MMouseState, ImGuiMouseButton_Middle, io);
-            toggleKey(VK_LCONTROL, LeftCtrl, ImGuiKey_LeftCtrl, ImGuiMod_Ctrl, io);
-            toggleKey(VK_LSHIFT, LeftShift, ImGuiKey_LeftShift, ImGuiMod_Shift, io);
-            toggleKey(VK_BACK, Backspace, ImGuiKey_Backspace, ImGuiMod_None, io);
-            toggleKey(VK_RETURN, Enter, ImGuiKey_Enter, ImGuiMod_None, io);
-            toggleKey(VK_TAB, Tab, ImGuiKey_Tab, ImGuiMod_None, io);
-            toggleKey(VK_DELETE, Delete, ImGuiKey_Delete, ImGuiMod_None, io);
-            toggleKey(VK_UP, ArrowUp, ImGuiKey_UpArrow, ImGuiMod_None, io);
-            toggleKey(VK_DOWN, ArrowDown, ImGuiKey_DownArrow, ImGuiMod_None, io);
-            toggleKey(VK_LEFT, ArrowLeft, ImGuiKey_LeftArrow, ImGuiMod_None, io);
-            toggleKey(VK_RIGHT, ArrowRight, ImGuiKey_RightArrow, ImGuiMod_None, io);
+                toggleKey(VK_LBUTTON, LMouseState, ImGuiMouseButton_Left, io);
+                toggleKey(VK_RBUTTON, RMouseState, ImGuiMouseButton_Right, io);
+                toggleKey(VK_MBUTTON, MMouseState, ImGuiMouseButton_Middle, io);
+                toggleKey(VK_LCONTROL, LeftCtrl, ImGuiKey_LeftCtrl, ImGuiMod_Ctrl, io);
+                toggleKey(VK_LSHIFT, LeftShift, ImGuiKey_LeftShift, ImGuiMod_Shift, io);
+                toggleKey(VK_BACK, Backspace, ImGuiKey_Backspace, ImGuiMod_None, io);
+                toggleKey(VK_RETURN, Enter, ImGuiKey_Enter, ImGuiMod_None, io);
+                toggleKey(VK_TAB, Tab, ImGuiKey_Tab, ImGuiMod_None, io);
+                toggleKey(VK_DELETE, Delete, ImGuiKey_Delete, ImGuiMod_None, io);
+                toggleKey(VK_UP, ArrowUp, ImGuiKey_UpArrow, ImGuiMod_None, io);
+                toggleKey(VK_DOWN, ArrowDown, ImGuiKey_DownArrow, ImGuiMod_None, io);
+                toggleKey(VK_LEFT, ArrowLeft, ImGuiKey_LeftArrow, ImGuiMod_None, io);
+                toggleKey(VK_RIGHT, ArrowRight, ImGuiKey_RightArrow, ImGuiMod_None, io);
 
-            toggleKey(VK_OEM_1, keyState[VK_OEM_1], io);			// ;
-            toggleKey(VK_OEM_PLUS, keyState[VK_OEM_PLUS], io);		// =
-            toggleKey(VK_OEM_COMMA, keyState[VK_OEM_COMMA], io);	// <
-            toggleKey(VK_OEM_MINUS, keyState[VK_OEM_MINUS], io);	// -
-            toggleKey(VK_OEM_PERIOD, keyState[VK_OEM_PERIOD], io);	// >
-            toggleKey(VK_SPACE, keyState[VK_SPACE], io);			// Space
-            toggleKey(VK_OEM_2, keyState[VK_OEM_2], io);			// /
-            toggleKey(VK_OEM_3, keyState[VK_OEM_3], io);			// `
-            toggleKey(VK_OEM_4, keyState[VK_OEM_4], io);			// [
-            toggleKey(VK_OEM_5, keyState[VK_OEM_5], io);			// |
-            toggleKey(VK_OEM_6, keyState[VK_OEM_6], io);			// ]
-            toggleKey(VK_OEM_7, keyState[VK_OEM_7], io);			// /
+                toggleKey(VK_OEM_1, keyState[VK_OEM_1], io);			// ;
+                toggleKey(VK_OEM_PLUS, keyState[VK_OEM_PLUS], io);		// =
+                toggleKey(VK_OEM_COMMA, keyState[VK_OEM_COMMA], io);	// <
+                toggleKey(VK_OEM_MINUS, keyState[VK_OEM_MINUS], io);	// -
+                toggleKey(VK_OEM_PERIOD, keyState[VK_OEM_PERIOD], io);	// >
+                toggleKey(VK_SPACE, keyState[VK_SPACE], io);			// Space
+                toggleKey(VK_OEM_2, keyState[VK_OEM_2], io);			// /
+                toggleKey(VK_OEM_3, keyState[VK_OEM_3], io);			// `
+                toggleKey(VK_OEM_4, keyState[VK_OEM_4], io);			// [
+                toggleKey(VK_OEM_5, keyState[VK_OEM_5], io);			// |
+                toggleKey(VK_OEM_6, keyState[VK_OEM_6], io);			// ]
+                toggleKey(VK_OEM_7, keyState[VK_OEM_7], io);			// /
+            } else { io.ClearInputKeys(); }
 
             ++frameSkip; // Prefix increment is slightly more efficient
 
@@ -553,4 +556,19 @@ namespace OSImGui
         }
         return DefWindowProcW(hWnd, msg, wParam, lParam);
     }
+}
+
+LRESULT CALLBACK OSImGui::LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    if (nCode == HC_ACTION) {
+        auto* p = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+        if (wParam == WM_KEYDOWN) {
+            if (p->vkCode == MenuConfig::HotKey) {
+                MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
+            }
+            if (p->vkCode == ESPConfig::HotKey) {
+                ESPConfig::ESPenabled = !ESPConfig::ESPenabled;
+            }
+        }
+    }
+    return CallNextHookEx(g_keyboard_hook, nCode, wParam, lParam);
 }

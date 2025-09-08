@@ -49,7 +49,7 @@ namespace KeyMgr
         case VK_F12: return "F12";
         default:
         {
-            wchar_t name[16]; // wide char for ToUnicode
+            wchar_t name[16];
             BYTE keyboardState[256];
             GetKeyboardState(keyboardState);
             UINT scanCode = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
@@ -57,11 +57,10 @@ namespace KeyMgr
             if (result > 0)
             {
                 name[result] = L'\0';
-                // Convert wide string to regular string
                 int size_needed = WideCharToMultiByte(CP_UTF8, 0, name, -1, NULL, 0, NULL, NULL);
                 std::string str(size_needed, 0);
                 WideCharToMultiByte(CP_UTF8, 0, name, -1, &str[0], size_needed, NULL, NULL);
-                str.pop_back(); // Remove null terminator
+                str.pop_back();
                 return str;
             }
             return "N/A";
@@ -69,36 +68,34 @@ namespace KeyMgr
         }
     }
 
-    inline void GetPressedKey(int& vk_code, std::string& keyName)
+    inline void GetPressedKey(int& vk_code, std::string* keyName)
     {
         int hotkey = 0;
-        std::string buff = keyName;
-        keyName = "...";
+        std::string buff = *keyName;
+        *keyName = "...";
 
         while (true)
         {
-            hotkey = 0;
             for (int key = 0; key < 256; key++)
             {
                 if (GetAsyncKeyState(key) & 0x8000)
                 {
                     hotkey = key;
-                    break;
                 }
             }
 
             if (hotkey == MenuConfig::HotKey)
             {
-                keyName = buff;
+                *keyName = buff;
                 break;
             }
             if (hotkey > 0 && hotkey < 256)
             {
                 vk_code = hotkey;
-                keyName = GetKeyName(hotkey);
+                *keyName = GetKeyName(hotkey);
                 break;
             }
-            Sleep(1);
+            //Sleep(1);
         }
     }
 }

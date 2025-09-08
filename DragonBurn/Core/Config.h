@@ -46,7 +46,6 @@ namespace MenuConfig
 	inline bool SpecWinChengePos = false;
 	inline bool BombWinChengePos = false;
 	inline int HotKey = VK_END;
-	inline bool keyWasPressed = false;
 }
 
 namespace LegitBotConfig
@@ -75,7 +74,6 @@ namespace LegitBotConfig
 namespace ESPConfig
 {
 	inline int HotKey = VK_F6;
-	inline bool keyWasPressed = false;
 	inline bool ESPenabled = true;
 	inline bool AmmoBar = false;
 	inline bool ShowBoneESP = true;
