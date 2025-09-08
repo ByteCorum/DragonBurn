@@ -318,7 +318,7 @@ namespace GUI
 					if (ImGui::Button(Text::ESP::HotKey.c_str(), { 70.f, 25.f }))
 					{
 						std::thread([&]() {
-							KeyMgr::GetPressedKey(ESPConfig::HotKey, Text::ESP::HotKey);
+							KeyMgr::GetPressedKey(ESPConfig::HotKey, &Text::ESP::HotKey);
 							}).detach();
 					}
 
@@ -448,7 +448,7 @@ namespace GUI
 						if (ImGui::Button(Text::Aimbot::HotKey.c_str(), { 70.f, 25.f }))
 						{
 							std::thread([&]() {
-								KeyMgr::GetPressedKey(AimControl::HotKey, Text::Aimbot::HotKey);
+								KeyMgr::GetPressedKey(AimControl::HotKey, &Text::Aimbot::HotKey);
 								}).detach();
 						}
 						PutSliderInt(Text::Aimbot::BulletSlider.c_str(), 10.f, &AimControl::AimBullet, &BulletMin, &BulletMax, "%d");
@@ -600,7 +600,7 @@ namespace GUI
 							if (ImGui::Button(Text::Trigger::HotKey.c_str(), {70.f, 25.f}))
 							{
 								std::thread([&]() {
-									KeyMgr::GetPressedKey(TriggerBot::HotKey, Text::Trigger::HotKey);
+									KeyMgr::GetPressedKey(TriggerBot::HotKey, &Text::Trigger::HotKey);
 									}).detach();
 							}
 						}
@@ -652,7 +652,7 @@ namespace GUI
 					if (ImGui::Button(Text::Misc::HotKey.c_str(), { 70.f, 25.f }))
 					{
 						std::thread([&]() {
-							KeyMgr::GetPressedKey(MenuConfig::HotKey, Text::Misc::HotKey);
+							KeyMgr::GetPressedKey(MenuConfig::HotKey, &Text::Misc::HotKey);
 							}).detach();
 					}
 					PutSwitch(Text::Misc::SpecCheck.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::WorkInSpec);

@@ -323,16 +323,6 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 			}
 		}
 
-		// handle esp hotkey
-		SHORT keyState = GetAsyncKeyState(ESPConfig::HotKey);
-		if (keyState & 0x8000)
-			ESPConfig::keyWasPressed = true;
-		if (ESPConfig::keyWasPressed && !(keyState & 0x8000))
-		{
-			ESPConfig::ESPenabled = !ESPConfig::ESPenabled;
-			ESPConfig::keyWasPressed = false;
-		}
-
 		// render esp
 		if (ESPConfig::ESPenabled)
 		{
@@ -385,15 +375,6 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 
 void Menu() 
 {
-	SHORT keyState = GetAsyncKeyState(MenuConfig::HotKey);
-	if (keyState & 0x8000)
-		MenuConfig::keyWasPressed = true;
-	if (MenuConfig::keyWasPressed && !(keyState & 0x8000))
-	{
-		MenuConfig::ShowMenu = !MenuConfig::ShowMenu;
-		MenuConfig::keyWasPressed = false;
-	}
-
 	if (MenuConfig::ShowMenu)
 		GUI::DrawGui();
 
