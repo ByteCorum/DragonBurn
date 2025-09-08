@@ -16,14 +16,14 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     if (!memoryManager.ReadMemory<DWORD>(LocalEntity.Pawn.Address + Offset.Pawn.iIDEntIndex, uHandle))
     {
         g_HasValidTarget = false;
-        g_CanShoot = false;
+        g_TargetFoundTime = std::chrono::system_clock::now();
         return;
     }
 
     if (uHandle == -1)
     {
         g_HasValidTarget = false;
-        g_CanShoot = false;
+        g_TargetFoundTime = std::chrono::system_clock::now();
         return;
     }
 
@@ -31,7 +31,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     if (PawnAddress == 0)
     {
         g_HasValidTarget = false;
-        g_CanShoot = false;
+        g_TargetFoundTime = std::chrono::system_clock::now();
         return;
     }
 
@@ -39,7 +39,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     if (!targetEntity.UpdatePawn(PawnAddress))
     {
         g_HasValidTarget = false;
-        g_CanShoot = false;
+        g_TargetFoundTime = std::chrono::system_clock::now();
         return;
     }
 
@@ -47,52 +47,29 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     if (!CanTrigger(LocalEntity, targetEntity))
     {
         g_HasValidTarget = false;
-        g_CanShoot = false;
+        g_TargetFoundTime = std::chrono::system_clock::now();
         return;
     }
 
-    // If we reach here, we have a valid target
+    if (!g_HasValidTarget)
+    {
+        g_TargetFoundTime = std::chrono::system_clock::now();
+    }
     g_HasValidTarget = true;
 
     auto now = std::chrono::system_clock::now();
 
-    // Handle shot duration cooldown
-    if (g_CanShoot)
-    {
-        auto timeSinceShot = std::chrono::duration_cast<std::chrono::milliseconds>(
-            now - g_LastShotTime).count();
+    // calculate elapsed time
+    long long timeSinceLastShot = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now - g_LastShotTime).count();
+    long long timeSinceTargetFound = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now - g_TargetFoundTime).count();
 
-        if (timeSinceShot < ShotDuration)
-        {
-            return; // Still in shot cooldown
-        }
-        else
-        {
-            g_CanShoot = false; // Reset shot state
-        }
-    }
-
-    // Process trigger logic if we have a valid target
-    if (g_HasValidTarget)
-    {
-        // Handle trigger delay
-        if (!g_CanShoot)
-        {
-            auto timeSinceFound = std::chrono::duration_cast<std::chrono::milliseconds>(
-                now - g_TargetFoundTime).count();
-
-            if (timeSinceFound >= TriggerDelay)
-            {
-                g_CanShoot = true;
-            }
-        }
-
-        // Execute shot if ready
-        if (g_CanShoot && (GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways))
-        {
-            ExecuteShot();
-        }
-    }
+    // check conditions to shoot
+    if ((GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways) &&
+        timeSinceLastShot >= ShotDuration &&
+        timeSinceTargetFound >= TriggerDelay)
+    { ExecuteShot(); }
 }
 
 bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity)

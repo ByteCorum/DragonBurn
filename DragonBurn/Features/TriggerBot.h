@@ -22,7 +22,6 @@ namespace TriggerBot
 	inline std::chrono::time_point<std::chrono::system_clock> g_LastShotTime;
     inline std::chrono::time_point<std::chrono::system_clock> g_TargetFoundTime;
 	inline bool g_HasValidTarget = false;
-	inline bool g_CanShoot = false;
 
     // Main functions
 	void Run(const CEntity& LocalEntity);

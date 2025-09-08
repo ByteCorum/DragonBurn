@@ -60,22 +60,22 @@ namespace Render
 			return;
 
 		constexpr float DEG_TO_RAD = M_PI / 180.f;
-		constexpr float PERFECT_FOV = 69.0f; // static reference fov
+		constexpr float STATIC_FOV = 90.0f;
 		
 		ImVec2 center = ImVec2(Gui.Window.Size.x / 2.0f, Gui.Window.Size.y / 2.0f);
 		float halfWindowSize = Gui.Window.Size.x / 2.0f;
 
-		float prfctFovTan = tan(PERFECT_FOV * DEG_TO_RAD / 2.0f);
+		float staticFovTan = tan(STATIC_FOV * DEG_TO_RAD / 2.0f);
 		float aimFovTan = tan(AimControl::AimFov * DEG_TO_RAD / 2.0f);
 
-		float radius = (aimFovTan / prfctFovTan) * halfWindowSize;
+		float radius = (aimFovTan / staticFovTan) * halfWindowSize;
 
 		drawList->AddCircle(center, radius, LegitBotConfig::FovCircleColor, 0, 1.5f);
 
 		if (AimControl::AimFovMin > 0)
 		{
 			float aimFovMinTan = tan(AimControl::AimFovMin * DEG_TO_RAD / 2.0f);
-			float minRadius = (aimFovMinTan / prfctFovTan) * halfWindowSize;
+			float minRadius = (aimFovMinTan / staticFovTan) * halfWindowSize;
 			drawList->AddCircle(center, minRadius, LegitBotConfig::FovCircleColor, 0, 1.5f);
 		}
 	}
@@ -173,7 +173,6 @@ namespace Render
 		// Right rectangles
 		Gui.RectangleFilled(Vec2{ Pos.x + 5, Pos.y - 1 }, Vec2{ 17, 3 }, Color & IM_COL32_A_MASK);
 		Gui.RectangleFilled(Vec2{ Pos.x + 6, Pos.y }, Vec2{ 17, 3 }, Color);
-
 	}
 
 	inline ImVec4 Get2DBox(const CEntity& Entity)
@@ -188,7 +187,6 @@ namespace Render
 		const float posY = headBone.ScreenPos.y - height * 0.08f;
 
 		return ImVec4{ posX, posY, width, height };
-
 	}
 
 	inline void DrawBone(const CEntity& Entity, ImColor Color, float Thickness)

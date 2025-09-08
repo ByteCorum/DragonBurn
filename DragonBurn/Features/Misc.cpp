@@ -195,8 +195,6 @@ namespace Misc
 		}
 	}
 
-		
-
 	void FastStop() noexcept
 	{
 		if (!MiscCFG::FastStop)
@@ -267,19 +265,18 @@ namespace Misc
 		else if (Command_Str == "-right") System::Key_Con_HWND(hwnd_cs2, 0x44, FALSE);
 	
 	}
-	
-	void AutoKnifeExecute(const CEntity& Local, const std::vector<CEntity>& Entities, int autoKnifeKey) noexcept
+
+
+	void KnifeBot(const CEntity& Local, const std::vector<CEntity>& Entities, int autoKnifeKey) noexcept
 	{
-		// Weapon check: knife only
 		if (!(Local.Pawn.WeaponName == "ct_knife" || Local.Pawn.WeaponName == "t_knife"))
 			return;
-	
-		// Optional hotkey gate: if key provided, require it pressed
+
 		if (autoKnifeKey != 0 && !(GetAsyncKeyState(autoKnifeKey) & 0x8000))
 			return;
 	
 		const Vec3 localPos = Local.Pawn.Pos;
-		const Vec3 eyePos = Local.Pawn.CameraPos; // local position + view offset
+		const Vec3 eyePos = Local.Pawn.CameraPos;
 		const Vec2 viewAngles = Local.Pawn.ViewAngle;
 	
 		auto normalizeAngle = [](float a) -> float {
@@ -310,7 +307,6 @@ namespace Misc
 				continue;
 	
 			const Vec3 enemyPos = E.Pawn.Pos;
-			// Use head bone if available
 			Vec3 targetPos = enemyPos;
 			const auto bone = E.GetBone();
 			if (!bone.BonePosList.empty()) {
@@ -319,21 +315,18 @@ namespace Misc
 					targetPos = bone.BonePosList[headIndex].Pos;
 				}
 			}
-	
-			// Distance check (world units)
+
 			const float dx = localPos.x - enemyPos.x;
 			const float dy = localPos.y - enemyPos.y;
 			const float dz = localPos.z - enemyPos.z;
 			const float dist = sqrtf(dx * dx + dy * dy + dz * dz);
 			if (dist > 70.0f)
 				continue;
-	
-			// Angle delta check
+
 			const Vec2 delta = calcAngleDelta(eyePos, targetPos, viewAngles);
 			if (hypotf(delta.x, delta.y) > 40.0f)
 				continue;
-	
-			// Heavy vs light attack condition
+
 			const int enemyHp = E.Pawn.Health;
 			const bool facing = fabsf(normalizeAngle(viewAngles.y - E.Pawn.ViewAngle.y)) <= 50.0f;
 			if ((enemyHp <= 55 && enemyHp > 30) || facing)
@@ -350,36 +343,35 @@ namespace Misc
 			}
 		}
 	}
-	
-	void zeusbot(const CEntity& Local, const std::vector<CEntity>& Entities) noexcept
+
+	void ZeusBot(const CEntity& Local) noexcept
 	{
-		if (Local.Pawn.WeaponName != "zeus")
-			return;
-	
+		if (Local.Pawn.WeaponName != "zeus") return;
+
+		DWORD uHandle = 0;
+		if (!memoryManager.ReadMemory<DWORD>(Local.Pawn.Address + Offset.Pawn.iIDEntIndex, uHandle)) return;
+		if (uHandle == -1) return;
+		DWORD64 PawnAddress = CEntity::ResolveEntityHandle(uHandle);
+		if (PawnAddress == 0) return;
+		CEntity targetEntity;
+		if (!targetEntity.UpdatePawn(PawnAddress)) return;
+		if (targetEntity.Pawn.Address == 0 || MenuConfig::TeamCheck && targetEntity.Controller.TeamID == Local.Controller.TeamID) return;
+
 		const Vec3 localPos = Local.Pawn.Pos;
-	
-		for (const auto& E : Entities)
-		{
-			if (!E.IsAlive())
-				continue;
-			if (E.Controller.TeamID == Local.Controller.TeamID)
-				continue;
-	
-			const Vec3 enemyPos = E.Pawn.Pos;
-			const float dx = localPos.x - enemyPos.x;
-			const float dy = localPos.y - enemyPos.y;
-			const float dz = localPos.z - enemyPos.z;
-			const float dist = sqrtf(dx * dx + dy * dy + dz * dz);
-			if (dist > 130.0f)
-				continue;
-	
-			ExecuteCommand("+attack");
-			Sleep(1);
-			ExecuteCommand("-attack");
-			break;
-		}
+		const Vec3 enemyPos = targetEntity.Pawn.Pos;
+		const float dx = localPos.x - enemyPos.x;
+		const float dy = localPos.y - enemyPos.y;
+		const float dz = localPos.z - enemyPos.z;
+		const float dist = sqrtf(dx * dx + dy * dy + dz * dz);
+
+		if (dist > MiscCFG::AutoZeusDistance)
+			return;
+
+		ExecuteCommand("+attack");
+		Sleep(1);
+		ExecuteCommand("-attack");
 	}
-	
+
 	void AntiAFKKickUpdate() noexcept
 	{
 		if (!MiscCFG::AntiAFKKick) return;
@@ -430,7 +422,6 @@ namespace Misc
 		static const int kColorTolerance = 20; // tolerance for RGB matching
 		static const int kDefaultIntervalMs = 1500; // baked-in interval
 		static const int kDefaultMinPixels = 10000; // baked-in threshold
-		static const bool kDefaultShowStatus = true; // baked-in logging
 		
 		void StartAutoAccept()
 		{
@@ -444,17 +435,9 @@ namespace Misc
 					{
 						iterationCount++;
 						
-						if (kDefaultShowStatus)
-						{
-							Log::Debug(std::string("[AutoAccept] [") + std::to_string(iterationCount.load()) + "] Searching...");
-						}
-						
 						if (DetectAcceptButton())
 						{
-							if (kDefaultShowStatus)
-							{
-								Log::Debug(std::string("[AutoAccept] [") + std::to_string(iterationCount.load()) + "] Found accept button! Clicking...");
-							}
+							Log::Debug(std::string("[AutoAccept] [") + std::to_string(iterationCount.load()) + "] Found accept button! Clicking...");
 						}
 					}
 					
@@ -472,11 +455,6 @@ namespace Misc
 			if (autoAcceptThread.joinable())
 			{
 				autoAcceptThread.join();
-			}
-			
-			if (kDefaultShowStatus)
-			{
-				Log::Debug("[AutoAccept] Stopped searching.");
 			}
 		}
 		

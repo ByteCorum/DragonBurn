@@ -31,35 +31,20 @@
 
 int PreviousTotalHits = 0;
 
-void RenderCrosshair(ImDrawList*, const CEntity&);
-
-void RadarSetting(Base_Radar&);
-
-std::string Cheats::GetCurrentMapName() {
-    if (!g_globalVars || !g_globalVars->g_cCurrentMap) {
-        return "";
-    }
-
-    char currentMap[256] = { 0 };
-    if (!memoryManager.ReadMemory(reinterpret_cast<DWORD64>(g_globalVars->g_cCurrentMap),
-        currentMap, sizeof(currentMap) - 1)) {
-        return "";
-    }
-
-    currentMap[255] = '\0';
-    return std::string(currentMap);
-}
-
 void Menu();
 void Visual(const CEntity&);
 void Radar(Base_Radar, const CEntity&);
 void Trigger(const CEntity&);
 void AIM(const CEntity&, std::vector<Vec3>);
 void MiscFuncs(CEntity&);
+void RenderCrosshair(ImDrawList*, const CEntity&);
+void RadarSetting(Base_Radar&);
 
 void Cheats::Run()
 {	
 	Menu();
+
+	Misc::AutoAccept::UpdateAutoAccept();
 
 	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
@@ -67,7 +52,7 @@ void Cheats::Run()
 	}
 
 	// Update matrix
-	if(!memoryManager.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix,64))
+	if (!memoryManager.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix,64))
 		return;
 
 	// Update EntityList Entry
@@ -138,18 +123,18 @@ void Cheats::Run()
 			allEntities.push_back(pair.second);
 		}
 		SpecList::GetSpectatorList(allEntities, LocalEntity);
+		m_previousTick = m_currentTick;
 	}
-	m_previousTick = m_currentTick;
 }
 
 // collect entity data
 std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEntity, int& localPlayerControllerIndex)
 {
 	// update only on new tick
-	if (m_currentTick == m_previousTick)
-	{
-		return cachedResults;
-	}
+	//if (m_currentTick == m_previousTick)
+	//{
+	//	return cachedResults;
+	//}
 
 	std::vector<EntityBatchData> batchData;
 	batchData.reserve(64);
@@ -286,16 +271,16 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 		// process aimbot data
 		if (!AimControl::HitboxList.empty()) {
 			float minDistance = FLT_MAX;
-			Vec3 bestAimPos{ 0, 0, 0 };
+			Vec3 bestAimPos = { 0, 0, 0 };
 
 			ImVec2 screenCenter{ Gui.Window.Size.x / 2, Gui.Window.Size.y / 2 };
 
 			constexpr float DEG_TO_RAD = M_PI / 180.f;
-			constexpr float PERFECT_FOV = 69.0f;
+			constexpr float STATIC_FOV = 90.0f;
 			float halfWindowSize = Gui.Window.Size.x / 2.f;
-			float prfctFovTan = tan(PERFECT_FOV * DEG_TO_RAD / 2.f);
+			float staticFovTan = tan(STATIC_FOV * DEG_TO_RAD / 2.f);
 			float aimFovTan = tan(AimControl::AimFov * DEG_TO_RAD / 2.f);
-			float aimFovRadius = (aimFovTan / prfctFovTan) * halfWindowSize;
+			float aimFovRadius = (aimFovTan / staticFovTan) * halfWindowSize;
 
 			for (size_t i = 0; i < AimControl::HitboxList.size(); ++i) {
 				int hitboxID = AimControl::HitboxList[i];
@@ -305,22 +290,19 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 
 				if (distanceToSight < minDistance && distanceToSight <= aimFovRadius) {
 					minDistance = distanceToSight;
+					Vec3 tempPos = entity.GetBone().BonePosList[hitboxID].Pos;
+					bestAimPos = tempPos;
+				}
+			}
 
+			if (minDistance != FLT_MAX) {
 					if (!LegitBotConfig::VisibleCheck ||
 						entity.Pawn.bSpottedByMask & (DWORD64(1) << (localPlayerControllerIndex)) ||
 						localEntity.Pawn.bSpottedByMask & (DWORD64(1) << (entityIndex))) {
-						Vec3 tempPos = entity.GetBone().BonePosList[hitboxID].Pos;
-
-						/*if (hitboxID == BONEINDEX::head) {
-							tempPos.z -= 1.0f;
-						}*/
-
-						bestAimPos = tempPos;
 						aimPosList.push_back(bestAimPos);
-						MaxAimDistance = distanceToSight;
+						MaxAimDistance = minDistance;
 					}
 				}
-			}
 		}
 
 		// render esp
@@ -439,29 +421,24 @@ void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
 
 void MiscFuncs(CEntity& LocalEntity)
 {
-    Misc::HitManager(LocalEntity, PreviousTotalHits);
-    Misc::BunnyHop(LocalEntity);
     SpecList::SpectatorWindowList(LocalEntity);
     bmb::RenderWindow(LocalEntity.Controller.TeamID);
-    Misc::Watermark(LocalEntity);
-    Misc::AntiAFKKickUpdate();
     SoundESP::Render();
-    // knife bot
-    if (MiscCFG::AutoKnife) {
-        std::vector<CEntity> enemyList;
-        enemyList.reserve(Cheats::cachedResults.size());
-        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
-        Misc::AutoKnifeExecute(LocalEntity, enemyList);
-    }
-    // zeus bot
-    if (MiscCFG::AutoZeus) {
-        std::vector<CEntity> enemyList;
-        enemyList.reserve(Cheats::cachedResults.size());
-        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
-        Misc::zeusbot(LocalEntity, enemyList);
-    }
+
+    Misc::HitManager(LocalEntity, PreviousTotalHits);
+    Misc::BunnyHop(LocalEntity);
+    Misc::Watermark(LocalEntity);
     Misc::FastStop();
-    Misc::AutoAccept::UpdateAutoAccept();
+    Misc::AntiAFKKickUpdate();
+    if (MiscCFG::AutoKnife && !MenuConfig::ShowMenu) {
+        std::vector<CEntity> enemyList;
+        enemyList.reserve(Cheats::cachedResults.size());
+        for (const auto& r : Cheats::cachedResults) enemyList.push_back(r.second);
+        Misc::KnifeBot(LocalEntity, enemyList);
+    }
+    if (MiscCFG::AutoZeus && !MenuConfig::ShowMenu) {
+        Misc::ZeusBot(LocalEntity);
+    }
 }
 
 void RadarSetting(Base_Radar& Radar)
@@ -517,4 +494,19 @@ void RenderCrosshair(ImDrawList* drawList, const CEntity& LocalEntity)
 		return;
 
 	Render::DrawCrossHair(drawList, ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y / 2), MiscCFG::SniperCrosshairColor);
+}
+
+std::string Cheats::GetCurrentMapName() {
+    if (!g_globalVars || !g_globalVars->g_cCurrentMap) {
+        return "";
+    }
+
+    char currentMap[256] = { 0 };
+    if (!memoryManager.ReadMemory(reinterpret_cast<DWORD64>(g_globalVars->g_cCurrentMap),
+        currentMap, sizeof(currentMap) - 1)) {
+        return "";
+    }
+
+    currentMap[255] = '\0';
+    return std::string(currentMap);
 }
