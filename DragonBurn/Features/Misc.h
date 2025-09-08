@@ -269,10 +269,10 @@ namespace Misc
 	void CleanTraces();
 
 	void FastStop() noexcept;
-  void AutoKnifeExecute(const CEntity& local, const std::vector<CEntity>& entities, int autoKnifeKey = 0) noexcept;
-  void ExecuteCommand(const std::string& command) noexcept;
-  void zeusbot(const CEntity& local, const std::vector<CEntity>& entities) noexcept;
-  void AntiAFKKickUpdate() noexcept;
+	void KnifeBot(const CEntity& local, const std::vector<CEntity>& entities, int autoKnifeKey = 0) noexcept;
+	void ExecuteCommand(const std::string& command) noexcept;
+	void ZeusBot(const CEntity& local) noexcept;
+	void AntiAFKKickUpdate() noexcept;
 
 	namespace AutoAccept
 	{
