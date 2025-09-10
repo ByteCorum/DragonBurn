@@ -389,11 +389,11 @@ bool CEntity::IsAlive() const
 
 bool CEntity::IsInScreen()
 {
-	if (!gGame.View.WorldToScreen(this->Pawn.Pos, this->Pawn.ScreenPos))
-		return false;
-	const ImVec2 screenSize = ImVec2(Gui.Window.Size.x, Gui.Window.Size.y);
-	return this->Pawn.ScreenPos.x >= 0.0f && this->Pawn.ScreenPos.x <= screenSize.x &&
-		   this->Pawn.ScreenPos.y >= 0.0f && this->Pawn.ScreenPos.y <= screenSize.y;
+    if (!gGame.View.WorldToScreen(this->Pawn.Pos, this->Pawn.ScreenPos))
+        return false;
+    
+    return (this->Pawn.ScreenPos.x >= 0 && this->Pawn.ScreenPos.x <= Gui.Window.Size.x &&
+            this->Pawn.ScreenPos.y >= 0 && this->Pawn.ScreenPos.y <= Gui.Window.Size.y);
 }
 
 CBone CEntity::GetBone() const

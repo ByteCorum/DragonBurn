@@ -177,16 +177,38 @@ namespace Render
 
 	inline ImVec4 Get2DBox(const CEntity& Entity)
 	{
-		BoneJointPos headBone = Entity.GetBone().BonePosList[BONEINDEX::head];
+		const auto& bonePosList = Entity.GetBone().BonePosList;
+		if (bonePosList.empty())
+			return ImVec4(0, 0, 0, 0);
 
-		const float diffY = Entity.Pawn.ScreenPos.y - headBone.ScreenPos.y;
+		Vec2 minPos = bonePosList[0].ScreenPos;
+		Vec2 maxPos = bonePosList[0].ScreenPos;
+
+		for (const auto& boneJoint : bonePosList)
+		{
+			if (!boneJoint.IsVisible)
+				continue;
+			minPos.x = min(boneJoint.ScreenPos.x, minPos.x);
+			minPos.y = min(boneJoint.ScreenPos.y, minPos.y);
+			maxPos.x = max(boneJoint.ScreenPos.x, maxPos.x);
+			maxPos.y = max(boneJoint.ScreenPos.y, maxPos.y);
+		}
+
+		BoneJointPos headBone = Entity.GetBone().BonePosList[BONEINDEX::head];
+		const float diffY = maxPos.y - headBone.ScreenPos.y;
 		const float height = diffY * 1.09f;
 		const float width = height * 0.6f;
 
 		const float posX = headBone.ScreenPos.x - width * 0.5f;
 		const float posY = headBone.ScreenPos.y - height * 0.08f;
 
-		return ImVec4{ posX, posY, width, height };
+		minPos.x = min(minPos.x, posX);
+		minPos.y = min(minPos.y, posY);
+		maxPos.x = max(maxPos.x, posX + width);
+		maxPos.y = max(maxPos.y, posY + height);
+
+		const Vec2 size{ maxPos.x - minPos.x, maxPos.y - minPos.y };
+		return ImVec4(minPos.x, minPos.y, size.x, size.y);
 	}
 
 	inline void DrawBone(const CEntity& Entity, ImColor Color, float Thickness)
