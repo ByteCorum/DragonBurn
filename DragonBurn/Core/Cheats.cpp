@@ -290,19 +290,18 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 
 				if (distanceToSight < minDistance && distanceToSight <= aimFovRadius) {
 					minDistance = distanceToSight;
-					Vec3 tempPos = entity.GetBone().BonePosList[hitboxID].Pos;
-					bestAimPos = tempPos;
-				}
-			}
 
-			if (minDistance != FLT_MAX) {
 					if (!LegitBotConfig::VisibleCheck ||
 						entity.Pawn.bSpottedByMask & (DWORD64(1) << (localPlayerControllerIndex)) ||
 						localEntity.Pawn.bSpottedByMask & (DWORD64(1) << (entityIndex))) {
+						Vec3 tempPos = entity.GetBone().BonePosList[hitboxID].Pos;
+
+						bestAimPos = tempPos;
 						aimPosList.push_back(bestAimPos);
-						MaxAimDistance = minDistance;
+						MaxAimDistance = distanceToSight;
 					}
 				}
+			}
 		}
 
 		// render esp
