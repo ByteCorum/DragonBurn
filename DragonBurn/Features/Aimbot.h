@@ -25,8 +25,8 @@ namespace AimControl
     inline int AimBullet = 1;
     inline bool ScopeOnly = true;
     inline bool IgnoreFlash = false;
-    inline bool HumanizeVar = false;
-    inline float HumanizationStrength = 0.1f;
+    inline bool HumanizeVar = true;
+    inline float HumanizationStrength = 0.4f;
     inline float AimFov = 10;
     inline float AimFovMin = 0.4f;
     inline float Smooth = 5.0f;

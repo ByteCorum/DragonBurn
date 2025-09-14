@@ -133,7 +133,8 @@ namespace ConfigMenu {
 		TriggerBot::StopedOnly = false;
 		TriggerBot::ScopeOnly = true;
 		AimControl::IgnoreFlash = false;
-		AimControl::HumanizeVar = false;
+		AimControl::HumanizeVar = true;
+		AimControl::HumanizationStrength = 0.4;
 
 		ESPConfig::ArmorBar = false;
 		ESPConfig::ShowArmorNum = false;
@@ -199,6 +200,7 @@ namespace ConfigMenu {
 		LegitBotConfig::TriggerBot = true;
 		LegitBotConfig::TriggerAlways = false;
 		TriggerBot::HotKey = 6;
+		TriggerBot::TTDtimeout = false;
 		Text::Trigger::HotKey = KeyMgr::GetKeyName(TriggerBot::HotKey);
 
 		MenuConfig::TeamCheck = true;

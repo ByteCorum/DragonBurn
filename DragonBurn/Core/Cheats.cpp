@@ -34,7 +34,7 @@ int PreviousTotalHits = 0;
 void Menu();
 void Visual(const CEntity&);
 void Radar(Base_Radar, const CEntity&);
-void Trigger(const CEntity&);
+void Trigger(const CEntity&, const int&);
 void AIM(const CEntity&, std::vector<Vec3>);
 void MiscFuncs(CEntity&);
 void RenderCrosshair(ImDrawList*, const CEntity&);
@@ -115,7 +115,7 @@ void Cheats::Run()
 	// run trigger & aim every new tick
 	if (m_currentTick != m_previousTick)
 	{
-		Trigger(LocalEntity);
+		Trigger(LocalEntity, LocalPlayerControllerIndex);
 		AIM(LocalEntity, AimPosList);
 		
 		std::vector<CEntity> allEntities;
@@ -389,11 +389,11 @@ void Radar(Base_Radar Radar, const CEntity& LocalEntity)
 	}
 }
 
-void Trigger(const CEntity& LocalEntity)
+void Trigger(const CEntity& LocalEntity, const int& LocalPlayerControllerIndex)
 {
 	// TriggerBot
 	if (LegitBotConfig::TriggerBot && (GetAsyncKeyState(TriggerBot::HotKey) || LegitBotConfig::TriggerAlways))
-		TriggerBot::Run(LocalEntity);
+		TriggerBot::Run(LocalEntity, LocalPlayerControllerIndex);
 }
 
 void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
@@ -407,9 +407,8 @@ void AIM(const CEntity& LocalEntity, std::vector<Vec3> AimPosList)
 	}
 
 	bool shouldAim = LegitBotConfig::AimAlways || GetAsyncKeyState(AimControl::HotKey);
-	if (shouldAim && !AimPosList.empty()) {
+	if (shouldAim && !AimPosList.empty())
 		AimControl::AimBot(LocalEntity, LocalEntity.Pawn.CameraPos, AimPosList);
-	}
 
 	if (LegitBotConfig::AimToggleMode && (GetAsyncKeyState(AimControl::HotKey) & 0x8000) &&
 		currentTick - lastTick >= 200) {
@@ -425,9 +424,9 @@ void MiscFuncs(CEntity& LocalEntity)
     SoundESP::Render();
 
     Misc::HitManager(LocalEntity, PreviousTotalHits);
-    Misc::BunnyHop(LocalEntity);
+    //Misc::BunnyHop(LocalEntity);
     Misc::Watermark(LocalEntity);
-    Misc::FastStop();
+    //Misc::FastStop();
     Misc::AntiAFKKickUpdate();
     if (MiscCFG::AutoKnife && !MenuConfig::ShowMenu) {
         std::vector<CEntity> enemyList;
