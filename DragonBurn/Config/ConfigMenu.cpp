@@ -199,6 +199,7 @@ namespace ConfigMenu {
 		LegitBotConfig::TriggerBot = true;
 		LegitBotConfig::TriggerAlways = false;
 		TriggerBot::HotKey = 6;
+		TriggerBot::TTDtimeout = false;
 		Text::Trigger::HotKey = KeyMgr::GetKeyName(TriggerBot::HotKey);
 
 		MenuConfig::TeamCheck = true;

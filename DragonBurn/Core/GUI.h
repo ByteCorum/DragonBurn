@@ -611,6 +611,7 @@ namespace GUI
 						PutSwitch(Text::Trigger::ScopeOnly.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::ScopeOnly);
 						PutSwitch(Text::Trigger::IgnoreFlash.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::IgnoreFlash, false, NULL, NULL, Text::Aimbot::OffTip.c_str());
 						PutSwitch(Text::Trigger::StopOnly.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::StopedOnly);
+						PutSwitch(Text::Trigger::TTDtimeout.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &TriggerBot::TTDtimeout, false, NULL, NULL, Text::Aimbot::OnTip.c_str());
 						PutSliderInt(Text::Trigger::DelaySlider.c_str(), 5.f, &TriggerBot::TriggerDelay, &DelayMin, &DelayMax, "%d ms", Text::Trigger::DelayTip.c_str());
 						PutSliderInt(Text::Trigger::FakeShotSlider.c_str(), 5.f, &TriggerBot::ShotDuration, &DurationMin, &DurationMax, "%d ms");
 					}
