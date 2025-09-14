@@ -39,7 +39,7 @@ namespace Text {
         inline std::string Ammo = "Ammo Bar";
         inline std::string ScopedESP = "Show Scoped";
         inline std::string FlashedESP = "Show Flashed";
-        inline std::string FlashCheck = "Disable when Flashed";
+        inline std::string FlashCheck = "Disable Flashed";
         inline std::string ShowArmorBar = "Armor Bar";
         inline std::string ArmorNum = "Armor Number";
         inline std::string OutOfFOVArrow = "Offscreen";
