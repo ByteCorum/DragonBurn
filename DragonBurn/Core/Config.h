@@ -96,6 +96,7 @@ namespace ESPConfig
 	inline bool OutLine = true;
 	inline bool ShowIsScoped = true;
 	inline bool ShowIsBlind = false;
+	inline bool FlashCheck = false;
 	// 0: normal 1: Corner
 	inline int BoxType = 0;
 	inline float BoxRounding = 5;

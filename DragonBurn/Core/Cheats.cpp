@@ -305,7 +305,7 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 		}
 
 		// render esp
-		if (ESPConfig::ESPenabled)
+		if (ESPConfig::ESPenabled && ESP::CheckFlashESP(localEntity))
 		{
 			const ImVec4& Rect = result.espRect;
 			const int distance = result.distance;
