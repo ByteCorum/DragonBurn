@@ -3,7 +3,7 @@
 #include <random>
 #include <thread>
 
-void TriggerBot::Run(const CEntity& LocalEntity)
+void TriggerBot::Run(const CEntity& LocalEntity, const int& LocalPlayerControllerIndex)
 {
     if (MenuConfig::ShowMenu)
         return;
@@ -44,7 +44,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     }
 
     // Validate the targeted entity
-    if (!CanTrigger(LocalEntity, targetEntity))
+    if (!CanTrigger(LocalEntity, targetEntity, LocalPlayerControllerIndex))
     {
         g_HasValidTarget = false;
         g_TargetFoundTime = std::chrono::system_clock::now();
@@ -72,7 +72,7 @@ void TriggerBot::Run(const CEntity& LocalEntity)
     { ExecuteShot(); }
 }
 
-bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity)
+bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity, const int& LocalPlayerControllerIndex)
 {
     // Check if target is in a valid state
     if (TargetEntity.Pawn.Address == 0)
@@ -101,6 +101,12 @@ bool TriggerBot::CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEnt
 
     // Check flash duration
     if (!IgnoreFlash && LocalEntity.Pawn.FlashDuration > 0.0f)
+        return false;
+
+    // Check TTD timout
+    DWORD64 playerMask = (DWORD64(1) << LocalPlayerControllerIndex);
+    bool bIsVisible = (TargetEntity.Pawn.bSpottedByMask & playerMask) || (LocalEntity.Pawn.bSpottedByMask & playerMask);
+    if (TTDtimeout && !bIsVisible)
         return false;
 
     // Check scope requirement

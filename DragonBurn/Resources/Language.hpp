@@ -109,6 +109,7 @@ namespace Text {
         inline std::string StopOnly = "Stop Check";
         inline std::string VisCheck = "Visible Check";
         inline std::string DelayTip = "Using it try keep your TTD above 350ms";
+        inline std::string TTDtimeout = "Wait min TTD";
     }
 
     namespace Misc
