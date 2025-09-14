@@ -67,6 +67,10 @@ namespace Text {
         inline std::string HumanizeVar = "Humanize Aimbot";
         inline std::string OnlyAuto = "Only Auto";
         inline std::string OnlyAutoTip = "Aim will only work in automatic shooting mode";
+        inline std::string SmoothTip = "It's better to keep this above 6 to avoid VAC Live";
+        inline std::string StartBulletTip = "It's better to keep this above 1 to avoid VAC Live";
+        inline std::string OnTip = "It's better to keep this on to avoid VAC Live";
+        inline std::string OffTip = "It's better to keep this off to avoid VAC Live";
     }
 
     namespace RCS
@@ -104,6 +108,7 @@ namespace Text {
         inline std::string IgnoreFlash = "Ignore Flash";
         inline std::string StopOnly = "Stop Check";
         inline std::string VisCheck = "Visible Check";
+        inline std::string DelayTip = "Using it try keep your TTD above 350ms";
     }
 
     namespace Misc
