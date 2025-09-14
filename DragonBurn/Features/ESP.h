@@ -487,4 +487,9 @@ namespace ESP
         float orient = atan2f(py, px);
         DrawArrowAt(dl, pos, orient, 12.0f, ESPConfig::OutOfFOVArrowColor);
     }
+
+    bool CheckFlashESP(const CEntity& localEntity)
+    {
+        return !ESPConfig::FlashCheck || localEntity.Pawn.FlashDuration < 0.1f;
+    }
 }
