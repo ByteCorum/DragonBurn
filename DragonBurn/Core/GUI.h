@@ -366,6 +366,7 @@ namespace GUI
 						PutSwitch(Text::ESP::PlayerName.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowPlayerName);
 						PutSwitch(Text::ESP::ScopedESP.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowIsScoped);
 						PutSwitch(Text::ESP::FlashedESP.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowIsBlind);
+						PutSwitch(Text::ESP::FlashCheck.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::FlashCheck);
 						PutSwitch(Text::ESP::VisCheck.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::VisibleCheck, true, "###VisibleCol", reinterpret_cast<float*>(&ESPConfig::VisibleColor));
 					}
 					ImGui::NewLine();
