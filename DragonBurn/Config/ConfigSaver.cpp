@@ -191,6 +191,7 @@ namespace MyConfigSaver
         ConfigData["Triggerbot"]["ScopeOnly"]=    TriggerBot::ScopeOnly;
         ConfigData["Triggerbot"]["IgnoreFlash"]=  TriggerBot::IgnoreFlash;
         ConfigData["Triggerbot"]["StopedOnly"] = TriggerBot::StopedOnly;
+        ConfigData["Triggerbot"]["TTDtimeout"] = TriggerBot::TTDtimeout;
         ConfigData["Triggerbot"]["AutoMode"]=     LegitBotConfig::TriggerAlways;
 
 
@@ -409,7 +410,7 @@ namespace MyConfigSaver
             AimControl::HotKey = ReadData(ConfigData["Aimbot"],{"Hotkey"}, 0);
             AimControl::AimBullet = ReadData(ConfigData["Aimbot"],{"AimBullet"}, 0);
             AimControl::AimFov = ReadData(ConfigData["Aimbot"],{"Fov"}, 5.f);
-            AimControl::HumanizationStrength = ReadData(ConfigData["Aimbot"],{"HumanizationStrength"}, 0.1f);
+            AimControl::HumanizationStrength = ReadData(ConfigData["Aimbot"],{"HumanizationStrength"}, 0.4f);
             AimControl::AimFovMin = ReadData(ConfigData["Aimbot"],{"FovMin"}, .5f);
             ESPConfig::DrawFov = ReadData(ConfigData["Aimbot"],{"FovCircle"}, false);
             LegitBotConfig::FovCircleColor.Value.x = ReadData(ConfigData["Aimbot"],{"CircleColor","r"}, 0.f);
@@ -420,7 +421,7 @@ namespace MyConfigSaver
             AimControl::HitboxList = LoadVector(ConfigData["Aimbot"], "Hitboxes", { BONEINDEX::head });
             LegitBotConfig::VisibleCheck = ReadData(ConfigData["Aimbot"],{"VisibleCheck"}, true);
             AimControl::IgnoreFlash = ReadData(ConfigData["Aimbot"],{"IgnoreFlash"}, false);
-            AimControl::HumanizeVar = ReadData(ConfigData["Aimbot"],{"HumanizeVar"}, false);
+            AimControl::HumanizeVar = ReadData(ConfigData["Aimbot"],{"HumanizeVar"}, true);
             AimControl::ScopeOnly = ReadData(ConfigData["Aimbot"],{"ScopeOnly"}, false);
             AimControl::onlyAuto = ReadData(ConfigData["Aimbot"], { "OnlyAuto" }, false);
             Text::Aimbot::HotKey = KeyMgr::GetKeyName(AimControl::HotKey);
@@ -444,6 +445,7 @@ namespace MyConfigSaver
             TriggerBot::ScopeOnly = ReadData(ConfigData["Triggerbot"],{"ScopeOnly"}, false);
             TriggerBot::IgnoreFlash = ReadData(ConfigData["Triggerbot"],{"IgnoreFlash"}, false);
             TriggerBot::StopedOnly = ReadData(ConfigData["Triggerbot"], { "StopedOnly" }, false);
+            TriggerBot::TTDtimeout = ReadData(ConfigData["Triggerbot"], { "TTDtimeout" }, false);
             LegitBotConfig::TriggerAlways = ReadData(ConfigData["Triggerbot"],{"AutoMode"}, false);
             Text::Trigger::HotKey = KeyMgr::GetKeyName(TriggerBot::HotKey);
         }

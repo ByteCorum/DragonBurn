@@ -13,6 +13,7 @@ namespace TriggerBot
 	inline bool ScopeOnly = true;
 	inline bool IgnoreFlash = false;
 	inline bool StopedOnly = false;
+	inline bool TTDtimeout = false;
 	inline bool VisibleCheck = true;
 
     // Input configuration
@@ -24,10 +25,10 @@ namespace TriggerBot
 	inline bool g_HasValidTarget = false;
 
     // Main functions
-	void Run(const CEntity& LocalEntity);
+	void Run(const CEntity& LocalEntity, const int& LocalPlayerControllerIndex);
 
     // Validation functions
-    bool CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity);
+    bool CanTrigger(const CEntity& LocalEntity, const CEntity& TargetEntity, const int& LocalPlayerControllerIndex);
 
     // Execution functions
 	void ExecuteShot();
