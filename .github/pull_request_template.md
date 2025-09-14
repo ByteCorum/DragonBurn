@@ -8,12 +8,14 @@
 - Should be documented: y/n
 
 <!-- Please try to limit your pull request to one type; submit multiple pull requests if needed. -->
+
 ### Type
 
 - [ ] Bugfix
 - [ ] Feature
 - [ ] Code style update
 - [ ] Refactor
+- [ ] Regular code maintenance
 - [ ] Tests-related changes
 - [ ] Documentation content changes
 - [ ] Other (please describe):
