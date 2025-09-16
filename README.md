@@ -154,6 +154,13 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 >
 > Solution: Turn off all Anti-Viruses and all Anti-Cheats client, usually it caused by faceit ac
 
+> [!TIP]  
+> This cmds should fix any issue(after executing restart pc):
+>
+> `reg add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\DeviceGuard" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 00000000 /f`
+> `bcdedit /set hypervisorlaunchtype off`
+> `reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 00000000 /f`
+
 ---
 
 ### 🖼️Preview
