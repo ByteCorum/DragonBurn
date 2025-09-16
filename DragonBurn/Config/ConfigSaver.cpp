@@ -480,7 +480,7 @@ namespace MyConfigSaver
             MiscCFG::AutoAccept = ReadData(ConfigData["Misc"], { "AutoAccept" }, false);
 
             MiscCFG::EnemySound = ReadData(ConfigData["Misc"], { "EnemySound" }, false);
-            MiscCFG::EnemySoundColor.Value.x = ReadData(ConfigData["Misc"], { "EnemySoundColor","r" }, 255.f);
+            MiscCFG::EnemySoundColor.Value.x = ReadData(ConfigData["Misc"], { "EnemySoundColor","r" }, 0.f);
             MiscCFG::EnemySoundColor.Value.y = ReadData(ConfigData["Misc"], { "EnemySoundColor","g" }, 0.f);
             MiscCFG::EnemySoundColor.Value.z = ReadData(ConfigData["Misc"], { "EnemySoundColor","b" }, 0.f);
             MiscCFG::EnemySoundColor.Value.w = ReadData(ConfigData["Misc"], { "EnemySoundColor","a" }, 255.f);

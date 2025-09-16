@@ -104,8 +104,8 @@ bool CEntity::UpdatePawn(const DWORD64& PlayerPawnAddress)
 		return false;
 	if (!this->Pawn.GetSpotted())//
 		return false;
-	//if (!this->Pawn.GetFFlags())
-	//	return false;
+	if (!this->Pawn.GetFFlags())
+		return false;
 	//if (!this->Pawn.GetDefusing())
 	//	return false;
 	if (!this->Pawn.GetFlashDuration())//
@@ -181,6 +181,10 @@ bool PlayerPawn::GetSpotted()
 	return GetDataAddressWithOffset<DWORD64>(Address, Offset.Pawn.bSpottedByMask, this->bSpottedByMask);
 }
 
+bool PlayerPawn::GetFFlags()
+{
+	return GetDataAddressWithOffset<int>(Address, Offset.Pawn.fFlags, this->fFlags);
+}
 
 bool PlayerPawn::GetWeaponName()
 {
@@ -305,12 +309,7 @@ bool PlayerPawn::GetFov()
 		return false;
 	return GetDataAddressWithOffset<int>(CameraServices, Offset.Pawn.iFovStart, this->Fov);
 }
-//
-//bool PlayerPawn::GetFFlags()
-//{
-//	return GetDataAddressWithOffset<int>(Address, Offset.Pawn.fFlags, this->fFlags);
-//}
-//
+
 //bool PlayerPawn::GetDefusing()
 //{
 //	return memoryManager.ReadMemory(Address + Offset.C4.m_bBeingDefused, this->isDefusing);
@@ -508,7 +507,7 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 	std::vector<DWORD64>& cameraAddresses) {
 
 	std::vector<std::pair<DWORD64, SIZE_T>> requests;
-	requests.reserve(entities.size() * 20); // 6 controller + 14 pawn = 21 per entity
+	requests.reserve(entities.size() * 21); // 6 controller + 15 pawn = 22 per entity
 
 	// Build all requests for Phase 1
 	for (const auto& [entityIndex, entity] : entities) {
@@ -526,13 +525,13 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.vecLastClipCameraPos, sizeof(Vec3));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.Pos, sizeof(Vec3));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.bSpottedByMask, sizeof(DWORD64));
+		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.fFlags, sizeof(int));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.iShotsFired, sizeof(DWORD));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.aimPunchAngle, sizeof(Vec2));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.iTeamNum, sizeof(int));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.CurrentHealth, sizeof(int));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.CurrentArmor, sizeof(int));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.flFlashDuration, sizeof(float));
-		//requests.emplace_back(entity.Pawn.Address + Offset.Pawn.fFlags, sizeof(int));
 		//requests.emplace_back(entity.Pawn.Address + Offset.C4.m_bBeingDefused, sizeof(bool));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.aimPunchCache, sizeof(C_UTL_VECTOR));
 		requests.emplace_back(entity.Pawn.Address + Offset.Pawn.AbsVelocity, sizeof(Vec3));
@@ -557,10 +556,10 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 	cameraAddresses.reserve(entities.size());
 
 	// Calculate per-entity data size
-	const SIZE_T CONTROLLER_DATA_SIZE = sizeof(int) * 3 + MAX_PATH + sizeof(INT64) + sizeof(DWORD);
+	const SIZE_T CONTROLLER_DATA_SIZE = sizeof(int) * 3 + MAX_PATH + sizeof(INT64) + sizeof(DWORD);// if u adding new controller field to read add its size here
 
 	const SIZE_T PAWN_DATA_SIZE = sizeof(Vec2) * 2 + sizeof(Vec3) * 3 + sizeof(DWORD64) * 3 +
-		sizeof(DWORD) + sizeof(int) * 3 + sizeof(float) + sizeof(C_UTL_VECTOR);
+		sizeof(DWORD) + sizeof(int) * 4 + sizeof(float) + sizeof(C_UTL_VECTOR); // if u adding new pawn field to read add its size here
 	const SIZE_T ENTITY_DATA_SIZE = CONTROLLER_DATA_SIZE + PAWN_DATA_SIZE;
 
 	SIZE_T currentOffset = 0;
@@ -607,6 +606,9 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 		memcpy(&entity.Pawn.bSpottedByMask, buffer.data() + currentOffset, sizeof(DWORD64));
 		currentOffset += sizeof(DWORD64);
 
+		memcpy(&entity.Pawn.fFlags, buffer.data() + currentOffset, sizeof(int));
+		currentOffset += sizeof(int);
+
 		memcpy(&entity.Pawn.ShotsFired, buffer.data() + currentOffset, sizeof(DWORD));
 		currentOffset += sizeof(DWORD);
 
@@ -624,9 +626,6 @@ bool EntityBatchProcessor::ProcessCoreEntityData(
 
 		memcpy(&entity.Pawn.FlashDuration, buffer.data() + currentOffset, sizeof(float));
 		currentOffset += sizeof(float);
-
-		//memcpy(&entity.Pawn.fFlags, buffer.data() + currentOffset, sizeof(int));
-		//currentOffset += sizeof(int);
 
 		//memcpy(&entity.Pawn.isDefusing, buffer.data() + currentOffset, sizeof(bool));
 		//currentOffset += sizeof(bool);

@@ -46,10 +46,12 @@ void Cheats::Run()
 
 	Misc::AutoAccept::UpdateAutoAccept();
 
+#ifndef DBDEBUG
 	if (!Init::Client::isGameWindowActive() && !MenuConfig::ShowMenu) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 		return;
 	}
+#endif
 
 	// Update matrix
 	if (!memoryManager.ReadMemory(gGame.GetMatrixAddress(), gGame.View.Matrix,64))

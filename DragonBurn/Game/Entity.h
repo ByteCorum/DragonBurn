@@ -71,7 +71,7 @@ public:
 	enum class Flags
 	{
 		NONE,
-		IN_AIR = 1 << 0,
+		ON_GROUND = 1 << 0,
 		IN_CROUCH = 1 << 1
 	};
 
@@ -94,7 +94,7 @@ public:
 	int TeamID;
 	int Fov;
 	DWORD64 bSpottedByMask;
-	//int fFlags;
+	int fFlags;
 	float FlashDuration;
 	//bool isDefusing;
 
@@ -109,7 +109,7 @@ public:
 	bool GetTeamID();
 	bool GetFov();
 	bool GetSpotted();
-	//bool GetFFlags();
+	bool GetFFlags();
 	bool GetAimPunchCache();
 	bool GetAmmo();
 	//bool GetMaxAmmo();
@@ -120,9 +120,10 @@ public:
 
 	std::vector<short> GetWeaponInventory(DWORD64 entityList) const;
 
-	//constexpr bool HasFlag(const Flags Flag) const noexcept {
-	//	return fFlags & (int)Flag;
-	//}
+	bool HasFlag(const Flags Flag) const noexcept
+	{
+		return fFlags & (int)Flag;
+	}
 };
 
 class Client
@@ -145,13 +146,13 @@ private:
 			BatchField{ Offset.Pawn.vecLastClipCameraPos, &pawn.CameraPos },
 			BatchField{ Offset.Pawn.Pos, &pawn.Pos },
 			BatchField{ Offset.Pawn.bSpottedByMask, &pawn.bSpottedByMask },
+			BatchField{ Offset.Pawn.fFlags, &pawn.fFlags },
 			BatchField{ Offset.Pawn.iShotsFired, &pawn.ShotsFired },
 			BatchField{ Offset.Pawn.aimPunchAngle, &pawn.AimPunchAngle },
 			BatchField{ Offset.Pawn.iTeamNum, &pawn.TeamID },
 			BatchField{ Offset.Pawn.CurrentHealth, &pawn.Health },
 			BatchField{ Offset.Pawn.CurrentArmor, &pawn.Armor },
 			BatchField{ Offset.Pawn.flFlashDuration, &pawn.FlashDuration },
-			//BatchField{ Offset.Pawn.fFlags, &pawn.fFlags },
 			//BatchField{ Offset.C4.m_bBeingDefused, &pawn.isDefusing },
 			BatchField{ Offset.Pawn.aimPunchCache, &pawn.AimPunchCache },
 			BatchField{ Offset.Pawn.GameSceneNode, &pawn.GameSceneNode }

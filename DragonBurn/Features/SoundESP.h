@@ -9,11 +9,11 @@ namespace SoundESP {
         CEntity entity;
     };
 
-    inline float MaxDistance = 1000.0f;
-    inline float EffectSpeed = 340.0f;
-    inline float MaxRadius = 150.0f;
+    inline float MaxDistance = 2000.0f;
+    inline float EffectSpeed = 200.0f;
+    inline float MaxRadius = 60.0f;
     inline float MinMovementSpeed = 15.0f;
-    inline double MinSpawnInterval = 0.85;
+    inline double MinSpawnInterval = 0.2f;
 
     static std::vector<SoundEffect> soundEffects;
     static std::unordered_map<int, float> lastSoundTimes;
@@ -45,6 +45,8 @@ namespace SoundESP {
             return;
 
         float currentSoundTime = 0.0f;
+        bool Jumped = !entity.Pawn.HasFlag(PlayerPawn::Flags::ON_GROUND);
+
         if (!memoryManager.ReadMemory<float>(entity.Pawn.Address + Offset.Pawn.m_flEmitSoundTime, currentSoundTime))
             return;
         if (lastSoundTimes[entity.Controller.Address] == 0.0f) {
@@ -54,7 +56,8 @@ namespace SoundESP {
         if (lastSoundTimes[entity.Controller.Address] == currentSoundTime)
             return;
 
-        if (entity.Pawn.Speed < MinMovementSpeed) {
+        if (entity.Pawn.Speed < MinMovementSpeed && !Jumped)
+        {
             lastSoundTimes[entity.Controller.Address] = currentSoundTime;
             return;
         }
@@ -110,7 +113,7 @@ namespace SoundESP {
             }
 
             float progress = std::clamp(elapsed / duration, 0.0f, 1.0f);
-            float startRadius = MaxRadius * 0.2f;
+            float startRadius = MaxRadius * 0.1f;
             float radius = startRadius + (MaxRadius - startRadius) * progress;
             
             ImColor color = MiscCFG::EnemySoundColor;
