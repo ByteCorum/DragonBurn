@@ -99,6 +99,7 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error(error.what());
 	}
 
+KMD_CONNECTING://KMD_CONNECTING
 	Log::Info("Connecting to kernel mode driver");
 	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
@@ -108,7 +109,27 @@ https://github.com/ByteCorum/DragonBurn
 	else
 	{
 		Log::PreviousLine();
-		Log::Error("Failed to connect to kernel mode driver");
+		Log::Warning("Failed to connect to kernel mode driver");
+		Log::Info("Triggered auto-map protocol");
+		Log::Info("Looking for kernel mapper...");
+
+		if (fs::exists("DragonBurn-kernel.exe")) 
+		{
+			Log::PreviousLine();
+			Log::Info("Executing kernel mapper...");
+			int result = Init::Verify::ExecuteMapper();
+
+			Log::PreviousLine();
+			if (result == 0)
+				goto KMD_CONNECTING;//KMD_CONNECTING
+			else
+				Log::Error("Failed to map kernel mode driver");
+		}
+		else
+		{
+			Log::PreviousLine();
+			Log::Error("Failed to find kernel mapper");
+		}
 	}
 
 	std::cout << '\n';

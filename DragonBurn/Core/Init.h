@@ -68,6 +68,44 @@ namespace Init
                 return true;
             return false;
         }
+
+        static int ExecuteMapper()
+        {
+            STARTUPINFOW si = { sizeof(STARTUPINFOW) };
+            PROCESS_INFORMATION pi = {};
+
+            si.dwFlags = STARTF_USESHOWWINDOW;
+            si.wShowWindow = SW_SHOW;
+
+            std::wstring cmdLine = L"DragonBurn-kernel.exe";
+            BOOL success = CreateProcessW(
+                nullptr,                   // Application name
+                &cmdLine[0],               // Command line (must be modifiable)
+                nullptr,                   // Process security attributes
+                nullptr,                   // Thread security attributes
+                FALSE,                     // Inherit handles
+                CREATE_NEW_CONSOLE,        // Creation flags - creates new console
+                nullptr,                   // Environment
+                nullptr,                   // Current directory
+                &si,                       // Startup info
+                &pi                        // Process info
+            );
+
+            int result = -1;
+            if (success)
+            {
+                WaitForSingleObject(pi.hProcess, INFINITE);
+
+                DWORD exitCode;
+                GetExitCodeProcess(pi.hProcess, &exitCode);
+                result = static_cast<int>(exitCode);
+
+                CloseHandle(pi.hProcess);
+                CloseHandle(pi.hThread);
+            }
+
+            return result;
+        }
 	};
 
     class Client
