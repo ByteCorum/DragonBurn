@@ -48,6 +48,9 @@ namespace Misc
 	};
 
 	inline bool Zoom = false;
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	static std::uniform_int_distribution<int> dis(-40, 40);
 
 	static inline std::vector<ImColor> colorList = {
 		ImColor(255, 0, 0),     // Red

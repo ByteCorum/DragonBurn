@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Shellapi.h>
 #include <filesystem>
+#include <random>
 #include "../Helpers/Logger.h"
 #include "../Core/Cheats.h"
 namespace fs = std::filesystem;
@@ -188,7 +189,7 @@ namespace Misc
 					!(GetAsyncKeyState(layout.backward) & 0x8000))
 				{
 					last_stop_time = std::chrono::steady_clock::now();
-					std::thread(PerformKeyStop, opposite_key, MiscCFG::FastStopDelay).detach();
+					std::thread(PerformKeyStop, opposite_key, MiscCFG::FastStopDelay + MiscCFG::FastStopOffset).detach();
 				}
 			}
 			key_released_map[key] = false;
@@ -203,14 +204,13 @@ namespace Misc
 		if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_LSHIFT) & 0x8000)
 			return;
 
-		static std::map<int, bool> key_released_map;
 		static auto last_stop_time = std::chrono::steady_clock::now();
+		static std::map<int, bool> key_released_map;
 
+		MiscCFG::FastStopOffset = dis(gen);
 		auto now = std::chrono::steady_clock::now();
-		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last_stop_time).count() < MiscCFG::FastStopDelay + 20)
-		{
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(now - last_stop_time).count() < MiscCFG::FastStopDelay + MiscCFG::FastStopOffset)
 			return;
-		}
 
 		auto it = keyLayouts.find(Layout);
 		if (it != keyLayouts.end()) {

@@ -647,9 +647,7 @@ namespace GUI
 					//PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop);
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
 					ImGui::TextDisabled("BunnyHop is disabled due to VAC Live");
-					//PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
-					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
-					ImGui::TextDisabled("FastStop is disabled due to VAC Live");
+					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop);
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
 					PutSwitch("Auto Accept", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
                     PutSwitch("Knife bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);

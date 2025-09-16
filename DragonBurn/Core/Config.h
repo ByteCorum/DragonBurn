@@ -173,7 +173,8 @@ namespace MiscCFG
 	inline bool HitMarker = false;
 	inline bool bmbTimer = true;
 	inline bool FastStop = false;
-	inline int FastStopDelay = 100;
+	inline int FastStopDelay = 120;
+	inline int FastStopOffset = 0;
 	inline bool SpecList = false;
 	inline ImColor BombTimerCol = ImColor(131, 137, 150, 255);
 	inline bool ShowHeadShootLine = false;
