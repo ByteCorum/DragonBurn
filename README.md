@@ -146,6 +146,16 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 
 ---
 
+### ❌Errors
+
+<img src="imgs/error_1.png" width="400" height="90">
+
+> Windows Defender or any other anticheats may flag cheat as virus
+>
+> Solution: Turn off real-time protection
+
+---
+
 ### ❌Mapper errors
 
 cmd should be opened as admin
