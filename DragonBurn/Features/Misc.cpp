@@ -124,12 +124,12 @@ namespace Misc
 		//	return;
 
 		bool spacePressed = GetAsyncKeyState(VK_SPACE);
-		//bool isInAir = AirCheck(Local);
+		bool isInAir = !Local.Pawn.HasFlag(PlayerPawn::Flags::ON_GROUND);
 
 		static DWORD lastJumped = GetTickCount64();
 		DWORD currentTick = GetTickCount64();
 
-		if (spacePressed /*&& isInAir*/)
+		if (spacePressed && !isInAir)
 		{
 			if (currentTick - lastJumped >= MenuConfig::BunnyHopDelay)
 			{
@@ -138,14 +138,6 @@ namespace Misc
 				lastJumped = currentTick;
 			}
 		}
-		//else if (spacePressed /*&& !isInAir*/)
-		//{
-		//	SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-		//}
-		//else if (!spacePressed)
-		//{
-		//	SendMessage(hwnd_cs2, WM_KEYUP, VK_SPACE, 0);
-		//}
 	}
 
 	void CleanTraces()

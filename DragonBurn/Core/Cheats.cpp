@@ -426,7 +426,7 @@ void MiscFuncs(CEntity& LocalEntity)
     SoundESP::Render();
 
     Misc::HitManager(LocalEntity, PreviousTotalHits);
-    //Misc::BunnyHop(LocalEntity);
+    Misc::BunnyHop(LocalEntity);
     Misc::Watermark(LocalEntity);
     Misc::FastStop();
     Misc::AntiAFKKickUpdate();
