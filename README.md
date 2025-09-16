@@ -157,7 +157,7 @@ cmd should be opened as admin
 > Solution: Turn off all Anti-Viruses and all Anti-Cheats client, usually it caused by faceit ac
 >
 > Faceit: `sc stop faceit`
-> Vanguard: `sc stop vgc`
+> Vanguard: `sc stop vgc` `sc stop vgk`
 
 > [!TIP]  
 > This cmds should fix any issue(after executing restart pc):
