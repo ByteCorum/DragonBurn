@@ -142,6 +142,8 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 
 ### ❌Mapper errors
 
+cmd should be opened as admin
+
 > Error: `[-] \Device\Nal is already in use.`
 >
 > Solution: Use [NalFix](https://github.com/VollRagm/NalFix)
@@ -153,6 +155,9 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 > Still getting: `[-] Failed to register and start service for the vulnerable driver`
 >
 > Solution: Turn off all Anti-Viruses and all Anti-Cheats client, usually it caused by faceit ac
+>
+> Faceit: `sc stop faceit`
+> Vanguard: `sc stop vgc`
 
 > [!TIP]  
 > This cmds should fix any issue(after executing restart pc):
