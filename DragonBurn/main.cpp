@@ -121,13 +121,17 @@ KMD_CONNECTING://KMD_CONNECTING
 
 			Log::PreviousLine();
 			if (result == 0)
+			{
+				Log::Fine("Successfully mapped kernel mode driver");
 				goto KMD_CONNECTING;//KMD_CONNECTING
+			}
 			else
 				Log::Error("Failed to map kernel mode driver");
 		}
 		else
 		{
 			Log::PreviousLine();
+			Log::Info("It might have been deleted by AV, turn off AV and clean temp");
 			Log::Error("Failed to find kernel mapper");
 		}
 	}
