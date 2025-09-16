@@ -115,8 +115,7 @@ namespace ESPConfig
 	inline ImColor FilledColor2 = ImColor(59, 71, 148, 128);
 
     inline bool ShowOutOfFOVArrow = false;
-    inline float OutOfFOVRadiusFactor = 0.95f;
-    inline float OutOfFOVArrowSize = 12.0f;
+    inline float OutOfFOVRadiusFactor = 0.45f;
     inline ImColor OutOfFOVArrowColor = ImColor(255, 180, 50, 230);
 }
 

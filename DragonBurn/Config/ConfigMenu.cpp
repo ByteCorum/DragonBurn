@@ -173,6 +173,9 @@ namespace ConfigMenu {
 		ESPConfig::ShowEyeRay = false;
 		ESPConfig::ShowPlayerName = true;
 		ESPConfig::BoxRounding = 5.0f;
+		ESPConfig::OutOfFOVRadiusFactor = 0.45f;
+		ESPConfig::ShowOutOfFOVArrow = false;
+		ESPConfig::OutOfFOVArrowColor = ImColor(59, 71, 148, 128);
 
 		LegitBotConfig::AimBot = true;
 		LegitBotConfig::AimToggleMode = false;

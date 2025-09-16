@@ -44,6 +44,7 @@ namespace Text {
         inline std::string ArmorNum = "Armor Number";
         inline std::string OutOfFOVArrow = "Offscreen";
         inline std::string OutOfFOVRadius = "Arrow Radius Factor";
+        inline std::string SoundEsp = "Sound esp";
     }
 
     namespace Aimbot

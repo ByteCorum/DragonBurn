@@ -459,11 +459,12 @@ namespace ESP
 
         // Match original polar mapping and aspect ratio correction
         const ImVec2 center = ImVec2(screen.x * 0.5f, screen.y * 0.5f);
+
         // Interpret OutOfFOVRadiusFactor as percent (0..100) if > 1, else scale
-        float Rpercent = 0.90f; // radius
-        if (Rpercent <= 1.0f) Rpercent *= 100.0f;
-        Rpercent = min(max(Rpercent, 0.0f), 100.0f);
-        const float ring = screen.y / ((120.0f - Rpercent) / 10.0f);
+        float radius = ESPConfig::OutOfFOVRadiusFactor;
+        if (radius <= 1.0f) radius *= 100.0f;
+        radius = min(max(radius, 0.0f), 100.0f);
+        const float ring = screen.y / ((120.0f - radius)/3);
 
         // Radar-like rotation: angleRad = localYawRad - atan2(target.y - local.y, target.x - local.x)
         const float localYawRad = local.Pawn.ViewAngle.y * (IM_PI / 180.0f);

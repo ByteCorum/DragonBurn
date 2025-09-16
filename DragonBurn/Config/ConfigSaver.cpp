@@ -303,11 +303,11 @@ namespace MyConfigSaver
             ESPConfig::ShowArmorNum = ReadData(ConfigData["ESP"], { "ArmorNum" }, false);
 
             ESPConfig::ShowOutOfFOVArrow = ReadData(ConfigData["ESP"], { "OutOfFOVArrow" }, false);
-            ESPConfig::OutOfFOVRadiusFactor = ReadData(ConfigData["ESP"], { "OutOfFOVRadius" }, 0.95f);
-            ESPConfig::OutOfFOVArrowColor.Value.x = ReadData(ConfigData["ESP"], { "OutOfFOVColor","r" }, 1.0f);
-            ESPConfig::OutOfFOVArrowColor.Value.y = ReadData(ConfigData["ESP"], { "OutOfFOVColor","g" }, 0.7f);
-            ESPConfig::OutOfFOVArrowColor.Value.z = ReadData(ConfigData["ESP"], { "OutOfFOVColor","b" }, 0.2f);
-            ESPConfig::OutOfFOVArrowColor.Value.w = ReadData(ConfigData["ESP"], { "OutOfFOVColor","a" }, 0.9f);
+            ESPConfig::OutOfFOVRadiusFactor = ReadData(ConfigData["ESP"], { "OutOfFOVRadius" }, 0.45f);
+            ESPConfig::OutOfFOVArrowColor.Value.x = ReadData(ConfigData["ESP"], { "OutOfFOVColor","r" }, 0.f);
+            ESPConfig::OutOfFOVArrowColor.Value.y = ReadData(ConfigData["ESP"], { "OutOfFOVColor","g" }, 0.f);
+            ESPConfig::OutOfFOVArrowColor.Value.z = ReadData(ConfigData["ESP"], { "OutOfFOVColor","b" }, 0.f);
+            ESPConfig::OutOfFOVArrowColor.Value.w = ReadData(ConfigData["ESP"], { "OutOfFOVColor","a" }, 255.f);
 
             ESPConfig::BoneColor.Value.x = ReadData(ConfigData["ESP"], { "BoneColor","r" }, 0.f);
             ESPConfig::BoneColor.Value.y = ReadData(ConfigData["ESP"], { "BoneColor","g" }, 0.f);

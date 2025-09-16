@@ -312,6 +312,7 @@ namespace GUI
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
 					ImGui::GradientText("ESP");
 					float MinRounding = 0.f, MaxRouding = 5.f;
+					float MinFovFactor = 0.f, MaxFovFactor = 1.f;
 					PutSwitch(Text::ESP::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
 					ImGui::TextDisabled(Text::ESP::HotKeyList.c_str());
@@ -354,6 +355,10 @@ namespace GUI
 						}
 						PutSwitch(Text::ESP::EyeRay.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowEyeRay, true, "###LineCol", reinterpret_cast<float*>(&ESPConfig::EyeRayColor));
 						PutSwitch(Text::ESP::OutOfFOVArrow.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowOutOfFOVArrow, true, "###OutFOVCol", reinterpret_cast<float*>(&ESPConfig::OutOfFOVArrowColor));
+						if(ESPConfig::ShowOutOfFOVArrow)
+							PutSliderFloat(Text::ESP::OutOfFOVRadius.c_str(), .5f, &ESPConfig::OutOfFOVRadiusFactor, &MinFovFactor, &MaxFovFactor, "%.1f");
+
+						PutSwitch(Text::ESP::SoundEsp.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&MiscCFG::EnemySoundColor));
 						PutSwitch(Text::ESP::HealthBar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHealthBar);
 						if (ESPConfig::ShowHealthBar)
 							PutSwitch(Text::ESP::HealthNum.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHealthNum);
@@ -647,7 +652,6 @@ namespace GUI
 					ImGui::TextDisabled("FastStop is disabled due to VAC Live");
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
 					PutSwitch("Auto Accept", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
-                    PutSwitch("Sound esp", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&MiscCFG::EnemySoundColor));
                     PutSwitch("Knife bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);
                     PutSwitch("Zeus bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoZeus);
                     PutSwitch("Anti-afk", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AntiAFKKick);
