@@ -35,8 +35,7 @@ DragonBurn is one of the best CS2 kernel mode read only external cheats. It has 
 
 <a href="https://discord.gg/5WcvdzFybD"><img src="https://invidget.switchblade.xyz/5WcvdzFybD"></a>
 
-> [!NOTE]  
-> If link preview didn't load, this is direct [link](https://discord.gg/5WcvdzFybD)
+<a href="https://ko-fi.com/bytecorum"><img src="https://img.shields.io/badge/Support Author-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 
 ---
 
@@ -199,5 +198,18 @@ cmd should be opened as admin
 <p align="center">
 <img src="imgs/img2.png">
 </p>
+
+---
+
+### 📲Contacts
+
+<a href="https://github.com/ByteCorum"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a>
+<a href="https://discordapp.com/users/798503509522645012"><img src="https://img.shields.io/badge/Discord-003E54?style=for-the-badge&logo=Discord&logoColor=white"></a>
+
+---
+
+### 💸Support
+
+<a href="https://ko-fi.com/bytecorum"><img src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 
 ---
