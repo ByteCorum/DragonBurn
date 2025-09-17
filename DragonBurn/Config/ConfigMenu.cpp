@@ -134,7 +134,7 @@ namespace ConfigMenu {
 		TriggerBot::ScopeOnly = true;
 		AimControl::IgnoreFlash = false;
 		AimControl::HumanizeVar = true;
-		AimControl::HumanizationStrength = 0.4;
+		AimControl::HumanizationStrength = 5;
 
 		ESPConfig::ArmorBar = false;
 		ESPConfig::ShowArmorNum = false;

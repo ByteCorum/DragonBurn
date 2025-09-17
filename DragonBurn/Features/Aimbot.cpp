@@ -39,8 +39,10 @@ std::pair<float, float> AimControl::CalculateTargetOffset(const Vec2& ScreenPos,
 
 std::pair<float, float> AimControl::Humanize(float TargetX, float TargetY) {
 
-    HumanizationStrength = std::clamp(HumanizationStrength, 0.0f, 1.0f);
-    if (HumanizationStrength <= 0.0f) {
+    static float HumanizationAmount = HumanizationStrength*2/100;
+
+    if (HumanizationAmount <= 0.0f)
+    {
         PrevTargetX = TargetX;
         PrevTargetY = TargetY;
         return { TargetX, TargetY };
@@ -55,29 +57,29 @@ std::pair<float, float> AimControl::Humanize(float TargetX, float TargetY) {
     float MovementDistance = std::sqrt(TargetX * TargetX + TargetY * TargetY);
     
     // add micro-movements (scaled by strength)
-    float MicroJitterX = microDist(gen) * std::min(MovementDistance * 0.25f, 8.0f) * HumanizationStrength;
-    float MicroJitterY = microDist(gen) * std::min(MovementDistance * 0.25f, 8.0f) * HumanizationStrength;
+    float MicroJitterX = microDist(gen) * std::min(MovementDistance * 0.25f, 8.0f) * HumanizationAmount;
+    float MicroJitterY = microDist(gen) * std::min(MovementDistance * 0.25f, 8.0f) * HumanizationAmount;
     
     // add larger jitter for longer movements (scaled by strength)
-    float JitterScale = std::min(MovementDistance * 0.15f, 12.0f) * HumanizationStrength;
+    float JitterScale = std::min(MovementDistance * 0.15f, 12.0f) * HumanizationAmount;
     float JitterX = jitterDist(gen) * JitterScale;
     float JitterY = jitterDist(gen) * JitterScale;
     
     // create slightly curved path (scaled by strength)
-    float PerpX = -TargetY * 0.35f * jitterDist(gen) * HumanizationStrength;
-    float PerpY = TargetX * 0.35f * jitterDist(gen) * HumanizationStrength;
+    float PerpX = -TargetY * 0.35f * jitterDist(gen) * HumanizationAmount;
+    float PerpY = TargetX * 0.35f * jitterDist(gen) * HumanizationAmount;
     
     // apply smoothing with strength-controlled factor (more aggressive smoothing variation)
     // at strength=0, no smoothing (immediate response)
     // at strength=1, full smoothing range with more noticeable lag
     float baseSmoothFactor = smoothnessDist(gen);
-    float SmoothFactor = 1.0f - ((1.0f - baseSmoothFactor) * HumanizationStrength);
+    float SmoothFactor = 1.0f - ((1.0f - baseSmoothFactor) * HumanizationAmount);
     float SmoothedX = TargetX * SmoothFactor + PrevTargetX * (1.0f - SmoothFactor);
     float SmoothedY = TargetY * SmoothFactor + PrevTargetY * (1.0f - SmoothFactor);
     
     // reaction time simulation - occasional delayed response
     std::uniform_real_distribution<float> reactionDist(0.0f, 1.0f);
-    if (reactionDist(gen) < 0.15f * HumanizationStrength) { // 15% chance at full strength
+    if (reactionDist(gen) < 0.15f * HumanizationAmount) { // 15% chance at full strength
         SmoothedX = PrevTargetX; // use previous target (simulates delayed reaction)
         SmoothedY = PrevTargetY;
     }

@@ -311,8 +311,8 @@ namespace GUI
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
 					ImGui::GradientText("ESP");
-					float MinRounding = 0.f, MaxRouding = 5.f;
-					float MinFovFactor = 0.f, MaxFovFactor = 1.f;
+					static const float MinRounding = 0.f, MaxRouding = 5.f;
+					static const float MinFovFactor = 0.f, MaxFovFactor = 1.f;
 					PutSwitch(Text::ESP::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
 					ImGui::TextDisabled(Text::ESP::HotKeyList.c_str());
@@ -384,10 +384,10 @@ namespace GUI
 					ImGui::Dummy({ 0.f, ImGui::GetFrameHeight() * 9 });
 
 					ImGui::GradientText("External Radar");
-					float RadarPointSizeProportionMin = 0.2f, RadarPointSizeProportionMax = 2.f;
-					float ProportionMin = 500.f, ProportionMax = 15000.f;
-					float RadarRangeMin = 100.f, RadarRangeMax = 300.f;
-					float AlphaMin = 0.f, AlphaMax = 1.f;
+					static const float RadarPointSizeProportionMin = 0.2f, RadarPointSizeProportionMax = 2.f;
+					static const float ProportionMin = 500.f, ProportionMax = 15000.f;
+					static const float RadarRangeMin = 100.f, RadarRangeMax = 300.f;
+					static const float AlphaMin = 0.f, AlphaMax = 1.f;
 					PutSwitch(Text::Radar::Toggle.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &RadarCFG::ShowRadar);
 					if (RadarCFG::ShowRadar)
 					{
@@ -442,11 +442,11 @@ namespace GUI
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
 					ImGui::GradientText("Aimbot");
 
-					float FovMin = 0.f, FovMax = 30.f, MinFovMax = 1.f;
-					int BulletMin = 0, BulletMax = 5;
-					float SmoothMin = 0.f, SmoothMax = 15.f;
-					static const float MinHumanize = 0.0f;
-					static const float MaxHumanize = 1.0f;
+					static const float FovMin = 0.f, FovMax = 30.f, MinFovMax = 1.f;
+					static const int BulletMin = 0, BulletMax = 5;
+					static const float SmoothMin = 0.f, SmoothMax = 10.f;
+					static const int MinHumanize = 0;
+					static const int MaxHumanize = 15;
 					PutSwitch(Text::Aimbot::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::AimBot);
 					if (LegitBotConfig::AimBot)
 					{
@@ -471,7 +471,7 @@ namespace GUI
 
 						PutSwitch(Text::Aimbot::HumanizeVar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::HumanizeVar, false, NULL, NULL, Text::Aimbot::OnTip.c_str());
 						if(AimControl::HumanizeVar)
-							PutSliderFloat(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%.1f");
+							PutSliderInt(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%d");
 
 						PutSliderFloat(Text::Aimbot::FovSlider.c_str(), 10.f, &AimControl::AimFov, &AimControl::AimFovMin, &FovMax, "%.1f");
 						PutSliderFloat(Text::Aimbot::FovMinSlider.c_str(), 10.f, &AimControl::AimFovMin, &FovMin, &MinFovMax, "%.2f");
@@ -542,8 +542,8 @@ namespace GUI
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
 					ImGui::GradientText("RCS");
-					float recoilMin = 0.f, recoilMax = 2.f;
-					int RCSBulletMin = 0, RCSBulletMax = 5;
+					static const float recoilMin = 0.f, recoilMax = 2.f;
+					static const int RCSBulletMin = 0, RCSBulletMax = 5;
 					PutSwitch(Text::RCS::Toggle.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::RCS);
 					if (LegitBotConfig::RCS)
 					{
@@ -594,8 +594,8 @@ namespace GUI
 
 					ImGui::NewLine();
 					ImGui::GradientText("Triggerbot");
-					int DelayMin = 0, DelayMax = 300;
-					int DurationMin = 0, DurationMax = 1000;
+					static const int DelayMin = 0, DelayMax = 300;
+					static const int DurationMin = 0, DurationMax = 1000;
 
 					PutSwitch(Text::Trigger::Enable.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::TriggerBot);
 					if (LegitBotConfig::TriggerBot)
@@ -627,9 +627,9 @@ namespace GUI
 
 				if (MenuConfig::WCS.MenuPage == 2)
 				{
-					int FovMin = 60, FovMax = 140;
-					int NightMin = 0, NightMax = 150;
-					float FlashMin = 0.f, FlashMax = 255.f;
+					static const int FovMin = 60, FovMax = 140;
+					static const int NightMin = 0, NightMax = 150;
+					static const float FlashMin = 0.f, FlashMax = 255.f;
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
 					ImGui::GradientText("Misc");
@@ -675,7 +675,6 @@ namespace GUI
 					ImGui::SameLine();
 					if (ImGui::Button("Contact Author", { 125.f, 25.f }))
 						Gui.OpenWebpage("https://discord.gg/5WcvdzFybD");
-
 					if (ImGui::Button("Unhook", { 125.f, 25.f }))
 						Init::Client::Exit();
 					ImGui::SameLine();
