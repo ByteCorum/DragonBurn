@@ -553,9 +553,7 @@ namespace Misc
 			// Bring CS2 window to foreground to ensure click is received
 			HWND hwnd_cs2 = FindWindowA(NULL, "Counter-Strike 2");
 			if (hwnd_cs2)
-			{
 				EnsureForegroundCS2();
-			}
 	
 			// Helper lambda to perform one click (SendInput + client messages)
 			auto performClick = [&](int cx, int cy)
@@ -583,7 +581,7 @@ namespace Misc
 			for (int attempt = 0; attempt < 3; ++attempt)
 			{
 				int jitterX = x + (attempt == 0 ? 0 : (attempt == 1 ? 2 : -2));
-				int jitterY = y;
+				int jitterY = y-10;
 				SetCursorPos(jitterX, jitterY);
 				Sleep(attempt == 0 ? 45 : 25);
 				performClick(jitterX, jitterY);
@@ -625,16 +623,12 @@ namespace Misc
 			if (shouldRun)
 			{
 				if (!autoAcceptRunning.load())
-				{
 					StartAutoAccept();
-				}
 			}
 			else
 			{
 				if (autoAcceptRunning.load())
-				{
 					StopAutoAccept();
-				}
 			}
 		}
 	}
