@@ -220,7 +220,7 @@ std::vector<EntityResult> Cheats::ProcessEntities(CEntity& localEntity, int& loc
 			result.espRect = ESP::GetBoxRect(entity, ESPConfig::BoxType);
 
 		// sound esp
-		if (MiscCFG::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address)
+		if (ESPConfig::ESPenabled && ESPConfig::EnemySound && result.entity.Controller.Address != localEntity.Controller.Address)
 			SoundESP::ProcessSound(result.entity, localEntity);
 
 		result.isValid = true;
