@@ -107,6 +107,12 @@ namespace MyConfigSaver
         ConfigData["ESP"]["OutOfFOVColor"]["b"]=    ESPConfig::OutOfFOVArrowColor.Value.z;
         ConfigData["ESP"]["OutOfFOVColor"]["a"]=    ESPConfig::OutOfFOVArrowColor.Value.w;
 
+        ConfigData["ESP"]["EnemySound"] = ESPConfig::EnemySound;
+        ConfigData["ESP"]["EnemySoundColor"]["r"] = ESPConfig::EnemySoundColor.Value.x;
+        ConfigData["ESP"]["EnemySoundColor"]["g"] = ESPConfig::EnemySoundColor.Value.y;
+        ConfigData["ESP"]["EnemySoundColor"]["b"] = ESPConfig::EnemySoundColor.Value.z;
+        ConfigData["ESP"]["EnemySoundColor"]["a"] = ESPConfig::EnemySoundColor.Value.w;
+
 
         //ConfigData["Crosshairs"]["Enable"]=        CrosshairsCFG::ShowCrossHair;
         //ConfigData["Crosshairs"]["Size"]=          CrosshairsCFG::CrossHairSize;
@@ -215,7 +221,7 @@ namespace MyConfigSaver
         ConfigData["Misc"]["TimerColor"]["a"]=  MiscCFG::BombTimerCol.Value.w;
 
         ConfigData["Misc"]["Bhop"]=             MiscCFG::BunnyHop;
-        //ConfigData["Misc"]["FastStop"] =        MiscCFG::FastStop;
+        ConfigData["Misc"]["FastStop"] =        MiscCFG::FastStop;
         ConfigData["Misc"]["SpecList"]=         MiscCFG::SpecList;
 
         ConfigData["Misc"]["SniperCrosshair"] = MiscCFG::SniperCrosshair;
@@ -225,12 +231,6 @@ namespace MyConfigSaver
         ConfigData["Misc"]["SniperCrosshairColor"]["a"] = MiscCFG::SniperCrosshairColor.Value.w;
 
         ConfigData["Misc"]["AutoAccept"] = MiscCFG::AutoAccept;
-
-        ConfigData["Misc"]["EnemySound"] = MiscCFG::EnemySound;
-        ConfigData["Misc"]["EnemySoundColor"]["r"] = MiscCFG::EnemySoundColor.Value.x;
-        ConfigData["Misc"]["EnemySoundColor"]["g"] = MiscCFG::EnemySoundColor.Value.y;
-        ConfigData["Misc"]["EnemySoundColor"]["b"] = MiscCFG::EnemySoundColor.Value.z;
-        ConfigData["Misc"]["EnemySoundColor"]["a"] = MiscCFG::EnemySoundColor.Value.w;
 
         ConfigData["Misc"]["AutoKnife"] = MiscCFG::AutoKnife;
         ConfigData["Misc"]["AutoKnifeDistance"] = MiscCFG::AutoKnifeDistance;
@@ -353,6 +353,12 @@ namespace MyConfigSaver
             ESPConfig::EyeRayColor.Value.y = ReadData(ConfigData["ESP"], { "EyeRayColor","g" }, 0.f);
             ESPConfig::EyeRayColor.Value.z = ReadData(ConfigData["ESP"], { "EyeRayColor","b" }, 0.f);
             ESPConfig::EyeRayColor.Value.w = ReadData(ConfigData["ESP"], { "EyeRayColor","a" }, 255.f);
+
+            ESPConfig::EnemySound = ReadData(ConfigData["ESP"], { "EnemySound" }, false);
+            ESPConfig::EnemySoundColor.Value.x = ReadData(ConfigData["ESP"], { "EnemySoundColor","r" }, 0.f);
+            ESPConfig::EnemySoundColor.Value.y = ReadData(ConfigData["ESP"], { "EnemySoundColor","g" }, 0.f);
+            ESPConfig::EnemySoundColor.Value.z = ReadData(ConfigData["ESP"], { "EnemySoundColor","b" }, 0.f);
+            ESPConfig::EnemySoundColor.Value.w = ReadData(ConfigData["ESP"], { "EnemySoundColor","a" }, 255.f);
 
         }
 
@@ -478,13 +484,6 @@ namespace MyConfigSaver
             MiscCFG::SniperCrosshairColor.Value.w = ReadData(ConfigData["Misc"], { "SniperCrosshairColor","a" }, 255.f);
 
             MiscCFG::AutoAccept = ReadData(ConfigData["Misc"], { "AutoAccept" }, false);
-
-            MiscCFG::EnemySound = ReadData(ConfigData["Misc"], { "EnemySound" }, false);
-            MiscCFG::EnemySoundColor.Value.x = ReadData(ConfigData["Misc"], { "EnemySoundColor","r" }, 0.f);
-            MiscCFG::EnemySoundColor.Value.y = ReadData(ConfigData["Misc"], { "EnemySoundColor","g" }, 0.f);
-            MiscCFG::EnemySoundColor.Value.z = ReadData(ConfigData["Misc"], { "EnemySoundColor","b" }, 0.f);
-            MiscCFG::EnemySoundColor.Value.w = ReadData(ConfigData["Misc"], { "EnemySoundColor","a" }, 255.f);
-
             MiscCFG::AutoKnife = ReadData(ConfigData["Misc"], { "AutoKnife" }, false);
             MiscCFG::AutoKnifeDistance = ReadData(ConfigData["Misc"], { "AutoKnifeDistance" }, 70.0f);
             MiscCFG::AutoZeus = ReadData(ConfigData["Misc"], { "AutoZeus" }, false);

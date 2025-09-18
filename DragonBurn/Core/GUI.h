@@ -358,7 +358,7 @@ namespace GUI
 						if(ESPConfig::ShowOutOfFOVArrow)
 							PutSliderFloat(Text::ESP::OutOfFOVRadius.c_str(), .5f, &ESPConfig::OutOfFOVRadiusFactor, &MinFovFactor, &MaxFovFactor, "%.1f");
 
-						PutSwitch(Text::ESP::SoundEsp.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&MiscCFG::EnemySoundColor));
+						PutSwitch(Text::ESP::SoundEsp.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&ESPConfig::EnemySoundColor));
 						PutSwitch(Text::ESP::HealthBar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHealthBar);
 						if (ESPConfig::ShowHealthBar)
 							PutSwitch(Text::ESP::HealthNum.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHealthNum);

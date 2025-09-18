@@ -215,8 +215,8 @@ namespace ConfigMenu {
 
 		MiscCFG::AutoAccept = false;
 
-        MiscCFG::EnemySound = false;
-        MiscCFG::EnemySoundColor = ImColor(255, 255, 255, 255);
+		ESPConfig::EnemySound = false;
+		ESPConfig::EnemySoundColor = ImColor(255, 255, 255, 255);
 
         MiscCFG::AutoKnife = false;
         MiscCFG::AutoKnifeDistance = 70.0f;

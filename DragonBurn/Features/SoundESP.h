@@ -116,7 +116,7 @@ namespace SoundESP {
             float startRadius = MaxRadius * 0.1f;
             float radius = startRadius + (MaxRadius - startRadius) * progress;
             
-            ImColor color = MiscCFG::EnemySoundColor;
+            ImColor color = ESPConfig::EnemySoundColor;
             color.Value.w *= (1.0f - progress);
 
             RenderSound(soundEffect.origin, radius, color);

@@ -117,6 +117,9 @@ namespace ESPConfig
     inline bool ShowOutOfFOVArrow = false;
     inline float OutOfFOVRadiusFactor = 0.45f;
     inline ImColor OutOfFOVArrowColor = ImColor(255, 180, 50, 230);
+
+	inline bool EnemySound = false;
+	inline ImColor EnemySoundColor = ImColor(255, 255, 255, 255);
 }
 
 //namespace CrosshairsCFG
@@ -181,9 +184,6 @@ namespace MiscCFG
 	inline ImColor HeadShootLineColor = ImColor(131, 137, 150, 200);
 
     inline bool AutoAccept = false;
-
-    inline bool EnemySound = false;
-    inline ImColor EnemySoundColor = ImColor(255, 255, 255, 255);
 
     inline bool AutoKnife = false;
     inline float AutoKnifeDistance = 70.0f;
