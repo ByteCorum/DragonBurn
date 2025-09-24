@@ -8,8 +8,8 @@
 #include "..\Config\ConfigMenu.h"
 #include "..\Config\ConfigSaver.h"
 
-#include "..\Resources\Language.hpp"
-#include "..\Resources\Images.hpp"
+#include "..\Resources\Language.h"
+#include "..\Resources\Images.h"
 #include "../Helpers/KeyManager.h"
 
 #include "../Features/ESP.h"

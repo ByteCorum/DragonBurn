@@ -14,7 +14,7 @@
 #include <Windows.h>
 
 #include "Aimbot.h"
-#include "..\Resources\Sounds.hpp"
+#include "..\Resources\Sounds.h"
 #include "..\Game\Entity.h"
 #include "..\Core\Config.h"
 #include "..\OS-ImGui\imgui\imgui.h"

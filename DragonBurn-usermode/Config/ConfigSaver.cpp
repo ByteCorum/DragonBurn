@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include "ConfigSaver.h"
-#include "../Resources/Language.hpp"
+#include "../Resources/Language.h"
 #include "../Core/Config.h"
 #include "../Features/TriggerBot.h"
 #include "../Features/Aimbot.h"

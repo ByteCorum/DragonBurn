@@ -42,19 +42,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Resources\WeaponIcon.hpp">
+    <ClInclude Include="Resources\WeaponIcon.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\Sounds.hpp">
+    <ClInclude Include="Resources\Sounds.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\Language.hpp">
+    <ClInclude Include="Resources\Language.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\Images.hpp">
+    <ClInclude Include="Resources\Images.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\Font.hpp">
+    <ClInclude Include="Resources\Font.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="OS-ImGui\OS-ImGui_Struct.h">
@@ -63,7 +63,7 @@
     <ClInclude Include="OS-ImGui\OS-ImGui_External.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="OS-ImGui\OS-ImGui_Exception.hpp">
+    <ClInclude Include="OS-ImGui\OS-ImGui_Exception.h">
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="OS-ImGui\OS-ImGui_Base.h">

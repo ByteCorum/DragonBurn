@@ -12,7 +12,7 @@
 
 #include "Core/Cheats.h"
 #include "Offsets/Offsets.h"
-#include "Resources/Language.hpp"
+#include "Resources/Language.h"
 #include "Core/Init.h"
 #include "Config/ConfigSaver.h"
 #include "Helpers/Logger.h"

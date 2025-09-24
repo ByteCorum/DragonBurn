@@ -63,15 +63,16 @@ CMakeLists.txt linguist-documentation=false
 
 #Ignore dirs/files
 
-DragonBurn/OS-ImGui/*       linguist-vendored
-DragonBurn/OS-ImGui/imgui/* linguist-vendored
-DragonBurn/OS-ImGui/stb/*   linguist-vendored
-DragonBurn/Libs/*           linguist-vendored
-DragonBurn/Libs/json/*      linguist-vendored
-DragonBurn/Libs/curl/include/curl/*           linguist-vendored
-DragonBurn/Libs/zlib/include/*                linguist-vendored
-DragonBurn/Resources/Sounds.hpp       linguist-vendored
-DragonBurn/Resources/Images.hpp       linguist-vendored
-DragonBurn/Resources/WeaponIcon.hpp   linguist-vendored
-DragonBurn/Resources/Font.hpp         linguist-vendored
-DragonBurn/Core/GUI.h                 linguist-vendored
+DragonBurn-usermode/OS-ImGui/*       linguist-vendored
+DragonBurn-usermode/OS-ImGui/imgui/* linguist-vendored
+DragonBurn-usermode/OS-ImGui/stb/*   linguist-vendored
+DragonBurn-usermode/Libs/*           linguist-vendored
+DragonBurn-usermode/Libs/json/*      linguist-vendored
+DragonBurn-usermode/Libs/curl/include/curl/*           linguist-vendored
+DragonBurn-usermode/Libs/zlib/include/*                linguist-vendored
+DragonBurn-usermode/Resources/Sounds.h       linguist-vendored
+DragonBurn-usermode/Resources/Images.h       linguist-vendored
+DragonBurn-usermode/Resources/WeaponIcon.h   linguist-vendored
+DragonBurn-usermode/Resources/Font.h         linguist-vendored
+#DragonBurn-usermode/Core/GUI.h                 linguist-vendored
+DragonBurn-kernel/include/cfg.h         linguist-vendored
