@@ -1,5 +1,5 @@
 #include "Misc.h"
-#include "..\Resources\Language.hpp"
+#include "..\Resources\Language.h"
 #include <iostream>
 #include <Shellapi.h>
 #include <filesystem>

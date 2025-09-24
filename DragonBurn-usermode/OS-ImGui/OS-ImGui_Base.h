@@ -1,6 +1,6 @@
 #pragma once
 #include "OS-ImGui_Struct.h"
-#include "OS-ImGui_Exception.hpp"
+#include "OS-ImGui_Exception.h"
 #include <iostream>
 #include <string>
 #include <functional>

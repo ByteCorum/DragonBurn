@@ -5,7 +5,7 @@
 #include "../Features/Aimbot.h"
 #include <filesystem>
 #include <string>
-#include "../Resources/Language.hpp"
+#include "../Resources/Language.h"
 #include "../Features/RCS.h"
 #include "../Helpers/KeyManager.h"
 

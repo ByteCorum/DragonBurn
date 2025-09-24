@@ -1,7 +1,7 @@
 ﻿#include "OS-ImGui_Base.h"
-#include "..\Resources\WeaponIcon.hpp"
-#include "..\Resources\Font.hpp"
-#include "..\Resources\Language.hpp"
+#include "..\Resources\WeaponIcon.h"
+#include "..\Resources\Font.h"
+#include "..\Resources\Language.h"
 
 namespace OSImGui
 {

@@ -24,6 +24,7 @@
     <ProjectGuid>{36f8a44d-d629-4e53-beca-698b2c64a529}</ProjectGuid>
     <RootNamespace>DragonBurn</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>DragonBurn-usermode</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -92,7 +93,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <IncludePath>Libs\json</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
-    <TargetName>DragonBurn</TargetName>
+    <TargetName>DragonBurn-usermode</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,7 +102,7 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <IncludePath>Libs\json</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
-    <TargetName>DragonBurn</TargetName>
+    <TargetName>DragonBurn-usermode</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -210,17 +211,17 @@
     <ClInclude Include="OS-ImGui\imgui\imstb_truetype.h" />
     <ClInclude Include="OS-ImGui\OS-ImGui.h" />
     <ClInclude Include="OS-ImGui\OS-ImGui_Base.h" />
-    <ClInclude Include="OS-ImGui\OS-ImGui_Exception.hpp" />
+    <ClInclude Include="OS-ImGui\OS-ImGui_Exception.h" />
     <ClInclude Include="OS-ImGui\OS-ImGui_External.h" />
     <ClInclude Include="OS-ImGui\OS-ImGui_Struct.h" />
     <ClInclude Include="OS-ImGui\stb\stb_image.h" />
     <ClInclude Include="Core\MemoryMgr.h" />
     <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="Resources\Font.hpp" />
-    <ClInclude Include="Resources\Images.hpp" />
-    <ClInclude Include="Resources\Language.hpp" />
-    <ClInclude Include="Resources\Sounds.hpp" />
-    <ClInclude Include="Resources\WeaponIcon.hpp" />
+    <ClInclude Include="Resources\Font.h" />
+    <ClInclude Include="Resources\Images.h" />
+    <ClInclude Include="Resources\Language.h" />
+    <ClInclude Include="Resources\Sounds.h" />
+    <ClInclude Include="Resources\WeaponIcon.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\icon.ico" />
