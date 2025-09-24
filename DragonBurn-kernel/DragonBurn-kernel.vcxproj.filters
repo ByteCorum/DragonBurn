@@ -9,34 +9,34 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\utils.h">
+    <ClInclude Include="include\utils.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\service.h">
+    <ClInclude Include="include\service.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\portable_executable.h">
+    <ClInclude Include="include\portable_executable.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\nt.h">
+    <ClInclude Include="include\nt.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\kdmapper.h">
+    <ClInclude Include="include\kdmapper.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\intel_driver.h">
+    <ClInclude Include="include\intel_driver.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\intel_driver_resource.h">
+    <ClInclude Include="include\intel_driver_resource.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\cfg.h">
+    <ClInclude Include="include\cfg.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\logger.h">
+    <ClInclude Include="include\logger.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\web_api.h">
+    <ClInclude Include="include\web_api.hpp">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />

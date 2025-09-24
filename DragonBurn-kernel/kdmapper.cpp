@@ -1,12 +1,12 @@
-#include "kdmapper.h"
+#include "kdmapper.hpp"
 #include <Windows.h>
 #include <iostream>
 
-#include "utils.h"
-#include "intel_driver.h"
-#include "nt.h"
-#include "portable_executable.h"
-#include "logger.h"
+#include "utils.hpp"
+#include "intel_driver.hpp"
+#include "nt.hpp"
+#include "portable_executable.hpp"
+#include "logger.hpp"
 #include <sstream>
 
 void RelocateImageByDelta(portable_executable::vec_relocs relocs, const ULONG64 delta) {
