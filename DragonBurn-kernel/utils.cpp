@@ -1,10 +1,10 @@
-#include "utils.hpp"
+#include "utils.h"
 #include <Windows.h>
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include "logger.hpp"
-#include "nt.hpp"
+#include "logger.h"
+#include "nt.h"
 
 std::wstring utils::GetFullTempPath() {
 	wchar_t temp_directory[MAX_PATH + 1] = { 0 };

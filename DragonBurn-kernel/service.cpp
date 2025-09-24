@@ -1,11 +1,11 @@
-#include "service.hpp"
+#include "service.h"
 #include <Windows.h>
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "logger.hpp"
-#include "utils.hpp"
-#include "nt.hpp"
+#include "logger.h"
+#include "utils.h"
+#include "nt.h"
 
 bool service::RegisterAndStart(const std::wstring& driver_path, const std::wstring& serviceName) {
 	std::ostringstream ss;

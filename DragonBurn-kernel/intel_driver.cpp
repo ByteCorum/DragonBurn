@@ -1,15 +1,15 @@
-#include "intel_driver.hpp"
+#include "intel_driver.h"
 #include <Windows.h>
 #include <string>
 #include <fstream>
 #include <sstream>
 
-#include "utils.hpp"
-#include "intel_driver_resource.hpp"
-#include "service.hpp"
-#include "nt.hpp"
-#include "portable_executable.hpp"
-#include "logger.hpp"
+#include "utils.h"
+#include "intel_driver_resource.h"
+#include "service.h"
+#include "nt.h"
+#include "portable_executable.h"
+#include "logger.h"
 
 /**
  Command structures
