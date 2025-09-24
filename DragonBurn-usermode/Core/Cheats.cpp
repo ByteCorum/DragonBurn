@@ -22,8 +22,8 @@
 #include "../Core/Init.h"
 
 #include "../Features/ESP.h"
-#include "../Core/GUI.h"
-#include "../Features/RCS.H"
+#include "../Core/GUI.hpp"
+#include "../Features/RCS.h"
 #include "../Features/BombTimer.h"
 #include "../Features/SpectatorList.h"
 #include "../Helpers/Logger.h"

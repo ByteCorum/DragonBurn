@@ -104,7 +104,7 @@
     <ClInclude Include="Core\Cheats.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\GlobalVars.h" />
-    <ClInclude Include="Core\GUI.h" />
+    <ClInclude Include="Core\GUI.hpp" />
     <ClInclude Include="Core\Init.h" />
     <ClInclude Include="Core\Render.h" />
     <ClInclude Include="Features\Aimbot.h" />

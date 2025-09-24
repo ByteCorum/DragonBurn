@@ -153,7 +153,7 @@
     <ClInclude Include="Core\Init.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\GUI.h">
+    <ClInclude Include="Core\GUI.hpp">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\GlobalVars.h">
