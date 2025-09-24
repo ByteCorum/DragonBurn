@@ -25,7 +25,7 @@ DragonBurn is one of the best CS2 kernel mode read only external cheats. It has 
 </p></h3>
 
 <p align="center">
-<a href="https://github.com/ByteCorum/DragonBurn/releases/latest">Download latest release</a><br>
+<a href="https://github.com/ByteCorum/DragonBurn/releases/latest/download/DragonBurn.exe">Download latest release</a><br>
 ⭐Please, star this repo if it was helpful⭐
 </p>
 
