@@ -2,9 +2,9 @@
 #include <Windows.h>
 #include <string>
 #include <iostream>
-#include "utils.hpp"
-#include "nt.hpp"
-#include "logger.hpp"
+#include "utils.h"
+#include "nt.h"
+#include "logger.h"
 
 namespace intel_driver
 {
