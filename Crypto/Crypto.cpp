@@ -107,16 +107,8 @@ int main(int argc, char* argv[])
             Help();
             return 1;
         }
-        std::vector<uint8_t> key = GenKey(32);
-        std::cout << "Generated Key (32 bytes):\n";
-        for (size_t i = 0; i < key.size(); ++i)
-        {
-            printf("0x%02X", key[i]);
-            if (i < key.size() - 1)
-                std::cout << ", ";
-        }
-        std::cout << "\n\n";
 
+        std::vector<uint8_t> key = GenKey(32);
         if (!WriteFile(argv[2], key))
             return 1;
         std::cout << "Key saved to " << argv[2] << std::endl;
