@@ -25,7 +25,7 @@ jobs:
         with:
           name: DragonBurn_${{ github.sha }}
           path: |
-            D:\a\DragonBurn\DragonBurn\built\DragonBurn.exe
+            D:\a\DragonBurn\DragonBurn\built\DragonBurn-usermode.exe
 
   release:
     needs: ["build"]
