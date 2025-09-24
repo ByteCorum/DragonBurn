@@ -113,7 +113,7 @@ https://github.com/ByteCorum/DragonBurn
 	// Can't use --free and --indPages at the same time"
 	bool free = false;
 	bool indPagesMode = !CheckArg(argc, argv, L"legacymethod");
-	bool legacyImg = !CheckArg(argc, argv, L"legacyimg");
+	bool legacyImg = CheckArg(argc, argv, L"legacyimg");
 	bool copyHeader = false;
 	bool passAllocationPtr = false;
 

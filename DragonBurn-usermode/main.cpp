@@ -99,8 +99,17 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error(error.what());
 	}
 
+	int tryCount = 0;
 KMD_CONNECTING://KMD_CONNECTING
+
 	Log::Info("Connecting to kernel mode driver");
+	++tryCount;
+	if (tryCount > 4) 
+	{
+		Log::Warning("Try to reboot pc and manually run mapper with --legacymethod");
+		Log::Error("Failed to map kernel mode driver");
+	}
+
 	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
 		Log::PreviousLine();
@@ -116,8 +125,9 @@ KMD_CONNECTING://KMD_CONNECTING
 		if (fs::exists("DragonBurn-kernel.exe")) 
 		{
 			Log::PreviousLine();
-			Log::Info("Executing kernel mapper...");
-			int result = Init::Verify::ExecuteMapper();
+			bool legacyMapperMode = tryCount % 2 == 0;
+			Log::Info(legacyMapperMode ? "Executing legacy kernel mapper..." : "Executing kernel mapper...");
+			int result = Init::Verify::ExecuteMapper(legacyMapperMode);
 
 			Log::PreviousLine();
 			if (result == 0)
