@@ -54,12 +54,11 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << ctx << '\n';
 
-		SetConsoleTextAttribute(hConsole, 8);
-		system("pause");
-
 		if (fatal) 
 		{
 			ShellExecute(0, 0, L"https://github.com/ByteCorum/DragonBurn?tab=readme-ov-file#mapper-errors", 0, 0, SW_SHOW);
+			SetConsoleTextAttribute(hConsole, 8);
+			system("pause");
 			exit(-1);
 		}
 			
