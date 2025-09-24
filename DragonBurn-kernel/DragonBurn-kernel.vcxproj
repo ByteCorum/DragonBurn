@@ -46,13 +46,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\</IntDir>
+    <TargetName>DragonBurn-kernel</TargetName>
+    <IntDir>$(SolutionDir)\built\cache\km</IntDir>
+    <OutDir>$(SolutionDir)\built\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\</IntDir>
+    <TargetName>DragonBurn-kernel</TargetName>
+    <IntDir>$(SolutionDir)\built_dbg\cache\km</IntDir>
+    <OutDir>$(SolutionDir)\built_dbg\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
