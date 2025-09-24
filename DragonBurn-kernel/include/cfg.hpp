@@ -5,7 +5,7 @@
 
 namespace cfg
 {
-	static std::string version = xorstr_("3.3.8.0");
+	static std::string version = xorstr_("3.3.7.0");
 
 	static std::vector<uint8_t> key = {};
 

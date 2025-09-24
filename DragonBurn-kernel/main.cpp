@@ -6,12 +6,12 @@
 #include <sstream>
 #include <TlHelp32.h>
 
-#include "kdmapper.h"
-#include "utils.h"
-#include "intel_driver.h"
-#include "cfg.h"
-#include "web_api.h"
-#include "logger.h"
+#include "kdmapper.hpp"
+#include "utils.hpp"
+#include "intel_driver.hpp"
+#include "cfg.hpp"
+#include "web_api.hpp"
+#include "logger.hpp"
 
 LONG WINAPI SimplestCrashHandler(EXCEPTION_POINTERS* ExceptionInfo)
 {
