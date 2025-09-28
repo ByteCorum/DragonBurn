@@ -141,7 +141,7 @@ KMD_CONNECTING://KMD_CONNECTING
 		else
 		{
 			Log::PreviousLine();
-			Log::Info("It might have been deleted by AV, turn off AV and clean temp");
+			Log::Warning("It might have been deleted by AV, turn off AV and clean temp");
 			Log::Error("Failed to find kernel mapper");
 		}
 	}

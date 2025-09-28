@@ -136,11 +136,12 @@ namespace bmb
 				}
 			}
 
+			ImGui::SetCursorPos(ImVec2(pos.x+5, pos.y - 32));
 			ImFont* font = ImGui::GetFont();
 			float oldScale = font->Scale;
 			font->Scale = 0.7f;
 			ImGui::PushFont(font);
-			ImGui::TextColored(ImColor(0, 0, 0, 160), "Defusing: %.3f s", defuseRemaining);
+			ImGui::TextColored(ImColor(131, 137, 150, 200), "Defusing: %.3f s", defuseRemaining);
 			font->Scale = oldScale;
 			ImGui::PopFont();
 		}
