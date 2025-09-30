@@ -7,7 +7,7 @@
 #include <string>
 #include <fstream>
 
-#define KEY_SIZE 64
+#define KEY_SIZE 256
 
 std::vector<uint8_t> GenKey()
 {

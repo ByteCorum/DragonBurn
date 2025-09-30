@@ -1,3 +1,4 @@
+#define KEY_SIZE 256
 #ifndef JM_XORSTR_HPP
 #define JM_XORSTR_HPP
 
@@ -229,11 +230,16 @@ namespace jm {
 
 void RollingVectorProcedure(std::vector<uint8_t>& data, const std::vector<uint8_t>& key)
 {
-    if (key.empty())
+    if (key.size() != KEY_SIZE)
         return;
 
     for (size_t i = 0; i < data.size(); ++i)
     {
-        data[i] ^= key[i % key.size()];
+        size_t key_index = i % KEY_SIZE;
+
+        if (i % 2 == 0)
+            data[i] ^= key[key_index];
+        else
+            data[i] = (data[i] - key[key_index]) % KEY_SIZE;
     }
 }
