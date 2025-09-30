@@ -7,27 +7,57 @@
 #include <string>
 #include <fstream>
 
-std::vector<uint8_t> GenKey(size_t length)
+#define KEY_SIZE 64
+
+std::vector<uint8_t> GenKey()
 {
     std::mt19937 gen(static_cast<unsigned int>(std::time(0)));
     std::uniform_int_distribution<int> distrib(0, 255);
 
-    std::vector<uint8_t> key(length);
-    for (size_t i = 0; i < length; ++i) 
+    std::vector<uint8_t> key(KEY_SIZE);
+    for (size_t i = 0; i < KEY_SIZE; ++i)
         key[i] = static_cast<uint8_t>(distrib(gen));
     return key;
 }
 
-void Crypt(std::vector<uint8_t>& data, const std::vector<uint8_t>& key)
+void Encrypt(std::vector<uint8_t>& data, const std::vector<uint8_t>& key)
 {
-    if (key.empty())
+
+    if (key.size() != KEY_SIZE)
     {
-        std::cerr << "Error: Encryption key cannot be empty." << std::endl;
+        std::cerr << "Error: Encryption key must be exactly " << KEY_SIZE << " bytes." << std::endl;
         return;
     }
 
     for (size_t i = 0; i < data.size(); ++i)
-        data[i] ^= key[i % key.size()];
+    {
+        size_t key_index = i % KEY_SIZE;
+
+        if (i % 2 == 0)
+            data[i] ^= key[key_index];
+        else
+            data[i] = (data[i] + key[key_index]) % 256;
+    }
+}
+
+void Decrypt(std::vector<uint8_t>& data, const std::vector<uint8_t>& key)
+{
+
+    if (key.size() != KEY_SIZE)
+    {
+        std::cerr << "Error: Decryption key must be exactly " << KEY_SIZE << " bytes." << std::endl;
+        return;
+    }
+
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        size_t key_index = i % KEY_SIZE;
+
+        if (i % 2 == 0)
+            data[i] ^= key[key_index];
+        else
+            data[i] = (data[i] - key[key_index]) % 256;
+    }
 }
 
 void Help() 
@@ -92,7 +122,7 @@ int main(int argc, char* argv[])
         if (!ReadFile(argv[3], image))
             return 1;
 
-        Crypt(image, key);
+        Encrypt(image, key);
 
         std::string outname = argv[3];
         if (!WriteFile(outname + ".enc", image))
@@ -108,7 +138,7 @@ int main(int argc, char* argv[])
             return 1;
         }
 
-        std::vector<uint8_t> key = GenKey(32);
+        std::vector<uint8_t> key = GenKey();
         if (!WriteFile(argv[2], key))
             return 1;
         std::cout << "Key saved to " << argv[2] << std::endl;
