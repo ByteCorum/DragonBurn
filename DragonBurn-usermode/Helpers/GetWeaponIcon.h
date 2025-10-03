@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include <string>
-#include <map>
+#include <string_view>
+#include <unordered_map>
 
-static const std::unordered_map<std::string, const char*> gunIcons = 
+static const std::unordered_map<std::string_view, const char*> gunIcons =
 {
     {"ct_knife", "]"},
     {"t_knife", "["},
@@ -50,11 +50,11 @@ static const std::unordered_map<std::string, const char*> gunIcons =
 };
 
 // https://www.unknowncheats.me/forum/counter-strike-2-a/608799-weapon-icon-esp.html
-const char* GunIcon(const std::string weapon)
+inline const char* GunIcon(std::string_view weapon)
 {
-	auto it = gunIcons.find(weapon);
-	if (it != gunIcons.end()) {
-		return it->second;
-	}
-	return "";
+        auto it = gunIcons.find(weapon);
+        if (it != gunIcons.end()) {
+                return it->second;
+        }
+        return "";
 }

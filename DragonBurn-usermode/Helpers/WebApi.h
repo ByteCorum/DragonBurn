@@ -1,18 +1,21 @@
 #pragma once
+#include <array>
+#include <memory>
 #include <string>
+#include <string_view>
 #include <Windows.h>
-#include <vector>
 #include <regex>
 #include <stdexcept>
 
 namespace Web
 {
-    inline void Get(std::string url, std::string& response)
+    inline void Get(std::string_view url, std::string& response)
     {
-        response = "";
-        std::string cmd = "curl -s -X GET " + url;
+        response.clear();
+        std::string cmd("curl -s -X GET ");
+        cmd.append(url);
 
-        std::array<char, 128> buffer;
+        std::array<char, 256> buffer{};
         std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(cmd.c_str(), "r"), _pclose);
 
         if (!pipe)
