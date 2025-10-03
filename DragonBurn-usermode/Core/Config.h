@@ -28,14 +28,16 @@ namespace MenuConfig
 		ImVec2 ChildSize = ImVec2(540.f, 500.f);
 	} WCS;	// Window Component Settings
 
-	inline bool defaultConfig = false;
+        inline bool defaultConfig = false;
 
-	// 0: Window 1: Collapse
-	inline int WindowStyle = 0;
-	inline bool ShowMenu = true;
-	inline bool TeamCheck = true;
-	inline bool BypassOBS = false;
-	inline bool WorkInSpec = true;
+        // 0: Window 1: Collapse
+        inline int WindowStyle = 0;
+        inline int Theme = 0; // 0: DragonBurn, 1: Dark, 2: Light
+        inline bool ThemeChanged = false;
+        inline bool ShowMenu = true;
+        inline bool TeamCheck = true;
+        inline bool BypassOBS = false;
+        inline bool WorkInSpec = true;
 
 	inline ImVec2 MarkWinPos;
 	inline ImVec2 RadarWinPos;

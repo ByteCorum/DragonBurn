@@ -188,10 +188,12 @@ namespace ConfigMenu {
 		ESPConfig::BoxColor = ImColor(59, 71, 148, 180);
 		ESPConfig::EyeRayColor = ImVec4(0, 98, 98, 255);
 
-		MenuConfig::ShowMenu = true;
-		MenuConfig::WorkInSpec = true;
+                MenuConfig::ShowMenu = true;
+                MenuConfig::WorkInSpec = true;
+                MenuConfig::Theme = 0;
+                MenuConfig::ThemeChanged = true;
 
-		RadarCFG::ShowRadar = false;
+                RadarCFG::ShowRadar = false;
 		RadarCFG::RadarRange = 125;
 		RadarCFG::ShowRadarCrossLine = false;
 		RadarCFG::RadarCrossLineColor = ImColor(131, 137, 150, 180);

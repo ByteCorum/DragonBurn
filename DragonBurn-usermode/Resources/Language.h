@@ -137,6 +137,7 @@ namespace Text {
         inline std::string AutoBotDistance = "Distance";
         inline std::string AntiAFK = "Anti AFK";
         inline std::string AntiAFKInterval = "Interval";
+        inline std::string Theme = "Menu Theme";
         inline std::string InsecureTip = "This option may trigger VAC Live";
     }
 
