@@ -254,6 +254,8 @@ namespace MyConfigSaver
         ConfigData["MenuConfig"]["SpecWinPos"]["x"] = MenuConfig::SpecWinPos.x;
         ConfigData["MenuConfig"]["SpecWinPos"]["y"] = MenuConfig::SpecWinPos.y;
 
+        ConfigData["MenuConfig"]["Theme"] = MenuConfig::Theme;
+
         configFile << ConfigData.dump(4);
         configFile.close();
     }
@@ -520,6 +522,8 @@ namespace MyConfigSaver
             MenuConfig::BombWinChengePos = true;
             MenuConfig::RadarWinChengePos = true;
             MenuConfig::SpecWinChengePos = true;
+            MenuConfig::Theme = ReadData(ConfigData["MenuConfig"], { "Theme" }, 0);
+            MenuConfig::ThemeChanged = true;
         }
     }
 }
