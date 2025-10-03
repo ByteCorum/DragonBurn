@@ -20,6 +20,8 @@
 #include <filesystem>
 #include <KnownFolders.h>
 #include <ShlObj.h>
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -42,6 +44,7 @@ int main()
 #endif
 
 	Cheat();
+	return 0;
 }
 
 void Cheat()
@@ -153,6 +156,7 @@ KMD_CONNECTING://KMD_CONNECTING
 		Log::PreviousLine();
 		Log::Info("Waiting for CS2");
 		preStart = true;
+		std::this_thread::sleep_for(std::chrono::milliseconds(250));
 	}
 
 	if (preStart)
