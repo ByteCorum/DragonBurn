@@ -260,7 +260,7 @@ DWORD64 PlayerController::GetPlayerPawnAddress()
 
 	// Final read using cached value
 	DWORD64 EntityPawnAddress = 0;
-	if (!memoryManager.ReadMemory<DWORD64>(cachedEntityListEntry + 0x78 * lowIndex, EntityPawnAddress))
+	if (!memoryManager.ReadMemory<DWORD64>(cachedEntityListEntry + 0x70 * lowIndex, EntityPawnAddress))
 		return 0;
 
 	return EntityPawnAddress;
@@ -434,7 +434,7 @@ DWORD64 CEntity::ResolveEntityHandle(uint32_t handle)
 
 	// Final read using cached value
 	DWORD64 EntityAddress = 0;
-	if (!memoryManager.ReadMemory<DWORD64>(cachedEntityListEntry + 0x78 * lowIndex, EntityAddress))
+	if (!memoryManager.ReadMemory<DWORD64>(cachedEntityListEntry + 0x70 * lowIndex, EntityAddress))
 		return 0;
 
 	return EntityAddress;
