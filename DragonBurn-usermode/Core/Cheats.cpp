@@ -145,7 +145,7 @@ std::vector<std::pair<int, CEntity>> Cheats::CollectEntityData(CEntity& localEnt
 	for (int entityIndex = 0; entityIndex < 64; ++entityIndex)
 	{
 		DWORD64 entityAddress = 0;
-		if (!memoryManager.ReadMemory<DWORD64>(gGame.GetEntityListEntry() + (entityIndex + 1) * 0x78, entityAddress))
+		if (!memoryManager.ReadMemory<DWORD64>(gGame.GetEntityListEntry() + (entityIndex + 1) * 0x70, entityAddress))
 		{
 			continue;
 		}

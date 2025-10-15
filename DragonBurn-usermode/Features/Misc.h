@@ -95,7 +95,7 @@ namespace Misc
 	
 
 	static inline uintptr_t GetSmokeEntity(int i, uintptr_t EntityListEntry) {
-		uintptr_t Entity = EntityListEntry + 0x78 * (i + 1);
+		uintptr_t Entity = EntityListEntry + 0x70 * (i + 1);
 		return Entity;
 	}
 
