@@ -14,7 +14,6 @@
 #include <Windows.h>
 
 #include "Aimbot.h"
-#include "..\Resources\Sounds.h"
 #include "..\Game\Entity.h"
 #include "..\Core\Config.h"
 #include "..\OS-ImGui\imgui\imgui.h"
@@ -270,7 +269,8 @@ namespace Misc
 	void HitManager(CEntity&, int&) noexcept;
 	void BunnyHop(const CEntity&) noexcept;
 	void CleanTraces();
-
+	void HitSound() noexcept;
+	void PlaySoundWithVolume(LPCWSTR pszSound, HMODULE hmod, DWORD fdwSound);
 	void FastStop() noexcept;
 	void KnifeBot(const CEntity& local, const std::vector<CEntity>& entities, int autoKnifeKey = 0) noexcept;
 	void ExecuteCommand(const std::string& command) noexcept;
