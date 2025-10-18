@@ -6,6 +6,12 @@
 #include <random>
 #include "../Helpers/Logger.h"
 #include "../Core/Cheats.h"
+#include <mmsystem.h>
+#include <mmreg.h>
+#include <dsound.h>
+#pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "dsound.lib")
+
 namespace fs = std::filesystem;
 
 namespace System {
@@ -60,25 +66,60 @@ namespace Misc
 		MenuConfig::MarkWinPos = ImGui::GetWindowPos();
 		ImGui::End();
 	}
-
 	void HitSound() noexcept
 	{
-		switch (MiscCFG::HitSound)
+		if (MiscCFG::HitSound.empty() || MiscCFG::HitSound == "None" || MiscCFG::HitSoundVolume <= 0.01f)
+			return;
+
+		std::string soundPath = MenuConfig::path + "\\" + MiscCFG::HitSound;
+
+		// Check if file exists
+		DWORD fileAttr = GetFileAttributesA(soundPath.c_str());
+		if (fileAttr == INVALID_FILE_ATTRIBUTES) {
+			return;
+		}
+
+		std::wstring widePath = Misc::STR2LPCWSTR(soundPath);
+		PlaySoundWithVolume(widePath.c_str(), NULL, SND_ASYNC | SND_FILENAME);
+	}
+
+	// Working volume control using DirectSound
+	void PlaySoundWithVolume(LPCWSTR pszSound, HMODULE hmod, DWORD fdwSound)
+	{
+		// First play the sound
+		PlaySoundW(pszSound, hmod, fdwSound);
+
+		// Apply volume control using waveOut API
+		if (MiscCFG::HitSoundVolume < 1.0f)
 		{
-		case 1:
-			PlaySoundA(reinterpret_cast<char*>(neverlose_sound), NULL, SND_ASYNC | SND_MEMORY);
-			break;
-		case 2:
-			PlaySoundA(reinterpret_cast<char*>(skeet_sound), NULL, SND_ASYNC | SND_MEMORY);
-			break;
-		default:
-			break;
+			// Calculate volume in the range 0-65535
+			DWORD volume = static_cast<DWORD>(MiscCFG::HitSoundVolume * 65535);
+			// Set both left and right channels
+			DWORD dwVolume = (volume << 16) | volume;
+
+			// Apply volume to waveOut device
+			HWAVEOUT hWaveOut;
+			WAVEFORMATEX wfx = { WAVE_FORMAT_PCM, 1, 22050, 22050, 1, 8, 0 };
+
+			// Open waveOut device
+			if (waveOutOpen(&hWaveOut, WAVE_MAPPER, &wfx, 0, 0, CALLBACK_NULL) == MMSYSERR_NOERROR)
+			{
+				waveOutSetVolume(hWaveOut, dwVolume);
+
+				// Keep the volume applied for a short time, then restore
+				std::thread([hWaveOut]() {
+					std::this_thread::sleep_for(std::chrono::milliseconds(500));
+					// Restore to full volume
+					waveOutSetVolume(hWaveOut, 0xFFFFFFFF);
+					waveOutClose(hWaveOut);
+					}).detach();
+			}
 		}
 	}
 
 	void HitManager(CEntity& LocalPlayer, int& PreviousTotalHits) noexcept
 	{
-		if ((!MiscCFG::HitSound && !MiscCFG::HitMarker) || LocalPlayer.Controller.TeamID == 0 || MenuConfig::ShowMenu || !LocalPlayer.IsAlive())
+		if (((MiscCFG::HitSound.empty() || MiscCFG::HitSound == "None") && !MiscCFG::HitMarker) || LocalPlayer.Controller.TeamID == 0 || MenuConfig::ShowMenu || !LocalPlayer.IsAlive())
 			return;
 
 		uintptr_t pBulletServices;
@@ -93,7 +134,7 @@ namespace Misc
 			}
 			else
 			{
-				if (MiscCFG::HitSound)
+				if (!MiscCFG::HitSound.empty() && MiscCFG::HitSound != "None")
 				{
 					HitSound();
 				}
