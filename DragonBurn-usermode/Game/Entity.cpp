@@ -450,7 +450,7 @@ bool Client::GetSensitivity()
 		return false;
 
 	float flSensitivity = 0.0f;
-	if (!memoryManager.ReadMemory(ptr + 0x48, flSensitivity))
+	if (!memoryManager.ReadMemory(ptr + 0x50, flSensitivity))
 		return false;
 
 	this->Sensitivity = flSensitivity;

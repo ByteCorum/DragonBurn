@@ -193,8 +193,8 @@ void AimControl::AimBot(const CEntity& Local, Vec3 LocalPos,std::vector<Vec3>& A
 
     auto [TargetX, TargetY] = CalculateTargetOffset(ScreenPos, ScreenCenterX, ScreenCenterY);
 
-    //TargetX /= Local.Client.Sensitivity /4;
-    //TargetY /= Local.Client.Sensitivity /4;
+    TargetX /= Local.Client.Sensitivity /4;
+    TargetY /= Local.Client.Sensitivity /4;
     if (Smooth > 0.0f)
     {
         const float DistanceRatio = BestNorm / AimFov;
