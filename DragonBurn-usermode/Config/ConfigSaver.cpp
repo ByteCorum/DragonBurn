@@ -211,7 +211,9 @@ namespace MyConfigSaver
 
         ConfigData["Misc"]["WorkInSpec"]=       MenuConfig::WorkInSpec;
         ConfigData["Misc"]["Watermark"]=        MiscCFG::WaterMark;
-        ConfigData["Misc"]["HitSounds"]=        MiscCFG::HitSound;
+        
+        ConfigData["Misc"]["HitSounds"] = MiscCFG::HitSound;
+        ConfigData["Misc"]["HitSoundVolume"] = MiscCFG::HitSoundVolume;
         ConfigData["Misc"]["HitMarker"]=        MiscCFG::HitMarker;
 
         ConfigData["Misc"]["BombTimer"]=        MiscCFG::bmbTimer;
@@ -467,7 +469,9 @@ namespace MyConfigSaver
             MiscCFG::HeadShootLineColor.Value.w = ReadData(ConfigData["Misc"],{"HeadShootLineColor","a"}, 255.f);
             MenuConfig::WorkInSpec = ReadData(ConfigData["Misc"],{"WorkInSpec"}, false);
             MiscCFG::WaterMark = ReadData(ConfigData["Misc"],{"Watermark"}, false);
-            MiscCFG::HitSound = ReadData(ConfigData["Misc"],{"HitSounds"}, 0);
+          
+            MiscCFG::HitSound = ReadData(ConfigData["Misc"], { "HitSounds" }, std::string("None"));
+            MiscCFG::HitSoundVolume = ReadData(ConfigData["Misc"], { "HitSoundVolume" }, 1.0f);
             MiscCFG::HitMarker = ReadData(ConfigData["Misc"],{"HitMarker"}, false);
             MiscCFG::bmbTimer = ReadData(ConfigData["Misc"],{"BombTimer"}, false);
             MiscCFG::BombTimerCol.Value.x = ReadData(ConfigData["Misc"],{"TimerColor","r"}, 0.f);
