@@ -268,7 +268,8 @@ namespace ConfigMenu {
 
 		MiscCFG::WaterMark = true;
 		MiscCFG::BunnyHop = false;
-		MiscCFG::HitSound = 0;
+		MiscCFG::HitSound = "None";
+		MiscCFG::HitSoundVolume = 1.0f;
 		MiscCFG::HitMarker = false;
 		MiscCFG::SniperCrosshair = true;
 		MiscCFG::SniperCrosshairColor = ImColor(32, 178, 170, 255);
