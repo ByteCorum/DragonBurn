@@ -9,9 +9,8 @@ namespace MyConfigSaver {
     extern void LoadConfig(const std::string& filename);
 
     template <typename T>
-    static T ReadData(nlohmann::json node, std::vector <std::string> keys,T defaultValue)
+    static T ReadData(nlohmann::json node, std::vector <std::string> keys, T defaultValue)
     {
-        T value;
         for (std::string key : keys)
         {
             if (node.contains(key) && !node[key].is_null())
@@ -20,13 +19,16 @@ namespace MyConfigSaver {
             }
             else
             {
-                value = defaultValue;
-                return value;
-                break;
+                return defaultValue;
             }
         }
-        value = node.get<T>();
-        return value;
+
+        try {
+            return node.get<T>();
+        }
+        catch (const nlohmann::json::exception&) {
+            return defaultValue;
+        }
     }
     
     static uint32_t ImColorToUInt32(const ImColor& color)
