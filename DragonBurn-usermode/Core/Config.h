@@ -172,7 +172,8 @@ namespace MiscCFG
 	inline bool WaterMark = true;
 	inline bool SniperCrosshair = true;
 	inline ImColor SniperCrosshairColor = ImColor(32, 178, 170, 255);
-	inline int	HitSound = 0;
+	inline std::string HitSound = "None"; // Changed from int to string
+	inline float HitSoundVolume = 1.0f;   // Volume control (0.0 - 1.0)
 	inline bool HitMarker = false;
 	inline bool bmbTimer = true;
 	inline bool FastStop = false;
