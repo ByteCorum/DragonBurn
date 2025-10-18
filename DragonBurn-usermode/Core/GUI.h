@@ -1,4 +1,4 @@
-﻿#pragma once
+
 #include "..\Core\Config.h"
 #include "..\Core\Render.h"
 #include "..\Features\Aimbot.h"
@@ -139,14 +139,14 @@ namespace GUI
 		ImGui::SameLine();
 		ImGui::SetCursorPosY(CurrentCursorY - 2);
 		if (ColorEditor) {
-			AlignRight(ContentWidth + ImGui::GetFrameHeight() +7);
+			AlignRight(ContentWidth + ImGui::GetFrameHeight() + 7);
 			ImGui::ColorEdit4(lable, col, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_AlphaPreview);
 			ImGui::SameLine();
 		}
 		else {
 			AlignRight(ContentWidth);
 		}
-		
+
 		Gui.SwitchButton(string, v);
 		ImGui::PopID();
 	}
@@ -184,7 +184,7 @@ namespace GUI
 	{
 		ImGui::PushID(string);
 		float CurrentCursorX = ImGui::GetCursorPosX();
-		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX-15;
+		float SliderWidth = ImGui::GetColumnWidth() - ImGui::GetStyle().ItemSpacing.x - CursorX - 15;
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::TextDisabled(string);
 		if (Tip && ImGui::IsItemHovered())
@@ -231,7 +231,7 @@ namespace GUI
 				ImGui::Image((void*)MenuButton1, ImVec2(buttonW, buttonH));
 			if (Button1Pressed)
 				ImGui::Image((void*)MenuButton1Pressed, ImVec2(buttonW, buttonH));
-			if (ImGui::IsItemClicked()) 
+			if (ImGui::IsItemClicked())
 			{
 				MenuConfig::WCS.MenuPage = 0;
 				Button1Pressed = true;
@@ -301,7 +301,7 @@ namespace GUI
 			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5);
 
 			ImGui::SetCursorPos(MenuConfig::WCS.ChildPos);
-			
+
 			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize, false, ImGuiWindowFlags_NoScrollbar);
 			{
 				ImGui::Text("   DragonBurn");
@@ -345,7 +345,7 @@ namespace GUI
 						PutSwitch(Text::ESP::HeadBox.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowHeadBox, true, "###HeadBoxCol", reinterpret_cast<float*>(&ESPConfig::HeadBoxColor));
 						PutSwitch(Text::ESP::Skeleton.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowBoneESP, true, "###BoneCol", reinterpret_cast<float*>(&ESPConfig::BoneColor));
 						PutSwitch(Text::ESP::SnapLine.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowLineToEnemy, true, "###LineCol", reinterpret_cast<float*>(&ESPConfig::LineToEnemyColor));
-						if (ESPConfig::ShowLineToEnemy) 
+						if (ESPConfig::ShowLineToEnemy)
 						{
 							ImGui::TextDisabled(Text::ESP::LinePosList.c_str());
 							ImGui::SameLine();
@@ -355,7 +355,7 @@ namespace GUI
 						}
 						PutSwitch(Text::ESP::EyeRay.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowEyeRay, true, "###LineCol", reinterpret_cast<float*>(&ESPConfig::EyeRayColor));
 						PutSwitch(Text::ESP::OutOfFOVArrow.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowOutOfFOVArrow, true, "###OutFOVCol", reinterpret_cast<float*>(&ESPConfig::OutOfFOVArrowColor));
-						if(ESPConfig::ShowOutOfFOVArrow)
+						if (ESPConfig::ShowOutOfFOVArrow)
 							PutSliderFloat(Text::ESP::OutOfFOVRadius.c_str(), .5f, &ESPConfig::OutOfFOVRadiusFactor, &MinFovFactor, &MaxFovFactor, "%.1f");
 
 						PutSwitch(Text::ESP::SoundEsp.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::EnemySound, true, "###EnemySoundCol", reinterpret_cast<float*>(&ESPConfig::EnemySoundColor));
@@ -375,7 +375,7 @@ namespace GUI
 						PutSwitch(Text::ESP::VisCheck.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::VisibleCheck, true, "###VisibleCol", reinterpret_cast<float*>(&ESPConfig::VisibleColor));
 					}
 					ImGui::NewLine();
-					
+
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
 					ImGui::GradientText("ESP Preview");
@@ -392,7 +392,7 @@ namespace GUI
 					if (RadarCFG::ShowRadar)
 					{
 						PutSwitch(Text::Radar::CustomCheck.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &RadarCFG::customRadar);
-						
+
 						if (RadarCFG::customRadar)
 						{
 							PutSwitch(Text::Radar::CrossLine.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &RadarCFG::ShowRadarCrossLine);
@@ -402,7 +402,7 @@ namespace GUI
 							PutSliderFloat(Text::Radar::AlphaSlider.c_str(), 5.f, &RadarCFG::RadarBgAlpha, &AlphaMin, &AlphaMax, "%.1f");
 						}
 					}
-					
+
 					//ImGui::NewLine();
 					//ImGui::GradientText("Crosshairs");
 					//float DotMin = 1.f, DotMax = 50.f;
@@ -432,10 +432,10 @@ namespace GUI
 					//	PutSwitch(Lang::CrosshairsText.TargetCheck, 5.f, ImGui::GetFrameHeight() * 1.7, &MenuConfig::TargetingCrosshairs, true, "###CircleCol", reinterpret_cast<float*>(&CrosshairsCFG::TargetedColor));
 					//	PutSwitch(Lang::CrosshairsText.TeamCheck, 5.f, ImGui::GetFrameHeight() * 1.7, &CrosshairsCFG::TeamCheck);
 					//}
-					
+
 					//ImGui::Columns(1);
 				}
-				
+
 				if (MenuConfig::WCS.MenuPage == 0)
 				{
 					ImGui::Columns(2, nullptr, false);
@@ -470,7 +470,7 @@ namespace GUI
 						PutSwitch(Text::Aimbot::ScopeOnly.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::ScopeOnly);
 
 						PutSwitch(Text::Aimbot::HumanizeVar.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &AimControl::HumanizeVar, false, NULL, NULL, Text::Aimbot::OnTip.c_str());
-						if(AimControl::HumanizeVar)
+						if (AimControl::HumanizeVar)
 							PutSliderInt(Text::Aimbot::HumanizationStrength.c_str(), 10.f, &AimControl::HumanizationStrength, &MinHumanize, &MaxHumanize, "%d");
 
 						PutSliderFloat(Text::Aimbot::FovSlider.c_str(), 10.f, &AimControl::AimFov, &AimControl::AimFovMin, &FovMax, "%.1f");
@@ -483,7 +483,7 @@ namespace GUI
 						ImGui::Image((void*)HitboxImage, ImVec2(hitboxW, hitboxH));
 
 						ImGui::GetWindowDrawList()->AddLine(ImVec2(StartPos.x + 130, StartPos.y + 20), ImVec2(StartPos.x + 205, StartPos.y + 20), ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)), 1.8f); // Head
-						ImGui::SetCursorScreenPos(ImVec2(StartPos.x + 203, StartPos.y + 10)); 
+						ImGui::SetCursorScreenPos(ImVec2(StartPos.x + 203, StartPos.y + 10));
 						if (ImGui::Checkbox("###Head", &checkbox1))
 						{
 							if (checkbox1) {
@@ -550,8 +550,8 @@ namespace GUI
 						PutSliderInt(Text::RCS::BulletSlider.c_str(), 5.f, &RCS::RCSBullet, &RCSBulletMin, &RCSBulletMax, "%d");
 						PutSliderFloat(Text::RCS::Yaw.c_str(), 5.f, &RCS::RCSScale.x, &recoilMin, &recoilMax, "%.2f");
 						PutSliderFloat(Text::RCS::Pitch.c_str(), 5.f, &RCS::RCSScale.y, &recoilMin, &recoilMax, "%.2f");
-						float scalex = (2.22 - RCS::RCSScale.x) *.5f;
-						float scaley = (2.12 - RCS::RCSScale.y) *.5f;//Simulate reasonable error values
+						float scalex = (2.22 - RCS::RCSScale.x) * .5f;
+						float scaley = (2.12 - RCS::RCSScale.y) * .5f;//Simulate reasonable error values
 						ImVec2 BulletPos = ImGui::GetCursorScreenPos();
 
 						// Example Preview
@@ -572,7 +572,7 @@ namespace GUI
 						BulletPos12.x = BulletPos11.x - 3 * scalex; BulletPos12.y = BulletPos11.y - 9 * scaley;
 						BulletPos13.x = BulletPos12.x + 15 * scalex; BulletPos13.y = BulletPos12.y - 5 * scaley;
 						BulletPos14.x = BulletPos13.x + 10 * scalex; BulletPos14.y = BulletPos13.y - 4 * scaley;
-						
+
 						ImGui::GetWindowDrawList()->AddCircleFilled(BulletPos0, 4.f, ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)));
 						ImGui::GetWindowDrawList()->AddCircleFilled(BulletPos1, 4.f, ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)));
 						ImGui::GetWindowDrawList()->AddCircleFilled(BulletPos2, 4.f, ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Border)));
@@ -606,7 +606,7 @@ namespace GUI
 							ImGui::TextDisabled(Text::Trigger::HotKeyList.c_str());
 							ImGui::SameLine();
 							AlignRight(70.f);
-							if (ImGui::Button(Text::Trigger::HotKey.c_str(), {70.f, 25.f}))
+							if (ImGui::Button(Text::Trigger::HotKey.c_str(), { 70.f, 25.f }))
 							{
 								std::thread([&]() {
 									KeyMgr::GetPressedKey(TriggerBot::HotKey, &Text::Trigger::HotKey);
@@ -637,20 +637,74 @@ namespace GUI
 					PutSwitch(Text::Misc::SpecList.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SpecList);
 					PutSwitch(Text::Misc::Watermark.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::WaterMark);
 					PutSwitch(Text::Misc::HeadshotLine.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::ShowHeadShootLine);
+
+					// New WAV-based Hit Sound system
+					static std::vector<std::string> wavFiles;
+					static bool wavFilesLoaded = false;
+					static int currentHitSoundIndex = 0;
+
+					if (!wavFilesLoaded) {
+						wavFiles.clear();
+						wavFiles.push_back("None");
+
+						std::string searchPath = MenuConfig::path + "\\*.wav";
+						WIN32_FIND_DATAA findData;
+						HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
+
+						if (hFind != INVALID_HANDLE_VALUE) {
+							do {
+								if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+									wavFiles.push_back(findData.cFileName);
+								}
+							} while (FindNextFileA(hFind, &findData));
+							FindClose(hFind);
+						}
+						wavFilesLoaded = true;
+					}
+
+					// Find current index
+					currentHitSoundIndex = 0; // Default to "None"
+					for (int i = 0; i < wavFiles.size(); i++) {
+						if (wavFiles[i] == MiscCFG::HitSound) {
+							currentHitSoundIndex = i;
+							break;
+						}
+					}
+
+					// Hit Sound selection
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
-					ImGui::TextDisabled(Text::Misc::HitSound.c_str());
+					ImGui::TextDisabled("Hit Sound");
 					ImGui::SameLine();
 					AlignRight(160.f);
 					ImGui::SetNextItemWidth(160.f);
-					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
+
+					if (ImGui::Combo("###HitSounds", &currentHitSoundIndex, [](void* data, int idx, const char** out_text) {
+						auto* files = static_cast<std::vector<std::string>*>(data);
+						if (idx < 0 || idx >= files->size()) return false;
+						*out_text = (*files)[idx].c_str();
+						return true;
+						}, &wavFiles, wavFiles.size())) {
+						MiscCFG::HitSound = wavFiles[currentHitSoundIndex];
+					}
+
+					// Volume slider (only show if a sound is selected)
+					if (MiscCFG::HitSound != "None") {
+						ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.f);
+						ImGui::TextDisabled("Hit Sound Volume");
+						ImGui::SameLine();
+						AlignRight(160.f);
+						ImGui::SetNextItemWidth(160.f);
+						ImGui::SliderFloat("###HitSoundVolume", &MiscCFG::HitSoundVolume, 0.0f, 1.0f, "%.2f");
+					}
+
 					PutSwitch(Text::Misc::HitMerker.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop, false, NULL, NULL, Text::Misc::InsecureTip.c_str());
 					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop, false, NULL, NULL, Text::Misc::InsecureTip.c_str());
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
 					PutSwitch("Auto Accept", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
-                    PutSwitch("Knife bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);
-                    PutSwitch("Zeus bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoZeus);
-                    PutSwitch("Anti-afk", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AntiAFKKick);
+					PutSwitch("Knife bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);
+					PutSwitch("Zeus bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoZeus);
+					PutSwitch("Anti-afk", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AntiAFKKick);
 
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
@@ -683,7 +737,6 @@ namespace GUI
 						Misc::CleanTraces();
 						Init::Client::Exit();
 					}
-
 
 					ImGui::Columns(1);
 				}
