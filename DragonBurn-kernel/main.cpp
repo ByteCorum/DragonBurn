@@ -162,6 +162,22 @@ CHECK_VER://CHECK_VER
 	}
 #endif
 
+	BYTE* img = nullptr;
+	if (!legacyImg)
+	{
+		if (cfg::image.empty())
+			Log::Error("Driver image is empty");
+		RollingVectorProcedure(cfg::image, cfg::key);
+		img = cfg::image.data();
+	}
+	else
+	{
+		if (cfg::imageLegacy.empty())
+			Log::Error("Driver image is empty");
+		RollingVectorProcedure(cfg::imageLegacy, cfg::key);
+		img = cfg::imageLegacy.data();
+	}
+
 	if (!NT_SUCCESS(intel_driver::Load()))
 		Log::Error("Failed to connect to intel driver");
 
@@ -170,18 +186,6 @@ CHECK_VER://CHECK_VER
 		mode = kdmapper::AllocationMode::AllocateIndependentPages;
 
 	NTSTATUS exitCode = 0;
-	BYTE* img = nullptr;
-	if (!legacyImg)
-	{
-		RollingVectorProcedure(cfg::image, cfg::key);
-		img = cfg::image.data();
-	}
-	else
-	{
-		RollingVectorProcedure(cfg::imageLegacy, cfg::key);
-		img = cfg::imageLegacy.data();
-	}
-
 	if (!kdmapper::MapDriver(img, 0, 0, free, !copyHeader, mode, passAllocationPtr, callbackExample, &exitCode))
 	{
 		intel_driver::Unload();
