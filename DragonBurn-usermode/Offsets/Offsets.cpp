@@ -19,6 +19,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->PlantedC4 = offsetsJson["client.dll"]["dwPlantedC4"];
     this->InputSystem = offsetsJson["inputsystem.dll"]["dwInputSystem"];
     this->Sensitivity = offsetsJson["client.dll"]["dwSensitivity"];
+    this->Sensitivity_sensitivity = offsetsJson["client.dll"]["dwSensitivity_sensitivity"];
 
     this->Buttons.Attack = buttonsJson["client.dll"]["attack"];
     this->Buttons.Jump = buttonsJson["client.dll"]["jump"];

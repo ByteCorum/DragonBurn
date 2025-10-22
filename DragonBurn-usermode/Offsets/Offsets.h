@@ -22,6 +22,7 @@ public:
 	DWORD PlantedC4;
 	DWORD InputSystem;
 	DWORD Sensitivity;
+	DWORD Sensitivity_sensitivity;
 
 	struct
 	{
