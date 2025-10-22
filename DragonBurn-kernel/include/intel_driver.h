@@ -19,7 +19,7 @@ namespace intel_driver
 	PVOID RtlLookupElementGenericTableAvl(nt::PRTL_AVL_TABLE Table, PVOID Buffer);
 	nt::PiDDBCacheEntry* LookupEntry(nt::PRTL_AVL_TABLE PiDDBCacheTable, ULONG timestamp, const wchar_t * name);
 	PVOID ResolveRelativeAddress(_In_ PVOID Instruction, _In_ ULONG OffsetOffset, _In_ ULONG InstructionSize);
-	bool AcquireDebugPrivilege();
+	NTSTATUS AcquireDebugPrivilege();
 
 	uintptr_t FindPatternAtKernel(uintptr_t dwAddress, uintptr_t dwLen, BYTE* bMask, const char* szMask);
 	uintptr_t FindSectionAtKernel(const char* sectionName, uintptr_t modulePtr, PULONG size);
@@ -29,8 +29,8 @@ namespace intel_driver
 	bool ClearWdFilterDriverList();
 
 	bool IsRunning();
-	bool Load();
-	bool Unload();
+	NTSTATUS Load();
+	NTSTATUS Unload();
 
 	bool MemCopy(uint64_t destination, uint64_t source, uint64_t size);
 	bool SetMemory(uint64_t address, uint32_t value, uint64_t size);

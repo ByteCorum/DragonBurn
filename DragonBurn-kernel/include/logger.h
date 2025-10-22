@@ -2,13 +2,13 @@
 #include <string>
 #include <iostream>
 #include <Windows.h>
-#include <shellapi.h>
 #include <fstream>
 
-namespace Log 
+namespace Log
 {
 	const HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	const std::string LogFile = "Logs.txt";
+	const bool fullOutput = true;
 
 	inline bool WriteLog(std::string ctx)
 	{
@@ -23,7 +23,7 @@ namespace Log
 
 	}
 
-	inline void Info(std::string ctx) 
+	inline void Info(std::string ctx)
 	{
 		SetConsoleTextAttribute(hConsole, 11);
 		std::cout << "[i]";
@@ -40,13 +40,14 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << ctx << '\n';
 
-		if (pause) {
+		if (pause)
+		{
 			SetConsoleTextAttribute(hConsole, 8);
 			system("pause");
 		}
 	}
 
-	inline void Error(std::string ctx, bool fatal = true)
+	inline void Error(std::string ctx, bool fatal = true, bool pause = true)
 	{
 		SetConsoleTextAttribute(hConsole, 12);
 		std::cout << "[X]";
@@ -54,14 +55,14 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << ctx << '\n';
 
-		if (fatal) 
+		if (pause)
 		{
-			ShellExecute(0, 0, L"https://github.com/ByteCorum/DragonBurn?tab=readme-ov-file#mapper-errors", 0, 0, SW_SHOW);
 			SetConsoleTextAttribute(hConsole, 8);
 			system("pause");
-			exit(-1);
 		}
-			
+
+		if (fatal)
+			exit(-1);
 	}
 
 	inline void Fine(std::string ctx)
@@ -82,9 +83,7 @@ namespace Log
 		std::cout << line;
 
 		if (write)
-		{
 			WriteLog(line);
-		}
 #endif
 	}
 
@@ -96,6 +95,9 @@ namespace Log
 
 	inline void PreviousLine()
 	{
+		if (fullOutput)
+			return;
+
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 
