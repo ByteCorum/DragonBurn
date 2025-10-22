@@ -131,6 +131,9 @@ https://github.com/ByteCorum/DragonBurn
 #ifndef _DEBUG
 	const std::string curVersionUrl = "https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version";
 	std::string supportedVersions;
+	int tryCount = 0;
+
+CHECK_VER://CHECK_VER
 	Log::Info("Checking mapper version...");
 	try
 	{
@@ -143,10 +146,23 @@ https://github.com/ByteCorum/DragonBurn
 		else
 			Log::Error("Your mapper version is out of support");
 	}
-	catch (const std::runtime_error& error){Log::Error(error.what());}
+	catch (const std::exception& error)
+	{
+		Log::PreviousLine();
+		std::string errorMsg = error.what();
+		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
+		{
+			Log::Error(errorMsg, false, false);
+			Log::Info("Reconnecting...");
+			tryCount++;
+			goto CHECK_VER;//CHECK_VER
+		}
+		else
+			Log::Error(errorMsg);
+	}
 #endif
 
-	if (!intel_driver::Load())
+	if (!NT_SUCCESS(intel_driver::Load()))
 		Log::Error("Failed to connect to intel driver");
 
 	kdmapper::AllocationMode mode = kdmapper::AllocationMode::AllocatePool;
@@ -172,7 +188,7 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Error("Failed to map DragonBurn driver");
 	}
 
-	if (!intel_driver::Unload())
+	if (!NT_SUCCESS(intel_driver::Unload()))
 		Log::Warning("Warning failed to unload intel driver", true);
 
 	Log::Fine("DragonBurn driver mapped successfully");
