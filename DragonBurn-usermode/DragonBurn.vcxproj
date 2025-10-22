@@ -120,7 +120,6 @@
     <ClInclude Include="Game\Entity.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\View.h" />
-    <ClInclude Include="Helpers\Format.h" />
     <ClInclude Include="Helpers\GetWeaponIcon.h" />
     <ClInclude Include="Helpers\KeyManager.h" />
     <ClInclude Include="Helpers\Logger.h" />

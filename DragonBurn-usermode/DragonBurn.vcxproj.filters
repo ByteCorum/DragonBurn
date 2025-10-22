@@ -144,9 +144,6 @@
     <ClInclude Include="Helpers\GetWeaponIcon.h">
       <Filter>Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers\Format.h">
-      <Filter>Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Render.h">
       <Filter>Core</Filter>
     </ClInclude>
