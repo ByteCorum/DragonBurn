@@ -42,12 +42,14 @@ int main()
 #endif
 
 	Cheat();
+	return 0;
 }
 
 void Cheat()
 {
 	ShowWindow(GetConsoleWindow(), SW_SHOWNORMAL);
 	SetConsoleTitle(L"DragonBurn");
+	int tryCount = 0;
 	//Init::Verify::RandTitle();
 
 	Log::Custom(R"LOGO(______                            ______                  
@@ -69,6 +71,9 @@ https://github.com/ByteCorum/DragonBurn
 		Log::Warning("Your os is unsupported, bugs may occurred", true);
 
 #ifndef DBDEBUG
+
+	tryCount = 0;
+CHECK_VER://CHECK_VER
 	Log::Info("Checking cheat version");
 	try 
 	{
@@ -82,10 +87,21 @@ https://github.com/ByteCorum/DragonBurn
 	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
-		Log::Error(error.what());
+		std::string errorMsg = error.what();
+		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
+		{
+			Log::Error(errorMsg, false, false);
+			Log::Info("Reconnecting...");
+			tryCount++;
+			goto CHECK_VER;//CHECK_VER
+		}
+		else
+			Log::Error(errorMsg);
 	}
 #endif
 
+	tryCount = 0;
+UPDATE_OFFSETS://UPDATE_OFFSETS
 	Log::Info("Updating offsets");
 	try 
 	{
@@ -96,10 +112,18 @@ https://github.com/ByteCorum/DragonBurn
 	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
-		Log::Error(error.what());
+		std::string errorMsg = error.what();
+		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
+		{
+			Log::Error(errorMsg, false, false);
+			Log::Info("Reconnecting...");
+			tryCount++;
+			goto UPDATE_OFFSETS;//UPDATE_OFFSETS
+		}
+		else
+			Log::Error(errorMsg);
 	}
 
-	int tryCount = 0;
 KMD_CONNECTING://KMD_CONNECTING
 
 	Log::Info("Connecting to kernel mode driver");
@@ -153,6 +177,7 @@ KMD_CONNECTING://KMD_CONNECTING
 		Log::PreviousLine();
 		Log::Info("Waiting for CS2");
 		preStart = true;
+		Sleep(500);
 	}
 
 	if (preStart)
