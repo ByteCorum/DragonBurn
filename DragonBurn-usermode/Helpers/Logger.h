@@ -8,6 +8,7 @@ namespace Log
 {
 	const HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	const std::string LogFile = "Logs.txt";
+	const bool fullOutput = true;
 
 	inline bool WriteLog(std::string ctx)
 	{
@@ -94,6 +95,9 @@ namespace Log
 
 	inline void PreviousLine()
 	{
+		if (fullOutput)
+			return;
+
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 		CONSOLE_SCREEN_BUFFER_INFO csbi;
 

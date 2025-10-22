@@ -25,11 +25,15 @@ using namespace std;
 
 namespace fs = filesystem;
 string fileName;
+bool legacyMethod, legacyImg;
 
 void Cheat();
+bool CheckArg(const int&, char**, const std::string&);
 
-int main()
+int main(int argc, char* argv[])
 {
+	legacyMethod = CheckArg(argc, argv, "legacymethod");
+	legacyImg = CheckArg(argc, argv, "legacyimg");
 
 //do not use uaicess for debugging/profiling (uiacess restarts the cheat)
 #ifndef DBDEBUG
@@ -43,6 +47,17 @@ int main()
 
 	Cheat();
 	return 0;
+}
+
+bool CheckArg(const int& argc, char** argv, const std::string& value)
+{
+	for (size_t i = 0; i < argc; i++)
+	{
+		std::string arg = argv[i];
+		if (arg == "--" + value || arg == "/" + value)
+			return true;
+	}
+	return false;
 }
 
 void Cheat()
@@ -74,7 +89,7 @@ https://github.com/ByteCorum/DragonBurn
 
 	tryCount = 0;
 CHECK_VER://CHECK_VER
-	Log::Info("Checking cheat version");
+	Log::Info("Checking cheat version...");
 	try 
 	{
 		bool result = Init::Verify::CheckCheatVersion();
@@ -102,7 +117,7 @@ CHECK_VER://CHECK_VER
 
 	tryCount = 0;
 UPDATE_OFFSETS://UPDATE_OFFSETS
-	Log::Info("Updating offsets");
+	Log::Info("Updating offsets...");
 	try 
 	{
 		Offset.UpdateOffsets();
@@ -124,16 +139,10 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 			Log::Error(errorMsg);
 	}
 
+	tryCount = 0;
 KMD_CONNECTING://KMD_CONNECTING
 
-	Log::Info("Connecting to kernel mode driver");
-	++tryCount;
-	if (tryCount > 4) 
-	{
-		Log::Warning("Try to reboot pc and manually run mapper with --legacymethod");
-		Log::Error("Failed to map kernel mode driver");
-	}
-
+	Log::Info("Connecting to kernel mode driver...");
 	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
 		Log::PreviousLine();
@@ -142,22 +151,27 @@ KMD_CONNECTING://KMD_CONNECTING
 	else
 	{
 		Log::PreviousLine();
-		Log::Warning("Failed to connect to kernel mode driver");
+		Log::Error("Failed to connect to kernel mode driver", false, false);
 		Log::Info("Triggered auto-map protocol");
 		Log::Info("Looking for kernel mapper...");
 
 		if (fs::exists("DragonBurn-kernel.exe")) 
 		{
 			Log::PreviousLine();
-			bool legacyMapperMode = tryCount % 2 == 0;
-			Log::Info(legacyMapperMode ? "Executing legacy kernel mapper..." : "Executing kernel mapper...");
-			int result = Init::Verify::ExecuteMapper(legacyMapperMode);
+			std::string mapperInfo = "Executing kernel mapper, flags: "
+				+ std::string((legacyMethod || tryCount % 2 == 0) ? "--legacymethod" : "")
+				+ std::string(legacyImg ? "--legacyimg" : "")
+				+ std::string("...");
+			Log::Info(mapperInfo);
+			int result = Init::Verify::ExecuteMapper(legacyMethod, legacyImg, tryCount);
 
 			Log::PreviousLine();
 			if (result == 0)
 			{
 				Log::Fine("Successfully mapped kernel mode driver");
-				goto KMD_CONNECTING;//KMD_CONNECTING
+				tryCount++;
+				if (tryCount < 5)
+					goto KMD_CONNECTING;//KMD_CONNECTING
 			}
 			else
 				Log::Error("Failed to map kernel mode driver");
@@ -170,26 +184,23 @@ KMD_CONNECTING://KMD_CONNECTING
 		}
 	}
 
-	std::cout << '\n';
+	Log::Info("Waiting for CS2...");
 	bool preStart = false;
 	while (memoryManager.GetProcessID(L"cs2.exe") == 0)
 	{
-		Log::PreviousLine();
-		Log::Info("Waiting for CS2");
 		preStart = true;
 		Sleep(500);
 	}
-
 	if (preStart)
 	{
 		Log::PreviousLine();
-		Log::Info("Connecting to CS2(it may take some time)");
+		Log::Info("Connecting to CS2(it may take some time)...");
 		Sleep(23000);
 	}
 
 	Log::PreviousLine();
 	Log::Fine("Connected to CS2");
-	Log::Info("Linking to CS2");
+	Log::Info("Linking to CS2...");
 
 #ifndef DBDEBUG
 	try 

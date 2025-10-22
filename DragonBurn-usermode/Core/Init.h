@@ -69,7 +69,7 @@ namespace Init
             return false;
         }
 
-        static int ExecuteMapper(bool legacy = false)
+        static int ExecuteMapper(bool legacyMethod, bool legacyImg, bool tryCount)
         {
             STARTUPINFOW si = { sizeof(STARTUPINFOW) };
             PROCESS_INFORMATION pi = {};
@@ -77,7 +77,9 @@ namespace Init
             si.dwFlags = STARTF_USESHOWWINDOW;
             si.wShowWindow = SW_SHOW;
 
-            std::wstring cmdLine = legacy ? L"DragonBurn-kernel.exe --legacymethod" : L"DragonBurn-kernel.exe";
+            std::wstring cmdLine = L"DragonBurn-kernel.exe" 
+                + std::wstring((legacyMethod || tryCount % 2 == 0) ? L" --legacymethod" : L"")
+                + std::wstring(legacyImg ? L" --legacyimg" : L"");
             BOOL success = CreateProcessW(
                 nullptr,                   // Application name
                 &cmdLine[0],               // Command line (must be modifiable)
