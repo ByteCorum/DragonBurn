@@ -131,6 +131,9 @@ https://github.com/ByteCorum/DragonBurn
 #ifndef _DEBUG
 	const std::string curVersionUrl = "https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version";
 	std::string supportedVersions;
+	int tryCount = 0;
+
+CHECK_VER://CHECK_VER
 	Log::Info("Checking mapper version...");
 	try
 	{
@@ -143,10 +146,39 @@ https://github.com/ByteCorum/DragonBurn
 		else
 			Log::Error("Your mapper version is out of support");
 	}
-	catch (const std::runtime_error& error){Log::Error(error.what());}
+	catch (const std::exception& error)
+	{
+		Log::PreviousLine();
+		std::string errorMsg = error.what();
+		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
+		{
+			Log::Error(errorMsg, false, false);
+			Log::Info("Reconnecting...");
+			tryCount++;
+			goto CHECK_VER;//CHECK_VER
+		}
+		else
+			Log::Error(errorMsg);
+	}
 #endif
 
-	if (!intel_driver::Load())
+	BYTE* img = nullptr;
+	if (!legacyImg)
+	{
+		if (cfg::image.empty())
+			Log::Error("Driver image is empty");
+		RollingVectorProcedure(cfg::image, cfg::key);
+		img = cfg::image.data();
+	}
+	else
+	{
+		if (cfg::imageLegacy.empty())
+			Log::Error("Driver image is empty");
+		RollingVectorProcedure(cfg::imageLegacy, cfg::key);
+		img = cfg::imageLegacy.data();
+	}
+
+	if (!NT_SUCCESS(intel_driver::Load()))
 		Log::Error("Failed to connect to intel driver");
 
 	kdmapper::AllocationMode mode = kdmapper::AllocationMode::AllocatePool;
@@ -154,25 +186,13 @@ https://github.com/ByteCorum/DragonBurn
 		mode = kdmapper::AllocationMode::AllocateIndependentPages;
 
 	NTSTATUS exitCode = 0;
-	BYTE* img = nullptr;
-	if (!legacyImg)
-	{
-		RollingVectorProcedure(cfg::image, cfg::key);
-		img = cfg::image.data();
-	}
-	else
-	{
-		RollingVectorProcedure(cfg::imageLegacy, cfg::key);
-		img = cfg::imageLegacy.data();
-	}
-
 	if (!kdmapper::MapDriver(img, 0, 0, free, !copyHeader, mode, passAllocationPtr, callbackExample, &exitCode))
 	{
 		intel_driver::Unload();
 		Log::Error("Failed to map DragonBurn driver");
 	}
 
-	if (!intel_driver::Unload())
+	if (!NT_SUCCESS(intel_driver::Unload()))
 		Log::Warning("Warning failed to unload intel driver", true);
 
 	Log::Fine("DragonBurn driver mapped successfully");

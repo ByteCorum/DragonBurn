@@ -62,7 +62,7 @@ bool FixSecurityCookie(void* local_image, ULONG64 kernel_image_base)
 
 bool ResolveImports(portable_executable::vec_imports imports) {
 	for (const auto& current_import : imports) {
-		ULONG64 Module = utils::GetKernelModuleAddress(current_import.module_name);
+		ULONG64 Module = kdmUtils::GetKernelModuleAddress(current_import.module_name);
 		std::ostringstream ss;
 
 		if (!Module) 

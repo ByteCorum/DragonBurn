@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 
-namespace utils
+namespace kdmUtils
 {
 	std::wstring GetFullTempPath();
 	bool ReadFileToMemory(const std::wstring& file_path, std::vector<BYTE>* out_buffer);
