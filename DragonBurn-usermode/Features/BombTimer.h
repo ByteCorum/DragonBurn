@@ -84,7 +84,8 @@ namespace bmb
 
 		float remaining = (40000 - (int64_t)time + plantTime) / (float)1000;
 
-		ImGui::SetCursorPosX((ImGui::GetWindowSize().x - 180) * 0.5f);
+		float startPosX = ((ImGui::GetWindowSize().x - 180) * 0.5f) + 3;
+		ImGui::SetCursorPosX(startPosX);
 		float barLength = remaining <= 0.0f ? 0.0f : remaining >= 40 ? 1.0f : (remaining / 40.0f);
 		
 		if (isPlanted && remaining >= 0)
@@ -107,19 +108,15 @@ namespace bmb
 			ss << "Bomb on " << (!getBombSite(isBombPlanted) ? "A" : "B") << ": " << std::fixed << std::round(remaining * 1000.0) / 1000.0 << " s";
 			Gui.MyText(std::move(ss).str().c_str(), true);
 		}
-		else {
+		else
+		{
 			Gui.MyText("C4 not planted", true);
 			barLength = 0.0f;
 		}
-		ImGui::TextUnformatted(" ");
-		ImGui::SameLine();
 		Gui.MyProgressBar(barLength, { 180, 15 }, "", color);
 
 		if (isPlanted && remaining >= 0 && IsBeingDefused)
 		{
-			ImVec2 pos = ImGui::GetCursorPos();
-			ImGui::SetCursorPos(ImVec2(pos.x + 45, pos.y - 27));
-
 			float defuseRemaining = 0.0f;
 			DWORD64 globalVars = 0;
 			if (memoryManager.ReadMemory<DWORD64>(gGame.GetClientDLLAddress() + Offset.GlobalVars, globalVars) && globalVars)
@@ -136,14 +133,9 @@ namespace bmb
 				}
 			}
 
-			ImGui::SetCursorPos(ImVec2(pos.x+5, pos.y - 32));
-			ImFont* font = ImGui::GetFont();
-			float oldScale = font->Scale;
-			font->Scale = 0.7f;
-			ImGui::PushFont(font);
+			ImGui::SameLine();
+			ImGui::SetCursorPosX(startPosX);
 			ImGui::TextColored(ImColor(131, 137, 150, 200), "Defusing: %.3f s", defuseRemaining);
-			font->Scale = oldScale;
-			ImGui::PopFont();
 		}
 		if (isPlanted && !isBombPlanted)
 		{
