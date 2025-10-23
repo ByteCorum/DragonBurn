@@ -151,7 +151,7 @@ CHECK_VER://CHECK_VER
 		std::string errorMsg = error.what();
 		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
 		{
-			Log::Error(errorMsg, false, false);
+			Log::Error(errorMsg, false);
 			Log::Info("Reconnecting...");
 			tryCount++;
 			goto CHECK_VER;//CHECK_VER
