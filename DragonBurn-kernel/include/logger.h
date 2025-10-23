@@ -59,6 +59,7 @@ namespace Log
 		{
 			SetConsoleTextAttribute(hConsole, 8);
 			system("pause");
+			ShellExecute(0, 0, L"https://github.com/ByteCorum/DragonBurn?tab=readme-ov-file#mapper-errors", 0, 0, SW_SHOW);
 			exit(-1);
 		}
 			
