@@ -47,7 +47,7 @@ namespace Log
 		}
 	}
 
-	inline void Error(std::string ctx, bool fatal = true, bool pause = true)
+	inline void Error(std::string ctx, bool fatal = true)
 	{
 		SetConsoleTextAttribute(hConsole, 12);
 		std::cout << "[X]";
@@ -55,14 +55,13 @@ namespace Log
 		SetConsoleTextAttribute(hConsole, 7);
 		std::cout << ctx << '\n';
 
-		if (pause)
+		if (fatal) 
 		{
 			SetConsoleTextAttribute(hConsole, 8);
 			system("pause");
-		}
-
-		if (fatal)
 			exit(-1);
+		}
+			
 	}
 
 	inline void Fine(std::string ctx)
