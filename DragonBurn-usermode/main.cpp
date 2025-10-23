@@ -166,7 +166,7 @@ KMD_CONNECTING://KMD_CONNECTING
 			int result = Init::Verify::ExecuteMapper(legacyMethod, legacyImg, tryCount);
 
 			Log::PreviousLine();
-			if (result == 0 && tryCount < 5)
+			if (result == 0 && tryCount < 3)
 			{
 				Log::Fine("Successfully mapped kernel mode driver");
 				tryCount++;
