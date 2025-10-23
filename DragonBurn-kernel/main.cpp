@@ -112,20 +112,19 @@ https://github.com/ByteCorum/DragonBurn
 	//passAllocationPtr --> Passes allocated memory pointer as first param to entry point. Used by custom loaders or shellcode-style drivers
 	// Can't use --free and --indPages at the same time"
 	bool free = false;
-	bool indPagesMode = !CheckArg(argc, argv, L"legacymethod");
+	bool indPagesMode = CheckArg(argc, argv, L"securemode");
 	bool legacyImg = CheckArg(argc, argv, L"legacyimg");
 	bool copyHeader = false;
 	bool passAllocationPtr = false;
 
 	if (legacyImg)
 	{
-		Log::Info("Using legacy DragonBurn kernel mode driver ");
-		Log::Warning("Legacy DragonBurn kernel mode driver is deprecated, it's better to use new one");
+		Log::Info("Enabled: Legacy DragonBurn kernel");
+		Log::Warning("Legacy DragonBurn kernel is deprecated, it's better to use new one");
 	}
-	if (!indPagesMode)
+	if (indPagesMode)
 	{
-		Log::Info("Using legacy kernel mode driver mapping algorithm");
-		Log::Warning("Legacy kernel mode driver mapping algorithm is deprecated, it's better to use new one");
+		Log::Info("Enabled: Secure mapping and execution mode");
 	}
 
 #ifndef _DEBUG

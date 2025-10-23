@@ -174,9 +174,11 @@ cmd should be opened as admin
 > Faceit: `sc stop faceit`
 > Vanguard: `sc stop vgc` `sc stop vgk`
 
+<!--
 > Error: `Driver is mapped successfully but failed to connect to kernel`
 >
 > Solution: Reboot pc and manually run mapper with `--legacymethod`
+-->
 
 > [!TIP]  
 > This cmds should fix any issue(after executing restart pc):
