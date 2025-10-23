@@ -25,14 +25,14 @@ using namespace std;
 
 namespace fs = filesystem;
 string fileName;
-bool legacyMethod, legacyImg;
+bool secureMode, legacyImg;
 
 void Cheat();
 bool CheckArg(const int&, char**, const std::string&);
 
 int main(int argc, char* argv[])
 {
-	legacyMethod = CheckArg(argc, argv, "legacymethod");
+	secureMode = CheckArg(argc, argv, "securemode");
 	legacyImg = CheckArg(argc, argv, "legacyimg");
 
 //do not use uaicess for debugging/profiling (uiacess restarts the cheat)
@@ -139,9 +139,6 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 			Log::Error(errorMsg);
 	}
 
-	tryCount = 0;
-KMD_CONNECTING://KMD_CONNECTING
-
 	Log::Info("Connecting to kernel mode driver...");
 	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
@@ -159,19 +156,15 @@ KMD_CONNECTING://KMD_CONNECTING
 		{
 			Log::PreviousLine();
 			std::string mapperInfo = "Executing kernel mapper, flags: "
-				+ std::string((legacyMethod || tryCount % 2 == 0) ? "--legacymethod" : "")
+				+ std::string(secureMode ? "--securemode" : "")
 				+ std::string(legacyImg ? "--legacyimg" : "")
 				+ std::string("...");
 			Log::Info(mapperInfo);
-			int result = Init::Verify::ExecuteMapper(legacyMethod, legacyImg, tryCount);
+			int result = Init::Verify::ExecuteMapper(secureMode, legacyImg);
 
 			Log::PreviousLine();
-			if (result == 0 && tryCount < 3)
-			{
+			if (result == 0)
 				Log::Fine("Successfully mapped kernel mode driver");
-				tryCount++;
-				goto KMD_CONNECTING;//KMD_CONNECTING
-			}
 			else
 				Log::Error("Failed to map kernel mode driver");
 		}
