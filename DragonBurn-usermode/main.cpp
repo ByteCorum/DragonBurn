@@ -75,12 +75,10 @@ void Cheat()
 |___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
                   __/ |                                   
                  |___/                                    
-
-https://discord.gg/5WcvdzFybD
-https://github.com/ByteCorum/DragonBurn
-
-
 )LOGO", 13);
+	Log::Info(MenuConfig::name + " v" + MenuConfig::version + " by " + MenuConfig::author);
+	Log::Info("https://github.com/ByteCorum/DragonBurn");
+	Log::Info("https://discord.gg/5WcvdzFybD\n\n");
 
 	if (!Init::Verify::CheckWindowVersion())
 		Log::Warning("Your os is unsupported, bugs may occurred", true);

@@ -92,7 +92,7 @@ int wmain(const int argc, wchar_t** argv)
 {
 	SetUnhandledExceptionFilter(SimplestCrashHandler);
 
-	printf(R"LOGO(______                            ______                  
+	Log::Custom(R"LOGO(______                            ______                  
 |  _  \                           | ___ \                 
 | | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
 | | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
@@ -100,11 +100,10 @@ int wmain(const int argc, wchar_t** argv)
 |___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
                   __/ |                                   
                  |___/                                    
-
-https://discord.gg/5WcvdzFybD
-https://github.com/ByteCorum/DragonBurn
-
-)LOGO");
+)LOGO", 13);
+	Log::Info(cfg::name + " v" + cfg::version + " by " + cfg::author);
+	Log::Info("https://github.com/ByteCorum/DragonBurn");
+	Log::Info("https://discord.gg/5WcvdzFybD\n\n");
 
 	//free --> Automatically frees mapped memory after execution. Dangerous unless the driver finishes instantly
 	//indPagesMode --> Maps the driver into non-contiguous, separate memory pages. Better for stealth, but more complex
