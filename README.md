@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/tests-100/100-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/code quality-A+-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&logo=&logoColor=whit">
-  <img src="https://img.shields.io/badge/DragonBurn-v3.5.8.0-blue?style=for-the-badge&logo=&logoColor=whit">
+  <img src="https://img.shields.io/badge/DragonBurn-v3.5.8.1-blue?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/CS2-000000?style=for-the-badge&logo=counter-strike&logoColor=white">
   <img src="https://img.shields.io/badge/Kernel mode-28004D?style=for-the-badge">
   <img src="https://img.shields.io/badge/offsets auto update-D06B57?style=for-the-badge">
@@ -159,15 +159,19 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 
 cmd should be opened as admin
 
-> Error: `[-] \Device\Nal is already in use.`
+> Error: `[x] Kernel-mode driver image is empty`
+>
+> Solution: fill `std::vector<uint8_t> image = {};` in `cfg.h` with kernel binaries
+
+> Error: `[x] \Device\Nal is already in use.`
 >
 > Solution: Use [NalFix](https://github.com/VollRagm/NalFix)
 
-> Error: `[-] Your vulnerable driver list is enabled and have blocked the driver loading`
+> Error: `[x] Your vulnerable driver list is enabled and have blocked the driver loading`
 >
 > Solution: Disable vulnerable driver list, [official solution](https://support.microsoft.com/en-au/topic/kb5020779-the-vulnerable-driver-blocklist-after-the-october-2022-preview-release-3fcbe13a-6013-4118-b584-fcfbc6a09936)
 
-> Still getting: `[-] Failed to register and start service for the vulnerable driver`
+> Still getting: `[x] Failed to register and start service for the vulnerable driver`
 >
 > Solution: Turn off all Anti-Viruses and all Anti-Cheats client, usually it caused by faceit ac
 >
