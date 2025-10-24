@@ -137,8 +137,8 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 			Log::Error(errorMsg);
 	}
 
-CONNECT_KERNEL://CONNECT_KERNEL
 	bool mapped = false;
+CONNECT_KERNEL://CONNECT_KERNEL
 	Log::Info("Connecting to kernel mode driver...");
 	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
