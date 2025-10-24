@@ -137,6 +137,8 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 			Log::Error(errorMsg);
 	}
 
+CONNECT_KERNEL://CONNECT_KERNEL
+	bool mapped = false;
 	Log::Info("Connecting to kernel mode driver...");
 	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
 	{
@@ -146,7 +148,7 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 	else
 	{
 		Log::PreviousLine();
-		Log::Error("Failed to connect to kernel mode driver", false, false);
+		Log::Error("Failed to connect to kernel mode driver", mapped, mapped);
 		Log::Info("Triggered auto-map protocol");
 		Log::Info("Looking for kernel mapper...");
 
@@ -161,8 +163,12 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 			int result = Init::Verify::ExecuteMapper(secureMode, legacyImg);
 
 			Log::PreviousLine();
-			if (result == 0)
+			if (result == 0) 
+			{
 				Log::Fine("Successfully mapped kernel mode driver");
+				mapped = true;
+				goto CONNECT_KERNEL;//CONNECT_KERNEL
+			}
 			else
 				Log::Error("Failed to map kernel mode driver");
 		}
