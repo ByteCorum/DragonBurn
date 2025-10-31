@@ -1,5 +1,8 @@
 #include "Offsets.h"
 
+#include <fstream>
+#include <sstream>
+
 Offsets::Offsets() {}
 
 Offsets::~Offsets() {}
@@ -97,11 +100,30 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
 
 void Offsets::UpdateOffsets()
 {
-    std::string offsetsData, buttonsData, client_dllData;
+    namespace fs = std::filesystem;
 
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
+    auto read_file = [](fs::path const& path) -> std::string {
+        std::ifstream file(path, std::ios::binary);
+        if (!file)
+            throw std::runtime_error("failed to open " + path.string());
 
-    SetOffsets(offsetsData, buttonsData, client_dllData);
+        std::ostringstream oss;
+        oss << file.rdbuf();
+        return oss.str();
+    };
+
+    try {
+        fs::path base_dir = fs::current_path() / "offset";
+
+        auto const offsetsData    = read_file(base_dir / "offsets.json");
+        auto const buttonsData    = read_file(base_dir / "buttons.json");
+        auto const clientDllData  = read_file(base_dir / "client_dll.json");
+
+        SetOffsets(offsetsData, buttonsData, clientDllData);
+        Log::Fine("Loaded offsets from " + base_dir.string());
+    }
+    catch (std::exception const& ex) {
+        Log::Error(std::string("Failed to load local offsets: ") + ex.what(), false, false);
+        throw;
+    }
 }

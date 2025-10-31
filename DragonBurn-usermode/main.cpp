@@ -25,16 +25,11 @@ using namespace std;
 
 namespace fs = filesystem;
 string fileName;
-bool secureMode, legacyImg;
 
 void Cheat();
-bool CheckArg(const int&, char**, const std::string&);
 
 int main(int argc, char* argv[])
 {
-	secureMode = CheckArg(argc, argv, "securemode");
-	legacyImg = CheckArg(argc, argv, "legacyimg");
-
 //do not use uaicess for debugging/profiling (uiacess restarts the cheat)
 #ifndef DBDEBUG
 	DWORD err = PrepareForUIAccess();
@@ -49,22 +44,10 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-bool CheckArg(const int& argc, char** argv, const std::string& value)
-{
-	for (size_t i = 0; i < argc; i++)
-	{
-		std::string arg = argv[i];
-		if (arg == "--" + value || arg == "/" + value)
-			return true;
-	}
-	return false;
-}
-
 void Cheat()
 {
 	ShowWindow(GetConsoleWindow(), SW_SHOWNORMAL);
 	SetConsoleTitle(L"DragonBurn");
-	int tryCount = 0;
 	//Init::Verify::RandTitle();
 
 	Log::Custom(R"LOGO(______                            ______                  
@@ -83,38 +66,6 @@ void Cheat()
 	if (!Init::Verify::CheckWindowVersion())
 		Log::Warning("Your os is unsupported, bugs may occurred", true);
 
-#ifndef DBDEBUG
-
-	tryCount = 0;
-CHECK_VER://CHECK_VER
-	Log::Info("Checking cheat version...");
-	try 
-	{
-		bool result = Init::Verify::CheckCheatVersion();
-		Log::PreviousLine();
-		if (result)
-			Log::Fine("Your cheat version is up to date and supported");
-		else
-			Log::Error("Your cheat version is out of support");
-	}
-	catch (const std::exception& error)
-	{
-		Log::PreviousLine();
-		std::string errorMsg = error.what();
-		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
-		{
-			Log::Error(errorMsg, false, false);
-			Log::Info("Reconnecting...");
-			tryCount++;
-			goto CHECK_VER;//CHECK_VER
-		}
-		else
-			Log::Error(errorMsg);
-	}
-#endif
-
-	tryCount = 0;
-UPDATE_OFFSETS://UPDATE_OFFSETS
 	Log::Info("Updating offsets...");
 	try 
 	{
@@ -125,59 +76,20 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
-		std::string errorMsg = error.what();
-		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
-		{
-			Log::Error(errorMsg, false, false);
-			Log::Info("Reconnecting...");
-			tryCount++;
-			goto UPDATE_OFFSETS;//UPDATE_OFFSETS
-		}
-		else
-			Log::Error(errorMsg);
+        Log::Error(error.what());
 	}
 
-	bool mapped = false;
-CONNECT_KERNEL://CONNECT_KERNEL
-	Log::Info("Connecting to kernel mode driver...");
-	if (memoryManager.ConnectDriver(L"\\\\.\\DragonBurn-kmd"))
+    Log::Info("Checking hypervisor bridge...");
+    if (memoryManager.ConnectDriver(nullptr))
 	{
 		Log::PreviousLine();
-		Log::Fine("Successfully connected to kernel mode driver");
+        Log::Fine("Hypervisor bridge ready");
 	}
 	else
 	{
 		Log::PreviousLine();
-		Log::Error("Failed to connect to kernel mode driver", mapped, mapped);
-		Log::Info("Triggered auto-map protocol");
-		Log::Info("Looking for kernel mapper...");
-
-		if (fs::exists("DragonBurn-kernel.exe")) 
-		{
-			Log::PreviousLine();
-			std::string mapperInfo = "Executing kernel mapper, flags: "
-				+ std::string(secureMode ? "--securemode" : "")
-				+ std::string(legacyImg ? "--legacyimg" : "")
-				+ std::string("...");
-			Log::Info(mapperInfo);
-			int result = Init::Verify::ExecuteMapper(secureMode, legacyImg);
-
-			Log::PreviousLine();
-			if (result == 0) 
-			{
-				Log::Fine("Successfully mapped kernel mode driver");
-				mapped = true;
-				goto CONNECT_KERNEL;//CONNECT_KERNEL
-			}
-			else
-				Log::Error("Failed to map kernel mode driver");
-		}
-		else
-		{
-			Log::PreviousLine();
-			Log::Warning("It might have been deleted by AV, turn off AV and clean temp");
-			Log::Error("Failed to find kernel mapper");
-		}
+        Log::Error("Hypervisor is not running, please load hv.sys before starting DragonBurn");
+        return;
 	}
 
 	Log::Info("Waiting for CS2...");
@@ -197,22 +109,6 @@ CONNECT_KERNEL://CONNECT_KERNEL
 	Log::PreviousLine();
 	Log::Fine("Connected to CS2");
 	Log::Info("Linking to CS2...");
-
-#ifndef DBDEBUG
-	try 
-	{
-		if (!Init::Client::CheckCS2Version()) 
-		{
-			Log::PreviousLine();
-			Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
-		}
-	}
-	catch(const std::exception& error)
-	{
-		Log::PreviousLine();
-		Log::Error(error.what());
-	}
-#endif
 
 	if (!memoryManager.Attach(memoryManager.GetProcessID(L"cs2.exe")))
 	{
@@ -275,7 +171,11 @@ CONNECT_KERNEL://CONNECT_KERNEL
 
 	try
 	{
-		Gui.AttachAnotherWindow("Counter-Strike 2", "SDL_app", Cheats::Run);
+#ifdef _CONSOLE
+        static_cast<OSImGui::OSImGui_External&>(Gui).AttachAnotherWindow("Counter-Strike 2", "SDL_app", Cheats::Run);
+#else
+        Cheats::Run();
+#endif
 	}
 	catch (std::exception& error)
 	{

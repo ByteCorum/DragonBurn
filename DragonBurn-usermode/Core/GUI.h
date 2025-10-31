@@ -14,6 +14,7 @@
 
 #include "../Features/ESP.h"
 
+
 ID3D11ShaderResourceView* Logo = NULL;
 ID3D11ShaderResourceView* MenuButton1 = NULL;
 ID3D11ShaderResourceView* MenuButton2 = NULL;
@@ -41,6 +42,23 @@ bool checkbox2 = false;
 bool checkbox3 = false;
 bool checkbox4 = false;
 bool checkbox5 = false;
+
+static const char* kBoxTypeOptions[] = {
+	reinterpret_cast<const char*>(u8"标准"),
+	reinterpret_cast<const char*>(u8"直角"),
+};
+
+static const char* kLinePosOptions[] = {
+	reinterpret_cast<const char*>(u8"顶部"),
+	reinterpret_cast<const char*>(u8"中心"),
+	reinterpret_cast<const char*>(u8"底部"),
+};
+
+static const char* kHitSoundOptions[] = {
+	reinterpret_cast<const char*>(u8"无"),
+	reinterpret_cast<const char*>(u8"Neverlose"),
+	reinterpret_cast<const char*>(u8"Skeet"),
+};
 
 namespace GUI
 {
@@ -304,13 +322,13 @@ namespace GUI
 			
 			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize, false, ImGuiWindowFlags_NoScrollbar);
 			{
-				ImGui::Text("   DragonBurn");
+				ImGui::TextUnformatted(Text::Menu::Title.c_str());
 				ImGui::Separator();
 				if (MenuConfig::WCS.MenuPage == 1)
 				{
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::GradientText("ESP");
+					ImGui::GradientText(Text::ESP::FeatureName.c_str());
 					static const float MinRounding = 0.f, MaxRouding = 5.f;
 					static const float MinFovFactor = 0.f, MaxFovFactor = 1.f;
 					PutSwitch(Text::ESP::Enable.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ESPenabled);
@@ -335,8 +353,8 @@ namespace GUI
 							ImGui::TextDisabled(Text::ESP::BoxType.c_str());
 							ImGui::SameLine();
 							AlignRight(160.f);
-							ImGui::SetNextItemWidth(160.f);
-							ImGui::Combo("###BoxType", &ESPConfig::BoxType, "Normal\0Corner\0");
+						ImGui::SetNextItemWidth(160.f);
+						ImGui::Combo("###BoxType", &ESPConfig::BoxType, kBoxTypeOptions, IM_ARRAYSIZE(kBoxTypeOptions));
 							PutSliderFloat(Text::ESP::BoxRounding.c_str(), 10.f, &ESPConfig::BoxRounding, &MinRounding, &MaxRouding, "%.1f");
 						}
 						PutSwitch(Text::ESP::FilledBox.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::FilledBox, true, "###FilledBoxCol", reinterpret_cast<float*>(&ESPConfig::FilledColor));
@@ -350,8 +368,8 @@ namespace GUI
 							ImGui::TextDisabled(Text::ESP::LinePosList.c_str());
 							ImGui::SameLine();
 							AlignRight(160.f);
-							ImGui::SetNextItemWidth(160.f);
-							ImGui::Combo("###LinePos", &ESPConfig::LinePos, "Top\0Center\0Bottom\0");
+						ImGui::SetNextItemWidth(160.f);
+						ImGui::Combo("###LinePos", &ESPConfig::LinePos, kLinePosOptions, IM_ARRAYSIZE(kLinePosOptions));
 						}
 						PutSwitch(Text::ESP::EyeRay.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowEyeRay, true, "###LineCol", reinterpret_cast<float*>(&ESPConfig::EyeRayColor));
 						PutSwitch(Text::ESP::OutOfFOVArrow.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &ESPConfig::ShowOutOfFOVArrow, true, "###OutFOVCol", reinterpret_cast<float*>(&ESPConfig::OutOfFOVArrowColor));
@@ -378,12 +396,12 @@ namespace GUI
 					
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::GradientText("ESP Preview");
+					ImGui::GradientText(Text::ESP::Preview.c_str());
 					// ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() }, { ImGui::GetCursorPosX() - ImGui::GetColumnWidth() * 0.65f, ImGui::GetCursorPosY() - ImGui::GetFrameHeight() });
 					ESP::RenderPreview({ ImGui::GetColumnWidth(), ImGui::GetCursorPosY() });
 					ImGui::Dummy({ 0.f, ImGui::GetFrameHeight() * 9 });
 
-					ImGui::GradientText("External Radar");
+				ImGui::GradientText(Text::Menu::ExternalRadar.c_str());
 					static const float RadarPointSizeProportionMin = 0.2f, RadarPointSizeProportionMax = 2.f;
 					static const float ProportionMin = 500.f, ProportionMax = 15000.f;
 					static const float RadarRangeMin = 100.f, RadarRangeMax = 300.f;
@@ -440,7 +458,7 @@ namespace GUI
 				{
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::GradientText("Aimbot");
+					ImGui::GradientText(Text::Aimbot::FeatureName.c_str());
 
 					static const float FovMin = 0.f, FovMax = 30.f, MinFovMax = 1.f;
 					static const int BulletMin = 0, BulletMax = 5;
@@ -541,7 +559,7 @@ namespace GUI
 					}
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::GradientText("RCS");
+			ImGui::GradientText(Text::Menu::Recoil.c_str());
 					static const float recoilMin = 0.f, recoilMax = 2.f;
 					static const int RCSBulletMin = 0, RCSBulletMax = 5;
 					PutSwitch(Text::RCS::Toggle.c_str(), 5.f, ImGui::GetFrameHeight() * 1.7, &LegitBotConfig::RCS);
@@ -593,7 +611,7 @@ namespace GUI
 					}
 
 					ImGui::NewLine();
-					ImGui::GradientText("Triggerbot");
+					ImGui::GradientText(Text::Trigger::FeatureName.c_str());
 					static const int DelayMin = 0, DelayMax = 300;
 					static const int DurationMin = 0, DurationMax = 1000;
 
@@ -632,7 +650,7 @@ namespace GUI
 					static const float FlashMin = 0.f, FlashMax = 255.f;
 					ImGui::Columns(2, nullptr, false);
 					ImGui::SetCursorPos(ImVec2(15.f, 24.f));
-					ImGui::GradientText("Misc");
+					ImGui::GradientText(Text::Misc::FeatureName.c_str());
 					PutSwitch(Text::Misc::bmbTimer.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::bmbTimer, true, "###bmbTimerCol", reinterpret_cast<float*>(&MiscCFG::BombTimerCol));
 					PutSwitch(Text::Misc::SpecList.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SpecList);
 					PutSwitch(Text::Misc::Watermark.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::WaterMark);
@@ -641,20 +659,20 @@ namespace GUI
 					ImGui::TextDisabled(Text::Misc::HitSound.c_str());
 					ImGui::SameLine();
 					AlignRight(160.f);
-					ImGui::SetNextItemWidth(160.f);
-					ImGui::Combo("###HitSounds", &MiscCFG::HitSound, "None\0Neverlose\0Skeet\0");
+				ImGui::SetNextItemWidth(160.f);
+				ImGui::Combo("###HitSounds", &MiscCFG::HitSound, kHitSoundOptions, IM_ARRAYSIZE(kHitSoundOptions));
 					PutSwitch(Text::Misc::HitMerker.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::HitMarker);
 					PutSwitch(Text::Misc::BunnyHop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::BunnyHop, false, NULL, NULL, Text::Misc::InsecureTip.c_str());
 					PutSwitch(Text::Misc::FastStop.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::FastStop, false, NULL, NULL, Text::Misc::InsecureTip.c_str());
 					PutSwitch(Text::Misc::SniperCrosshair.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::SniperCrosshair, true, "###sniperCrosshair", reinterpret_cast<float*>(&MiscCFG::SniperCrosshairColor));
-					PutSwitch("Auto Accept", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
-                    PutSwitch("Knife bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);
-                    PutSwitch("Zeus bot", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoZeus);
-                    PutSwitch("Anti-afk", 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AntiAFKKick);
+				PutSwitch(Text::Misc::AutoAccept.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoAccept);
+				PutSwitch(Text::Misc::AutoKnifeBot.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoKnife);
+				PutSwitch(Text::Misc::AutoZeusBot.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AutoZeus);
+				PutSwitch(Text::Misc::AntiAFK.c_str(), 10.f, ImGui::GetFrameHeight() * 1.7, &MiscCFG::AntiAFKKick);
 
 					ImGui::NextColumn();
 					ImGui::SetCursorPosY(24.f);
-					ImGui::GradientText("Global Settings");
+				ImGui::GradientText(Text::Misc::GlobalSettings.c_str());
 					ImGui::TextDisabled(Text::Misc::MenuKey.c_str());
 					ImGui::SameLine();
 					AlignRight(70.f);
@@ -670,15 +688,15 @@ namespace GUI
 					ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 5.f);
 
 					ImGui::NewLine();
-					if (ImGui::Button("Source Code", { 125.f, 25.f }))
+				if (ImGui::Button(Text::Misc::SourceCode.c_str(), { 125.f, 25.f }))
 						Gui.OpenWebpage("https://github.com/ByteCorum/DragonBurn");
 					ImGui::SameLine();
-					if (ImGui::Button("Contact Author", { 125.f, 25.f }))
+				if (ImGui::Button(Text::Misc::ContactAuthor.c_str(), { 125.f, 25.f }))
 						Gui.OpenWebpage("https://discord.gg/5WcvdzFybD");
-					if (ImGui::Button("Unhook", { 125.f, 25.f }))
+				if (ImGui::Button(Text::Misc::Uninstall.c_str(), { 125.f, 25.f }))
 						Init::Client::Exit();
 					ImGui::SameLine();
-					if (ImGui::Button("Clear Traces", { 125.f, 25.f }))
+				if (ImGui::Button(Text::Misc::CleanTraces.c_str(), { 125.f, 25.f }))
 					{
 						Misc::CleanTraces();
 						Init::Client::Exit();

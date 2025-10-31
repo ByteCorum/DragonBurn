@@ -3,13 +3,31 @@
 #include "..\Resources\Font.h"
 #include "..\Resources\Language.h"
 
+#include <filesystem>
+
+namespace
+{
+    inline const ImWchar* GetChineseGlyphRanges()
+    {
+        static const ImWchar ranges[] = {
+            0x0020, 0x00FF,   // Basic Latin + Latin Supplement
+            0x2000, 0x206F,   // General Punctuation
+            0x3000, 0x303F,   // CJK Symbols and Punctuation
+            0x3400, 0x4DBF,   // CJK Unified Ideographs Extension A
+            0x4E00, 0x9FFF,   // CJK Unified Ideographs
+            0xFF00, 0xFFEF,   // Halfwidth and Fullwidth Forms
+            0
+        };
+        return ranges;
+    }
+}
+
 namespace OSImGui
 {
     bool OSImGui_Base::InitImGui(ID3D11Device* device, ID3D11DeviceContext* device_context)
     {
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->AddFontDefault();
         (void)io;
 
         //ImWchar ranges[] = {
@@ -32,8 +50,30 @@ namespace OSImGui
         ImFontConfig arialConfig;
         arialConfig.FontDataOwnedByAtlas = false;
 
-        ImFont* arialFont = fontAtlas->AddFontFromMemoryTTF((void*)MainFont, sizeof(MainFont), 20.0f, &arialConfig, fontAtlas->GetGlyphRangesDefault());
-        
+        const ImWchar* glyphRanges = GetChineseGlyphRanges();
+        ImFont* arialFont = fontAtlas->AddFontFromMemoryTTF((void*)MainFont, sizeof(MainFont), 20.0f, &arialConfig, glyphRanges);
+
+        ImFontConfig chineseConfig;
+        chineseConfig.MergeMode = true;
+        chineseConfig.PixelSnapH = true;
+        chineseConfig.FontDataOwnedByAtlas = false;
+
+        namespace fs = std::filesystem;
+        const char* candidateFonts[] = {
+            "C:/Windows/Fonts/msyh.ttc",
+            "C:/Windows/Fonts/msyh.ttf",
+            "C:/Windows/Fonts/simhei.ttf"
+        };
+
+        for (const char* candidate : candidateFonts)
+        {
+            if (fs::exists(candidate))
+            {
+                fontAtlas->AddFontFromFileTTF(candidate, 20.0f, &chineseConfig, glyphRanges);
+                break;
+            }
+        }
+
         ImFontConfig iconConfig;
         iconConfig.MergeMode = true;
         iconConfig.PixelSnapH = true;
@@ -44,6 +84,7 @@ namespace OSImGui
         ImFont* WeaponIconFont = fontAtlas->AddFontFromMemoryTTF((void*)cs_icon, sizeof(cs_icon), 20.0f);
 
         io.Fonts = fontAtlas;
+        io.FontDefault = arialFont;
 
         ImGui::DragonBurnDefaultStyle();
         io.LogFilename = nullptr;
@@ -62,7 +103,9 @@ namespace OSImGui
         ImGui_ImplWin32_Shutdown();
         ImGui::DestroyContext();
 
+        #ifdef _CONSOLE
         g_Device.CleanupDeviceD3D();
+        #endif
         DestroyWindow(Window.hWnd);
         UnregisterClassA(Window.ClassName.c_str(), Window.hInstance);
     }

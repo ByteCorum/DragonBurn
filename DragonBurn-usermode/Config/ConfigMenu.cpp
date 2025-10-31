@@ -5,9 +5,12 @@
 #include "../Features/Aimbot.h"
 #include <filesystem>
 #include <string>
+#include <cstring>
 #include "../Resources/Language.h"
 #include "../Features/RCS.h"
 #include "../Helpers/KeyManager.h"
+
+using Text::detail::to_utf8;
 
 namespace ConfigMenu {
 	
@@ -17,6 +20,13 @@ namespace ConfigMenu {
 		static char configNameBuffer[128] = "NewConfig";
 		static char configAuthorBuffer[128] = "Author";
 		static int selectedConfig = -1;
+		static bool localizedDefaults = false;
+        if (!localizedDefaults)
+        {
+            strcpy_s(configNameBuffer, Text::Config::DefaultConfigName.c_str());
+            strcpy_s(configAuthorBuffer, Text::Config::DefaultAuthorName.c_str());
+            localizedDefaults = true;
+        }
 
 		const std::string configDir = MenuConfig::path;
 		static std::vector<std::string> configFiles;
@@ -46,7 +56,7 @@ namespace ConfigMenu {
 		ImGui::TextDisabled(Text::Config::MyConfigs.c_str());
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		ImGui::SetNextItemWidth(ComponentWidth);
-		ImGui::ListBox("##ConfigFiles", &selectedConfig, configFilesCStr.data(), configFilesCStr.size());
+        ImGui::ListBox("##ConfigFiles", &selectedConfig, configFilesCStr.data(), static_cast<int>(configFilesCStr.size()));
 		ImGui::SetCursorPosX(CurrentCursorX + CursorX);
 		if (ImGui::Button(Text::Config::Load.c_str(), { 120.f, 30.f }) && selectedConfig >= 0 && selectedConfig < configFiles.size())
 		{
@@ -65,13 +75,13 @@ namespace ConfigMenu {
 			ImGui::OpenPopup("##reallyDelete");
 		if (ImGui::BeginPopup("##reallyDelete"))
 		{
-			ImGui::Text("   Are you sure?   ");
+            ImGui::Text("%s", Text::Config::ConfirmDelete.c_str());
 			ImGui::Text(" ");
 			ImGui::SameLine();
-			if (ImGui::Button("No", { 40.0f, 0.0f }))
+            if (ImGui::Button(Text::Global::No.c_str(), { 40.0f, 0.0f }))
 				ImGui::CloseCurrentPopup();
 			ImGui::SameLine();
-			if (ImGui::Button("Yes", { 40.0f, 0.0f }))
+            if (ImGui::Button(Text::Global::Yes.c_str(), { 40.0f, 0.0f }))
 			{
 				// Delete
 				std::string selectedConfigFile = configFiles[selectedConfig];
@@ -90,13 +100,13 @@ namespace ConfigMenu {
 			ImGui::OpenPopup("##reallyReset");
 		if (ImGui::BeginPopup("##reallyReset"))
 		{
-			ImGui::Text("   Are you sure?   ");
+            ImGui::Text("%s", Text::Config::ConfirmReset.c_str());
 			ImGui::Text(" ");
 			ImGui::SameLine();
-			if (ImGui::Button("No", { 40.0f, 0.0f }))
+            if (ImGui::Button(Text::Global::No.c_str(), { 40.0f, 0.0f }))
 				ImGui::CloseCurrentPopup();
 			ImGui::SameLine();
-			if (ImGui::Button("Yes", { 40.0f, 0.0f }))
+            if (ImGui::Button(Text::Global::Yes.c_str(), { 40.0f, 0.0f }))
 			{
 				ConfigMenu::ResetToDefault();
 				ImGui::CloseCurrentPopup();

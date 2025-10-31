@@ -40,6 +40,9 @@
     <Filter Include="Features\Legit">
       <UniqueIdentifier>{bec5d160-9097-41fe-b2e1-d771a6544092}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Hypervisor">
+      <UniqueIdentifier>{4a30b513-6f4f-49b9-9934-ebe389bade8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resources\WeaponIcon.h">
@@ -277,5 +280,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\..\..\hv\um\hv.asm">
+      <Filter>Hypervisor</Filter>
+    </MASM>
   </ItemGroup>
 </Project>
