@@ -94,10 +94,15 @@ void Cheat()
 		if (fs::exists(MenuConfig::docPath + "\\Adobe Software Data"))
 			fs::rename(MenuConfig::docPath + "\\Adobe Software Data", MenuConfig::path);
 
-		if (fs::create_directories(MenuConfig::path + "\\Data"))
+		try
+		{
+			fs::create_directories(MenuConfig::path + "\\Data");
 			Log::Fine("Config folder connected: " + MenuConfig::path);
-		else
-			Log::Error("Failed to create the config directory");
+		}
+		catch (std::exception error)
+		{
+			Log::Error(error.what());
+		}
 
 		if (fs::exists(MenuConfig::path + "\\default.cfg"))
 			MenuConfig::defaultConfig = true;

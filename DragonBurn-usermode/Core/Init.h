@@ -57,7 +57,9 @@ namespace Init
             std::vector<std::string> versions;
             try
             {
-                json versionJson = json::parse(storage::ReadStorageFile("versions.json"));
+                std::string versionData;
+                storage::ReadStorageFile("versions.json", versionData);
+                json versionJson = json::parse(versionData);
 
                 if (!versionJson.contains("last-access-time") || !versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
                     throw std::runtime_error("Invalid json data");
@@ -69,19 +71,19 @@ namespace Init
                 if (std::chrono::system_clock::now() - lastAccessTime > std::chrono::minutes(10))
                     throw std::runtime_error("Version data is outdated");
 
-                for (const auto& version : versionJson["versionJson"])
+                for (const auto& version : versionJson["usermode-ver"])
                     versions.push_back(version.get<std::string>());
             }
-            catch (...)
+            catch (std::exception error)
             {
                 std::string versionData;
                 Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3", versionData);
-                json versionJson = json::parse(versionData);
+                json versionJson = json::parse(versionData)["record"];
 
                 if (!versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
                     throw std::runtime_error("Invalid json data");
 
-                for (const auto& version : versionJson["versionJson"])
+                for (const auto& version : versionJson["usermode-ver"])
                     versions.push_back(version.get<std::string>());
 
                 auto now = std::chrono::system_clock::now();

@@ -8,7 +8,7 @@
 
 namespace storage 
 {
-	std::string& ReadStorageFile(const std::string& path);
+	void ReadStorageFile(const std::string& path, std::string& data);
 	void WriteStorageFile(const std::string& path, const std::string& data);
 }
 
