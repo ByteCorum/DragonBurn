@@ -436,6 +436,9 @@ namespace Render
 	void DrawHealthBar(DWORD Sign, float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size)
 	{
 		static std::unordered_map<DWORD, HealthBar> HealthBarMap;
+		if (HealthBarMap.size() > 64)
+			HealthBarMap.clear();
+
 		HealthBar& hb = HealthBarMap[Sign];
 		hb.HealthBarV(MaxHealth, CurrentHealth, Pos, Size, ESPConfig::ShowHealthNum);
 	}
@@ -443,12 +446,18 @@ namespace Render
 	void DrawAmmoBar(DWORD Sign, float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size)
 	{
 		static std::unordered_map<DWORD, HealthBar> HealthBarMap;
+		if (HealthBarMap.size() > 64)
+			HealthBarMap.clear();
+
 		HealthBar& hb = HealthBarMap[Sign];
 		hb.AmmoBarH(MaxAmmo, CurrentAmmo, Pos, Size);
 	}
 	void DrawArmorBar(DWORD Sign, float MaxArmor, float CurrentArmor, bool HasHelmet, const ImVec2& Pos, const ImVec2& Size)
 	{
 		static std::unordered_map<DWORD, HealthBar> HealthBarMap;
+		if (HealthBarMap.size() > 64)
+			HealthBarMap.clear();
+
 		HealthBar& hb = HealthBarMap[Sign];
 		hb.ArmorBarV(HasHelmet, MaxArmor, CurrentArmor, Pos, Size, ESPConfig::ShowArmorNum);
 	}
