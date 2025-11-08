@@ -103,14 +103,16 @@ void Offsets::UpdateOffsets()
     std::string gameVersion = Init::Client::GetCs2Version(memoryManager.GetProcessID(L"cs2.exe"));
     try
     {
-        json storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
+        std::string storedGameData;
+        storage::ReadStorageFile("gamedata.json", storedGameData);
+        json storedGameJson = json::parse(storedGameData);
 
         if (gameVersion.find(storedGameJson["game-version"].get<std::string>()) == std::string::npos)
             throw std::runtime_error("local offsets are outdated");
 
-        offsetsData = storage::ReadStorageFile("offsets.json");
-        buttonsData = storage::ReadStorageFile("buttons.json");
-        client_dllData = storage::ReadStorageFile("client_dll.json");
+        storage::ReadStorageFile("offsets.json", offsetsData);
+        storage::ReadStorageFile("buttons.json", buttonsData);
+        storage::ReadStorageFile("client_dll.json", client_dllData);
     }
     catch (...)
     {
@@ -125,7 +127,9 @@ void Offsets::UpdateOffsets()
         json storedGameJson;
         try
         {
-            storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
+            std::string storedGameData;
+            storage::ReadStorageFile("gamedata.json", storedGameData);
+            storedGameJson = json::parse(storedGameData);
         }
         catch (...) {}
         storedGameJson["game-version"] = gameVersion;
