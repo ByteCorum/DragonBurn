@@ -1,4 +1,6 @@
 #include "Offsets.h"
+#include "../Core/Init.h"
+#include "../Helpers/StorageMgr.h"
 
 Offsets::Offsets() {}
 

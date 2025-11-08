@@ -109,7 +109,7 @@ void Cheat()
 		Log::Error(error.what());
 	}
 
-#ifndef DBDEBUG
+//#ifndef DBDEBUG
 	tryCount = 0;
 CHECK_VER://CHECK_VER
 	Log::Info("Checking cheat version...");
@@ -136,7 +136,7 @@ CHECK_VER://CHECK_VER
 		else
 			Log::Error(errorMsg);
 	}
-#endif
+//#endif
 
 	bool mapped = false;
 CONNECT_KERNEL://CONNECT_KERNEL

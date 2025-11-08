@@ -7,11 +7,9 @@
 #include <thread>
 #include <psapi.h>
 #include <stdexcept>
-#include <json.hpp>
 #include <format>
 #include "../Offsets/Offsets.h"
 #include "../Helpers/WebApi.h"
-#include "../Core/Config.h"
 #include "../Helpers/StorageMgr.h"
 
 namespace Init
