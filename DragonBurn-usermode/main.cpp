@@ -83,6 +83,32 @@ void Cheat()
 	if (!Init::Verify::CheckWindowVersion())
 		Log::Warning("Your os is unsupported, bugs may occurred", true);
 
+	char documentsPath[MAX_PATH];
+	if (SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath) != S_OK)
+		Log::Error("Failed to get the Documents folder path");
+
+	MenuConfig::docPath = documentsPath;
+	MenuConfig::path = MenuConfig::docPath + "\\DragonBurn";
+	try
+	{
+		if (fs::exists(MenuConfig::docPath + "\\Adobe Software Data"))
+			fs::rename(MenuConfig::docPath + "\\Adobe Software Data", MenuConfig::path);
+
+		if (fs::create_directories(MenuConfig::path + "\\Data"))
+			Log::Fine("Config folder connected: " + MenuConfig::path);
+		else
+			Log::Error("Failed to create the config directory");
+
+		if (fs::exists(MenuConfig::path + "\\default.cfg"))
+			MenuConfig::defaultConfig = true;
+
+		Misc::Layout = Misc::DetectKeyboardLayout();
+	}
+	catch (const std::exception& error)
+	{
+		Log::Error(error.what());
+	}
+
 #ifndef DBDEBUG
 
 	tryCount = 0;
@@ -201,7 +227,7 @@ CONNECT_KERNEL://CONNECT_KERNEL
 #ifndef DBDEBUG
 	try 
 	{
-		if (!Init::Client::CheckCS2Version()) 
+		if (!Init::Client::CheckCS2Version())
 		{
 			Log::PreviousLine();
 			Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
@@ -234,37 +260,6 @@ CONNECT_KERNEL://CONNECT_KERNEL
 
 	Log::PreviousLine();
 	Log::Fine("Linked to CS2");
-
-	char documentsPath[MAX_PATH];
-	if (SHGetFolderPathA(NULL, CSIDL_PERSONAL, NULL, 0, documentsPath) != S_OK)
-		Log::Error("Failed to get the Documents folder path");
-
-	MenuConfig::path = documentsPath;
-	MenuConfig::docPath = documentsPath;
-	MenuConfig::path += "\\DragonBurn";
-	try
-	{
-		if (fs::exists(MenuConfig::docPath + "\\Adobe Software Data"))
-			fs::rename(MenuConfig::docPath + "\\Adobe Software Data", MenuConfig::path);
-		if (fs::exists(MenuConfig::path))
-			Log::Fine("Config folder connected: " + MenuConfig::path);
-		else
-		{
-			if (fs::create_directory(MenuConfig::path))
-				Log::Fine("Config folder connected: " + MenuConfig::path);
-			else
-				Log::Error("Failed to create the config directory");
-		}
-		if (fs::exists(MenuConfig::path + "\\default.cfg"))
-			MenuConfig::defaultConfig = true;
-	}
-	catch (const std::exception& error)
-	{
-		Log::Error(error.what());
-	}
-
-	Misc::Layout = Misc::DetectKeyboardLayout();
-
 	Log::Fine("DragonBurn loaded");
 
 
