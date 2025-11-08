@@ -103,7 +103,7 @@ void Offsets::UpdateOffsets()
     {
         json storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
 
-        if (gameVersion.find(storedGameJson["game-version"].get<std::string>()) != std::string::npos)
+        if (gameVersion.find(storedGameJson["game-version"].get<std::string>()) == std::string::npos)
             throw std::runtime_error("local offsets are outdated");
 
         offsetsData = storage::ReadStorageFile("offsets.json");
@@ -120,19 +120,14 @@ void Offsets::UpdateOffsets()
         storage::WriteStorageFile("buttons.json", buttonsData);
         storage::WriteStorageFile("client_dll.json", client_dllData);
 
+        json storedGameJson;
         try
         {
-            json storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
-            storedGameJson["game-version"] = gameVersion;
-            storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
-
+            storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
         }
-        catch (...) 
-        {
-            json storedGameJson;
-            storedGameJson["game-version"] = gameVersion;
-            storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
-        }
+        catch (...) {}
+        storedGameJson["game-version"] = gameVersion;
+        storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
     }
     SetOffsets(offsetsData, buttonsData, client_dllData);
 }
