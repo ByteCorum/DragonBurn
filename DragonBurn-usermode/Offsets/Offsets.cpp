@@ -98,7 +98,7 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
 void Offsets::UpdateOffsets()
 {
     std::string offsetsData, buttonsData, client_dllData;
-    std::string gameVersion = Init::Client::GetCs2Version();
+    std::string gameVersion = Init::Client::GetCs2Version(memoryManager.GetProcessID(L"cs2.exe"));
     try
     {
         json storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
@@ -134,6 +134,5 @@ void Offsets::UpdateOffsets()
             storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
         }
     }
-
     SetOffsets(offsetsData, buttonsData, client_dllData);
 }
