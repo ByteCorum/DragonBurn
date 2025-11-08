@@ -309,8 +309,8 @@ namespace Render
 	public:
 		HealthBar() {}
 
-		void HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowNum);
-		void ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowNum);
+		void HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowBar, bool ShowNum);
+		void ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowBar, bool ShowNum);
 		void AmmoBarH(float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size);
 
 	private:
@@ -338,72 +338,80 @@ namespace Render
 	//////////////////////////////////////////////////////////////////////////
 	// Vertical Health Bar
 	//////////////////////////////////////////////////////////////////////////
-	void HealthBar::HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowNum)
+	void HealthBar::HealthBarV(float MaxHealth, float CurrentHealth, const ImVec2& Pos, const ImVec2& Size, bool ShowBar, bool ShowNum)
 	{
-		ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
+		if (ShowBar || ShowNum)
+		{
+			this->MaxHealth = MaxHealth;
+			this->CurrentHealth = CurrentHealth;
+			this->RectPos = Pos;
+			this->RectSize = Size;
+		}
+		if (ShowBar)
+		{
+			ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
 
-		this->MaxHealth = MaxHealth;
-		this->CurrentHealth = CurrentHealth;
-		this->RectPos = Pos;
-		this->RectSize = Size;
+			float proportion = (MaxHealth > 0.f) ? CurrentHealth / MaxHealth : 0.f;
+			proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
 
-		float proportion = (MaxHealth > 0.f) ? CurrentHealth / MaxHealth : 0.f;
-		proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+			float height = RectSize.y * proportion;
+			ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
 
-		float height = RectSize.y * proportion;
-		ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
+			DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
 
-		DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
+			float colorLerpT = powf(proportion, 2.5f);
+			ImColor color = (proportion > 0.5f && proportion <= 1.f) ?
+				Mix(FirstStageColor, SecondStageColor, colorLerpT * 3.f - 1.f) :
+				Mix(SecondStageColor, ThirdStageColor, colorLerpT * 4.f);
 
-		float colorLerpT = powf(proportion, 2.5f);
-		ImColor color = (proportion > 0.5f && proportion <= 1.f) ?
-			Mix(FirstStageColor, SecondStageColor, colorLerpT * 3.f - 1.f) :
-			Mix(SecondStageColor, ThirdStageColor, colorLerpT * 4.f);
+			ImVec2 healthRectTL = { RectPos.x, RectPos.y + RectSize.y - height };
+			DrawList->AddRectFilled(healthRectTL, rectBR, color, 0);
 
-		ImVec2 healthRectTL = { RectPos.x, RectPos.y + RectSize.y - height };
-		DrawList->AddRectFilled(healthRectTL, rectBR, color, 0);
-
-		DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
-
-		if (ShowNum && CurrentHealth < MaxHealth)
+			DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
+		}
+		if (ShowNum)
 		{
 			char healthStr[16];
 			snprintf(healthStr, sizeof(healthStr), "%.f", CurrentHealth);
-			Gui.StrokeText(healthStr, healthRectTL, ImColor(255, 255, 255), 13.f, true);
+			Gui.StrokeText(healthStr, RectPos, ImColor(255, 255, 255), 13.f, true);
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// Vertical Armor Bar
 	//////////////////////////////////////////////////////////////////////////
-	void HealthBar::ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowNum)
+	void HealthBar::ArmorBarV(bool HasHelmet, float MaxArmor, float CurrentArmor, const ImVec2& Pos, const ImVec2& Size, bool ShowBar, bool ShowNum)
 	{
-		ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
+		if (ShowBar || ShowNum)
+		{
+			this->MaxArmor = MaxArmor;
+			this->CurrentArmor = CurrentArmor;
+			this->RectPos = Pos;
+			this->RectSize = Size;
+		}
+		if (ShowBar)
+		{
+			ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
 
-		this->MaxArmor = MaxArmor;
-		this->CurrentArmor = CurrentArmor;
-		this->RectPos = Pos;
-		this->RectSize = Size;
+			float proportion = (MaxArmor > 0.f) ? CurrentArmor / MaxArmor : 0.f;
+			proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
 
-		float proportion = (MaxArmor > 0.f) ? CurrentArmor / MaxArmor : 0.f;
-		proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+			float height = RectSize.y * proportion;
+			ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
 
-		float height = RectSize.y * proportion;
-		ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
+			DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
 
-		DrawList->AddRectFilled(RectPos, rectBR, BackGroundColor, 5, 15);
+			ImColor color = HasHelmet ? ArmorWithHelmetColor : ArmorColor;
+			ImVec2 armorRectTL = { RectPos.x, RectPos.y + RectSize.y - height };
+			DrawList->AddRectFilled(armorRectTL, rectBR, color, 0);
 
-		ImColor color = HasHelmet ? ArmorWithHelmetColor : ArmorColor;
-		ImVec2 armorRectTL = { RectPos.x, RectPos.y + RectSize.y - height };
-		DrawList->AddRectFilled(armorRectTL, rectBR, color, 0);
-
-		DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
-
-		if (ShowNum && CurrentArmor < MaxArmor)
+			DrawList->AddRect(RectPos, rectBR, FrameColor, 0, 15, 1);
+		}
+		if (ShowNum)
 		{
 			char armorStr[16];
 			snprintf(armorStr, sizeof(armorStr), "%.f", CurrentArmor);
-			Gui.StrokeText(armorStr, armorRectTL, ImColor(255, 255, 255), 13.f, true);
+			Gui.StrokeText(armorStr, RectPos, ImColor(255, 255, 255), 13.f, true);
 		}
 	}
 
@@ -440,7 +448,7 @@ namespace Render
 			HealthBarMap.clear();
 
 		HealthBar& hb = HealthBarMap[Sign];
-		hb.HealthBarV(MaxHealth, CurrentHealth, Pos, Size, ESPConfig::ShowHealthNum);
+		hb.HealthBarV(MaxHealth, CurrentHealth, Pos, Size, ESPConfig::ShowHealthBar,ESPConfig::ShowHealthNum);
 	}
 
 	void DrawAmmoBar(DWORD Sign, float MaxAmmo, float CurrentAmmo, const ImVec2& Pos, const ImVec2& Size)
@@ -459,7 +467,7 @@ namespace Render
 			HealthBarMap.clear();
 
 		HealthBar& hb = HealthBarMap[Sign];
-		hb.ArmorBarV(HasHelmet, MaxArmor, CurrentArmor, Pos, Size, ESPConfig::ShowArmorNum);
+		hb.ArmorBarV(HasHelmet, MaxArmor, CurrentArmor, Pos, Size, ESPConfig::ArmorBar, ESPConfig::ShowArmorNum);
 	}
 
 	ImVec2 GetScreenCenterImVec2()

@@ -318,12 +318,13 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 				Render::DrawDistance(localEntity, entity, Rect);
 
 				// healthbar
-				if (ESPConfig::ShowHealthBar)
+				if(ESPConfig::ShowHealthBar || ESPConfig::ShowHealthNum)
 				{
 					ImVec2 HealthBarPos = { Rect.x - 6.f, Rect.y };
 					ImVec2 HealthBarSize = { 4, Rect.w };
 					Render::DrawHealthBar(entity.Controller.Address, entity.Pawn.Health > 100 ? entity.Pawn.Health : 100, entity.Pawn.Health, HealthBarPos, HealthBarSize);
 				}
+
 
 				// ammo
 				// When player is using knife or nade, Ammo = -1.
@@ -337,7 +338,7 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 
 				// armor
 				// It is meaningless to render a empty bar
-				if (ESPConfig::ArmorBar && entity.Pawn.Armor > 0)
+				if ((ESPConfig::ArmorBar || ESPConfig::ShowArmorNum) && entity.Pawn.Armor > 0)
 				{
 					bool HasHelmet;
 					ImVec2 ArmorBarPos;
