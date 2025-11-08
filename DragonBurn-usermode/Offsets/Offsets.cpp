@@ -98,10 +98,42 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
 void Offsets::UpdateOffsets()
 {
     std::string offsetsData, buttonsData, client_dllData;
+    std::string gameVersion = Init::Client::GetCs2Version();
+    try
+    {
+        json storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
 
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
+        if (gameVersion.find(storedGameJson["game-version"].get<std::string>()) != std::string::npos)
+            throw std::runtime_error("local offsets are outdated");
+
+        offsetsData = storage::ReadStorageFile("offsets.json");
+        buttonsData = storage::ReadStorageFile("buttons.json");
+        client_dllData = storage::ReadStorageFile("client_dll.json");
+    }
+    catch (...)
+    {
+        Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
+        Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
+        Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
+
+        storage::WriteStorageFile("offsets.json", offsetsData);
+        storage::WriteStorageFile("buttons.json", buttonsData);
+        storage::WriteStorageFile("client_dll.json", client_dllData);
+
+        try
+        {
+            json storedGameJson = json::parse(storage::ReadStorageFile("gamedata.json"));
+            storedGameJson["game-version"] = gameVersion;
+            storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
+
+        }
+        catch (...) 
+        {
+            json storedGameJson;
+            storedGameJson["game-version"] = gameVersion;
+            storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
+        }
+    }
 
     SetOffsets(offsetsData, buttonsData, client_dllData);
 }

@@ -3,6 +3,8 @@
 #include "../Core/MemoryMgr.h"
 #include <json.hpp>
 #include "../Helpers/WebApi.h"
+#include "../Core/Init.h"
+#include "../Helpers/StorageMgr.h"
 
 using json = nlohmann::json;
 
