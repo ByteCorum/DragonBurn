@@ -14,14 +14,6 @@
 #include "../Core/Config.h"
 #include "../Helpers/StorageMgr.h"
 
-inline std::string WStringToString(const std::wstring& wstr)
-{
-    int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
-    std::vector<char> buffer(bufferSize);
-    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, buffer.data(), bufferSize, NULL, NULL);
-    return std::string(buffer.data());
-}
-
 namespace Init
 {
     using namespace std;
@@ -149,31 +141,25 @@ namespace Init
     class Client
     {
     public:
-        static std::string GetCs2Version()// TODO: Move this to kernel
+        static std::string GetCs2Version(int pid)
         {
-            std::string processPath;
-            HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, memoryManager.GetProcessID(L"cs2.exe"));
-            if (hProcess) 
-            {
-                wchar_t buffer[MAX_PATH];
-                DWORD size = MAX_PATH;
-                if (QueryFullProcessImageName(hProcess, 0, buffer, &size))
-                {
-                    CloseHandle(hProcess);
-                    processPath = WStringToString(buffer);
-                }
-                else
-                {
-                    CloseHandle(hProcess);
+            std::wstring processPath;
+            WCHAR filename[MAX_PATH];
+
+            HANDLE processHandle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+            if (processHandle != NULL) {
+                if (GetModuleFileNameEx(processHandle, NULL, filename, MAX_PATH) == 0)
                     throw std::runtime_error("failed to get process path");
-                }
+                else
+                    processPath = filename;
+                CloseHandle(processHandle);
             }
-            else 
+            else
                 throw std::runtime_error("failed to open process");
 
-            int pos = processPath.rfind("bin");
-            if (pos != std::string::npos) 
-                processPath = processPath.substr(0, pos + 3) + "\\built_from_cl.txt";
+            int pos = processPath.rfind(L"bin");
+            if (pos != std::wstring::npos) 
+                processPath = processPath.substr(0, pos + 3) + L"\\built_from_cl.txt";
             else
                 throw std::runtime_error("failed to find version file");
 
@@ -190,7 +176,6 @@ namespace Init
             return gameVersion;
         }
 
-        // Check if the game window is activated
         static bool isGameWindowActive() {
             HWND hwnd_cs2 = FindWindow(NULL, TEXT("Counter-Strike 2"));
 
