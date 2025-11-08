@@ -110,7 +110,6 @@ void Cheat()
 	}
 
 #ifndef DBDEBUG
-
 	tryCount = 0;
 CHECK_VER://CHECK_VER
 	Log::Info("Checking cheat version...");
@@ -139,30 +138,6 @@ CHECK_VER://CHECK_VER
 	}
 #endif
 
-	tryCount = 0;
-UPDATE_OFFSETS://UPDATE_OFFSETS
-	Log::Info("Updating offsets...");
-	try 
-	{
-		Offset.UpdateOffsets();
-		Log::PreviousLine();
-		Log::Fine("Offsets updated");
-	}
-	catch (const std::exception& error)
-	{
-		Log::PreviousLine();
-		std::string errorMsg = error.what();
-		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
-		{
-			Log::Error(errorMsg, false, false);
-			Log::Info("Reconnecting...");
-			tryCount++;
-			goto UPDATE_OFFSETS;//UPDATE_OFFSETS
-		}
-		else
-			Log::Error(errorMsg);
-	}
-
 	bool mapped = false;
 CONNECT_KERNEL://CONNECT_KERNEL
 	Log::Info("Connecting to kernel mode driver...");
@@ -178,7 +153,7 @@ CONNECT_KERNEL://CONNECT_KERNEL
 		Log::Info("Triggered auto-map protocol");
 		Log::Info("Looking for kernel mapper...");
 
-		if (fs::exists("DragonBurn-kernel.exe")) 
+		if (fs::exists("DragonBurn-kernel.exe"))
 		{
 			Log::PreviousLine();
 			std::string mapperInfo = "Executing kernel mapper, flags: "
@@ -189,7 +164,7 @@ CONNECT_KERNEL://CONNECT_KERNEL
 			int result = Init::Verify::ExecuteMapper(secureMode, legacyImg);
 
 			Log::PreviousLine();
-			if (result == 0) 
+			if (result == 0)
 			{
 				Log::Fine("Successfully mapped kernel mode driver");
 				mapped = true;
@@ -217,29 +192,36 @@ CONNECT_KERNEL://CONNECT_KERNEL
 	{
 		Log::PreviousLine();
 		Log::Info("Connecting to CS2(it may take some time)...");
-		Sleep(23000);
+		Sleep(20000);
 	}
-
 	Log::PreviousLine();
 	Log::Fine("Connected to CS2");
-	Log::Info("Linking to CS2...");
 
-#ifndef DBDEBUG
-	try 
+	tryCount = 0;
+UPDATE_OFFSETS://UPDATE_OFFSETS
+	Log::Info("Updating offsets...");
+	try
 	{
-		if (!Init::Client::CheckCS2Version())
-		{
-			Log::PreviousLine();
-			Log::Warning("Offsets are outdated, we'll update them asap. With current offsets, cheat may work unstable", true);
-		}
+		Offset.UpdateOffsets();
+		Log::PreviousLine();
+		Log::Fine("Offsets updated");
 	}
-	catch(const std::exception& error)
+	catch (const std::exception& error)
 	{
 		Log::PreviousLine();
-		Log::Error(error.what());
+		std::string errorMsg = error.what();
+		if (errorMsg.find("bad internet connection") != std::string::npos && tryCount < 3)
+		{
+			Log::Error(errorMsg, false, false);
+			Log::Info("Reconnecting...");
+			tryCount++;
+			goto UPDATE_OFFSETS;//UPDATE_OFFSETS
+		}
+		else
+			Log::Error(errorMsg);
 	}
-#endif
 
+	Log::Info("Attaching to CS2...");
 	if (!memoryManager.Attach(memoryManager.GetProcessID(L"cs2.exe")))
 	{
 		Log::PreviousLine();
@@ -255,7 +237,7 @@ CONNECT_KERNEL://CONNECT_KERNEL
 	g_globalVars = std::make_unique<globalvars>();
 	if (!g_globalVars->UpdateGlobalvars()) {
 		Log::PreviousLine();
-		Log::Error("Offsets are outdated");
+		Log::Error("Offsets are outdated, wait a few hours for offsets to update");
 	}
 
 	Log::PreviousLine();

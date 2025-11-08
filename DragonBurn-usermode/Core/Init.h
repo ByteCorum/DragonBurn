@@ -9,11 +9,10 @@
 #include <stdexcept>
 #include <json.hpp>
 #include <format>
-#include <sstream>
-#include <filesystem>
 #include "../Offsets/Offsets.h"
 #include "../Helpers/WebApi.h"
 #include "../Core/Config.h"
+#include "../Helpers/StorageMgr.h"
 
 inline std::string WStringToString(const std::wstring& wstr)
 {
@@ -63,83 +62,42 @@ namespace Init
         //    SetConsoleTitle(title);
         //}
 
-        static std::vector<std::string> GetCloudVer()
-        {
-            std::string versionData;
-            std::string localVerFile = MenuConfig::path + "\\Data\\versions.json";
-            Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3", versionData);
-            json versionJson = json::parse(versionData);
-
-            if (!versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
-                throw std::runtime_error("Invalid json data");
-
-            auto now = std::chrono::system_clock::now();
-            versionJson["last-access-time"] = std::format("{:%Y-%m-%d %H:%M:%S}", now);
-
-            std::ofstream storage(localVerFile);
-            if (storage.is_open())
-            {
-                storage << versionJson.dump(4);
-                storage.close();
-            }
-
-            std::vector<std::string> versions;
-            for (const auto& version : versionJson["versionJson"])
-            {
-                versions.push_back(version.get<std::string>());
-            }
-
-            return versions;
-        }
-
-        static std::vector<std::string> GetLocalVer()
-        {
-            std::string localVerFile = MenuConfig::path + "\\Data\\versions.json";
-            if (!std::filesystem::exists(localVerFile))
-                throw std::runtime_error("Failed to find local version storage");
-
-            std::string versionData;
-            std::ifstream storage(localVerFile);
-            if (storage.is_open())
-            {
-                std::stringstream buffer;
-                buffer << storage.rdbuf();
-                versionData = buffer.str();
-                storage.close();
-            }
-            else
-                throw std::runtime_error("Failed to open local version storage");
-
-            json versionJson = json::parse(versionData);
-
-            if (!versionJson.contains("last-access-time") || !versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
-                throw std::runtime_error("Invalid json data");
-
-            std::stringstream ss(versionJson["last-access-time"].get<std::string>());
-            std::chrono::system_clock::time_point lastAccessTime;
-            std::chrono::from_stream(ss, "%Y-%m-%d %H:%M:%S", lastAccessTime);
-
-            if (std::chrono::system_clock::now() - lastAccessTime > std::chrono::minutes(10))
-                throw std::runtime_error("Version data is outdated");
-
-            std::vector<std::string> versions;
-            for (const auto& version : versionJson["versionJson"])
-            {
-                versions.push_back(version.get<std::string>());
-            }
-            return versions;
-        }
-
         static bool CheckCheatVersion()
         {
             std::vector<std::string> versions;
             try
             {
-                versions = GetLocalVer();
+                json versionJson = json::parse(storage::ReadStorageFile("versions.json"));
+
+                if (!versionJson.contains("last-access-time") || !versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
+                    throw std::runtime_error("Invalid json data");
+
+                std::stringstream ss(versionJson["last-access-time"].get<std::string>());
+                std::chrono::system_clock::time_point lastAccessTime;
+                std::chrono::from_stream(ss, "%Y-%m-%d %H:%M:%S", lastAccessTime);
+
+                if (std::chrono::system_clock::now() - lastAccessTime > std::chrono::minutes(10))
+                    throw std::runtime_error("Version data is outdated");
+
+                for (const auto& version : versionJson["versionJson"])
+                    versions.push_back(version.get<std::string>());
             }
             catch (...)
             {
-                versions = GetCloudVer();
+                std::string versionData;
+                Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3", versionData);
+                json versionJson = json::parse(versionData);
+
+                if (!versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
+                    throw std::runtime_error("Invalid json data");
+
+                for (const auto& version : versionJson["versionJson"])
+                    versions.push_back(version.get<std::string>());
+
+                auto now = std::chrono::system_clock::now();
+                versionJson["last-access-time"] = std::format("{:%Y-%m-%d %H:%M:%S}", now);
+
+                storage::WriteStorageFile("versions.json", versionJson.dump(4));
             }
 
             if (std::find(versions.begin(), versions.end(), MenuConfig::version) != versions.end())
@@ -191,14 +149,8 @@ namespace Init
     class Client
     {
     public:
-        static bool CheckCS2Version()
+        static std::string GetCs2Version()// TODO: Move this to kernel
         {
-            std::string supportedVersion;
-            Web::Get("https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/cs2-version", supportedVersion);
-            if (supportedVersion == "-1")
-                return true;
-
-            //getting processPath
             std::string processPath;
             HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, memoryManager.GetProcessID(L"cs2.exe"));
             if (hProcess) 
@@ -219,28 +171,23 @@ namespace Init
             else 
                 throw std::runtime_error("failed to open process");
 
-            // get path to built_from_cl.txt
             int pos = processPath.rfind("bin");
             if (pos != std::string::npos) 
                 processPath = processPath.substr(0, pos + 3) + "\\built_from_cl.txt";
             else
                 throw std::runtime_error("failed to find version file");
 
-            //reading file
+            std::string gameVersion;
             std::ifstream file(processPath);
             if (file.is_open()) 
             {
-                std::string gameVersion;
                 std::getline(file, gameVersion);
                 file.close();
-
-                if (supportedVersion == gameVersion)
-                    return true;
-                else
-                    return false;
             }
             else
                 throw std::runtime_error("failed to get game version");
+
+            return gameVersion;
         }
 
         // Check if the game window is activated
