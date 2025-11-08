@@ -148,6 +148,7 @@
     <ClInclude Include="Resources\Language.h" />
     <ClInclude Include="Resources\Sounds.h" />
     <ClInclude Include="Resources\WeaponIcon.h" />
+    <ClInclude Include="Helpers\StorageMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\icon.ico" />
@@ -180,6 +181,7 @@
     <ClCompile Include="OS-ImGui\OS-ImGui_Base.cpp" />
     <ClCompile Include="OS-ImGui\OS-ImGui_External.cpp" />
     <ClCompile Include="Core\MemoryMgr.cpp" />
+    <ClCompile Include="Helpers\StorageMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resource.rc" />
