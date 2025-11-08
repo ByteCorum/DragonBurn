@@ -8,12 +8,15 @@ void storage::ReadStorageFile(const std::string& path, std::string& data)
     if (!std::filesystem::exists(localStorageFile))
         throw std::runtime_error("Failed to find local storage");
 
-    std::ifstream storage(localStorageFile);
+    std::ifstream storage(localStorageFile, std::ios::in | std::ios::binary | std::ios::ate);
     if (storage.is_open())
     {
-        std::string line;
-        while (std::getline(storage, line))
-            data += line;
+        std::streamsize size = storage.tellg();
+        storage.seekg(0, std::ios::beg);
+
+        data.resize(size);
+        if (!storage.read(&data[0], size))
+            throw std::runtime_error("Failed to read local storage");
     }
     else
         throw std::runtime_error("Failed to open local storage");
