@@ -7,6 +7,10 @@
 #include <thread>
 #include <psapi.h>
 #include <stdexcept>
+#include <json.hpp>
+#include <format>
+#include <sstream>
+#include <filesystem>
 #include "../Offsets/Offsets.h"
 #include "../Helpers/WebApi.h"
 #include "../Core/Config.h"
@@ -59,12 +63,86 @@ namespace Init
         //    SetConsoleTitle(title);
         //}
 
+        static std::vector<std::string> GetCloudVer()
+        {
+            std::string versionData;
+            std::string localVerFile = MenuConfig::path + "\\Data\\versions.json";
+            Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3", versionData);
+            json versionJson = json::parse(versionData);
+
+            if (!versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
+                throw std::runtime_error("Invalid json data");
+
+            auto now = std::chrono::system_clock::now();
+            versionJson["last-access-time"] = std::format("{:%Y-%m-%d %H:%M:%S}", now);
+
+            std::ofstream storage(localVerFile);
+            if (storage.is_open())
+            {
+                storage << versionJson.dump(4);
+                storage.close();
+            }
+
+            std::vector<std::string> versions;
+            for (const auto& version : versionJson["versionJson"])
+            {
+                versions.push_back(version.get<std::string>());
+            }
+
+            return versions;
+        }
+
+        static std::vector<std::string> GetLocalVer()
+        {
+            std::string localVerFile = MenuConfig::path + "\\Data\\versions.json";
+            if (!std::filesystem::exists(localVerFile))
+                throw std::runtime_error("Failed to find local version storage");
+
+            std::string versionData;
+            std::ifstream storage(localVerFile);
+            if (storage.is_open())
+            {
+                std::stringstream buffer;
+                buffer << storage.rdbuf();
+                versionData = buffer.str();
+                storage.close();
+            }
+            else
+                throw std::runtime_error("Failed to open local version storage");
+
+            json versionJson = json::parse(versionData);
+
+            if (!versionJson.contains("last-access-time") || !versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
+                throw std::runtime_error("Invalid json data");
+
+            std::stringstream ss(versionJson["last-access-time"].get<std::string>());
+            std::chrono::system_clock::time_point lastAccessTime;
+            std::chrono::from_stream(ss, "%Y-%m-%d %H:%M:%S", lastAccessTime);
+
+            if (std::chrono::system_clock::now() - lastAccessTime > std::chrono::minutes(10))
+                throw std::runtime_error("Version data is outdated");
+
+            std::vector<std::string> versions;
+            for (const auto& version : versionJson["versionJson"])
+            {
+                versions.push_back(version.get<std::string>());
+            }
+            return versions;
+        }
+
         static bool CheckCheatVersion()
         {
-            std::string supportedVersions;
-            Web::Get("https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version", supportedVersions);
+            std::vector<std::string> versions;
+            try
+            {
+                versions = GetLocalVer();
+            }
+            catch (...)
+            {
+                versions = GetCloudVer();
+            }
 
-            if (supportedVersions.find(MenuConfig::version) != std::string::npos)
+            if (std::find(versions.begin(), versions.end(), MenuConfig::version) != versions.end())
                 return true;
             return false;
         }
