@@ -5,7 +5,8 @@
 
 namespace cfg
 {
-	static std::string version = xorstr_("3.5.8.1");
+	static std::string kmVersion = xorstr_("2.4.7.1");
+	static std::string umVersion = xorstr_("3.6.8.1");
 	static std::string name    = xorstr_("DragonBurn");
 	static std::string author  = xorstr_("ByteCorum");
 

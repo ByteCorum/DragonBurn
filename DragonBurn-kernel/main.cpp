@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <sstream>
 #include <TlHelp32.h>
+#include "json.hpp"
 
 #include "kdmapper.h"
 #include "utils.h"
@@ -12,6 +13,8 @@
 #include "cfg.h"
 #include "web_api.h"
 #include "logger.h"
+
+using json = nlohmann::json;
 
 LONG WINAPI SimplestCrashHandler(EXCEPTION_POINTERS* ExceptionInfo)
 {
@@ -88,6 +91,35 @@ bool CheckArg(const int argc, wchar_t** argv, const wchar_t* arg)
 	return false;
 }
 
+bool CheckCheatVersion()
+{
+	std::vector<std::string> versions;
+
+	std::string versionData;
+	Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3", versionData);
+	json versionJson = json::parse(versionData)["record"];
+
+	if (!versionJson.contains("kernel-ver") || versionJson["kernel-ver"].is_null() || !versionJson["kernel-ver"].is_array())
+		throw std::runtime_error("Invalid json data");
+
+	for (const auto& version : versionJson["kernel-ver"])
+		versions.push_back(version.get<std::string>());
+
+	if (std::find(versions.begin(), versions.end(), cfg::kmVersion) != versions.end())
+		return true;
+	return false;
+}
+
+bool IsDriverRunning(const LPCWSTR name)
+{
+	HANDLE kernelDriver = CreateFile(name, GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (kernelDriver == INVALID_HANDLE_VALUE)
+        return false;
+
+	BOOL result = CloseHandle(kernelDriver);
+    return true;
+}
+
 int wmain(const int argc, wchar_t** argv)
 {
 	SetUnhandledExceptionFilter(SimplestCrashHandler);
@@ -101,7 +133,7 @@ int wmain(const int argc, wchar_t** argv)
                   __/ |                                   
                  |___/                                    
 )LOGO", 13);
-	Log::Info(cfg::name + " v" + cfg::version + " by " + cfg::author);
+	Log::Info(cfg::name + " v" + cfg::umVersion + " & " + cfg::kmVersion + " by " + cfg::author);
 	Log::Info("https://github.com/ByteCorum/DragonBurn");
 	Log::Info("https://discord.gg/5WcvdzFybD\n\n");
 
@@ -122,25 +154,21 @@ int wmain(const int argc, wchar_t** argv)
 		Log::Warning("Legacy DragonBurn kernel is deprecated, it's better to use new one");
 	}
 	if (indPagesMode)
-	{
 		Log::Info("Enabled: Secure mapping and execution mode");
-	}
+
+	if (IsDriverRunning(L"\\\\.\\DragonBurn-kmd"))
+		Log::Error("Kernel mode driver is already mapped");
 
 #ifndef _DEBUG
-	const std::string curVersionUrl = "https://raw.githubusercontent.com/ByteCorum/DragonBurn/data/version";
-	std::string supportedVersions;
 	int tryCount = 0;
-
 CHECK_VER://CHECK_VER
 	Log::Info("Checking mapper version...");
 	try
 	{
-		Web::Get(curVersionUrl, supportedVersions);
-		if (supportedVersions.find(cfg::version) != std::string::npos)
-		{
-			Log::PreviousLine();
+		bool result = CheckCheatVersion();
+		Log::PreviousLine();
+		if (result)
 			Log::Fine("Your mapper version is up to date and supported");
-		}
 		else
 			Log::Error("Your mapper version is out of support");
 	}

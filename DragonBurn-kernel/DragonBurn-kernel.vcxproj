@@ -103,6 +103,7 @@
     <ClInclude Include="include\crypto.h" />
     <ClInclude Include="include\intel_driver.h" />
     <ClInclude Include="include\intel_driver_resource.h" />
+    <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\kdmapper.h" />
     <ClInclude Include="include\logger.h" />
     <ClInclude Include="include\nt.h" />

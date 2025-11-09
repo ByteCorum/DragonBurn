@@ -80,3 +80,4 @@ DragonBurn-usermode/Resources/WeaponIcon.h   linguist-vendored
 DragonBurn-usermode/Resources/Font.h         linguist-vendored
 DragonBurn-kernel/include/cfg.h         linguist-vendored
 DragonBurn-kernel/include/intel_driver_resource.h         linguist-vendored
+DragonBurn-kernel/include/json.hpp     linguist-vendored
