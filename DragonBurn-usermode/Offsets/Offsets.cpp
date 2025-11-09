@@ -97,6 +97,20 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->C4.m_nBombSite = client_dllJson["C_PlantedC4"]["fields"]["m_nBombSite"];
 }
 
+void ReadExistingStorage(json& storedGameJson)
+{
+    try
+    {
+        std::string storedGameData;
+        storage::ReadStorageFile("gamedata.json", storedGameData);
+        storedGameJson = json::parse(storedGameData);
+    }
+    catch (...)
+    {
+        storedGameJson = json::object();
+    }
+}
+
 void Offsets::UpdateOffsets()
 {
     std::string offsetsData, buttonsData, client_dllData;
@@ -104,6 +118,7 @@ void Offsets::UpdateOffsets()
     try
     {
         std::string storedGameData;
+        
         storage::ReadStorageFile("gamedata.json", storedGameData);
         json storedGameJson = json::parse(storedGameData);
 
@@ -125,13 +140,7 @@ void Offsets::UpdateOffsets()
         storage::WriteStorageFile("client_dll.json", client_dllData);
 
         json storedGameJson;
-        try
-        {
-            std::string storedGameData;
-            storage::ReadStorageFile("gamedata.json", storedGameData);
-            storedGameJson = json::parse(storedGameData);
-        }
-        catch (...) {}
+        ReadExistingStorage(storedGameJson);
         storedGameJson["game-version"] = gameVersion;
         storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
     }
