@@ -133,9 +133,9 @@ int wmain(const int argc, wchar_t** argv)
                   __/ |                                   
                  |___/                                    
 )LOGO", 13);
-	Log::Info(cfg::name + " v" + cfg::umVersion + " & " + cfg::kmVersion + " by " + cfg::author);
+	Log::Info(cfg::name + " v" + cfg::umVersion + " & v" + cfg::kmVersion + " by " + cfg::author);
 	Log::Info("https://github.com/ByteCorum/DragonBurn");
-	Log::Info("https://discord.gg/5WcvdzFybD\n\n");
+	Log::Info("https://discord.gg/5WcvdzFybD\n");
 
 	//free --> Automatically frees mapped memory after execution. Dangerous unless the driver finishes instantly
 	//indPagesMode --> Maps the driver into non-contiguous, separate memory pages. Better for stealth, but more complex
