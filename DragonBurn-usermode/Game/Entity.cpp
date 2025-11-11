@@ -383,7 +383,7 @@ std::vector<short> PlayerPawn::GetWeaponInventory(DWORD64 entityList) const
 
 bool CEntity::IsAlive() const
 {
-	return this->Controller.AliveStatus == 1 && this->Pawn.Health > 0 && this->Pawn.Health <= 100;
+	return this->Controller.AliveStatus == 1 && this->Pawn.Health > 0;
 }
 
 bool CEntity::IsInScreen()
