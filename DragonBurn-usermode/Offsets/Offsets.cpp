@@ -113,14 +113,19 @@ void ReadExistingStorage(json& storedGameJson)
 
 void Offsets::UpdateOffsets()
 {
-    std::string offsetsData, buttonsData, client_dllData;
+    std::string offsetsData, buttonsData, client_dllData, infoData;
     std::string gameVersion = Init::Client::GetCs2Version(memoryManager.GetProcessID(L"cs2.exe"));
+
+    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", infoData);
+    std::string buildNumber = json::parse(infoData)["build_number"].get<std::string>();
     try
     {
         std::string storedGameData;
-        
         storage::ReadStorageFile("gamedata.json", storedGameData);
         json storedGameJson = json::parse(storedGameData);
+
+        if (buildNumber.find(storedGameJson["build_number"].get<std::string>()) == std::string::npos)
+            throw std::runtime_error("cloud offsets got updated");
 
         if (gameVersion.find(storedGameJson["game-version"].get<std::string>()) == std::string::npos)
             throw std::runtime_error("local offsets are outdated");
@@ -131,6 +136,11 @@ void Offsets::UpdateOffsets()
     }
     catch (...)
     {
+        json storedGameJson;
+        ReadExistingStorage(storedGameJson);
+        if (storedGameJson.contains("build_number") && buildNumber.find(storedGameJson["build_number"].get<std::string>()) != std::string::npos)
+            throw std::runtime_error("Offsets are outdated, wait a few hours for offsets to update");
+
         Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
         Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
         Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
@@ -139,9 +149,9 @@ void Offsets::UpdateOffsets()
         storage::WriteStorageFile("buttons.json", buttonsData);
         storage::WriteStorageFile("client_dll.json", client_dllData);
 
-        json storedGameJson;
         ReadExistingStorage(storedGameJson);
         storedGameJson["game-version"] = gameVersion;
+        storedGameJson["build_number"] = buildNumber;
         storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
     }
     SetOffsets(offsetsData, buttonsData, client_dllData);
