@@ -116,8 +116,8 @@ void Offsets::UpdateOffsets()
     std::string offsetsData, buttonsData, client_dllData, infoData;
     std::string gameVersion = Init::Client::GetCs2Version(memoryManager.GetProcessID(L"cs2.exe"));
 
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", infoData);
-    std::string buildNumber = json::parse(infoData)["build_number"].get<std::string>();
+    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/info.json", infoData);
+    std::string buildNumber = std::to_string(json::parse(infoData)["build_number"].get<int>());
     try
     {
         std::string storedGameData;
