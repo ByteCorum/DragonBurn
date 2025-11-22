@@ -187,18 +187,20 @@ CONNECT_KERNEL://CONNECT_KERNEL
 	}
 
 	Log::Info("Waiting for CS2...");
-	bool preStart = false;
-	while (memoryManager.GetProcessID(L"cs2.exe") == 0)
+	bool attached = false;
+	do
 	{
-		preStart = true;
-		Sleep(500);
-	}
-	if (preStart)
-	{
-		Log::PreviousLine();
-		Log::Info("Connecting to CS2(it may take some time)...");
-		Sleep(20000);
-	}
+		attached = false;
+		DWORD pid = memoryManager.GetProcessID(L"cs2.exe");
+		if (pid != 0)
+		{
+			Log::PreviousLine();
+			Log::Info("Attaching to CS2...");
+			attached = memoryManager.Attach(pid);
+		}
+		Sleep(1000);
+	} while (!attached);
+
 	Log::PreviousLine();
 	Log::Fine("Connected to CS2");
 
@@ -226,18 +228,19 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 			Log::Error(errorMsg);
 	}
 
-	Log::Info("Attaching to CS2...");
-	Sleep(500);
-	if (!memoryManager.Attach(memoryManager.GetProcessID(L"cs2.exe")))
+	bool inited = false;
+	tryCount = 0;
+	Log::Info("Initialing adresses...");
+	do
+	{
+		tryCount++;
+		inited = gGame.InitAddress();
+		Sleep(1000);
+	} while (!inited && tryCount < 5);
+	if (!inited)
 	{
 		Log::PreviousLine();
-		Log::Error("Failed to attach to the process");
-	}
-
-	if (!gGame.InitAddress())
-	{
-		Log::PreviousLine();
-		Log::Error("Failed to Init Address");
+		Log::Error("Failed to Init Addresses");
 	}
 
 	g_globalVars = std::make_unique<globalvars>();
