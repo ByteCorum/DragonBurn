@@ -322,7 +322,7 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 				{
 					ImVec2 HealthBarPos = { Rect.x - 6.f, Rect.y };
 					ImVec2 HealthBarSize = { 4, Rect.w };
-					Render::DrawHealthBar(entity.Controller.Address, entity.Pawn.Health, entity.Pawn.Health, HealthBarPos, HealthBarSize);
+					Render::DrawHealthBar(entity.Controller.Address, 100, entity.Pawn.Health, HealthBarPos, HealthBarSize);
 				}
 
 
@@ -350,7 +350,7 @@ void Cheats::HandleEnts(const std::vector<EntityResult>& entities, CEntity& loca
 						ArmorBarPos = { Rect.x - 6.f, Rect.y };
 					
 					ImVec2 ArmorBarSize = { 4.f, Rect.w };
-					Render::DrawArmorBar(entity.Controller.Address, entity.Pawn.Armor, entity.Pawn.Armor, HasHelmet, ArmorBarPos, ArmorBarSize);
+					Render::DrawArmorBar(entity.Controller.Address, 100, entity.Pawn.Armor, HasHelmet, ArmorBarPos, ArmorBarSize);
 				}
 			}
 		}
