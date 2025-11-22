@@ -302,7 +302,7 @@ namespace GUI
 
 			ImGui::SetCursorPos(MenuConfig::WCS.ChildPos);
 			
-			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize, false, ImGuiWindowFlags_NoScrollbar);
+			ImGui::BeginChild("Page", MenuConfig::WCS.ChildSize, false, ImGuiWindowFlags_AlwaysVerticalScrollbar);
 			{
 				ImGui::Text("   DragonBurn");
 				ImGui::Separator();
