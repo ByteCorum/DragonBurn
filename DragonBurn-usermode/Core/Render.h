@@ -352,7 +352,7 @@ namespace Render
 			ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
 
 			float proportion = (MaxHealth > 0.f) ? CurrentHealth / MaxHealth : 0.f;
-			proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+			proportion = (proportion < 0.f) ? 0.f : proportion;
 
 			float height = RectSize.y * proportion;
 			ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
@@ -394,7 +394,7 @@ namespace Render
 			ImDrawList* DrawList = ImGui::GetBackgroundDrawList();
 
 			float proportion = (MaxArmor > 0.f) ? CurrentArmor / MaxArmor : 0.f;
-			proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+			proportion = (proportion < 0.f) ? 0.f : proportion;
 
 			float height = RectSize.y * proportion;
 			ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
@@ -428,7 +428,7 @@ namespace Render
 		this->RectSize = Size;
 
 		float proportion = (MaxAmmo > 0) ? CurrentAmmo / static_cast<float>(MaxAmmo) : 0.f;
-		proportion = (proportion < 0.f) ? 0.f : ((proportion > 1.f) ? 1.f : proportion);
+		proportion = (proportion < 0.f) ? 0.f : proportion;
 
 		float width = RectSize.x * proportion;
 		ImVec2 rectBR = { RectPos.x + RectSize.x, RectPos.y + RectSize.y };
