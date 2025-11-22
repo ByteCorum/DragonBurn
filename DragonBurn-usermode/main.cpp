@@ -227,6 +227,7 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 	}
 
 	Log::Info("Attaching to CS2...");
+	Sleep(500);
 	if (!memoryManager.Attach(memoryManager.GetProcessID(L"cs2.exe")))
 	{
 		Log::PreviousLine();

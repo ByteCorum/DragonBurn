@@ -373,7 +373,7 @@ namespace Render
 		{
 			char healthStr[16];
 			snprintf(healthStr, sizeof(healthStr), "%.f", CurrentHealth);
-			Gui.StrokeText(healthStr, {RectPos.x - RectSize.x , RectPos.y}, ImColor(255, 255, 255), 13.f, true);
+			Gui.StrokeText(healthStr, {RectPos.x + RectSize.x+6 , RectPos.y}, ImColor(255, 255, 255), 13.f, true);
 		}
 	}
 
@@ -411,7 +411,7 @@ namespace Render
 		{
 			char armorStr[16];
 			snprintf(armorStr, sizeof(armorStr), "%.f", CurrentArmor);
-			Gui.StrokeText(armorStr, { RectPos.x - RectSize.x , RectPos.y }, ImColor(255, 255, 255), 13.f, true);
+			Gui.StrokeText(armorStr, { RectPos.x - RectSize.x -3 , RectPos.y }, ImColor(255, 255, 255), 13.f, true);
 		}
 	}
 
