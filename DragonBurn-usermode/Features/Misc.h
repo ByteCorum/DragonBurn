@@ -92,12 +92,10 @@ namespace Misc
 		localtime_s(ptm, &now);
 	}
 
-	
-
-	static inline uintptr_t GetSmokeEntity(int i, uintptr_t EntityListEntry) {
-		uintptr_t Entity = EntityListEntry + 0x70 * (i + 1);
-		return Entity;
-	}
+	//static inline uintptr_t GetSmokeEntity(int i, uintptr_t EntityListEntry) {
+	//	uintptr_t Entity = EntityListEntry + 0x70 * (i + 1);
+	//	return Entity;
+	//}
 
 	//inline bool AirCheck(const CEntity& Local)
 	//{
