@@ -110,6 +110,8 @@ CHECK_VER://CHECK_VER
 			system("sc stop vgk");
 
 			Log::Fine("Recomended preferences applied, pls restart your pc");
+			Log::Info("Ignore usermode-part mapper error, just reboot pc and run again");
+			system("pause");
 			return -1;
 		}
 		else
