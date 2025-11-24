@@ -106,7 +106,7 @@ void Offsets::UpdateOffsets()
         .get<int>()
     );
     
-    json GamaDataStorage
+    json GamaDataStorage;
     try
     {
         GamaDataStorage = json::parse(storage::ReadStorageFile("gamedata.json"));
