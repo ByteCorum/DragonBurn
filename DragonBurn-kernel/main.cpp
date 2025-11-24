@@ -22,6 +22,7 @@ bool CheckCheatVersion();
 bool CheckArg(const int argc, wchar_t** argv, const wchar_t* arg);
 DWORD getParentProcess();
 bool callbackExample(ULONG64* param1, ULONG64* param2, ULONG64 allocationPtr, ULONG64 allocationSize);
+bool CheckWindowsKernelPrefs();
 
 
 int wmain(const int argc, wchar_t** argv)
@@ -88,6 +89,37 @@ CHECK_VER://CHECK_VER
 	}
 #endif
 
+	if (!CheckWindowsKernelPrefs())
+	{
+		Log::Warning("Your windows kernel preferences may lead to unexpected behavior.");
+		std::string response;
+		do
+		{
+			Log::Info("Would you like to apply recomended preferences: ");
+			std::cin >> response;
+		} while (response == "y" || response == "n");
+		if (response == "y")
+		{
+			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f");
+			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\Lsa\" /v RunAsPPL /t REG_DWORD /d 0 /f");
+			system("reg add \"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 00000000 /f");
+			system("bcdedit /set hypervisorlaunchtype off");
+			system("reg add \"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config\" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 00000000 /f");
+			system("sc stop faceit");
+			system("sc stop vgc");
+			system("sc stop vgk");
+
+			Log::Fine("Recomended preferences applied, pls restart your pc");
+			return 0;
+		}
+		else
+			Log::Warning("Recomended preferences won't be applied may lead to unexpected behavior.");
+	}
+	system("sc stop faceit");
+	system("sc stop vgc");
+	system("sc stop vgk");
+
+
 	BYTE* img = nullptr;
 	if (!legacyImg)
 	{
@@ -124,6 +156,47 @@ CHECK_VER://CHECK_VER
 	Log::Fine("DragonBurn driver mapped successfully");
 	system("pause");
 	return 0;
+}
+
+bool CheckWindowsKernelPrefs() 
+{
+	HKEY hKey;
+	LONG openStatus = RegOpenKeyExA(
+		HKEY_LOCAL_MACHINE,
+		"SYSTEM\\CurrentControlSet\\Control\\CI\\Config",
+		0,
+		KEY_READ,
+		&hKey
+	);
+	if (openStatus != ERROR_SUCCESS)
+		return false;
+
+	DWORD data = 0;
+	DWORD dataSize = sizeof(data);
+	DWORD type = 0;
+
+	LONG queryStatus = RegQueryValueExA(
+		hKey,
+		"VulnerableDriverBlocklistEnable",
+		nullptr,
+		&type,
+		(LPBYTE)&data,
+		&dataSize
+	);
+	RegCloseKey(hKey);
+
+	if (queryStatus == ERROR_SUCCESS)
+	{
+		if (type == REG_DWORD)
+		{
+			if (static_cast<int>(data) == 0)
+				return true;
+			else
+				return false;
+		}
+	}
+
+	return false;
 }
 
 LONG WINAPI SimplestCrashHandler(EXCEPTION_POINTERS* ExceptionInfo)
