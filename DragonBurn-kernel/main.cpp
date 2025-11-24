@@ -110,7 +110,7 @@ CHECK_VER://CHECK_VER
 			system("sc stop vgk");
 
 			Log::Fine("Recomended preferences applied, pls restart your pc");
-			return 0;
+			return -1;
 		}
 		else
 			Log::Warning("Recomended preferences won't be applied may lead to unexpected behavior.");
