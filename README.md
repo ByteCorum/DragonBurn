@@ -1,5 +1,4 @@
-<p align="center">
-<img src="Assets/banner.png">
+<p align="center"><img src="Assets/banner.png">
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
@@ -9,7 +8,7 @@
   <img src="https://img.shields.io/badge/tests-100/100-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/code quality-A+-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&logo=&logoColor=whit">
-  <img src="https://img.shields.io/badge/DragonBurn-v3.6.9.3-blue?style=for-the-badge&logo=&logoColor=whit">
+  <img src="https://img.shields.io/badge/DragonBurn-v3.7.9.3-blue?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/CS2-000000?style=for-the-badge&logo=counter-strike&logoColor=white">
   <img src="https://img.shields.io/badge/Kernel mode-28004D?style=for-the-badge">
   <img src="https://img.shields.io/badge/offsets auto update-D06B57?style=for-the-badge">
@@ -45,91 +44,91 @@ Press END key to open/close menu.
 
 <details>
 <summary>Visual</summary>
-  
-- Box ESP
-- Box Type
-- Box Rounding
-- Filled Box ESP
-- Gradient Filled Box ESP
-- Skeleton
-- Snap Line
-- Sound esp
-- Bomb esp
-- Bomb carrier esp
-- Visual Color
-- Eye Ray
-- Health Bar
-- Armor Bar
-- Weapon
-- Ammo
-- Distance
-- Name
-- Scoped
-- Blind
-- Blind Hide
-- AWP Crosshair
-- Visual Preview
-- etc
+
+-   Box ESP
+-   Box Type
+-   Box Rounding
+-   Filled Box ESP
+-   Gradient Filled Box ESP
+-   Skeleton
+-   Snap Line
+-   Sound esp
+-   Bomb esp
+-   Bomb carrier esp
+-   Visual Color
+-   Eye Ray
+-   Health Bar
+-   Armor Bar
+-   Weapon
+-   Ammo
+-   Distance
+-   Name
+-   Scoped
+-   Blind
+-   Blind Hide
+-   AWP Crosshair
+-   Visual Preview
+-   etc
 </details>
 
 <details>
 <summary>Radar Hack</summary>
-  
-- Point Size
-- Proportion
-- Range
-- Alpha
+
+-   Point Size
+-   Proportion
+-   Range
+-   Alpha
 </details>
 
 <details>
 <summary>Aimbot</summary>
-  
-- Start Bullet
-- Aim Lock
-- Draw Fov
-- Visible Check
-- Auto Only
-- Flash Check
-- Scope Check
-- Humanization
-- FOV
-- Smooth
-- Multi Hitboxes Selection
+
+-   Start Bullet
+-   Aim Lock
+-   Draw Fov
+-   Visible Check
+-   Auto Only
+-   Flash Check
+-   Scope Check
+-   Humanization
+-   FOV
+-   Smooth
+-   Multi Hitboxes Selection
 </details>
 
 <details>
 <summary>RCS</summary>
-  
-- Yaw
-- Pitch
-- Preview
+
+-   Yaw
+-   Pitch
+-   Preview
 </details>
 
 <details>
 <summary>Trigger Bot</summary>
-  
-- Scope Check
-- Flash Check
-- Stop Check
-- Shot Delay
-- Shot Duration
-- TTD
+
+-   Scope Check
+-   Flash Check
+-   Stop Check
+-   Shot Delay
+-   Shot Duration
+-   TTD
 </details>
 
 <details>
 <summary>Misc</summary>
-  
-- Bomb Timer
-- Bunny Hop
-- Head Line
-- Hit Sound
-- Hit Markers
-- Auto knife
-- Auto zeus
-- Auto accept
-- Spectator list
-- Watermark
-- Anti Record
+
+-   Bomb Timer
+-   Bunny Hop
+-   Head Line
+-   Hit Sound
+-   Hit Markers
+-   Auto knife
+-   Auto zeus
+-   Auto accept
+-   Spectator list
+-   Watermark
+-   Anti Record
 </details>
 
 ---
@@ -138,7 +137,7 @@ Press END key to open/close menu.
 
 At the beginning, download latest release or compile project by yourself. You need only 2 files `DragonBurn.exe` and `DragonBurn-kernel.exe`.
 
-> [!NOTE]  
+> [!NOTE]
 > Kernel driver is close source for safety reasons, download it from release.
 
 Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] success` all fine, then just run `DragonBurn.exe` and gl hf.
@@ -184,7 +183,7 @@ cmd should be opened as admin
 > Solution: Reboot pc and manually run mapper with `--legacymethod`
 -->
 
-> [!TIP]  
+> [!TIP]
 > This cmds should fix any issue(after executing restart pc):
 >
 > ```
