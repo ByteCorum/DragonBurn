@@ -1,5 +1,4 @@
-<p align="center"><img src="Assets/banner.png">
-</p>
+<p align="center"><img src="Assets/banner.png"></p>
 <p align="center">
   <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
   <img src="https://img.shields.io/badge/Visual_Studio-5C2D91?style=for-the-badge&logo=visual%20studio&logoColor=white">
@@ -8,7 +7,7 @@
   <img src="https://img.shields.io/badge/tests-100/100-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/code quality-A+-76B900?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge&logo=&logoColor=whit">
-  <img src="https://img.shields.io/badge/DragonBurn-v3.7.9.3-blue?style=for-the-badge&logo=&logoColor=whit">
+  <img src="https://img.shields.io/badge/DragonBurn-v3.7.9.4-blue?style=for-the-badge&logo=&logoColor=whit">
   <img src="https://img.shields.io/badge/CS2-000000?style=for-the-badge&logo=counter-strike&logoColor=white">
   <img src="https://img.shields.io/badge/Kernel mode-28004D?style=for-the-badge">
   <img src="https://img.shields.io/badge/offsets auto update-D06B57?style=for-the-badge">
