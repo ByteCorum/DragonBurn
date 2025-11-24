@@ -97,67 +97,37 @@ void Offsets::SetOffsets(const std::string& offsetsData, const std::string& butt
     this->C4.m_nBombSite = client_dllJson["C_PlantedC4"]["fields"]["m_nBombSite"];
 }
 
-void ReadExistingStorage(json& storedGameJson)
-{
-    try
-    {
-        std::string storedGameData;
-        storage::ReadStorageFile("gamedata.json", storedGameData);
-        storedGameJson = json::parse(storedGameData);
-    }
-    catch (...)
-    {
-        storedGameJson = json::object();
-    }
-}
-
 void Offsets::UpdateOffsets()
 {
-    std::string offsetsData, buttonsData, client_dllData, infoData;
-    std::string gameVersion = Init::Client::GetCs2Version(memoryManager.GetProcessID(L"cs2.exe"));
-    Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/info.json", infoData);
-    std::string buildNumber = std::to_string(json::parse(infoData)["build_number"].get<int>());
+    std::string offsets, buttons, client_dll;
+    std::string gameBuildNum = std::to_string
+    (
+        json::parse(Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/info.json"))["build_number"]
+        .get<int>()
+    );
+    json GamaDataStorage = json::parse(storage::ReadStorageFile("gamedata.json"));
 
     try
     {
-        std::string storedGameData;
-        storage::ReadStorageFile("gamedata.json", storedGameData);
-        json storedGameJson = json::parse(storedGameData);
-
-        if (buildNumber.find(storedGameJson["build_number"].get<std::string>()) == std::string::npos)
+        if (gameBuildNum.find(GamaDataStorage["build-number"].get<std::string>()) == std::string::npos)
             throw std::runtime_error("cloud offsets got updated");
 
-        if (gameVersion.find(storedGameJson["game-version"].get<std::string>()) == std::string::npos)
-            throw std::runtime_error("local offsets are outdated");
-
-        storage::ReadStorageFile("offsets.json", offsetsData);
-        storage::ReadStorageFile("buttons.json", buttonsData);
-        storage::ReadStorageFile("client_dll.json", client_dllData);
+        offsets = storage::ReadStorageFile("offsets.json");
+        buttons = storage::ReadStorageFile("buttons.json");
+        client_dll = storage::ReadStorageFile("client_dll.json");
     }
     catch (...)
     {
-        json storedGameJson;
-        ReadExistingStorage(storedGameJson);
+        offsets = Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json");
+        buttons = Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json");
+        client_dll = Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json");
 
-        if (storedGameJson.contains("build_number") &&
-            buildNumber.find(storedGameJson["build_number"].get<std::string>()) != std::string::npos)
-        {
-            throw std::runtime_error("Offsets are outdated, wait a few hours for offsets to update");
-        }
+        storage::WriteStorageFile("offsets.json", offsets);
+        storage::WriteStorageFile("buttons.json", buttons);
+        storage::WriteStorageFile("client_dll.json", client_dll);
 
-        Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
-        Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
-        Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json", client_dllData);
-
-        storage::WriteStorageFile("offsets.json", offsetsData);
-        storage::WriteStorageFile("buttons.json", buttonsData);
-        storage::WriteStorageFile("client_dll.json", client_dllData);
-
-        json newGameDataJson;
-        newGameDataJson["game-version"] = gameVersion;
-        newGameDataJson["build_number"] = buildNumber;
-        storage::WriteStorageFile("gamedata.json", newGameDataJson.dump(4));
+        GamaDataStorage["build-number"] = gameBuildNum;
+        storage::WriteStorageFile("gamedata.json", GamaDataStorage.dump(4));
     }
-
-    SetOffsets(offsetsData, buttonsData, client_dllData);
+    SetOffsets(offsets, buttons, client_dll);
 }
