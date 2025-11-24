@@ -244,7 +244,8 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 	}
 
 	g_globalVars = std::make_unique<globalvars>();
-	if (!g_globalVars->UpdateGlobalvars()) {
+	if (!g_globalVars->UpdateGlobalvars())
+	{
 		Log::PreviousLine();
 		Log::Error("Offsets are outdated, wait a few hours for offsets to update");
 	}
