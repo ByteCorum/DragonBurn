@@ -115,9 +115,9 @@ void Offsets::UpdateOffsets()
 {
     std::string offsetsData, buttonsData, client_dllData, infoData;
     std::string gameVersion = Init::Client::GetCs2Version(memoryManager.GetProcessID(L"cs2.exe"));
-
     Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/info.json", infoData);
     std::string buildNumber = std::to_string(json::parse(infoData)["build_number"].get<int>());
+
     try
     {
         std::string storedGameData;
@@ -138,8 +138,12 @@ void Offsets::UpdateOffsets()
     {
         json storedGameJson;
         ReadExistingStorage(storedGameJson);
-        if (storedGameJson.contains("build_number") && buildNumber.find(storedGameJson["build_number"].get<std::string>()) != std::string::npos)
+
+        if (storedGameJson.contains("build_number") &&
+            buildNumber.find(storedGameJson["build_number"].get<std::string>()) != std::string::npos)
+        {
             throw std::runtime_error("Offsets are outdated, wait a few hours for offsets to update");
+        }
 
         Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json", offsetsData);
         Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json", buttonsData);
@@ -149,10 +153,11 @@ void Offsets::UpdateOffsets()
         storage::WriteStorageFile("buttons.json", buttonsData);
         storage::WriteStorageFile("client_dll.json", client_dllData);
 
-        ReadExistingStorage(storedGameJson);
-        storedGameJson["game-version"] = gameVersion;
-        storedGameJson["build_number"] = buildNumber;
-        storage::WriteStorageFile("gamedata.json", storedGameJson.dump(4));
+        json newGameDataJson;
+        newGameDataJson["game-version"] = gameVersion;
+        newGameDataJson["build_number"] = buildNumber;
+        storage::WriteStorageFile("gamedata.json", newGameDataJson.dump(4));
     }
+
     SetOffsets(offsetsData, buttonsData, client_dllData);
 }
