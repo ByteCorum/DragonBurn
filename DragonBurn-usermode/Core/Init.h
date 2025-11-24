@@ -57,39 +57,35 @@ namespace Init
             std::vector<std::string> versions;
             try
             {
-                std::string versionData;
-                storage::ReadStorageFile("versions.json", versionData);
-                json versionJson = json::parse(versionData);
+                json localVer = json::parse(storage::ReadStorageFile("versions.json"));
 
-                if (!versionJson.contains("last-access-time") || !versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
+                if (!localVer.contains("last-access-time") || !localVer.contains("usermode-ver") || localVer["usermode-ver"].is_null() || !localVer["usermode-ver"].is_array())
                     throw std::runtime_error("Invalid json data");
 
-                std::stringstream ss(versionJson["last-access-time"].get<std::string>());
+                std::stringstream ss(localVer["last-access-time"].get<std::string>());
                 std::chrono::system_clock::time_point lastAccessTime;
                 std::chrono::from_stream(ss, "%Y-%m-%d %H:%M:%S", lastAccessTime);
 
                 if (std::chrono::system_clock::now() - lastAccessTime > std::chrono::minutes(10))
                     throw std::runtime_error("Version data is outdated");
 
-                for (const auto& version : versionJson["usermode-ver"])
+                for (const auto& version : localVer["usermode-ver"])
                     versions.push_back(version.get<std::string>());
             }
             catch (std::exception error)
             {
-                std::string versionData;
-                Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3", versionData);
-                json versionJson = json::parse(versionData)["record"];
+                json cloudVer = json::parse(Web::Get("https://api.jsonbin.io/v3/b/690e4759ae596e708f4b20b3"))["record"];
 
-                if (!versionJson.contains("usermode-ver") || versionJson["usermode-ver"].is_null() || !versionJson["usermode-ver"].is_array())
+                if (!cloudVer.contains("usermode-ver") || cloudVer["usermode-ver"].is_null() || !cloudVer["usermode-ver"].is_array())
                     throw std::runtime_error("Invalid json data");
 
-                for (const auto& version : versionJson["usermode-ver"])
+                for (const auto& version : cloudVer["usermode-ver"])
                     versions.push_back(version.get<std::string>());
 
                 auto now = std::chrono::system_clock::now();
-                versionJson["last-access-time"] = std::format("{:%Y-%m-%d %H:%M:%S}", now);
+                cloudVer["last-access-time"] = std::format("{:%Y-%m-%d %H:%M:%S}", now);
 
-                storage::WriteStorageFile("versions.json", versionJson.dump(4));
+                storage::WriteStorageFile("versions.json", cloudVer.dump(4));
             }
 
             if (std::find(versions.begin(), versions.end(), MenuConfig::version) != versions.end())
@@ -141,40 +137,40 @@ namespace Init
     class Client
     {
     public:
-        static std::string GetCs2Version(int pid)
-        {
-            std::wstring processPath;
-            WCHAR filename[MAX_PATH];
+        //static std::string GetCs2Version(int pid)
+        //{
+        //    std::wstring processPath;
+        //    WCHAR filename[MAX_PATH];
 
-            HANDLE processHandle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
-            if (processHandle != NULL) {
-                if (GetModuleFileNameEx(processHandle, NULL, filename, MAX_PATH) == 0)
-                    throw std::runtime_error("failed to get process path");
-                else
-                    processPath = filename;
-                CloseHandle(processHandle);
-            }
-            else
-                throw std::runtime_error("failed to open process");
+        //    HANDLE processHandle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid);
+        //    if (processHandle != NULL) {
+        //        if (GetModuleFileNameEx(processHandle, NULL, filename, MAX_PATH) == 0)
+        //            throw std::runtime_error("failed to get process path");
+        //        else
+        //            processPath = filename;
+        //        CloseHandle(processHandle);
+        //    }
+        //    else
+        //        throw std::runtime_error("failed to open process");
 
-            int pos = processPath.rfind(L"bin");
-            if (pos != std::wstring::npos) 
-                processPath = processPath.substr(0, pos + 3) + L"\\built_from_cl.txt";
-            else
-                throw std::runtime_error("failed to find version file");
+        //    int pos = processPath.rfind(L"bin");
+        //    if (pos != std::wstring::npos) 
+        //        processPath = processPath.substr(0, pos + 3) + L"\\built_from_cl.txt";
+        //    else
+        //        throw std::runtime_error("failed to find version file");
 
-            std::string gameVersion;
-            std::ifstream file(processPath);
-            if (file.is_open()) 
-            {
-                std::getline(file, gameVersion);
-                file.close();
-            }
-            else
-                throw std::runtime_error("failed to get game version");
+        //    std::string gameVersion;
+        //    std::ifstream file(processPath);
+        //    if (file.is_open()) 
+        //    {
+        //        std::getline(file, gameVersion);
+        //        file.close();
+        //    }
+        //    else
+        //        throw std::runtime_error("failed to get game version");
 
-            return gameVersion;
-        }
+        //    return gameVersion;
+        //}
 
         static bool isGameWindowActive() {
             HWND hwnd_cs2 = FindWindow(NULL, TEXT("Counter-Strike 2"));

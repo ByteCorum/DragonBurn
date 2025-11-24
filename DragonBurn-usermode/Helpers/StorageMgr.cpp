@@ -1,8 +1,8 @@
 #include "StorageMgr.h"
 
-void storage::ReadStorageFile(const std::string& path, std::string& data)
+std::string storage::ReadStorageFile(const std::string& path)
 {
-    data = "";
+    std::string data;
     std::string localStorageFile = MenuConfig::path + "\\Data\\" + path;
 
     if (!std::filesystem::exists(localStorageFile))
@@ -20,6 +20,8 @@ void storage::ReadStorageFile(const std::string& path, std::string& data)
     }
     else
         throw std::runtime_error("Failed to open local storage");
+
+    return data;
 }
 
 void storage::WriteStorageFile(const std::string& path, const std::string& data)
