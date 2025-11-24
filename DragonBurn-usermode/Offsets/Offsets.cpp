@@ -105,7 +105,16 @@ void Offsets::UpdateOffsets()
         json::parse(Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/info.json"))["build_number"]
         .get<int>()
     );
-    json GamaDataStorage = json::parse(storage::ReadStorageFile("gamedata.json"));
+    
+    json GamaDataStorage
+    try
+    {
+        GamaDataStorage = json::parse(storage::ReadStorageFile("gamedata.json"));
+    }
+    catch(...)
+    {
+        GamaDataStorage = json::object();
+    }
 
     try
     {
