@@ -95,9 +95,9 @@ CHECK_VER://CHECK_VER
 		std::string response;
 		do
 		{
-			Log::Info("Would you like to apply recomended preferences: ");
-			std::cin >> response;
-		} while (response == "y" || response == "n");
+			Log::Info("Would you like to apply recomended preferences(y/n)");
+			std::cout << ">>> "; std::cin >> response;
+		} while (response != "y" && response != "n");
 		if (response == "y")
 		{
 			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f");
