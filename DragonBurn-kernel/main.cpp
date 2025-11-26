@@ -33,6 +33,7 @@ int wmain(const int argc, wchar_t** argv)
 	bool free = false; //free --> Automatically frees mapped memory after execution. Dangerous unless the driver finishes instantly
 	bool indPagesMode = CheckArg(argc, argv, L"securemode"); //indPagesMode --> Maps the driver into non-contiguous, separate memory pages. Better for stealth, but more complex
 	bool legacyImg = CheckArg(argc, argv, L"legacyimg");
+	bool forcePrefs = CheckArg(argc, argv, L"forceprefs");
 	bool copyHeader = false; //copyHeader --> Ennsures the PE headers are copied into memory	Needed for drivers that inspect their own image
 	bool passAllocationPtr = false;//passAllocationPtr --> Passes allocated memory pointer as first param to entry point. Used by custom loaders or shellcode-style drivers
 
@@ -89,7 +90,7 @@ CHECK_VER://CHECK_VER
 	}
 #endif
 
-	if (!CheckWindowsKernelPrefs())
+	if (forcePrefs || !CheckWindowsKernelPrefs())
 	{
 		Log::Warning("Your windows kernel preferences may lead to unexpected behavior.");
 		std::string response;
@@ -100,14 +101,14 @@ CHECK_VER://CHECK_VER
 		} while (response != "y" && response != "n");
 		if (response == "y")
 		{
-			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f");
-			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\Lsa\" /v RunAsPPL /t REG_DWORD /d 0 /f");
-			system("reg add \"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 00000000 /f");
-			system("bcdedit /set hypervisorlaunchtype off");
-			system("reg add \"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config\" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 00000000 /f");
-			system("sc stop faceit");
-			system("sc stop vgc");
-			system("sc stop vgk");
+			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f >nul 2>&1");
+			system("reg add \"HKLM\SYSTEM\CurrentControlSet\Control\Lsa\" /v RunAsPPL /t REG_DWORD /d 0 /f >nul 2>&1");
+			system("reg add \"HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\DeviceGuard\" /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 00000000 /f >nul 2>&1");
+			system("bcdedit /set hypervisorlaunchtype off >nul 2>&1");
+			system("reg add \"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\CI\Config\" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 00000000 /f >nul 2>&1");
+			system("sc stop faceit >nul 2>&1");
+			system("sc stop vgc >nul 2>&1");
+			system("sc stop vgk >nul 2>&1");
 
 			Log::Fine("Recomended preferences applied, pls restart your pc");
 			Log::Info("Ignore usermode-part mapper error, just reboot pc and run again");
