@@ -92,7 +92,10 @@ CHECK_VER://CHECK_VER
 
 	if (forcePrefs || !CheckWindowsKernelPrefs())
 	{
-		Log::Warning("Your windows kernel preferences may lead to unexpected behavior.");
+		if (!forcePrefs)
+			Log::Warning("Your windows kernel preferences may lead to unexpected behavior.");
+		else
+			Log::Warning("Key to force preferences detected.");
 		std::string response;
 		do
 		{
@@ -118,9 +121,9 @@ CHECK_VER://CHECK_VER
 		else
 			Log::Warning("Recomended preferences won't be applied may lead to unexpected behavior.");
 	}
-	system("sc stop faceit");
-	system("sc stop vgc");
-	system("sc stop vgk");
+	system("sc stop faceit >nul 2>&1");
+	system("sc stop vgc >nul 2>&1");
+	system("sc stop vgk >nul 2>&1");
 
 
 	BYTE* img = nullptr;
