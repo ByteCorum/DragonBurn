@@ -11,14 +11,25 @@ namespace Web
     {
         std::string response;
         std::array<char, 128> buffer;
-        std::unique_ptr<FILE, decltype(&_pclose)> pipe(_popen(("curl -s -X GET " + url).c_str(), "r"), _pclose);
 
-        if (!pipe)
-            throw std::runtime_error("failed to get curl request");
+        std::string command = "curl -s -X GET " + url + " 2>&1";
+
+        FILE* pipePtr = _popen(command.c_str(), "r");
+
+        if (!pipePtr)
+            throw std::runtime_error("failed to create process");
+
+        std::unique_ptr<FILE, decltype(&_pclose)> pipe(pipePtr, _pclose);
 
         while (fgets(buffer.data(), static_cast<int>(buffer.size()), pipe.get()) != nullptr)
             response += buffer.data();
-        if (response == "")
+
+        int exitCode = _pclose(pipe.release());
+
+        if (exitCode != 0)
+            throw std::runtime_error(response);
+
+        if (response.empty())
             throw std::runtime_error("bad internet connection");
 
         std::regex pattern("\\d{3}:");
