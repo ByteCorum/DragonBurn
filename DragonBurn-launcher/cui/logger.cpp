@@ -6,12 +6,12 @@
 #include <Windows.h>
 #include <fstream>
 
-namespace Logger 
+namespace logger 
 {
 	static const HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
-bool Logger::WriteLog(const std::string& ctx)
+bool logger::WriteLog(const std::string& ctx)
 {
 	std::ofstream file(config::LogFile, std::ios::app);
 	if (!file.is_open())
@@ -23,7 +23,7 @@ bool Logger::WriteLog(const std::string& ctx)
 	return true;
 }
 
-void Logger::Info(const std::string& ctx, const std::string& ending)
+void logger::Info(const std::string& ctx, const std::string& ending)
 {
 	SetConsoleTextAttribute(hConsole, Colors::LightCyan);
 	std::cout << "[i]";
@@ -32,7 +32,7 @@ void Logger::Info(const std::string& ctx, const std::string& ending)
 	std::cout << ctx << ending;
 }
 
-void Logger::Warning(const std::string& ctx, const bool& pause)
+void logger::Warning(const std::string& ctx, const bool& pause)
 {
 	SetConsoleTextAttribute(hConsole, Colors::Yellow);
 	std::cout << "[!]";
@@ -47,7 +47,7 @@ void Logger::Warning(const std::string& ctx, const bool& pause)
 	}
 }
 
-void Logger::Error(const std::string& ctx, const bool& fatal, const bool& pause)
+void logger::Error(const std::string& ctx, const bool& fatal, const bool& pause)
 {
 	SetConsoleTextAttribute(hConsole, Colors::Red);
 	std::cout << "[X]";
@@ -65,7 +65,7 @@ void Logger::Error(const std::string& ctx, const bool& fatal, const bool& pause)
 		exit(-1);
 }
 
-void Logger::Fine(const std::string& ctx)
+void logger::Fine(const std::string& ctx)
 {
 	SetConsoleTextAttribute(hConsole, Colors::Green);
 	std::cout << "[+]";
@@ -74,7 +74,7 @@ void Logger::Fine(const std::string& ctx)
 	std::cout << ctx << '\n';
 }
 
-void Logger::Debug(const std::string& ctx, const bool& write)
+void logger::Debug(const std::string& ctx, const bool& write)
 {
 	if (!config::debug)
 		return;
@@ -89,7 +89,7 @@ void Logger::Debug(const std::string& ctx, const bool& write)
 		WriteLog(ctx);
 }
 
-std::string Logger::Input(const std::string& question, const std::vector<std::string>& allowedInput, const std::string& inputPrompt)
+std::string logger::Input(const std::string& question, const std::vector<std::string>& allowedInput, const std::string& inputPrompt)
 {
 	std::string response = "";
 	do
@@ -118,13 +118,13 @@ std::string Logger::Input(const std::string& question, const std::vector<std::st
 	} while (std::find(allowedInput.begin(), allowedInput.end(), response) == allowedInput.end());
 }
 
-void Logger::Colored(const std::string& ctx, const int& color)
+void logger::Colored(const std::string& ctx, const int& color)
 {
 	SetConsoleTextAttribute(hConsole, color);
 	std::cout << ctx << '\n';
 }
 
-void Logger::PreviousLine()
+void logger::PreviousLine()
 {
 	if (!config::allowLineOperstions)
 		return;

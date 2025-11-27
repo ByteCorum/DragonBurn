@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-namespace Logger
+namespace logger
 {
     enum Colors 
     {

@@ -10,4 +10,8 @@ namespace config
 	static const bool debug = false;
 	static const std::string LogFile = "runtime-logs.txt";
 	static const bool allowLineOperstions = false;
+
+	static bool flag_SecureMode = false;
+	static bool flag_LegacyImg = false;
+	static bool flag_ForcePrefs = false;
 }
