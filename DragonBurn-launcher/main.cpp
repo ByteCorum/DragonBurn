@@ -1,3 +1,5 @@
+#include "config.h"
+#include "cui/logger.h"
 
 int main(int argc, char** argv)
 {
