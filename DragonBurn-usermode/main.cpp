@@ -236,13 +236,16 @@ UPDATE_OFFSETS://UPDATE_OFFSETS
 
 	bool inited = false;
 	tryCount = 0;
+	Log::Info("Initialing adresses..", '.');
 	do
 	{
-		Log::Info("Initialing adresses...");
+		std::cout << '.';
 		tryCount++;
 		inited = gGame.InitAddress();
 		Sleep(1000);
-	} while (!inited && tryCount < 10);
+	} while (!inited && tryCount < 30);
+	std::cout << '\n';
+
 	if (!inited)
 	{
 		Log::PreviousLine();

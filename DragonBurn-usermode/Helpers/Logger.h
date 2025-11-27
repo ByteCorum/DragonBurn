@@ -10,7 +10,7 @@ namespace Log
 	const std::string LogFile = "Logs.txt";
 	const bool fullOutput = true;
 
-	inline bool WriteLog(std::string ctx)
+	inline bool WriteLog(const std::string& ctx)
 	{
 		std::ofstream file(LogFile, std::ios::app);
 		if (!file.is_open())
@@ -23,16 +23,16 @@ namespace Log
 
 	}
 
-	inline void Info(std::string ctx) 
+	inline void Info(const std::string& ctx, char endChar = '\n')
 	{
 		SetConsoleTextAttribute(hConsole, 11);
 		std::cout << "[i]";
 
 		SetConsoleTextAttribute(hConsole, 7);
-		std::cout << ctx << '\n';
+		std::cout << ctx << endChar;
 	}
 
-	inline void Warning(std::string ctx, bool pause = false)
+	inline void Warning(const std::string& ctx, bool pause = false)
 	{
 		SetConsoleTextAttribute(hConsole, 14);
 		std::cout << "[!]";
@@ -47,7 +47,7 @@ namespace Log
 		}
 	}
 
-	inline void Error(std::string ctx, bool fatal = true, bool pause = true)
+	inline void Error(const std::string& ctx, bool fatal = true, bool pause = true)
 	{
 		SetConsoleTextAttribute(hConsole, 12);
 		std::cout << "[X]";
@@ -65,7 +65,7 @@ namespace Log
 			exit(-1);
 	}
 
-	inline void Fine(std::string ctx)
+	inline void Fine(const std::string& ctx)
 	{
 		SetConsoleTextAttribute(hConsole, 2);
 		std::cout << "[+]";
@@ -74,7 +74,7 @@ namespace Log
 		std::cout << ctx << '\n';
 	}
 
-	inline void Debug(std::string ctx, bool write = false)
+	inline void Debug(const std::string& ctx, bool write = false)
 	{
 #ifdef DBDEBUG
 		std::string line = "[Debug]" + ctx + '\n';
@@ -87,7 +87,7 @@ namespace Log
 #endif
 	}
 
-	inline void Custom(std::string ctx, int color)
+	inline void Custom(const std::string& ctx, int color)
 	{
 		SetConsoleTextAttribute(hConsole, color);
 		std::cout << ctx << '\n';
