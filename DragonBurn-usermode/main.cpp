@@ -25,7 +25,7 @@ using namespace std;
 
 namespace fs = filesystem;
 string fileName;
-bool secureMode, legacyImg;
+bool secureMode, legacyImg, forceprefs;
 
 void Cheat();
 bool CheckArg(const int&, char**, const std::string&);
@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
 {
 	secureMode = CheckArg(argc, argv, "securemode");
 	legacyImg = CheckArg(argc, argv, "legacyimg");
+	forceprefs = CheckArg(argc, argv, "forceprefs");
 
 //do not use uaicess for debugging/profiling (uiacess restarts the cheat)
 #ifndef DBDEBUG
@@ -164,9 +165,10 @@ CONNECT_KERNEL://CONNECT_KERNEL
 			std::string mapperInfo = "Executing kernel mapper, flags: "
 				+ std::string(secureMode ? "--securemode" : "")
 				+ std::string(legacyImg ? "--legacyimg" : "")
+				+ std::string(forceprefs ? "--forceprefs" : "")
 				+ std::string("...");
 			Log::Info(mapperInfo);
-			int result = Init::Verify::ExecuteMapper(secureMode, legacyImg);
+			int result = Init::Verify::ExecuteMapper(secureMode, legacyImg, forceprefs);
 
 			Log::PreviousLine();
 			if (result == 0)

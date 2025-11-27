@@ -26,11 +26,11 @@ namespace Web
 
         int exitCode = _pclose(pipe.release());
 
-        if (exitCode != 0)
+        if (exitCode != 0 && !response.empty())
             throw std::runtime_error(response);
 
         if (response.empty())
-            throw std::runtime_error("bad internet connection");
+            throw std::runtime_error("failed to connect to the remote host");
 
         std::regex pattern("\\d{3}:");
         if (std::regex_search(response, pattern))

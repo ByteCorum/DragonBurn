@@ -93,7 +93,7 @@ namespace Init
             return false;
         }
 
-        static int ExecuteMapper(bool secureMode, bool legacyImg)
+        static int ExecuteMapper(bool secureMode, bool legacyImg, bool forceprefs)
         {
             STARTUPINFOW si = { sizeof(STARTUPINFOW) };
             PROCESS_INFORMATION pi = {};
@@ -103,7 +103,8 @@ namespace Init
 
             std::wstring cmdLine = L"DragonBurn-kernel.exe" 
                 + std::wstring(secureMode ? L" --securemode" : L"")
-                + std::wstring(legacyImg ? L" --legacyimg" : L"");
+                + std::wstring(legacyImg ? L" --legacyimg" : L"")
+                + std::wstring(forceprefs ? L" --forceprefs" : L"");
             BOOL success = CreateProcessW(
                 nullptr,                   // Application name
                 &cmdLine[0],               // Command line (must be modifiable)
