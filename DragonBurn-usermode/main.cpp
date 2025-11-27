@@ -155,7 +155,11 @@ CONNECT_KERNEL://CONNECT_KERNEL
 	else
 	{
 		Log::PreviousLine();
-		Log::Error("Failed to connect to kernel mode driver", mapped, mapped);
+		if (!mapped)
+			Log::Warning("Failed to connect to kernel mode driver");
+		else
+			Log::Error("Failed to connect to kernel mode driver");
+		
 		Log::Info("Triggered auto-map protocol");
 		Log::Info("Looking for kernel mapper...");
 
