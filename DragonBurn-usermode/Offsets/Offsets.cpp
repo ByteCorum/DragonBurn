@@ -102,7 +102,7 @@ void Offsets::UpdateOffsets()
     std::string offsets, buttons, client_dll;
     std::string gameBuildNum = std::to_string
     (
-        json::parse(Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/info.json"))["build_number"]
+        json::parse(Web::Get("https://raw.githubusercontent.com/sezzyaep/CS2-OFFSETS/refs/heads/main/info.json"))["build_number"]
         .get<int>()
     );
     
@@ -127,9 +127,9 @@ void Offsets::UpdateOffsets()
     }
     catch (...)
     {
-        offsets = Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/offsets.json");
-        buttons = Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/buttons.json");
-        client_dll = Web::Get("https://raw.githubusercontent.com/a2x/cs2-dumper/main/output/client_dll.json");
+        offsets = Web::Get("https://raw.githubusercontent.com/sezzyaep/CS2-OFFSETS/refs/heads/main/offsets.json");
+        buttons = Web::Get("https://raw.githubusercontent.com/sezzyaep/CS2-OFFSETS/refs/heads/main/buttons.json");
+        client_dll = Web::Get("https://raw.githubusercontent.com/sezzyaep/CS2-OFFSETS/refs/heads/main/client_dll.json");
 
         storage::WriteStorageFile("offsets.json", offsets);
         storage::WriteStorageFile("buttons.json", buttons);
