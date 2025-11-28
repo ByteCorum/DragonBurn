@@ -38,7 +38,7 @@
     <ClInclude Include="web-api\web-api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win-api\web-api.h">
+    <ClInclude Include="win-api\win-api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cui\logger.h">

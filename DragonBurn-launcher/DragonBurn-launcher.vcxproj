@@ -152,7 +152,7 @@
     <ClInclude Include="cui\ui.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="web-api\web-api.h" />
-    <ClInclude Include="win-api\web-api.h" />
+    <ClInclude Include="win-api\win-api.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\icon.ico" />
