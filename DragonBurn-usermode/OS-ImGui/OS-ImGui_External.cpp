@@ -294,6 +294,24 @@ namespace OSImGui
             if (Type == ATTACH && !UpdateWindowData()) 
                 break;
 
+            // Skip rendering when the game window is not focused
+            if (Type == ATTACH) {
+                HWND hForeground = GetForegroundWindow();
+
+                if (hForeground != DestWindow.hWnd && hForeground != Window.hWnd) {
+                    const float* actualClearColor = reinterpret_cast<const float*>(&Window.BgColor.Value);
+
+                    g_Device.g_pd3dDeviceContext->OMSetRenderTargets(1, &g_Device.g_mainRenderTargetView, nullptr);
+                    g_Device.g_pd3dDeviceContext->ClearRenderTargetView(g_Device.g_mainRenderTargetView, actualClearColor);
+
+                    g_Device.g_pSwapChain->Present(0, 0);
+                    frameSkip = 0;
+
+                    Sleep(1);
+                    continue;
+                }
+            }
+
             ImGuiIO& io = ImGui::GetIO();
 
             static bool keyState[256] = { true }; // Track keys
