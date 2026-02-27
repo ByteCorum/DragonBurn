@@ -137,7 +137,7 @@ At the beginning, download latest release or compile project by yourself. You ne
 > [!NOTE]
 > Kernel driver is closed-source for safety reasons. Please download the compiled binary from the releases.
 
-Once downloaded run `DragonBurn-kernel.exe` to map the driver. If u see `[+] success` all fine, then just run `DragonBurn.exe` and gl hf.
+Once downloaded, run `DragonBurn-kernel.exe` to map the driver. If u see `[+] success` all fine, then just run `DragonBurn.exe` and gl hf.
 
 ---
 
