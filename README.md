@@ -145,7 +145,7 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 
 <img src="imgs/error_1.png" width="400" height="90">
 
-> Error: `Windows Defender or any other anticheats may flag cheat as virus`
+> Error: `Windows Defender, any other antivirus programs, or anti-cheats may flag cheat as virus`
 >
 > Solution: Turn off real-time protection
 
@@ -169,7 +169,7 @@ cmd should be opened as admin
 
 > Still getting: `[x] Failed to register and start service for the vulnerable driver`
 >
-> Solution: Turn off all Anti-Viruses and all Anti-Cheats client, usually it caused by faceit ac
+> Solution: Turn off all antiviruses and all anti-cheat clients, usually it caused by faceit ac
 >
 > Faceit: `sc stop faceit`
 > Vanguard: `sc stop vgc` `sc stop vgk`
