@@ -181,7 +181,7 @@ cmd should be opened as admin
 -->
 
 > [!TIP]
-> This cmds should fix any issue(after executing restart pc):
+> These cmds should fix any issue(after executing restart pc):
 >
 > ```
 > reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f
