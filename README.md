@@ -17,7 +17,7 @@
 
 <h3>
 <p align="center">
-DragonBurn is one of the best CS2 kernel mode read only external cheats. It has ton of features, full customization and offsets auto update. Undetected by all anti-cheats except faceit.
+DragonBurn is one of the best CS2 kernel mode read only external cheats. It has a wide range of features, full customization, and automatic offset updates. Undetected by all anti-cheats except faceit.
 </p></h3>
 
 <p align="center">
@@ -157,7 +157,7 @@ cmd should be opened as admin
 
 > Error: `[x] Kernel-mode driver image is empty`
 >
-> Solution: fill `std::vector<uint8_t> image = {};` in `cfg.h` with kernel binaries
+> Solution: Fill `std::vector<uint8_t> image = {};` in `cfg.h` with kernel binaries
 
 > Error: `[x] \Device\Nal is already in use.`
 >
@@ -169,7 +169,7 @@ cmd should be opened as admin
 
 > Still getting: `[x] Failed to register and start service for the vulnerable driver`
 >
-> Solution: Turn off all antiviruses and all anti-cheat clients, usually it caused by faceit ac
+> Solution: Turn off all antiviruses and all anti-cheat clients, usually caused by faceit ac
 >
 > Faceit: `sc stop faceit`
 > Vanguard: `sc stop vgc` `sc stop vgk`
@@ -181,7 +181,7 @@ cmd should be opened as admin
 -->
 
 > [!TIP]
-> These cmds should fix any issue(after executing restart pc):
+> These cmds should fix any issue (after executing restart pc):
 >
 > ```
 > reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f
