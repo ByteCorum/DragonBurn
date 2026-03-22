@@ -37,3 +37,9 @@ void storage::WriteStorageFile(const std::string& path, const std::string& data)
     else
         throw std::runtime_error("Failed to open local storage");
 }
+
+bool storage::FileExists(const std::string& path)
+{
+    std::string localStorageFile = MenuConfig::path + "\\Data\\" + path;
+    return std::filesystem::exists(localStorageFile);
+}
