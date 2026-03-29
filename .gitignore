@@ -402,10 +402,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-#Other
 built/
 built_dbg/
+DragonBurn/RCa21268
 built_legacy/
-DragonBurn-kernel/include/cfg.h
-DragonBurn-kernel/RCa41796
+DragonBurn/RCa11676
+DragonBurn/RCa12968
