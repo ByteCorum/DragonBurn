@@ -17,7 +17,7 @@
 
 <h3>
 <p align="center">
-DragonBurn is one of the best CS2 kernel mode read only external cheats. It has ton of features, full customization and offsets auto update. Undetected by all anti-cheats except faceit.
+DragonBurn is one of the best CS2 kernel mode read only external cheats. It has a wide range of features, full customization, and automatic offset updates. Undetected by all anti-cheats except faceit.
 </p></h3>
 
 <p align="center">
@@ -35,7 +35,7 @@ DragonBurn is one of the best CS2 kernel mode read only external cheats. It has 
 
 ---
 
-### 📋 Features
+### 📋Features
 
 Press END key to open/close menu.
 
@@ -135,9 +135,9 @@ Press END key to open/close menu.
 At the beginning, download latest release or compile project by yourself. You need only 2 files `DragonBurn.exe` and `DragonBurn-kernel.exe`.
 
 > [!NOTE]
-> Kernel driver is close source for safety reasons, download it from release.
+> Kernel driver is closed-source for safety reasons. Please download the compiled binary from the releases.
 
-Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] success` all fine, then just run `DragonBurn.exe` and gl hf.
+Once downloaded, run `DragonBurn-kernel.exe` to map the driver. If u see `[+] success` all fine, then just run `DragonBurn.exe` and gl hf.
 
 ---
 
@@ -145,7 +145,7 @@ Now you should run `DragonBurn-kernel.exe` to map the driver. If u see `[+] succ
 
 <img src="imgs/error_1.png" width="400" height="90">
 
-> Error: `Windows Defender or any other anticheats may flag cheat as virus`
+> Error: `Windows Defender, other antivirus programs, or anti-cheats may flag cheat as virus`
 >
 > Solution: Turn off real-time protection
 
@@ -157,7 +157,7 @@ cmd should be opened as admin
 
 > Error: `[x] Kernel-mode driver image is empty`
 >
-> Solution: fill `std::vector<uint8_t> image = {};` in `cfg.h` with kernel binaries
+> Solution: Fill `std::vector<uint8_t> image = {};` in `cfg.h` with kernel binaries
 
 > Error: `[x] \Device\Nal is already in use.`
 >
@@ -169,7 +169,7 @@ cmd should be opened as admin
 
 > Still getting: `[x] Failed to register and start service for the vulnerable driver`
 >
-> Solution: Turn off all Anti-Viruses and all Anti-Cheats client, usually it caused by faceit ac
+> Solution: Turn off all antiviruses and all anti-cheat clients, usually caused by faceit anti-cheat
 >
 > Faceit: `sc stop faceit`
 > Vanguard: `sc stop vgc` `sc stop vgk`
@@ -181,7 +181,7 @@ cmd should be opened as admin
 -->
 
 > [!TIP]
-> This cmds should fix any issue(after executing restart pc):
+> These cmds should fix any issues (after executing restart pc):
 >
 > ```
 > reg add \"HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f
