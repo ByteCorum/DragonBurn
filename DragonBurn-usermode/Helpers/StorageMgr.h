@@ -10,5 +10,6 @@ namespace storage
 {
 	std::string ReadStorageFile(const std::string& path);
 	void WriteStorageFile(const std::string& path, const std::string& data);
+	bool FileExists(const std::string& path);
 }
 
