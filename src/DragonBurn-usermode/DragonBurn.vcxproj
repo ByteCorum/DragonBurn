@@ -123,7 +123,6 @@
     <ClInclude Include="helpers\weapon-icons.h" />
     <ClInclude Include="helpers\key-manager.h" />
     <ClInclude Include="helpers\logger.h" />
-    <ClInclude Include="helpers\mouse.h" />
     <ClInclude Include="helpers\ui-access.h" />
     <ClInclude Include="helpers\network.h" />
     <ClInclude Include="offsets\offsets.h" />
@@ -166,7 +165,6 @@
     <ClCompile Include="game\bone.cpp" />
     <ClCompile Include="game\entity.cpp" />
     <ClCompile Include="game\game.cpp" />
-    <ClCompile Include="helpers\mouse.cpp" />
     <ClCompile Include="helpers\ui-access.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="offsets\offsets.cpp" />
