@@ -1,4 +1,4 @@
-<p align="center"><img src="Assets/banner.png"></p><p align="center">  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
+<p align="center"><img src="resources/readme/banner.png"></p><p align="center">  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white">
   <img src="https://img.shields.io/badge/Visual_Studio-5C2D91?style=for-the-badge&logo=visual%20studio&logoColor=white">
   <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white">
   <img src="https://img.shields.io/badge/build-passing-76B900?style=for-the-badge&logo=&logoColor=whit">
@@ -22,7 +22,6 @@ DragonBurn is one of the best CS2 kernel mode read only external cheats. It has 
 
 <p align="center">
 <a href="https://github.com/ByteCorum/DragonBurn/releases/latest/download/DragonBurn.exe">Download latest release</a><br>
-⭐Please, star this repo if it was helpful⭐
 </p>
 
 ---
@@ -30,8 +29,6 @@ DragonBurn is one of the best CS2 kernel mode read only external cheats. It has 
 ### 🌐Join our community
 
 <a href="https://discord.gg/5WcvdzFybD"><img src="https://invidget.switchblade.xyz/5WcvdzFybD"></a>
-
-<a href="https://ko-fi.com/bytecorum"><img src="https://img.shields.io/badge/Support Author-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 
 ---
 
@@ -42,108 +39,109 @@ Press END key to open/close menu.
 <details>
 <summary>Visual</summary>
 
--   Box ESP
--   Box Type
--   Box Rounding
--   Filled Box ESP
--   Gradient Filled Box ESP
--   Skeleton
--   Snap Line
--   Sound esp
--   Bomb esp
--   Bomb carrier esp
--   Visual Color
--   Eye Ray
--   Health Bar
--   Armor Bar
--   Weapon
--   Ammo
--   Distance
--   Name
--   Scoped
--   Blind
--   Blind Hide
--   AWP Crosshair
--   Visual Preview
--   etc
-</details>
+- Box ESP
+- Box Type
+- Box Rounding
+- Filled Box ESP
+- Gradient Filled Box ESP
+- Skeleton
+- Snap Line
+- Sound esp
+- Bomb esp
+- Bomb carrier esp
+- Visual Color
+- Eye Ray
+- Health Bar
+- Armor Bar
+- Weapon
+- Ammo
+- Distance
+- Name
+- Scoped
+- Blind
+- Blind Hide
+- AWP Crosshair
+- Visual Preview
+- etc
+    </details>
 
 <details>
 <summary>Radar Hack</summary>
 
--   Point Size
--   Proportion
--   Range
--   Alpha
-</details>
+- Point Size
+- Proportion
+- Range
+- Alpha
+    </details>
 
 <details>
 <summary>Aimbot</summary>
 
--   Start Bullet
--   Aim Lock
--   Draw Fov
--   Visible Check
--   Auto Only
--   Flash Check
--   Scope Check
--   Humanization
--   FOV
--   Smooth
--   Multi Hitboxes Selection
-</details>
+- Start Bullet
+- Aim Lock
+- Draw Fov
+- Visible Check
+- Auto Only
+- Flash Check
+- Scope Check
+- Humanization
+- FOV
+- Smooth
+- Multi Hitboxes Selection
+    </details>
 
 <details>
 <summary>RCS</summary>
 
--   Yaw
--   Pitch
--   Preview
-</details>
+- Yaw
+- Pitch
+- Preview
+    </details>
 
 <details>
 <summary>Trigger Bot</summary>
 
--   Scope Check
--   Flash Check
--   Stop Check
--   Shot Delay
--   Shot Duration
--   TTD
-</details>
+- Scope Check
+- Flash Check
+- Stop Check
+- Shot Delay
+- Shot Duration
+- TTD
+    </details>
 
 <details>
 <summary>Misc</summary>
 
--   Bomb Timer
--   Bunny Hop
--   Head Line
--   Hit Sound
--   Hit Markers
--   Auto knife
--   Auto zeus
--   Auto accept
--   Spectator list
--   Watermark
--   Anti Record
-</details>
+- Bomb Timer
+- Bunny Hop
+- Head Line
+- Hit Sound
+- Hit Markers
+- Auto knife
+- Auto zeus
+- Auto accept
+- Spectator list
+- Watermark
+- Anti Record
+    </details>
+
+---
+
+### 🏗️
+
+TODO
 
 ---
 
 ### 🛠️How to use
 
-At the beginning, download latest release or compile project by yourself. You need only 2 files `DragonBurn.exe` and `DragonBurn-kernel.exe`.
-
-> [!NOTE]
-> Kernel driver is closed-source for safety reasons. Please download the compiled binary from the releases.
-
-Once downloaded, run `DragonBurn-kernel.exe` to map the driver. If u see `[+] success` all fine, then just run `DragonBurn.exe` and gl hf.
+TODO
 
 ---
 
 ### ❌Errors
 
-<img src="imgs/error_1.png" width="400" height="90">
+<img src="resources/readme/error0.png" width="400" height="90">
 
 > Error: `Windows Defender, other antivirus programs, or anti-cheats may flag cheat as virus`
 >
@@ -200,28 +198,31 @@ cmd should be opened as admin
 ### 🖼️Preview
 
 <p align="center">
-<img src="imgs/img.png">
+<img src="resources/readme/img0.png">
 </p>
 
 <p align="center">
-<img src="imgs/img1.png">
+<img src="resources/readme/img1.png">
 </p>
 
 <p align="center">
-<img src="imgs/img2.png">
+<img src="resources/readme/img2.png">
 </p>
 
 ---
 
+### 🏅Crew
+
+## TODO
+
 ### 📲Contacts
 
-<a href="https://github.com/ByteCorum"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a>
-<a href="https://discordapp.com/users/798503509522645012"><img src="https://img.shields.io/badge/Discord-003E54?style=for-the-badge&logo=Discord&logoColor=white"></a>
+TODO
 
 ---
 
 ### 💸Support
 
-<a href="https://ko-fi.com/bytecorum"><img src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
+TODO
 
 ---
