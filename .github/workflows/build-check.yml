@@ -2,9 +2,9 @@ name: build-check x64 release
 
 on:
   push:
-    branches: [stable, WIP, kernel]
+    branches: [stable, wip_maintenance]
   pull_request:
-    branches: [stable, WIP, kernel]
+    branches: [stable, wip_maintenance]
 
 jobs:
   build:
