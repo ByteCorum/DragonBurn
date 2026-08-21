@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="intel_driver.cpp" />
+    <ClCompile Include="kdmapper.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="portable_executable.cpp" />
+    <ClCompile Include="service.cpp" />
+    <ClCompile Include="utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="include\cfg.h" />
+    <ClInclude Include="include\crypto.h" />
+    <ClInclude Include="include\intel_driver.h" />
+    <ClInclude Include="include\intel_driver_resource.h" />
+    <ClInclude Include="include\kdmapper.h" />
+    <ClInclude Include="include\logger.h" />
+    <ClInclude Include="include\nt.h" />
+    <ClInclude Include="include\portable_executable.h" />
+    <ClInclude Include="include\service.h" />
+    <ClInclude Include="include\utils.h" />
+    <ClInclude Include="include\web_api.h" />
+    <ClInclude Include="include\json.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{ac359fba-b363-4b75-bd19-310104ec8f2c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
+  </ItemGroup>
+</Project>

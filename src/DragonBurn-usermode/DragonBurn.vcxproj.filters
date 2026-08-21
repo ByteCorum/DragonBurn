@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{c7eb2bee-9d48-4b5f-98df-abb37974d0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{086a1eb5-40f6-4843-ad51-55c21c74334e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\imgui">
+      <UniqueIdentifier>{f8b5bed1-1b6f-40cc-9db4-17e73ada8245}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImGui\stb">
+      <UniqueIdentifier>{e872f4ab-6347-4e22-bd08-3624ccf0469d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{a1c9b5e3-6914-4106-8d30-758cf8623753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features">
+      <UniqueIdentifier>{59bbe7bd-04b4-4864-b11e-26d70ea98b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Visual">
+      <UniqueIdentifier>{a506b36b-4aa1-423b-9b8d-6da3929610eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Misc">
+      <UniqueIdentifier>{b0c7adeb-2fdd-4355-93c2-b03f5946ffec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{d6ce1762-ee50-44d7-938a-7de7d8911330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{ae0f6fd8-fd82-4090-a2f8-c6d80c60c33e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{1f597d36-beeb-429b-a159-e90c3f7b34d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Offsets">
+      <UniqueIdentifier>{d41606d6-9efb-4793-9976-ae2deca558e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Legit">
+      <UniqueIdentifier>{bec5d160-9097-41fe-b2e1-d771a6544092}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resources\WeaponIcon.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Sounds.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Language.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Images.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\Font.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\OS-ImGui_Struct.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\OS-ImGui_External.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\OS-ImGui_Exception.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\OS-ImGui_Base.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\OS-ImGui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imconfig.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imgui.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imgui_impl_dx11.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imgui_impl_win32.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imgui_internal.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imstb_rectpack.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imstb_textedit.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\imgui\imstb_truetype.h">
+      <Filter>ImGui\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OS-ImGui\stb\stb_image.h">
+      <Filter>ImGui\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\View.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Entity.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Bone.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\BombTimer.h">
+      <Filter>Features\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Misc.h">
+      <Filter>Features\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\SpectatorList.h">
+      <Filter>Features\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\ESP.h">
+      <Filter>Features\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Radar.h">
+      <Filter>Features\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\RCS.h">
+      <Filter>Features\Legit</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\SoundESP.h">
+      <Filter>Features\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\TriggerBot.h">
+      <Filter>Features\Legit</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\Mouse.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\UIAccess.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\GetWeaponIcon.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Render.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Init.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GUI.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GlobalVars.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Globals.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cheats.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigSaver.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Config\ConfigMenu.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Offsets\Offsets.h">
+      <Filter>Offsets</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Aimbot.h">
+      <Filter>Features\Legit</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\WebApi.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\Logger.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MemoryMgr.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Config.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Resources\resource.h" />
+    <ClInclude Include="Helpers\StorageMgr.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\KeyManager.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\icon.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="OS-ImGui\OS-ImGui_External.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\OS-ImGui_Base.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\OS-ImGui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui_demo.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui_draw.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui_impl_dx11.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui_impl_win32.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui_tables.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OS-ImGui\imgui\imgui_widgets.cpp">
+      <Filter>ImGui\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Entity.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Bone.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Misc.cpp">
+      <Filter>Features\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Radar.cpp">
+      <Filter>Features\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\TriggerBot.cpp">
+      <Filter>Features\Legit</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\Mouse.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\UIAccess.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GlobalVars.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cheats.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\ConfigSaver.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Config\ConfigMenu.cpp">
+      <Filter>Config</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\Aimbot.cpp">
+      <Filter>Features\Legit</Filter>
+    </ClCompile>
+    <ClCompile Include="Offsets\Offsets.cpp">
+      <Filter>Offsets</Filter>
+    </ClCompile>
+    <ClCompile Include="Features\RCS.cpp">
+      <Filter>Features\Legit</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MemoryMgr.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\StorageMgr.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resource.rc" />
+  </ItemGroup>
+</Project>
