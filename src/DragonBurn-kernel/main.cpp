@@ -9,7 +9,7 @@
 
 #include "kdmapper.h"
 #include "utils.h"
-#include "intel_driver.h"
+#include "intel-driver.h"
 #include "cfg.h"
 #include "web_api.h"
 #include "logger.h"
@@ -28,33 +28,27 @@ bool CheckWindowsKernelPrefs();
 int wmain(const int argc, wchar_t** argv)
 {
 	SetUnhandledExceptionFilter(SimplestCrashHandler);
-	
+
 	// Can't use --free and --indPages at the same time"
 	bool free = false; //free --> Automatically frees mapped memory after execution. Dangerous unless the driver finishes instantly
 	bool indPagesMode = CheckArg(argc, argv, L"securemode"); //indPagesMode --> Maps the driver into non-contiguous, separate memory pages. Better for stealth, but more complex
-	bool legacyImg = CheckArg(argc, argv, L"legacyimg");
 	bool forcePrefs = CheckArg(argc, argv, L"forceprefs");
 	bool copyHeader = false; //copyHeader --> Ennsures the PE headers are copied into memory	Needed for drivers that inspect their own image
 	bool passAllocationPtr = false;//passAllocationPtr --> Passes allocated memory pointer as first param to entry point. Used by custom loaders or shellcode-style drivers
 
-	Log::Custom(R"LOGO(______                            ______                  
-|  _  \                           | ___ \                 
-| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
-| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
+	Log::Custom(R"LOGO(______                            ______
+|  _  \                           | ___ \
+| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __
+| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \
 | |/ /| | | (_| | (_| | (_) | | | | |_/ / |_| | |  | | | |
 |___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
-                  __/ |                                   
-                 |___/                                    
+                  __/ |
+                 |___/
 )LOGO", 13);
 	Log::Info(cfg::name + " v" + cfg::umVersion + " & v" + cfg::kmVersion + " by " + cfg::author);
 	Log::Info("https://github.com/ByteCorum/DragonBurn");
 	Log::Info("https://discord.gg/5WcvdzFybD\n");
 
-	if (legacyImg)
-	{
-		Log::Info("Enabled: Legacy DragonBurn kernel");
-		Log::Warning("Legacy DragonBurn kernel is deprecated, it's better to use new one");
-	}
 	if (indPagesMode)
 		Log::Info("Enabled: Secure mapping and execution mode");
 
@@ -127,20 +121,9 @@ CHECK_VER://CHECK_VER
 
 
 	BYTE* img = nullptr;
-	if (!legacyImg)
-	{
-		if (cfg::image.empty())
-			Log::Error("Driver image is empty");
-		RollingVectorProcedure(cfg::image, cfg::key);
-		img = cfg::image.data();
-	}
-	else
-	{
-		if (cfg::imageLegacy.empty())
-			Log::Error("Driver image is empty");
-		RollingVectorProcedure(cfg::imageLegacy, cfg::key);
-		img = cfg::imageLegacy.data();
-	}
+	if (cfg::image.empty())
+		Log::Error("Driver image is empty");
+	img = cfg::image.data();
 
 	if (!NT_SUCCESS(intel_driver::Load()))
 		Log::Error("Failed to connect to intel driver");
@@ -164,7 +147,7 @@ CHECK_VER://CHECK_VER
 	return 0;
 }
 
-bool CheckWindowsKernelPrefs() 
+bool CheckWindowsKernelPrefs()
 {
 	HKEY hKey;
 	LONG openStatus = RegOpenKeyExA(
@@ -281,6 +264,7 @@ bool CheckArg(const int argc, wchar_t** argv, const wchar_t* arg)
 	return false;
 }
 
+//TODO: fix version
 bool CheckCheatVersion()
 {
 	std::vector<std::string> versions;

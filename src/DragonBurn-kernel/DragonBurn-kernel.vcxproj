@@ -91,30 +91,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="intel_driver.cpp" />
+    <ClCompile Include="intel-driver.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="kdmapper.cpp" />
-    <ClCompile Include="portable_executable.cpp" />
+    <ClCompile Include="portable-executable.cpp" />
     <ClCompile Include="service.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\cfg.h" />
     <ClInclude Include="include\crypto.h" />
-    <ClInclude Include="include\intel_driver.h" />
-    <ClInclude Include="include\intel_driver_resource.h" />
+    <ClInclude Include="include\intel-driver.h" />
+    <ClInclude Include="include\intel-driver-resource.h" />
     <ClInclude Include="include\json.hpp" />
     <ClInclude Include="include\kdmapper.h" />
     <ClInclude Include="include\logger.h" />
     <ClInclude Include="include\nt.h" />
-    <ClInclude Include="include\portable_executable.h" />
+    <ClInclude Include="include\portable-executable.h" />
     <ClInclude Include="include\service.h" />
     <ClInclude Include="include\utils.h" />
-    <ClInclude Include="include\web_api.h" />
+    <ClInclude Include="include\web-api.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon.ico" />

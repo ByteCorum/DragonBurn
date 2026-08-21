@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
+  <ItemGroup Label="Projectconfigurations">
+    <Projectconfiguration Include="Debug|x64">
+      <configuration>Debug</configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
+    </Projectconfiguration>
+    <Projectconfiguration Include="Release|x64">
+      <configuration>Release</configuration>
       <Platform>x64</Platform>
-    </ProjectConfiguration>
+    </Projectconfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -19,14 +19,14 @@
     <ProjectName>DragonBurn-usermode</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+  <PropertyGroup Condition="'$(configuration)|$(Platform)'=='Debug|x64'" Label="configuration">
+    <configurationType>Application</configurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+  <PropertyGroup Condition="'$(configuration)|$(Platform)'=='Release|x64'" Label="configuration">
+    <configurationType>Application</configurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -37,14 +37,14 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ImportGroup Label="PropertySheets" Condition="'$(configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ImportGroup Label="PropertySheets" Condition="'$(configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)\built_dbg\</OutDir>
     <IntDir>$(SolutionDir)\built_dbg\cache\um</IntDir>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -53,7 +53,7 @@
     <TargetName>DragonBurn-usermode</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <PropertyGroup Condition="'$(configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)\built\</OutDir>
     <IntDir>$(SolutionDir)\built\cache\um</IntDir>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -62,7 +62,7 @@
     <TargetName>DragonBurn-usermode</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
@@ -78,7 +78,7 @@
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -98,93 +98,93 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Config\ConfigMenu.h" />
-    <ClInclude Include="Config\ConfigSaver.h" />
-    <ClInclude Include="Core\Config.h" />
-    <ClInclude Include="Core\Cheats.h" />
-    <ClInclude Include="Core\Globals.h" />
-    <ClInclude Include="Core\GlobalVars.h" />
-    <ClInclude Include="Core\GUI.h" />
-    <ClInclude Include="Core\Init.h" />
-    <ClInclude Include="Core\Render.h" />
-    <ClInclude Include="Features\Aimbot.h" />
-    <ClInclude Include="Features\BombTimer.h" />
-    <ClInclude Include="Features\ESP.h" />
-    <ClInclude Include="Features\Misc.h" />
-    <ClInclude Include="Features\Radar.h" />
-    <ClInclude Include="Features\RCS.h" />
-    <ClInclude Include="Features\SoundESP.h" />
-    <ClInclude Include="Features\SpectatorList.h" />
-    <ClInclude Include="Features\TriggerBot.h" />
-    <ClInclude Include="Game\Bone.h" />
-    <ClInclude Include="Game\Entity.h" />
-    <ClInclude Include="Game\Game.h" />
-    <ClInclude Include="Game\View.h" />
-    <ClInclude Include="Helpers\GetWeaponIcon.h" />
-    <ClInclude Include="Helpers\KeyManager.h" />
-    <ClInclude Include="Helpers\Logger.h" />
-    <ClInclude Include="Helpers\Mouse.h" />
-    <ClInclude Include="Helpers\UIAccess.h" />
-    <ClInclude Include="Helpers\WebApi.h" />
-    <ClInclude Include="Offsets\Offsets.h" />
-    <ClInclude Include="OS-ImGui\imgui\imconfig.h" />
-    <ClInclude Include="OS-ImGui\imgui\imgui.h" />
-    <ClInclude Include="OS-ImGui\imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="OS-ImGui\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="OS-ImGui\imgui\imgui_internal.h" />
-    <ClInclude Include="OS-ImGui\imgui\imstb_rectpack.h" />
-    <ClInclude Include="OS-ImGui\imgui\imstb_textedit.h" />
-    <ClInclude Include="OS-ImGui\imgui\imstb_truetype.h" />
-    <ClInclude Include="OS-ImGui\OS-ImGui.h" />
-    <ClInclude Include="OS-ImGui\OS-ImGui_Base.h" />
-    <ClInclude Include="OS-ImGui\OS-ImGui_Exception.h" />
-    <ClInclude Include="OS-ImGui\OS-ImGui_External.h" />
-    <ClInclude Include="OS-ImGui\OS-ImGui_Struct.h" />
-    <ClInclude Include="OS-ImGui\stb\stb_image.h" />
-    <ClInclude Include="Core\MemoryMgr.h" />
-    <ClInclude Include="Resources\resource.h" />
-    <ClInclude Include="Resources\Font.h" />
-    <ClInclude Include="Resources\Images.h" />
-    <ClInclude Include="Resources\Language.h" />
-    <ClInclude Include="Resources\Sounds.h" />
-    <ClInclude Include="Resources\WeaponIcon.h" />
-    <ClInclude Include="Helpers\StorageMgr.h" />
+    <ClInclude Include="config\config-menu.h" />
+    <ClInclude Include="config\config-saver.h" />
+    <ClInclude Include="core\config.h" />
+    <ClInclude Include="core\cheats.h" />
+    <ClInclude Include="core\globals.h" />
+    <ClInclude Include="core\global-vars.h" />
+    <ClInclude Include="core\gui.h" />
+    <ClInclude Include="core\init.h" />
+    <ClInclude Include="core\render.h" />
+    <ClInclude Include="features\aimbot.h" />
+    <ClInclude Include="features\bomb-timer.h" />
+    <ClInclude Include="features\esp.h" />
+    <ClInclude Include="features\misc.h" />
+    <ClInclude Include="features\radar.h" />
+    <ClInclude Include="features\rcs.h" />
+    <ClInclude Include="features\sound-esp.h" />
+    <ClInclude Include="features\spectator-list.h" />
+    <ClInclude Include="features\triggerbot.h" />
+    <ClInclude Include="game\bone.h" />
+    <ClInclude Include="game\entity.h" />
+    <ClInclude Include="game\game.h" />
+    <ClInclude Include="game\view.h" />
+    <ClInclude Include="helpers\weapon-icons.h" />
+    <ClInclude Include="helpers\key-manager.h" />
+    <ClInclude Include="helpers\logger.h" />
+    <ClInclude Include="helpers\mouse.h" />
+    <ClInclude Include="helpers\ui-access.h" />
+    <ClInclude Include="helpers\network.h" />
+    <ClInclude Include="offsets\offsets.h" />
+    <ClInclude Include="imgui-extencion\imgui\imconfig.h" />
+    <ClInclude Include="imgui-extencion\imgui\imgui.h" />
+    <ClInclude Include="imgui-extencion\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui-extencion\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="imgui-extencion\imgui\imgui_internal.h" />
+    <ClInclude Include="imgui-extencion\imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui-extencion\imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui-extencion\imgui\imstb_truetype.h" />
+    <ClInclude Include="imgui-extencion\ex-imgui.h" />
+    <ClInclude Include="imgui-extencion\ex-imgui-base.h" />
+    <ClInclude Include="imgui-extencion\ex-imgui-exception.h" />
+    <ClInclude Include="imgui-extencion\ex-imgui-external.h" />
+    <ClInclude Include="imgui-extencion\ex-imgui-struct.h" />
+    <ClInclude Include="imgui-extencion\stb\stb_image.h" />
+    <ClInclude Include="core\memory.h" />
+    <ClInclude Include="resources\resource.h" />
+    <ClInclude Include="resources\font.h" />
+    <ClInclude Include="resources\images.h" />
+    <ClInclude Include="resources\language.h" />
+    <ClInclude Include="resources\sounds.h" />
+    <ClInclude Include="resources\weaponicon.h" />
+    <ClInclude Include="helpers\storage.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\icon.ico" />
+    <Image Include="resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Config\ConfigMenu.cpp" />
-    <ClCompile Include="Config\ConfigSaver.cpp" />
-    <ClCompile Include="Core\Cheats.cpp" />
-    <ClCompile Include="Core\GlobalVars.cpp" />
-    <ClCompile Include="Features\Aimbot.cpp" />
-    <ClCompile Include="Features\Misc.cpp" />
-    <ClCompile Include="Features\Radar.cpp" />
-    <ClCompile Include="Features\RCS.cpp" />
-    <ClCompile Include="Features\TriggerBot.cpp" />
-    <ClCompile Include="Game\Bone.cpp" />
-    <ClCompile Include="Game\Entity.cpp" />
-    <ClCompile Include="Game\Game.cpp" />
-    <ClCompile Include="Helpers\Mouse.cpp" />
-    <ClCompile Include="Helpers\UIAccess.cpp" />
+    <ClCompile Include="config\config-menu.cpp" />
+    <ClCompile Include="config\config-saver.cpp" />
+    <ClCompile Include="core\cheats.cpp" />
+    <ClCompile Include="core\global-vars.cpp" />
+    <ClCompile Include="features\aimbot.cpp" />
+    <ClCompile Include="features\misc.cpp" />
+    <ClCompile Include="features\radar.cpp" />
+    <ClCompile Include="features\rcs.cpp" />
+    <ClCompile Include="features\triggerbot.cpp" />
+    <ClCompile Include="game\bone.cpp" />
+    <ClCompile Include="game\entity.cpp" />
+    <ClCompile Include="game\game.cpp" />
+    <ClCompile Include="helpers\mouse.cpp" />
+    <ClCompile Include="helpers\ui-access.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Offsets\Offsets.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui_demo.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui_draw.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui_impl_dx11.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui_tables.cpp" />
-    <ClCompile Include="OS-ImGui\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="OS-ImGui\OS-ImGui.cpp" />
-    <ClCompile Include="OS-ImGui\OS-ImGui_Base.cpp" />
-    <ClCompile Include="OS-ImGui\OS-ImGui_External.cpp" />
-    <ClCompile Include="Core\MemoryMgr.cpp" />
-    <ClCompile Include="Helpers\StorageMgr.cpp" />
+    <ClCompile Include="offsets\offsets.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui_demo.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui-extencion\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui-extencion\ex-imgui.cpp" />
+    <ClCompile Include="imgui-extencion\ex-imgui-base.cpp" />
+    <ClCompile Include="imgui-extencion\ex-imgui-external.cpp" />
+    <ClCompile Include="core\memory.cpp" />
+    <ClCompile Include="helpers\storage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources\Resource.rc" />
+    <ResourceCompile Include="resources\resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

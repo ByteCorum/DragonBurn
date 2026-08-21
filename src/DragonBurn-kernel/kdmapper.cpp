@@ -3,9 +3,9 @@
 #include <iostream>
 
 #include "utils.h"
-#include "intel_driver.h"
+#include "intel-driver.h"
 #include "nt.h"
-#include "portable_executable.h"
+#include "portable-executable.h"
 #include "logger.h"
 #include <sstream>
 
@@ -65,7 +65,7 @@ bool ResolveImports(portable_executable::vec_imports imports) {
 		ULONG64 Module = kdmUtils::GetKernelModuleAddress(current_import.module_name);
 		std::ostringstream ss;
 
-		if (!Module) 
+		if (!Module)
 		{
 			ss << "Dependency " << current_import.module_name << " wasn't found";
 			Log::Error(ss.str(), false);
@@ -186,7 +186,7 @@ ULONG64 kdmapper::MapDriver(BYTE* data, ULONG64 param1, ULONG64 param2, bool fre
 		}
 
 		// Write fixed image to kernel
-		if (!intel_driver::WriteMemory(realBase, (PVOID)((uintptr_t)local_image_base + (destroyHeader ? TotalVirtualHeaderSize : 0)), image_size)) 
+		if (!intel_driver::WriteMemory(realBase, (PVOID)((uintptr_t)local_image_base + (destroyHeader ? TotalVirtualHeaderSize : 0)), image_size))
 		{
 			Log::Error("Failed to write local image to remote image", false);
 			kernel_image_base = realBase;
@@ -213,7 +213,7 @@ ULONG64 kdmapper::MapDriver(BYTE* data, ULONG64 param1, ULONG64 param2, bool fre
 				uintptr_t secAddr = kernel_image_base + sec->VirtualAddress;
 				uint32_t secSize = sec->Misc.VirtualSize;
 
-				if (secSize <= 0) 
+				if (secSize <= 0)
 				{
 					ss << L"Skipping empty section: " << (char*)sec->Name;
 					Log::Info(ss.str());
@@ -328,5 +328,3 @@ ULONG64 kdmapper::MapDriver(BYTE* data, ULONG64 param1, ULONG64 param2, bool fre
 
 	return 0;
 }
-
-

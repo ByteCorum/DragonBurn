@@ -1,22 +1,10 @@
-﻿//______                            ______                  
-//|  _  \                           | ___ \                 
-//| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
-//| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
-//| |/ /| | | (_| | (_| | (_) | | | | |_/ / |_| | |  | | | |
-//|___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
-//                  __/ |                                   
-//                 |___/                                    
-//
-//https://discord.gg/5WcvdzFybD
-//https://github.com/ByteCorum/DragonBurn
-
-#include "Core/Cheats.h"
-#include "Offsets/Offsets.h"
-#include "Resources/Language.h"
-#include "Core/Init.h"
-#include "Config/ConfigSaver.h"
-#include "Helpers/Logger.h"
-#include "Helpers/UIAccess.h"
+﻿#include "core/cheats.h"
+#include "offsets/offsets.h"
+#include "resources/language.h"
+#include "core/init.h"
+#include "config/config-saver.h"
+#include "helpers/logger.h"
+#include "helpers/ui-access.h"
 #include <filesystem>
 #include <KnownFolders.h>
 #include <ShlObj.h>
@@ -68,14 +56,14 @@ void Cheat()
 	int tryCount = 0;
 	//Init::Verify::RandTitle();
 
-	Log::Custom(R"LOGO(______                            ______                  
-|  _  \                           | ___ \                 
-| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __  
-| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \ 
+	Log::Custom(R"LOGO(______                            ______
+|  _  \                           | ___ \
+| | | |_ __ __ _  __ _  ___  _ __ | |_/ /_   _ _ __ _ __
+| | | | '__/ _` |/ _` |/ _ \| '_ \| ___ \ | | | '__| '_ \
 | |/ /| | | (_| | (_| | (_) | | | | |_/ / |_| | |  | | | |
 |___/ |_|  \__,_|\__, |\___/|_| |_\____/ \__,_|_|  |_| |_|
-                  __/ |                                   
-                 |___/                                    
+                  __/ |
+                 |___/
 )LOGO", 13);
 	Log::Info(MenuConfig::name + " v" + MenuConfig::version + " by " + MenuConfig::author);
 	Log::Info("https://github.com/ByteCorum/DragonBurn");
@@ -119,7 +107,7 @@ void Cheat()
 	tryCount = 0;
 CHECK_VER://CHECK_VER
 	Log::Info("Checking cheat version...");
-	try 
+	try
 	{
 		bool result = Init::Verify::CheckCheatVersion();
 		Log::PreviousLine();
@@ -159,7 +147,7 @@ CONNECT_KERNEL://CONNECT_KERNEL
 			Log::Warning("Failed to connect to kernel mode driver");
 		else
 			Log::Error("Failed to connect to kernel mode driver");
-		
+
 		Log::Info("Triggered auto-map protocol");
 		Log::Info("Looking for kernel mapper...");
 
