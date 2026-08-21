@@ -48,7 +48,7 @@
     <OutDir>$(SolutionDir)\built_dbg\</OutDir>
     <IntDir>$(SolutionDir)\built_dbg\cache\um</IntDir>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IncludePath>Libs\json</IncludePath>
+    <IncludePath>dependencies\json</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <TargetName>DragonBurn-usermode</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
@@ -57,7 +57,7 @@
     <OutDir>$(SolutionDir)\built\</OutDir>
     <IntDir>$(SolutionDir)\built\cache\um</IntDir>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <IncludePath>Libs\json</IncludePath>
+    <IncludePath>dependencies\json</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <TargetName>DragonBurn-usermode</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
