@@ -1,53 +1,40 @@
 cmake_minimum_required(VERSION 3.20)
 project(DragonBurnSolution VERSION 3.3.8.0 LANGUAGES CXX)
 
-# Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Platform check - Windows only
 if(NOT WIN32)
     message(FATAL_ERROR "This project is designed for Windows only")
 endif()
 
-# Configuration types
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 
-# Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/built_dbg")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/built")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/built_dbg/cache")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/built/cache")
 
-# Enable solution folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Windows-specific compiler settings
 if(MSVC)
     add_compile_options(/W3 /sdl-)
     add_compile_definitions(UNICODE _UNICODE)
     
-    # Debug specific
     add_compile_options($<$<CONFIG:Debug>:/W3 /sdl->)
     add_compile_definitions($<$<CONFIG:Debug>:DBDEBUG _DEBUG>)
     
-    # Release specific
     add_compile_options($<$<CONFIG:Release>:/W3 /sdl- /O2>)
     add_compile_definitions($<$<CONFIG:Release>:NDEBUG>)
     
-    # Linker settings for both configurations
     set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE /DEBUG")
     set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF")
     
-    # UAC elevation for both targets
     set(UAC_MANIFEST "/MANIFESTUAC:\"level='requireAdministrator' uiAccess='false'\"")
 endif()
 
-# =============================================================================
 # DragonBurn Kernel Project
-# =============================================================================
 
-# Kernel project sources
 set(KERNEL_SOURCES
     src/dragonburn-kernel/intel-driver.cpp
     src/dragonburn-kernel/main.cpp
@@ -57,7 +44,6 @@ set(KERNEL_SOURCES
     src/dragonburn-kernel/utils.cpp
 )
 
-# Kernel project headers
 set(KERNEL_HEADERS
     src/dragonburn-kernel/include/cfg.h
     src/dragonburn-kernel/include/crypto.h
@@ -74,16 +60,13 @@ set(KERNEL_HEADERS
     src/dragonburn-kernel/resource.h
 )
 
-# Kernel project resources
 set(KERNEL_RESOURCES
     src/dragonburn-kernel/resource.rc
     src/dragonburn-kernel/icon.ico
 )
 
-# Create kernel executable
 add_executable(DragonBurn-kernel WIN32 ${KERNEL_SOURCES} ${KERNEL_HEADERS} ${KERNEL_RESOURCES})
 
-# Set kernel target properties
 target_include_directories(DragonBurn-kernel PRIVATE src/dragonburn-kernel/include)
 
 target_compile_options(DragonBurn-kernel PRIVATE
@@ -99,17 +82,14 @@ target_compile_definitions(DragonBurn-kernel PRIVATE
     _UNICODE
 )
 
-# Set output name
 set_target_properties(DragonBurn-kernel PROPERTIES OUTPUT_NAME "DragonBurn-kernel")
 
-# Linker options for kernel project
 set_target_properties(DragonBurn-kernel PROPERTIES
     LINK_FLAGS_DEBUG "/DEBUG"
     LINK_FLAGS_RELEASE "/OPT:REF /OPT:ICF /LTCG"
     LINK_FLAGS "${UAC_MANIFEST}"
 )
 
-# Libraries for kernel project
 target_link_libraries(DragonBurn-kernel PRIVATE
     version
     kernel32
@@ -126,14 +106,10 @@ target_link_libraries(DragonBurn-kernel PRIVATE
     odbccp32
 )
 
-# Set folder for kernel project in IDE
 set_target_properties(DragonBurn-kernel PROPERTIES FOLDER "Kernel")
 
-# =============================================================================
 # DragonBurn User-Mode Project
-# =============================================================================
 
-# User-mode project sources
 set(USERMODE_SOURCES
     # Main
     src/dragonburn-usermode/main.cpp
@@ -181,7 +157,6 @@ set(USERMODE_SOURCES
     src/dragonburn-usermode/imgui-extencion/ex-imgui-external.cpp
 )
 
-# User-mode project headers
 set(USERMODE_HEADERS
     # Config
     src/dragonburn-usermode/config/config-menu.h
@@ -256,16 +231,13 @@ set(USERMODE_HEADERS
     src/dragonburn-usermode/resources/weaponicon.h
 )
 
-# User-mode project resources
 set(USERMODE_RESOURCES
     src/dragonburn-usermode/resources/resource.rc
     src/dragonburn-usermode/resources/icon.ico
 )
 
-# Create user-mode executable
 add_executable(DragonBurn-usermode WIN32 ${USERMODE_SOURCES} ${USERMODE_HEADERS} ${USERMODE_RESOURCES})
 
-# Set user-mode target properties
 target_include_directories(DragonBurn-usermode PRIVATE
     src/dragonburn-usermode/dependencies/json
     src/dragonburn-usermode/imgui-extencion
@@ -279,17 +251,14 @@ target_compile_definitions(DragonBurn-usermode PRIVATE
     _UNICODE
 )
 
-# Set output name
 set_target_properties(DragonBurn-usermode PROPERTIES OUTPUT_NAME "DragonBurn-usermode")
 
-# Linker options for user-mode project
 set_target_properties(DragonBurn-usermode PROPERTIES
     LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE /DEBUG"
     LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF"
     LINK_FLAGS "${UAC_MANIFEST}"
 )
 
-# Libraries for user-mode project
 target_link_libraries(DragonBurn-usermode PRIVATE
     d3d11
     dxgi
@@ -307,23 +276,16 @@ target_link_libraries(DragonBurn-usermode PRIVATE
     odbccp32
 )
 
-# Set folder for user-mode project in IDE
 set_target_properties(DragonBurn-usermode PROPERTIES FOLDER "Main")
 
-# Set main project as startup project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT DragonBurn-usermode)
 
-# =============================================================================
 # Build Options
-# =============================================================================
 
-# Option to build only user-mode
 option(BUILD_USERMODE "Build DragonBurn user-mode application" ON)
 
-# Option to build only kernel
 option(BUILD_KERNEL "Build DragonBurn kernel mapper" ON)
 
-# Conditional building
 if(NOT BUILD_USERMODE)
     set_target_properties(DragonBurn-usermode PROPERTIES EXCLUDE_FROM_ALL TRUE)
     set_target_properties(DragonBurn-usermode PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD TRUE)
@@ -335,16 +297,12 @@ if(NOT BUILD_KERNEL)
 endif()
 
 # =============================================================================
-# Output Configuration
-# =============================================================================
 
-# Ensure output directories exist
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/built)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/built/cache)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/built_dbg)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/built_dbg/cache)
 
-# Copy kernel executable to build directory for usermode to find
 if(BUILD_KERNEL)
     add_custom_command(TARGET DragonBurn-usermode POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -357,11 +315,6 @@ if(BUILD_KERNEL)
     )
 endif()
 
-# =============================================================================
-# Grouping for IDE
-# =============================================================================
-
-# Group source files for user-mode
 source_group("DragonBurn\Config" FILES
     src/dragonburn-usermode/config/config-menu.cpp
     src/dragonburn-usermode/config/config-menu.h
@@ -472,7 +425,6 @@ source_group("DragonBurn\Resources" FILES
     src/dragonburn-usermode/main.cpp
 )
 
-# Group source files for kernel
 source_group("Kernel\Sources" FILES
     src/dragonburn-kernel/intel-driver.cpp
     src/dragonburn-kernel/kdmapper.cpp
