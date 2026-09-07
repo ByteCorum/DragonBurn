@@ -1,0 +1,37 @@
+name: cmake-build-check x64 release
+
+on:
+  push:
+    branches: [stable, wip_maintenance]
+  pull_request:
+    branches: [stable, wip_maintenance]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -G "Visual Studio 17 2022" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CONFIGURATION_TYPES=Release \
+            -DBUILD_USERMODE=ON \
+            -DBUILD_KERNEL=ON
+
+      - name: Build with CMake
+        run: cmake --build build --config Release -- /m
+
+      - name: Archive build
+        uses: actions/upload-artifact@v4
+        with:
+          name: DragonBurn_cmake_${{ github.sha }}
+          path: |
+            D:\a\DragonBurn\DragonBurn\built\DragonBurn-usermode.exe
+            D:\a\DragonBurn\DragonBurn\built\DragonBurn-kernel.exe

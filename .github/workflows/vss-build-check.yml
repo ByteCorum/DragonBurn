@@ -1,4 +1,4 @@
-name: build-check x64 release
+name: vss-build-check x64 release
 
 on:
   push:
@@ -26,6 +26,7 @@ jobs:
           name: DragonBurn_${{ github.sha }}
           path: |
             D:\a\DragonBurn\DragonBurn\built\DragonBurn-usermode.exe
+            D:\a\DragonBurn\DragonBurn\built\DragonBurn-kernelmode.exe
 
   release:
     needs: ["build"]
