@@ -15,17 +15,13 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/built/cache")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(MSVC)
-    add_compile_options(/W3 /sdl-)
     add_compile_definitions(UNICODE _UNICODE)
     
-    add_compile_options($<$<CONFIG:Debug>:/W3 /sdl->)
-    add_compile_definitions($<$<CONFIG:Debug>:DBDEBUG _DEBUG>)
-    
-    add_compile_options($<$<CONFIG:Release>:/W3 /sdl- /O2>)
-    add_compile_definitions($<$<CONFIG:Release>:NDEBUG>)
-    
-    set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE /DEBUG")
-    set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF")
+    # Global definitions
+    add_compile_definitions(
+        $<$<CONFIG:Debug>:DBDEBUG _DEBUG>
+        $<$<CONFIG:Release>:NDEBUG>
+    )
     
     set(UAC_MANIFEST "/MANIFESTUAC:\"level='requireAdministrator' uiAccess='false'\"")
 endif()
@@ -65,27 +61,26 @@ add_executable(DragonBurn-kernel WIN32 ${KERNEL_SOURCES} ${KERNEL_HEADERS} ${KER
 
 target_include_directories(DragonBurn-kernel PRIVATE src/dragonburn-kernel/include)
 
-target_compile_options(DragonBurn-kernel PRIVATE
-    $<$<CONFIG:Debug>:/W4 /Od>
-    $<$<CONFIG:Release>:/W3 /O2 /Oi /GL /MP>
-    /sdl
-)
+
 
 target_compile_definitions(DragonBurn-kernel PRIVATE
-    $<$<CONFIG:Debug>:DBDEBUG _DEBUG>
-    $<$<CONFIG:Release>:NDEBUG>
     UNICODE
     _UNICODE
+)
+
+target_compile_options(DragonBurn-kernel PRIVATE
+    $<$<CONFIG:Debug>:/W4 /Od /sdl>
+    $<$<CONFIG:Release>:/W4 /O2 /Oi /GL /MP /sdl>
 )
 
 target_compile_features(DragonBurn-kernel PRIVATE cxx_std_17)
 
 set_target_properties(DragonBurn-kernel PROPERTIES OUTPUT_NAME "DragonBurn-kernel")
 
-set_target_properties(DragonBurn-kernel PROPERTIES
-    LINK_FLAGS_DEBUG "/DEBUG"
-    LINK_FLAGS_RELEASE "/OPT:REF /OPT:ICF /LTCG"
-    LINK_FLAGS "${UAC_MANIFEST}"
+target_link_options(DragonBurn-kernel PRIVATE
+    $<$<CONFIG:Debug>:/DEBUG>
+    $<$<CONFIG:Release>:/OPT:REF /OPT:ICF /LTCG>
+    "${UAC_MANIFEST}"
 )
 
 target_link_libraries(DragonBurn-kernel PRIVATE
@@ -245,14 +240,19 @@ target_compile_definitions(DragonBurn-usermode PRIVATE
     _UNICODE
 )
 
+target_compile_options(DragonBurn-usermode PRIVATE
+    $<$<CONFIG:Debug>:/W3 /Od>
+    $<$<CONFIG:Release>:/W3 /O2 /Oi /GL /MP>
+)
+
 target_compile_features(DragonBurn-usermode PRIVATE cxx_std_20)
 
 set_target_properties(DragonBurn-usermode PROPERTIES OUTPUT_NAME "DragonBurn-usermode")
 
-set_target_properties(DragonBurn-usermode PROPERTIES
-    LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE /DEBUG"
-    LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF"
-    LINK_FLAGS "${UAC_MANIFEST}"
+target_link_options(DragonBurn-usermode PRIVATE
+    $<$<CONFIG:Debug>:/SUBSYSTEM:CONSOLE /DEBUG>
+    $<$<CONFIG:Release>:/SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF>
+    "${UAC_MANIFEST}"
 )
 
 target_link_libraries(DragonBurn-usermode PRIVATE
