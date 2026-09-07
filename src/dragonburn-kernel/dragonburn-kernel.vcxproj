@@ -100,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\cfg.h" />
-    <ClInclude Include="include\crypto.h" />
     <ClInclude Include="include\intel-driver.h" />
     <ClInclude Include="include\intel-driver-resource.h" />
     <ClInclude Include="include\json.hpp" />

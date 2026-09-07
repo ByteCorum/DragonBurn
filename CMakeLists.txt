@@ -46,7 +46,6 @@ set(KERNEL_SOURCES
 
 set(KERNEL_HEADERS
     src/dragonburn-kernel/include/cfg.h
-    src/dragonburn-kernel/include/crypto.h
     src/dragonburn-kernel/include/intel-driver.h
     src/dragonburn-kernel/include/intel-driver-resource.h
     src/dragonburn-kernel/include/json.hpp
@@ -122,7 +121,6 @@ set(USERMODE_SOURCES
     src/dragonburn-usermode/core/cheats.cpp
     src/dragonburn-usermode/core/global-vars.cpp
     src/dragonburn-usermode/core/memory.cpp
-    src/dragonburn-usermode/core/storage.cpp
     
     # Features
     src/dragonburn-usermode/features/aimbot.cpp
@@ -138,6 +136,7 @@ set(USERMODE_SOURCES
     
     # Helpers
     src/dragonburn-usermode/helpers/ui-access.cpp
+    src/dragonburn-usermode/helpers/storage.cpp
     
     # Offsets
     src/dragonburn-usermode/offsets/offsets.cpp
@@ -190,16 +189,12 @@ set(USERMODE_HEADERS
     src/dragonburn-usermode/game/view.h
     
     # Helpers
-    src/dragonburn-usermode/helpers/format.h
-    src/dragonburn-usermode/helpers/getweaponicon.h
     src/dragonburn-usermode/helpers/key-manager.h
     src/dragonburn-usermode/helpers/logger.h
-    src/dragonburn-usermode/helpers/mouse.h
     src/dragonburn-usermode/helpers/network.h
     src/dragonburn-usermode/helpers/storage.h
     src/dragonburn-usermode/helpers/ui-access.h
     src/dragonburn-usermode/helpers/weapon-icons.h
-    src/dragonburn-usermode/helpers/webapi.h
     
     # Offsets
     src/dragonburn-usermode/offsets/offsets.h
@@ -364,18 +359,14 @@ source_group("DragonBurn\\Game" FILES
 )
 
 source_group("DragonBurn\\Helpers" FILES
-    src/dragonburn-usermode/helpers/format.h
-    src/dragonburn-usermode/helpers/getweaponicon.h
     src/dragonburn-usermode/helpers/key-manager.h
     src/dragonburn-usermode/helpers/logger.h
-    src/dragonburn-usermode/helpers/mouse.h
     src/dragonburn-usermode/helpers/network.h
     src/dragonburn-usermode/helpers/storage.cpp
     src/dragonburn-usermode/helpers/storage.h
     src/dragonburn-usermode/helpers/ui-access.cpp
     src/dragonburn-usermode/helpers/ui-access.h
     src/dragonburn-usermode/helpers/weapon-icons.h
-    src/dragonburn-usermode/helpers/webapi.h
 )
 
 source_group("DragonBurn\\ImGui" FILES
@@ -436,7 +427,6 @@ source_group("Kernel\\Sources" FILES
 
 source_group("Kernel\\Headers" FILES
     src/dragonburn-kernel/include/cfg.h
-    src/dragonburn-kernel/include/crypto.h
     src/dragonburn-kernel/include/intel-driver.h
     src/dragonburn-kernel/include/intel-driver-resource.h
     src/dragonburn-kernel/include/json.hpp
