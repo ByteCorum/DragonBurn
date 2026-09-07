@@ -17,15 +17,11 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
 
       - name: Configure CMake
-        run: |
-          cmake -B build \
-            -G "Visual Studio 17 2022" \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_CONFIGURATION_TYPES=Release \
-            -DBUILD_USERMODE=ON \
-            -DBUILD_KERNEL=ON
+        shell: cmd
+        run: cmake -B build -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CONFIGURATION_TYPES=Release -DBUILD_USERMODE=ON -DBUILD_KERNEL=ON
 
       - name: Build with CMake
+        shell: cmd
         run: cmake --build build --config Release -- /m
 
       - name: Archive build
@@ -33,5 +29,5 @@ jobs:
         with:
           name: DragonBurn_cmake_${{ github.sha }}
           path: |
-            D:\a\DragonBurn\DragonBurn\built\DragonBurn-usermode.exe
-            D:\a\DragonBurn\DragonBurn\built\DragonBurn-kernel.exe
+            built/DragonBurn-usermode.exe
+            built/DragonBurn-kernel.exe
