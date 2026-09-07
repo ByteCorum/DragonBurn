@@ -315,14 +315,14 @@ if(BUILD_KERNEL)
     )
 endif()
 
-source_group("DragonBurn\Config" FILES
+source_group("DragonBurn\\Config" FILES
     src/dragonburn-usermode/config/config-menu.cpp
     src/dragonburn-usermode/config/config-menu.h
     src/dragonburn-usermode/config/config-saver.cpp
     src/dragonburn-usermode/config/config-saver.h
 )
 
-source_group("DragonBurn\Core" FILES
+source_group("DragonBurn\\Core" FILES
     src/dragonburn-usermode/core/cheats.cpp
     src/dragonburn-usermode/core/cheats.h
     src/dragonburn-usermode/core/config.h
@@ -336,7 +336,7 @@ source_group("DragonBurn\Core" FILES
     src/dragonburn-usermode/core/render.h
 )
 
-source_group("DragonBurn\Features" FILES
+source_group("DragonBurn\\Features" FILES
     src/dragonburn-usermode/features/aimbot.cpp
     src/dragonburn-usermode/features/aimbot.h
     src/dragonburn-usermode/features/bomb-timer.h
@@ -353,7 +353,7 @@ source_group("DragonBurn\Features" FILES
     src/dragonburn-usermode/features/triggerbot.h
 )
 
-source_group("DragonBurn\Game" FILES
+source_group("DragonBurn\\Game" FILES
     src/dragonburn-usermode/game/bone.cpp
     src/dragonburn-usermode/game/bone.h
     src/dragonburn-usermode/game/entity.cpp
@@ -363,7 +363,7 @@ source_group("DragonBurn\Game" FILES
     src/dragonburn-usermode/game/view.h
 )
 
-source_group("DragonBurn\Helpers" FILES
+source_group("DragonBurn\\Helpers" FILES
     src/dragonburn-usermode/helpers/format.h
     src/dragonburn-usermode/helpers/getweaponicon.h
     src/dragonburn-usermode/helpers/key-manager.h
@@ -378,7 +378,7 @@ source_group("DragonBurn\Helpers" FILES
     src/dragonburn-usermode/helpers/webapi.h
 )
 
-source_group("DragonBurn\ImGui" FILES
+source_group("DragonBurn\\ImGui" FILES
     src/dragonburn-usermode/imgui-extencion/imgui/imconfig.h
     src/dragonburn-usermode/imgui-extencion/imgui/imgui.cpp
     src/dragonburn-usermode/imgui-extencion/imgui/imgui.h
@@ -396,7 +396,7 @@ source_group("DragonBurn\ImGui" FILES
     src/dragonburn-usermode/imgui-extencion/imgui/imstb_truetype.h
 )
 
-source_group("DragonBurn\OS-ImGui" FILES
+source_group("DragonBurn\\OS-ImGui" FILES
     src/dragonburn-usermode/imgui-extencion/ex-imgui.cpp
     src/dragonburn-usermode/imgui-extencion/ex-imgui.h
     src/dragonburn-usermode/imgui-extencion/ex-imgui-base.cpp
@@ -408,12 +408,12 @@ source_group("DragonBurn\OS-ImGui" FILES
     src/dragonburn-usermode/imgui-extencion/stb/stb_image.h
 )
 
-source_group("DragonBurn\Offsets" FILES
+source_group("DragonBurn\\Offsets" FILES
     src/dragonburn-usermode/offsets/offsets.cpp
     src/dragonburn-usermode/offsets/offsets.h
 )
 
-source_group("DragonBurn\Resources" FILES
+source_group("DragonBurn\\Resources" FILES
     src/dragonburn-usermode/resources/resource.rc
     src/dragonburn-usermode/resources/icon.ico
     src/dragonburn-usermode/resources/resource.h
@@ -425,7 +425,7 @@ source_group("DragonBurn\Resources" FILES
     src/dragonburn-usermode/main.cpp
 )
 
-source_group("Kernel\Sources" FILES
+source_group("Kernel\\Sources" FILES
     src/dragonburn-kernel/intel-driver.cpp
     src/dragonburn-kernel/kdmapper.cpp
     src/dragonburn-kernel/main.cpp
@@ -434,7 +434,7 @@ source_group("Kernel\Sources" FILES
     src/dragonburn-kernel/utils.cpp
 )
 
-source_group("Kernel\Headers" FILES
+source_group("Kernel\\Headers" FILES
     src/dragonburn-kernel/include/cfg.h
     src/dragonburn-kernel/include/crypto.h
     src/dragonburn-kernel/include/intel-driver.h
@@ -450,7 +450,7 @@ source_group("Kernel\Headers" FILES
     src/dragonburn-kernel/resource.h
 )
 
-source_group("Kernel\Resources" FILES
+source_group("Kernel\\Resources" FILES
     src/dragonburn-kernel/resource.rc
     src/dragonburn-kernel/icon.ico
 )
