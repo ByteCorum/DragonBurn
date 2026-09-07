@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(DragonBurnSolution VERSION 3.3.8.0 LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(DragonBurnSolution VERSION 3.7.10.4 LANGUAGES CXX)
 
 if(NOT WIN32)
     message(FATAL_ERROR "This project is designed for Windows only")
@@ -80,6 +77,8 @@ target_compile_definitions(DragonBurn-kernel PRIVATE
     UNICODE
     _UNICODE
 )
+
+target_compile_features(DragonBurn-kernel PRIVATE cxx_std_17)
 
 set_target_properties(DragonBurn-kernel PROPERTIES OUTPUT_NAME "DragonBurn-kernel")
 
@@ -246,6 +245,8 @@ target_compile_definitions(DragonBurn-usermode PRIVATE
     _UNICODE
 )
 
+target_compile_features(DragonBurn-usermode PRIVATE cxx_std_20)
+
 set_target_properties(DragonBurn-usermode PROPERTIES OUTPUT_NAME "DragonBurn-usermode")
 
 set_target_properties(DragonBurn-usermode PROPERTIES
@@ -290,8 +291,6 @@ if(NOT BUILD_KERNEL)
     set_target_properties(DragonBurn-kernel PROPERTIES EXCLUDE_FROM_ALL TRUE)
     set_target_properties(DragonBurn-kernel PROPERTIES EXCLUDE_FROM_DEFAULT_BUILD TRUE)
 endif()
-
-# =============================================================================
 
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/built)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/built/cache)
