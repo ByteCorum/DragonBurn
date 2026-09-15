@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@latest
+      - uses: actions/checkout@v7
 
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
@@ -36,7 +36,7 @@ jobs:
           }
 
       - name: Archive usermode
-        uses: actions/upload-artifact@latest
+        uses: actions/upload-artifact@v4
         with:
           name: DragonBurn_vss_${{ github.sha }}
           path: |
