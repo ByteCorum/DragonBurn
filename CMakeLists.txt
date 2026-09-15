@@ -10,6 +10,14 @@ if(NOT MSVC)
     message(FATAL_ERROR "The MSVC toolchain (Visual Studio 2022, v143 toolset) is required.")
 endif()
 
+# Mirror the original MSBuild preprocessor environment: CMake injects /DWIN32 and /D_WINDOWS into the base flags, but the .vcxproj build defines neither.
+# The ex-imgui headers conditionally compile their declarations on the subsystem macros, so both must be removed to match the working .sln build.
+string(REGEX REPLACE "/DWIN32" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+string(REGEX REPLACE "/D_WINDOWS" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+# The kernel .vcxproj Release configuration defines no NDEBUG; strip CMake's default /DNDEBUG to match. The usermode target re-declares NDEBUG explicitly.
+string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+
 option(DRAGONBURN_BUILD_KERNEL   "Build the DragonBurn-kernel executable"   ON)
 option(DRAGONBURN_BUILD_USERMODE "Build the DragonBurn-usermode executable" ON)
 
@@ -114,6 +122,7 @@ target_compile_features(DragonBurn-usermode PRIVATE cxx_std_20)
 target_compile_definitions(DragonBurn-usermode PRIVATE
     UNICODE
     _UNICODE
+    _CONSOLE
     $<$<CONFIG:Debug>:DBDEBUG>
     $<$<CONFIG:Debug>:_DEBUG>
     $<$<CONFIG:Release>:NDEBUG>
