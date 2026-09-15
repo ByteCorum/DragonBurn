@@ -15,7 +15,7 @@ jobs:
 
       - name: Configure CMake
         shell: cmd
-        run: cmake -B build -A x64 -DCMAKE_CONFIGURATION_TYPES=Release -DDRAGONBURN_BUILD_KERNEL=ON -DDRAGONBURN_BUILD_USERMODE=ON
+        run: cmake -B build -A x64 -DCMAKE_CONFIGURATION_TYPES=Release -DDRAGONBURN_BUILD_KERNEL=ON -DDRAGONBURN_BUILD_MAPPER=ON -DDRAGONBURN_BUILD_USERMODE=ON
 
       - name: Build with CMake
         shell: cmd
@@ -26,7 +26,8 @@ jobs:
         run: |
           $expected = @(
             'built\DragonBurn-usermode.exe',
-            'built\DragonBurn-kernel.exe'
+            'built\DragonBurn-mapper.exe',
+            'built\DragonBurn-kernel.sys'
           )
           foreach ($file in $expected) {
             if (-not (Test-Path $file)) {
@@ -36,10 +37,23 @@ jobs:
             Write-Host "OK: $file"
           }
 
-      - name: Archive build
+      - name: Archive usermode
         uses: actions/upload-artifact@v4
         with:
-          name: DragonBurn_cmake_${{ github.sha }}
+          name: DragonBurn-vss-usermode-${{ github.sha }}
           path: |
-            built/DragonBurn-usermode.exe
-            built/DragonBurn-kernel.exe
+           built\DragonBurn-usermode.exe
+      
+      - name: Archive mapper
+        uses: actions/upload-artifact@v4
+        with:
+          name: DragonBurn-vss-mapper-${{ github.sha }}
+          path: |
+           built\DragonBurn-mapper.exe
+        
+      - name: Archive kernel
+        uses: actions/upload-artifact@v4
+        with:
+          name: DragonBurn-vss-kernel-${{ github.sha }}
+          path: |
+           built\DragonBurn-kernel.sys

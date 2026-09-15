@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dragonburn-usermode", "src\dragonburn-usermode\dragonburn.vcxproj", "{36F8A44D-D629-4E53-BECA-698B2C64A529}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dragonburn-kernel", "src\dragonburn-kernel\dragonburn-kernel.vcxproj", "{518E0636-BA8F-459D-ACAC-81BD33475E3E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dragonburn-mapper", "src\dragonburn-mapper\dragonburn-mapper.vcxproj", "{518E0636-BA8F-459D-ACAC-81BD33475E3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

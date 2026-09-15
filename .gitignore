@@ -404,8 +404,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 #Other
-built/
-built_dbg/
-built_legacy/
-DragonBurn-kernel/include/cfg.h
-DragonBurn-kernel/RCa41796
+**/built/*
+**/built_dbg/*
+**/built_legacy/*

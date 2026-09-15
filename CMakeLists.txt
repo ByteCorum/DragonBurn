@@ -7,7 +7,7 @@ if(NOT WIN32)
 endif()
 
 if(NOT MSVC)
-    message(FATAL_ERROR "The MSVC toolchain (Visual Studio 2022, v143 toolset) is required.")
+    message(FATAL_ERROR "The MSVC toolchain is required.")
 endif()
 
 # Mirror the original MSBuild preprocessor environment: CMake injects /DWIN32 and /D_WINDOWS into the base flags, but the .vcxproj build defines neither.
@@ -15,11 +15,12 @@ endif()
 string(REGEX REPLACE "/DWIN32" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 string(REGEX REPLACE "/D_WINDOWS" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-# The kernel .vcxproj Release configuration defines no NDEBUG; strip CMake's default /DNDEBUG to match. The usermode target re-declares NDEBUG explicitly.
+# The mapper .vcxproj Release configuration defines no NDEBUG; strip CMake's default /DNDEBUG to match. The usermode target re-declares NDEBUG explicitly.
 string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
-option(DRAGONBURN_BUILD_KERNEL   "Build the DragonBurn-kernel executable"   ON)
+option(DRAGONBURN_BUILD_MAPPER   "Build the DragonBurn-mapper executable"   ON)
 option(DRAGONBURN_BUILD_USERMODE "Build the DragonBurn-usermode executable" ON)
+option(DRAGONBURN_BUILD_KERNEL "Build the DragonBurn-kernel image" ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY         "${CMAKE_SOURCE_DIR}/built")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/built_dbg")
@@ -31,31 +32,31 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_REL
 # UACExecutionLevel RequireAdministrator equivalent: embeds a manifest that requests elevation for the executables.
 set(DRAGONBURN_UAC_ADMIN "/MANIFESTUAC:level='requireAdministrator'")
 
-if(DRAGONBURN_BUILD_KERNEL)
+if(DRAGONBURN_BUILD_MAPPER)
 
-add_executable(DragonBurn-kernel
-    src/dragonburn-kernel/main.cpp
-    src/dragonburn-kernel/intel-driver.cpp
-    src/dragonburn-kernel/kdmapper.cpp
-    src/dragonburn-kernel/portable-executable.cpp
-    src/dragonburn-kernel/service.cpp
-    src/dragonburn-kernel/utils.cpp
-    src/dragonburn-kernel/resource.rc
+add_executable(DragonBurn-mapper
+    src/dragonburn-mapper/main.cpp
+    src/dragonburn-mapper/intel-driver.cpp
+    src/dragonburn-mapper/kdmapper.cpp
+    src/dragonburn-mapper/portable-executable.cpp
+    src/dragonburn-mapper/service.cpp
+    src/dragonburn-mapper/utils.cpp
+    src/dragonburn-mapper/resource.rc
 )
 
-target_include_directories(DragonBurn-kernel PRIVATE
-    src/dragonburn-kernel/include
+target_include_directories(DragonBurn-mapper PRIVATE
+    src/dragonburn-mapper/include
 )
 
-target_compile_features(DragonBurn-kernel PRIVATE cxx_std_17)
+target_compile_features(DragonBurn-mapper PRIVATE cxx_std_17)
 
-target_compile_definitions(DragonBurn-kernel PRIVATE
+target_compile_definitions(DragonBurn-mapper PRIVATE
     UNICODE
     _UNICODE
     $<$<CONFIG:Debug>:DBDEBUG>
 )
 
-target_compile_options(DragonBurn-kernel PRIVATE
+target_compile_options(DragonBurn-mapper PRIVATE
     /MP
     /permissive-
     /sdl
@@ -66,12 +67,12 @@ target_compile_options(DragonBurn-kernel PRIVATE
 )
 
 # WholeProgramOptimization (LTCG) in Release.
-set_property(TARGET DragonBurn-kernel PROPERTY
+set_property(TARGET DragonBurn-mapper PROPERTY
     INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 
-target_link_libraries(DragonBurn-kernel PRIVATE version)
+target_link_libraries(DragonBurn-mapper PRIVATE version)
 
-target_link_options(DragonBurn-kernel PRIVATE
+target_link_options(DragonBurn-mapper PRIVATE
     ${DRAGONBURN_UAC_ADMIN}
     $<$<CONFIG:Release>:/OPT:REF>
     $<$<CONFIG:Release>:/OPT:ICF>
