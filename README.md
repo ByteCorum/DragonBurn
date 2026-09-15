@@ -20,6 +20,11 @@
 DragonBurn is one of the best CS2 kernel mode read only external cheats. It has a wide range of features, full customization, and automatic offset updates. Undetected by all anti-cheats except faceit.
 </p></h3>
 
+<h3>
+<p align="center">
+PROJECT IS CURRENTLY UNDER ACTIVE IMPROVEMENTS/PARTIAL REWORK AND NOT JET WORKS THE WAY IT IS, THE ONLY WAY TO USE THIS PROJECT, IS TO USE COMMUNITY BUILDS LISTED IN DISCORD!!!
+</p></h3>
+
 <p align="center">
 <a href="https://github.com/ByteCorum/DragonBurn/releases/latest/download/DragonBurn.exe">Download latest release</a><br>
 ⭐Please, star this repo if it was helpful⭐
