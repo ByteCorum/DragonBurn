@@ -42,20 +42,20 @@ jobs:
       - name: Archive usermode
         uses: actions/upload-artifact@v4
         with:
-          name: DragonBurn-vss-usermode-${{ github.sha }}
+          name: DragonBurn-cmake-usermode-${{ github.sha }}
           path: |
            built\DragonBurn-usermode.exe
       
       - name: Archive mapper
         uses: actions/upload-artifact@v4
         with:
-          name: DragonBurn-vss-mapper-${{ github.sha }}
+          name: DragonBurn-cmake-mapper-${{ github.sha }}
           path: |
            built\DragonBurn-mapper.exe
         
       - name: Archive kernel
         uses: actions/upload-artifact@v4
         with:
-          name: DragonBurn-vss-kernel-${{ github.sha }}
+          name: DragonBurn-cmake-kernel-${{ github.sha }}
           path: |
            built\DragonBurn-kernel.sys
