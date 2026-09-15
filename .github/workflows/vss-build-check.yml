@@ -20,13 +20,28 @@ jobs:
         run: |
           msbuild DragonBurn.sln -t:Rebuild -p:Configuration=Release -p:Platform=x64
 
+      - name: Verify build outputs
+        shell: pwsh
+        run: |
+          $expected = @(
+            'built\DragonBurn-usermode.exe',
+            'built\DragonBurn-kernel.exe'
+          )
+          foreach ($file in $expected) {
+            if (-not (Test-Path $file)) {
+              Write-Error "Build output missing: $file"
+              exit 1
+            }
+            Write-Host "OK: $file"
+          }
+
       - name: Archive usermode
         uses: actions/upload-artifact@v4
         with:
-          name: DragonBurn_${{ github.sha }}
+          name: DragonBurn_vss_${{ github.sha }}
           path: |
-            D:\a\DragonBurn\DragonBurn\built\DragonBurn-usermode.exe
-            D:\a\DragonBurn\DragonBurn\built\DragonBurn-kernelmode.exe
+           DragonBurn\DragonBurn\built\DragonBurn-usermode.exe
+           DragonBurn\DragonBurn\built\DragonBurn-kernelmode.exe
 
   release:
     needs: ["build"]

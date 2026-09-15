@@ -15,11 +15,26 @@ jobs:
 
       - name: Configure CMake
         shell: cmd
-        run: cmake -B build -A x64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CONFIGURATION_TYPES=Release -DBUILD_USERMODE=ON -DBUILD_KERNEL=ON
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_CONFIGURATION_TYPES=Release -DDRAGONBURN_BUILD_KERNEL=ON -DDRAGONBURN_BUILD_USERMODE=ON
 
       - name: Build with CMake
         shell: cmd
         run: cmake --build build --config Release -- /m
+
+      - name: Verify build outputs
+        shell: pwsh
+        run: |
+          $expected = @(
+            'built\DragonBurn-usermode.exe',
+            'built\DragonBurn-kernel.exe'
+          )
+          foreach ($file in $expected) {
+            if (-not (Test-Path $file)) {
+              Write-Error "Build output missing: $file"
+              exit 1
+            }
+            Write-Host "OK: $file"
+          }
 
       - name: Archive build
         uses: actions/upload-artifact@v4
